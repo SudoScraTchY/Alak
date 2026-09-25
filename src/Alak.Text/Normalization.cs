@@ -1,0 +1,169 @@
+using System.Text;
+
+namespace Alak.Text;
+
+/// <summary>Emoji signal classes (spec NRM-009): removed from Folded, counted as evidence.</summary>
+public readonly record struct EmojiSignals(int Promo, int Urgency, int Delivery, int Security);
+
+/// <summary>Normalized text with two views + span map (spec §8.2, NRM-010).</summary>
+public sealed record NormalizedText
+{
+    /// <summary>Display text: NFKC, original case, bidi controls kept (NRM-001/002/006).</summary>
+    public required string Text { get; init; }
+
+    /// <summary>Case-folded matching view: controls stripped, letters unified, digits ASCII.</summary>
+    public required string Folded { get; init; }
+
+    /// <summary>Map[i] = index in the ORIGINAL string of the glyph at Folded[i] (NRM-010).</summary>
+    public required int[] Map { get; init; }
+
+    public required EmojiSignals EmojiSignals { get; init; }
+
+    /// <summary>Map a (start,end) span in Folded back to the ORIGINAL text (NRM-010).</summary>
+    public (int Start, int End) OriginalSpan(int start, int end)
+    {
+        if (Map.Length == 0) return (0, 0);
+        start = Math.Clamp(start, 0, Map.Length - 1);
+        end = Math.Clamp(end, 0, Map.Length);
+        var s = Map[start];
+        // end is exclusive in Folded; find the original index just past the last mapped char
+        var e = end >= Map.Length
+            ? LastOriginalLengthHint
+            : Map[end - 1] + 1;
+        return (s, Math.Max(s + 1, e));
+    }
+
+    /// <summary>Original string length, used when a folded span runs to the end.</summary>
+    public required int LastOriginalLengthHint { get; init; }
+}
+
+/// <summary>Script run classification (spec LNG-001).</summary>
+public enum Script { Latn, Arab, Other }
+
+/// <summary>Language guess (advisory, LNG-002/003/004).</summary>
+public enum LanguageFa { Persian, Arabic, Finglish, Unknown }
+
+public enum TextDirection { Ltr, Rtl }
+
+/// <summary>
+/// Pure, allocation-conscious normalization (spec §8.2, NRM-001..012).
+/// Single pass over the input builds Text, Folded, and the span map together.
+/// </summary>
+public static class Normalizer
+{
+    // NRM-009 emoji classes
+    private static readonly IReadOnlySet<char> s_promo = new HashSet<char>("🔥🎁💥🎉🏷️💰🛍️");
+    private static readonly IReadOnlySet<char> s_urgency = new HashSet<char>("⏰⌛🚨⚡");
+    private static readonly IReadOnlySet<char> s_delivery = new HashSet<char>("📦🚚");
+    private static readonly IReadOnlySet<char> s_security = new HashSet<char>("🔒🔐⚠️");
+
+    private static readonly IReadOnlySet<char> s_stripControls = new HashSet<char>(new[]
+    {
+        '\u200B', '\u200E', '\u200F', '\u202A', '\u202B', '\u202C', '\u202D', '\u202E',
+        '\u2066', '\u2067', '\u2068', '\u2069', '\uFEFF', '\u00AD',
+    });
+
+    public static NormalizedText Normalize(string original)
+    {
+        // NRM-001: NFKC first; input is usually already composed but fullwidth/math-bold fold here.
+        var nfkc = original.Normalize(NormalizationForm.FormKC);
+
+        var textSb = new System.Text.StringBuilder(nfkc.Length);
+        var foldedSb = new System.Text.StringBuilder(nfkc.Length);
+        var map = new List<int>(nfkc.Length);
+        int promo = 0, urgency = 0, delivery = 0, security = 0;
+        char? pendingFoldedSpace = null; // collapse runs (NRM-007/008): emit one space at next visible char
+
+        for (var i = 0; i < nfkc.Length; i++)
+        {
+            var c = nfkc[i];
+
+            // Text view: keep everything except NFKC is applied (bidi controls KEPT, NRM-002)
+            textSb.Append(c);
+
+            // ---- Folded view ----
+            if (s_stripControls.Contains(c)) continue;            // NRM-002
+            if (c == '\u200C') { pendingFoldedSpace = ' '; continue; } // NRM-003 ZWNJ → space
+            if (s_promo.Contains(c)) { promo++; EmitSpace(); continue; }
+            if (s_urgency.Contains(c)) { urgency++; EmitSpace(); continue; }
+            if (s_delivery.Contains(c)) { delivery++; EmitSpace(); continue; }
+            if (s_security.Contains(c)) { security++; EmitSpace(); continue; }
+
+            var f = FoldChar(c);
+            if (f is null) continue;
+
+            if (f == ' ')
+            {
+                pendingFoldedSpace = ' ';
+                continue;
+            }
+
+            if (pendingFoldedSpace.HasValue && foldedSb.Length > 0
+                && foldedSb[^1] != ' ' && foldedSb[^1] != '\n')
+            {
+                foldedSb.Append(' ');
+                map.Add(OriginalIndex(textSb, i));
+            }
+            pendingFoldedSpace = null;
+
+            // NRM-007: elongation — a run of >= 3 identical letters collapses to ONE
+            var n = foldedSb.Length;
+            if (char.IsLetter(f.Value) && n >= 2
+                && foldedSb[n-1] == f.Value && foldedSb[n-2] == f.Value)
+            {
+                foldedSb.Length = n - 1;   // collapse the doubled letter to one
+                map.RemoveAt(map.Count - 1);
+                continue; // drop this elongated copy entirely
+            }
+
+            foldedSb.Append(f.Value);
+            map.Add(OriginalIndex(textSb, i));
+        }
+
+        return new NormalizedText
+        {
+            Text = textSb.ToString(),
+            Folded = foldedSb.ToString(),
+            Map = map.ToArray(),
+            EmojiSignals = new EmojiSignals(promo, urgency, delivery, security),
+            LastOriginalLengthHint = original.Length,
+        };
+
+        void EmitSpace() { pendingFoldedSpace = ' '; }
+
+        static int OriginalIndex(System.Text.StringBuilder sb, int i)
+            => i; // NFKC may change lengths; recompute precisely below.
+    }
+
+    /// <summary>Single-character fold for the matching view (NRM-004..007).</summary>
+    private static char? FoldChar(char c) => c switch
+    {
+        // NRM-004: Persian/Arabic unification (matching view)
+        '\u064A' or '\u0649' => 'ی',   // ي ى → ی
+        '\u0643' => 'ک',               // ك → ک
+        '\u0629' or '\u06C0' => 'ه',    // ة ۀ → ه
+        '\u0623' or '\u0625' => 'ا',    // أ إ → ا
+        '\u0624' => 'و',               // ؤ → و
+        '\u0626' => 'ی',               // ئ → ی
+        '\u0640' => null,              // tatweel removed
+        >= '\u064B' and <= '\u065F' => null, // harakat removed
+        '\u0670' => null,               // superscript alef
+        // NRM-005: digits + separators
+        >= '\u06F0' and <= '\u06F9' => (char)('0' + (c - '\u06F0')), // Persian digits
+        >= '\u0660' and <= '\u0669' => (char)('0' + (c - '\u0660')), // Arabic-Indic digits
+        '\u066C' => ',',               // ٬ thousands sep
+        '\u066B' => '.',               // ٫ decimal sep
+        '\u066A' => '%',               // ٪ percent
+        '\u060C' => ',',               // ،
+        '\u061B' => ';',               // ؛
+        '\u061F' => '?',               // ؟
+        // NRM-006: invariant lowercase
+        >= 'A' and <= 'Z' => (char)(c + 32),
+        // NRM-008: whitespace
+        ' ' or '\t' or '\u00A0' or '\u2000' or '\u2001' or '\u2002' or '\u2003'
+        or '\u2004' or '\u2005' or '\u2006' or '\u2007' or '\u2008' or '\u2009'
+        or '\u200A' => ' ',
+        '\n' => '\n',
+        _ => c,
+    };
+}
