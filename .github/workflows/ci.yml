@@ -1,0 +1,50 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  unit-tests:
+    # ARC-001: >90% of tests must run on a desktop CI runner, no Android workload.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Restore
+        run: dotnet restore Alak.sln
+      - name: Build (warnings as errors, ARC-004)
+        run: dotnet build Alak.sln -c Release --no-restore
+      - name: Test
+        run: dotnet test Alak.sln -c Release --no-build
+
+  privacy-guard:
+    # OSS-004 / R2: the app MUST NOT have network capability.
+    # Enforced on every PR: no INTERNET/ACCESS_NETWORK_STATE permission,
+    # no analytics/ad/crash SDK in the dependency list.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assert no network permission in any manifest or source
+        run: |
+          set -e
+          FAIL=0
+          # 1) No banned permission strings anywhere in manifests or csproj AndroidXml
+          if grep -rInE 'android\.permission\.(INTERNET|ACCESS_NETWORK_STATE|QUERY_ALL_PACKAGES|READ_EXTERNAL_STORAGE)' \
+               --include='*.xml' --include='*.csproj' src/ ; then
+            echo "::error::R2 violation: banned Android permission found"; FAIL=1
+          fi
+          # 2) No banned SDK families in any project file
+          if grep -rInEi '(appcenter|appsflyer|firebase-analytics|crashlytics|google\.ads|admob|facebook|adjust|amplitude|mixpanel|segment|bugsnag|instabug|sentry|newrelic|datadog|appdynamics)' \
+               --include='*.csproj' src/ ; then
+            echo "::error::R2 violation: analytics/ad/crash SDK found"; FAIL=1
+          fi
+          # 3) No HttpClient/WebRequest family in app code (D-03/R2)
+          if grep -rInE 'using System\.Net|HttpClient|HttpWebRequest|WebClient|Socket\(' \
+               --include='*.cs' src/ ; then
+            echo "::error::R2 violation: network client in code"; FAIL=1
+          fi
+          exit "$FAIL"

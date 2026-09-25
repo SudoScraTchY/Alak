@@ -1,0 +1,17 @@
+<Project>
+  <!--
+    Alak — repo-wide build settings (ARC-004: nullable + warnings-as-errors).
+    NOTE: children/contributors must NOT add package versions to this file;
+    package versions live in each .csproj to avoid contention (see ADR-0001).
+  -->
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <Deterministic>true</Deterministic>
+    <InvariantGlobalization>false</InvariantGlobalization>
+  </PropertyGroup>
+</Project>

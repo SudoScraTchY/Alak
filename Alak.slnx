@@ -1,0 +1,19 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Alak.Adaptive/Alak.Adaptive.csproj" />
+    <Project Path="src/Alak.Core/Alak.Core.csproj" />
+    <Project Path="src/Alak.Inference.Abstractions/Alak.Inference.Abstractions.csproj" />
+    <Project Path="src/Alak.Packs.Tool/Alak.Packs.Tool.csproj" />
+    <Project Path="src/Alak.Rules/Alak.Rules.csproj" />
+    <Project Path="src/Alak.Storage/Alak.Storage.csproj" />
+    <Project Path="src/Alak.Text/Alak.Text.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Alak.Adaptive.Tests/Alak.Adaptive.Tests.csproj" />
+    <Project Path="tests/Alak.Core.Tests/Alak.Core.Tests.csproj" />
+    <Project Path="tests/Alak.Inference.Abstractions.Tests/Alak.Inference.Abstractions.Tests.csproj" />
+    <Project Path="tests/Alak.Rules.Tests/Alak.Rules.Tests.csproj" />
+    <Project Path="tests/Alak.Storage.Tests/Alak.Storage.Tests.csproj" />
+    <Project Path="tests/Alak.Text.Tests/Alak.Text.Tests.csproj" />
+  </Folder>
+</Solution>
