@@ -14,7 +14,7 @@ with date, method, and result. Until then it stays `TODO(verify)`.
 | PF-07 | 16 KB page-size alignment of native lib | TODO(verify) | — | Needs NDK build (M8) |
 | PF-08 | EXTRA_IS_SENSITIVE clipboard flag (API 33+) | TODO(verify) | — | Needs API 33+ device |
 | PF-09 | PersianCalendar vs official Jalali table 1400–1420 | TODO(verify) | — | Golden-table test to be written in Alak.Text.Tests (DAT-002); do NOT trust .NET's PersianCalendar until the 1400–1420 sweep passes against a vendored trusted table |
-| PF-10 | SQLCipher bundle works on Android + FTS5 included | TODO(verify) | — | Desktop integration test planned in Alak.Storage.Tests; Android-side check in M1 device session |
+| PF-10 | SQLCipher bundle works on Android + FTS5 included | **Verified (desktop)** | 2026-09-25 | `SQLitePCLRaw.bundle_e_sqlcipher` **2.1.11** + `Microsoft.Data.Sqlite.Core` **10.0.12** (verified on nuget.org flatcontainer API; the spec's `SQLitePCLRaw.bundle.sqlcipher` id **does not exist** — 404 — the maintained bundle id uses an underscore). Live xUnit test `Alak.Storage.Tests/Pf10SqlCipherFts5Tests` proves: encrypted DB created via `Password=`; FTS5 `unicode61 remove_diacritics 2` virtual table created **inside** the encrypted DB; Persian + English MATCH queries return correct rows; opening without the key throws `SqliteException`; file header is not plaintext SQLite. **Android device check still TODO(verify) at M1.** |
 | PF-11 | MAUI cold service start cost | TODO(verify) | — | Needs device (M1) |
 | PF-12 | Post-reboot backfill via GetActiveNotifications | TODO(verify) | — | Needs device (M1) |
 | D-01 | Name availability (Play/F-Droid/GitHub/domain) | TODO(verify) | — | Before public release |

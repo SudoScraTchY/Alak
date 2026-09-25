@@ -1,7 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\Alak.Core\Alak.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- PF-10 verified 2026-09-25: SQLitePCLRaw.bundle_e_sqlcipher 2.1.11 is the maintained
+         SQLCipher bundle on nuget.org; the spec's "SQLitePCLRaw.bundle.sqlcipher" id 404s.
+         Microsoft.Data.Sqlite.Core 10.0.12 pairs with a SQLitePCLRaw provider bundle. -->
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="10.0.12" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlcipher" Version="2.1.11" />
   </ItemGroup>
 
   <PropertyGroup>
