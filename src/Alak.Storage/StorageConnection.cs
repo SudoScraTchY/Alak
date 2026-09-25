@@ -23,7 +23,7 @@ public sealed class StorageConnection : IDisposable
         Migrations.Apply(_con);
     }
 
-    internal SqliteConnection Underlying => _con;
+    public SqliteConnection Underlying => _con;
 
     public long ExecuteScalar(string sql, params (string, object?)[] args)
     {
