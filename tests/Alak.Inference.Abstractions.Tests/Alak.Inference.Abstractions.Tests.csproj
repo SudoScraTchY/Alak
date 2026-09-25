@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Alak.Inference.Abstractions\Alak.Inference.Abstractions.csproj" />
-    <ProjectReference Include="..\..\src\Alak.Core\Alak.Core.csproj" />
   </ItemGroup>
 
 </Project>
