@@ -1,0 +1,158 @@
+[
+  {
+    "id": "fa-works-008",
+    "package": "test.snapp",
+    "channel_name": "Promotions",
+    "title": "هدیه اولین سفارش",
+    "text": "کد تخفیف ۳۰٪ اولین سفارش شما: SNAPP30 — تا پایان امشب فرصت دارید",
+    "expect": {
+      "category": "offers",
+      "tags": [
+        "promo-code",
+        "discount",
+        "expiring"
+      ],
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "SNAPP30",
+          "first_order": true,
+          "discount": {
+            "type": "percent",
+            "value": 30
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-works-009",
+    "package": "test.shop",
+    "channel_name": "Promotions",
+    "title": "ارسال رایگان",
+    "text": "ارسال رایگان برای خرید بالای ۵۰۰ هزار تومان",
+    "expect": {
+      "category": "offers",
+      "tags": [
+        "free-shipping"
+      ],
+      "entities": [
+        {
+          "type": "discount",
+          "type2": "free_shipping"
+        }
+      ],
+      "not_entities": [
+        "promo_code"
+      ]
+    }
+  },
+  {
+    "id": "fa-works-010",
+    "package": "test.bank",
+    "channel_name": "Security",
+    "title": "کد ورود",
+    "text": "کد ورود شما: ۴۵۸۲۱۳ — این کد را به کسی ندهید",
+    "expect": {
+      "category": "security",
+      "tags": [
+        "verification-code"
+      ],
+      "entities": [
+        {
+          "type": "otp",
+          "length": 6
+        }
+      ],
+      "body_not_stored": true
+    }
+  },
+  {
+    "id": "fa-works-011",
+    "package": "test.bank",
+    "channel_name": "Alerts",
+    "title": "بانک",
+    "text": "مبلغ ۲٬۵۰۰٬۰۰۰ ریال از حساب شما برداشت شد",
+    "expect": {
+      "category": "money",
+      "entities": [
+        {
+          "type": "money",
+          "value": 2500000,
+          "currency": "IRR",
+          "direction": "debit"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-works-012",
+    "package": "test.snapp",
+    "channel_name": "Promotions",
+    "title": "دعوت دوستان",
+    "text": "کد معرف شما: ALI123 — دوستانتان را دعوت کنید و ۵۰ هزار تومان هدیه بگیرید",
+    "expect": {
+      "category": "offers",
+      "tags": [
+        "promo-code"
+      ],
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "ALI123",
+          "kind": "referral"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-works-013",
+    "package": "test.shop",
+    "channel_name": "Account",
+    "title": "ثبت آدرس",
+    "text": "کد پستی شما ۱۲۳۴۵۶۷۸۹۰ ثبت شد",
+    "expect": {
+      "category": "other",
+      "not_entities": [
+        "promo_code"
+      ],
+      "needs_review": true
+    }
+  },
+  {
+    "id": "fa-works-014",
+    "package": "test.office",
+    "channel_name": "Calendar",
+    "title": "یادآوری",
+    "text": "جلسه تیم ساعت ۱۰:۳۰ شروع می‌شود",
+    "expect": {
+      "category": "work",
+      "tags": [
+        "meeting"
+      ],
+      "entities": [
+        {
+          "type": "datetime",
+          "role": "start",
+          "time": "10:30"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-works-016",
+    "package": "test.shop",
+    "channel_name": "Promotions",
+    "text": "کد SAVE20 را در سبد خرید وارد کنید",
+    "title": "سبد خرید",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "SAVE20"
+        }
+      ]
+    }
+  }
+]

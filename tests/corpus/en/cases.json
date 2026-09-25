@@ -1,0 +1,169 @@
+[
+  {
+    "id": "en-works-001",
+    "package": "test.shop",
+    "channel_name": "Promotions",
+    "title": "Spring Sale",
+    "text": "Extra 25% off with code SPRING25 · ends tonight at midnight",
+    "expect": {
+      "category": "offers",
+      "tags": [
+        "promo-code",
+        "discount",
+        "expiring"
+      ],
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "SPRING25",
+          "discount": {
+            "type": "percent",
+            "value": 25
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "en-works-002",
+    "package": "test.bank",
+    "channel_name": "Security",
+    "title": "Bank",
+    "text": "Your verification code is 482913. Don't share it.",
+    "expect": {
+      "category": "security",
+      "tags": [
+        "verification-code"
+      ],
+      "entities": [
+        {
+          "type": "otp",
+          "length": 6
+        }
+      ],
+      "body_not_stored": true
+    }
+  },
+  {
+    "id": "en-works-003",
+    "package": "test.shop",
+    "channel_name": "Promotions",
+    "title": "Deal",
+    "text": "Use code 482913 at checkout for 10% off",
+    "expect": {
+      "category": "offers",
+      "tags": [
+        "promo-code",
+        "discount"
+      ],
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "482913"
+        }
+      ]
+    }
+  },
+  {
+    "id": "en-works-004",
+    "package": "test.shop",
+    "channel_name": "Orders",
+    "title": "Your order has shipped",
+    "text": "Order #A1234 · Track: 1Z999AA10123456784",
+    "expect": {
+      "category": "orders",
+      "tags": [
+        "delivery"
+      ],
+      "entities": [
+        {
+          "type": "order_ref",
+          "kind": "order",
+          "value": "A1234"
+        }
+      ]
+    }
+  },
+  {
+    "id": "en-works-005",
+    "package": "test.chat",
+    "channel_name": "Messages",
+    "title": "Sarah",
+    "text": "mentioned you in #design-review",
+    "expect": {
+      "category": "work",
+      "tags": [
+        "mention"
+      ]
+    }
+  },
+  {
+    "id": "en-works-006",
+    "package": "test.bank",
+    "channel_name": "Alerts",
+    "title": "Card alert",
+    "text": "$45.00 charged to card ending 4417 at STARBUCKS",
+    "expect": {
+      "category": "money",
+      "tags": [],
+      "entities": [
+        {
+          "type": "money",
+          "value": 45.0,
+          "currency": "USD",
+          "direction": "debit",
+          "account_hint": "4417"
+        }
+      ]
+    }
+  },
+  {
+    "id": "en-works-007",
+    " #": "",
+    "id2": null
+  },
+  {
+    "id": "en-negative-001",
+    "package": "test.post",
+    "channel_name": "Updates",
+    "title": "Address saved",
+    "text": "Your zip code 90210 was saved to your profile",
+    "expect": {
+      "category": "updates",
+      "not_entities": [
+        "promo_code"
+      ]
+    }
+  },
+  {
+    "id": "en-negative-002",
+    "package": "test.ride",
+    "channel_name": "Ride",
+    "title": "Your driver is arriving",
+    "text": "Share PIN 4821 with your driver",
+    "expect": {
+      "category": "orders",
+      "tags": [
+        "ride",
+        "ride-pin"
+      ],
+      "not_entities": [
+        "otp",
+        "promo_code"
+      ]
+    }
+  },
+  {
+    "id": "en-adversarial-001",
+    "package": "test.shop",
+    "channel_name": "Promotions",
+    "title": "💥LAST CHANCE💥",
+    "text": "F R E E   S H I P P I N G on everything! no code needed. sale ends soon!",
+    "expect": {
+      "category": "offers",
+      "tags": [
+        "no-code-needed"
+      ]
+    }
+  }
+]
