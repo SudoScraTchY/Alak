@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "fa-latn",
+  "name": "Finglish",
+  "nativeName": "Finglish",
+  "version": "0.1.0",
+  "minAppVersion": "1.0.0",
+  "scripts": [
+    "Latn"
+  ],
+  "direction": "ltr",
+  "calendars": [
+    "gregorian"
+  ],
+  "weekend": [
+    "thu",
+    "fri"
+  ],
+  "suffixSets": {},
+  "authors": [
+    "Alak contributors"
+  ],
+  "license": "CC0-1.0",
+  "dependsOn": [
+    "en"
+  ]
+}

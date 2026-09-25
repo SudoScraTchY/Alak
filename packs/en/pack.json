@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "en",
+  "name": "English",
+  "nativeName": "English",
+  "version": "1.0.0",
+  "minAppVersion": "1.0.0",
+  "scripts": ["Latn"],
+  "direction": "ltr",
+  "calendars": ["gregorian"],
+  "weekend": ["sat", "sun"],
+  "suffixSets": {
+    "en-plural": ["s", "es", "ed", "ing"]
+  },
+  "authors": ["Alak contributors"],
+  "license": "CC0-1.0",
+  "dependsOn": []
+}

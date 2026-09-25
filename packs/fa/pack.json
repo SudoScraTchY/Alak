@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "fa",
+  "name": "Persian",
+  "nativeName": "فارسی",
+  "version": "1.0.0",
+  "minAppVersion": "1.0.0",
+  "scripts": [
+    "Arab"
+  ],
+  "direction": "rtl",
+  "calendars": [
+    "jalali",
+    "gregorian"
+  ],
+  "weekend": [
+    "thu",
+    "fri"
+  ],
+  "suffixSets": {
+    "fa-nominal": [
+      "ها",
+      "های",
+      "هایی",
+      "ی",
+      "ات",
+      "ان",
+      "تان",
+      "شان",
+      "مان",
+      "ش",
+      "م",
+      "ت"
+    ]
+  },
+  "authors": [
+    "Alak contributors"
+  ],
+  "license": "CC0-1.0",
+  "dependsOn": []
+}
