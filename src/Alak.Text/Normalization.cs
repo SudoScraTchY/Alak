@@ -151,6 +151,7 @@ public static class Normalizer
         {
             if (char.IsWhiteSpace(s[i]))
             {
+                if (s[i] == '\n') { sb.Append('\n'); newMap.Add(map[i]); i++; continue; } // NRM-007: newlines preserved
                 if (sb.Length > 0 && sb[^1] != ' ') { sb.Append(' '); newMap.Add(map[i]); }
                 i++;
                 continue;
