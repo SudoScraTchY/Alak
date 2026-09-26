@@ -120,11 +120,14 @@ public static class Normalizer
             map.Add(OriginalIndex(textSb, i));
         }
 
+        var oldFolded = foldedSb.ToString();
+        var (folded, newMap) = GlueSpacedLetters(oldFolded, map.ToArray());
+
         return new NormalizedText
         {
             Text = textSb.ToString(),
-            Folded = foldedSb.ToString(),
-            Map = map.ToArray(),
+            Folded = folded,
+            Map = newMap,
             EmojiSignals = new EmojiSignals(promo, urgency, delivery, security),
             LastOriginalLengthHint = original.Length,
         };
@@ -134,6 +137,73 @@ public static class Normalizer
         static int OriginalIndex(System.Text.StringBuilder sb, int i)
             => i; // NFKC may change lengths; recompute precisely below.
     }
+
+    // NRM-007 companion (QLT-001 adversarial glue): "F R E E S H I P P I N G" → "free shipping".
+    // Runs of single letters separated by single spaces, ≥4 long, are glued back together.
+    // Returns (folded, map) with glued words; the map points each folded char at the
+    // ORIGINAL index of its first glued letter (NRM-010 stays valid).
+    private static (string Folded, int[] Map) GlueSpacedLetters(string s, int[] map)
+    {
+        var sb = new System.Text.StringBuilder(s.Length);
+        var newMap = new List<int>(map.Length);
+        var i = 0;
+        while (i < s.Length)
+        {
+            if (char.IsWhiteSpace(s[i]))
+            {
+                if (sb.Length > 0 && sb[^1] != ' ') { sb.Append(' '); newMap.Add(map[i]); }
+                i++;
+                continue;
+            }
+            // try glue: sequence of single letters separated by single spaces
+            var (glued, endIdx, gluedWord) = TryGlueAt(s, i);
+            if (glued && gluedWord.Length >= 4)
+            {
+                // map each glued letter to its own original letter position: walk k over
+                // the run, taking letters only (skipping the single separator spaces)
+                var k = i;
+                foreach (var ch in gluedWord)
+                {
+                    while (k < endIdx && !char.IsLetter(s[k])) k++;  // skip spaces
+                    newMap.Add(map[k]);
+                    k++;
+                }
+                sb.Append(gluedWord);
+                i = endIdx;
+            }
+            else
+            {
+                var e = i;
+                while (e < s.Length && !char.IsWhiteSpace(s[e])) e++;
+                for (var q = i; q < e; q++) { sb.Append(s[q]); newMap.Add(map[q]); }
+                i = e;
+            }
+        }
+        return (sb.ToString(), newMap.ToArray());
+    }
+
+    /// <summary>At i (a letter), try "a b c d" single-space glue; returns (ok, end index, word).</summary>
+    private static (bool Ok, int End, string Word) TryGlueAt(string s, int i)
+    {
+        var word = new System.Text.StringBuilder();
+        var k = i;
+        var glued = false;
+        while (k < s.Length)
+        {
+            if (char.IsWhiteSpace(s[k])) break;
+            word.Append(s[k]); k++;
+            // next is "single letter + space" pattern?
+            if (k + 1 < s.Length && s[k] == ' ' && char.IsLetter(s[k + 1])
+                && (k + 2 >= s.Length || s[k + 2] == ' '))
+            {
+                if (word.Length == 1) glued = true;
+                else if (!glued) break;
+                k++; // skip the separator space
+            }
+        }
+        return (glued, k, word.ToString());
+    }
+
 
     /// <summary>Single-character fold for the matching view (NRM-004..007).</summary>
     private static char? FoldChar(char c) => c switch

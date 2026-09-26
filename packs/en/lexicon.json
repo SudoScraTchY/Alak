@@ -1,0 +1,717 @@
+{
+ "concepts": {
+  "promo.code.trigger": {
+   "terms": [
+    "promo code",
+    "promo-code",
+    "coupon code",
+    "coupon",
+    "discount code",
+    "voucher code",
+    "voucher",
+    "gift code",
+    "redeem code",
+    "use code",
+    "with code",
+    "enter code",
+    "apply code"
+   ],
+   "weight": 1.0
+  },
+  "promo.code.trigger.weak": {
+   "terms": [
+    "code"
+   ],
+   "weight": 0.35
+  },
+  "promo.code.negative": {
+   "terms": [
+    "zip code",
+    "postal code",
+    "area code",
+    "country code",
+    "tracking code",
+    "tracking number",
+    "order code",
+    "order number",
+    "confirmation code",
+    "reference code",
+    "security code",
+    "verification code"
+   ],
+   "weight": -0.8
+  },
+  "promo.code.referral": {
+   "terms": [
+    "referral code",
+    "invite code",
+    "refer a friend",
+    "your friend code"
+   ],
+   "weight": 0.9
+  },
+  "promo.apply": {
+   "terms": [
+    "at checkout",
+    "in your cart",
+    "apply at checkout",
+    "enter at checkout",
+    "redeem now",
+    "valid on",
+    "applies to"
+   ],
+   "weight": 0.9
+  },
+  "promo.discount.word": {
+   "terms": [
+    "discount",
+    "sale",
+    "off",
+    "deal",
+    "deals",
+    "savings",
+    "save",
+    "bargain",
+    "clearance",
+    "markdown",
+    "offer",
+    "special offer",
+    "price drop",
+    "mega sale",
+    "flash sale",
+    "doorbuster",
+    "member price"
+   ],
+   "weight": 0.9
+  },
+  "promo.free_shipping": {
+   "terms": [
+    "free shipping",
+    "free delivery",
+    "ships free",
+    "shipping on us"
+   ],
+   "weight": 0.9
+  },
+  "promo.bogo": {
+   "terms": [
+    "bogo",
+    "buy one get one",
+    "buy 1 get 1",
+    "2 for 1",
+    "two for one"
+   ],
+   "weight": 0.9
+  },
+  "promo.cashback": {
+   "terms": [
+    "cashback",
+    "cash back",
+    "money back",
+    "rewards",
+    "points back"
+   ],
+   "weight": 0.9
+  },
+  "promo.credit": {
+   "terms": [
+    "credit",
+    "gift card",
+    "store credit",
+    "wallet credit",
+    "bonus"
+   ],
+   "weight": 0.9
+  },
+  "promo.limited": {
+   "terms": [
+    "limited time",
+    "today only",
+    "last chance",
+    "final hours",
+    "while supplies last",
+    "don't miss",
+    "hurry",
+    "act now",
+    "ends soon",
+    "one day only",
+    "exclusive"
+   ],
+   "weight": 0.9
+  },
+  "promo.urgency.time": {
+   "terms": [
+    "ends tonight",
+    "ends today",
+    "ends midnight",
+    "hours left",
+    "last day",
+    "expires soon",
+    "only today",
+    "closing soon"
+   ],
+   "weight": 0.9
+  },
+  "promo.first_order": {
+   "terms": [
+    "first order",
+    "first purchase",
+    "new customers",
+    "new users",
+    "welcome offer"
+   ],
+   "weight": 0.9
+  },
+  "promo.min_spend": {
+   "terms": [
+    "on orders over",
+    "orders above",
+    "minimum purchase",
+    "min. order",
+    "min order"
+   ],
+   "weight": 0.9
+  },
+  "promo.no_code": {
+   "terms": [
+    "no code needed",
+    "automatically applied",
+    "auto applied"
+   ],
+   "weight": 0.9
+  },
+  "promo.single_use": {
+   "terms": [
+    "single use",
+    "one-time use",
+    "one time use"
+   ],
+   "weight": 0.9
+  },
+  "promo.cap": {
+   "terms": [
+    "up to",
+    "maximum discount",
+    "capped at"
+   ],
+   "weight": 0.9
+  },
+  "ad.marker": {
+   "terms": [
+    "sponsored",
+    "advertisement",
+    "ad"
+   ],
+   "weight": 0.9
+  },
+  "ad.unsubscribe": {
+   "terms": [
+    "unsubscribe",
+    "opt out",
+    "stop receiving"
+   ],
+   "weight": 0.9
+  },
+  "ad.newsletter": {
+   "terms": [
+    "newsletter",
+    "weekly digest"
+   ],
+   "weight": 0.9
+  },
+  "ad.cta": {
+   "terms": [
+    "shop now",
+    "buy now",
+    "order now",
+    "download now",
+    "learn more",
+    "sign up",
+    "get started"
+   ],
+   "weight": 0.9
+  },
+  "ad.recommendation": {
+   "terms": [
+    "recommended for you",
+    "you might like",
+    "based on your activity"
+   ],
+   "weight": 0.9
+  },
+  "otp.trigger": {
+   "terms": [
+    "verification code",
+    "verify your",
+    "one-time code",
+    "one time code",
+    "login code",
+    "otp",
+    "passcode",
+    "confirm your number"
+   ],
+   "weight": 1.0
+  },
+  "otp.warning": {
+   "terms": [
+    "don't share it",
+    "do not share",
+    "never share",
+    "never give this code"
+   ],
+   "weight": 0.9
+  },
+  "security.login": {
+   "terms": [
+    "signed in",
+    "sign in",
+    "login",
+    "log in",
+    "new device"
+   ],
+   "weight": 0.9
+  },
+  "security.password": {
+   "terms": [
+    "password",
+    "reset your password",
+    "change your password"
+   ],
+   "weight": 0.9
+  },
+  "security.alert": {
+   "terms": [
+    "security alert",
+    "suspicious activity",
+    "unusual activity"
+   ],
+   "weight": 0.9
+  },
+  "security.2fa": {
+   "terms": [
+    "two-factor",
+    "2fa",
+    "authenticator"
+   ],
+   "weight": 0.9
+  },
+  "money.debit": {
+   "terms": [
+    "debited",
+    "charged to",
+    "withdrawn",
+    "paid out",
+    "purchase of"
+   ],
+   "weight": 0.9
+  },
+  "money.credit": {
+   "terms": [
+    "credited",
+    "deposited",
+    "refund",
+    "received",
+    "added to your balance"
+   ],
+   "weight": 0.9
+  },
+  "money.transfer": {
+   "terms": [
+    "transfer",
+    "sent you",
+    "you sent"
+   ],
+   "weight": 0.9
+  },
+  "money.balance": {
+   "terms": [
+    "balance",
+    "available balance",
+    "remaining balance"
+   ],
+   "weight": 0.9
+  },
+  "money.bill": {
+   "terms": [
+    "bill",
+    "invoice due",
+    "payment due",
+    "due date"
+   ],
+   "weight": 0.9
+  },
+  "money.card": {
+   "terms": [
+    "card",
+    "credit card",
+    "debit card"
+   ],
+   "weight": 0.9
+  },
+  "money.fraud": {
+   "terms": [
+    "fraud",
+    "unauthorized",
+    "declined"
+   ],
+   "weight": 0.9
+  },
+  "money.refund": {
+   "terms": [
+    "refund",
+    "refunded",
+    "money back"
+   ],
+   "weight": 0.9
+  },
+  "work.meeting": {
+   "terms": [
+    "meeting",
+    "standup",
+    "sync",
+    "calendar invite"
+   ],
+   "weight": 0.9
+  },
+  "work.calendar": {
+   "terms": [
+    "calendar",
+    "event starting",
+    "starting soon"
+   ],
+   "weight": 0.9
+  },
+  "work.deadline": {
+   "terms": [
+    "deadline",
+    "due tomorrow",
+    "due today"
+   ],
+   "weight": 0.9
+  },
+  "work.review": {
+   "terms": [
+    "review requested",
+    "code review",
+    "pr review"
+   ],
+   "weight": 0.9
+  },
+  "work.mention": {
+   "terms": [
+    "mentioned you",
+    "tagged you in"
+   ],
+   "weight": 0.9
+  },
+  "work.assign": {
+   "terms": [
+    "assigned to you",
+    "assigned you",
+    "new task"
+   ],
+   "weight": 0.9
+  },
+  "work.build": {
+   "terms": [
+    "build failed",
+    "build passed",
+    "ci failed",
+    "pipeline"
+   ],
+   "weight": 0.9
+  },
+  "work.incident": {
+   "terms": [
+    "incident",
+    "outage",
+    "service degraded"
+   ],
+   "weight": 0.9
+  },
+  "work.ticket": {
+   "terms": [
+    "ticket",
+    "issue updated"
+   ],
+   "weight": 0.9
+  },
+  "work.doc": {
+   "terms": [
+    "document",
+    "doc updated",
+    "shared a document"
+   ],
+   "weight": 0.9
+  },
+  "work.email_marker": {
+   "terms": [
+    "re:",
+    "fwd:",
+    "inbox"
+   ],
+   "weight": 0.9
+  },
+  "people.missed_call": {
+   "terms": [
+    "missed call",
+    "missed you"
+   ],
+   "weight": 0.9
+  },
+  "people.voice_message": {
+   "terms": [
+    "voice message",
+    "voicemail",
+    "voice note"
+   ],
+   "weight": 0.9
+  },
+  "people.group": {
+   "terms": [
+    "group",
+    "group chat"
+   ],
+   "weight": 0.9
+  },
+  "people.greeting": {
+   "terms": [
+    "hi",
+    "hey",
+    "hello"
+   ],
+   "weight": 0.9
+  },
+  "orders.status": {
+   "terms": [
+    "your order",
+    "order shipped",
+    "shipped",
+    "delivered",
+    "out for delivery",
+    "order confirmed"
+   ],
+   "weight": 0.9
+  },
+  "orders.tracking": {
+   "terms": [
+    "tracking",
+    "track your package",
+    "track order",
+    "track your order"
+   ],
+   "weight": 0.9
+  },
+  "orders.delivery_person": {
+   "terms": [
+    "your driver",
+    "courier",
+    "delivery person"
+   ],
+   "weight": 0.9
+  },
+  "orders.ride": {
+   "terms": [
+    "your driver is arriving",
+    "ride",
+    "trip",
+    "pickup"
+   ],
+   "weight": 0.9
+  },
+  "orders.pin": {
+   "terms": [
+    "pin",
+    "ride pin",
+    "share this pin"
+   ],
+   "weight": 0.9
+  },
+  "orders.flight": {
+   "terms": [
+    "boarding",
+    "gate",
+    "flight",
+    "check-in"
+   ],
+   "weight": 0.9
+  },
+  "orders.booking": {
+   "terms": [
+    "reservation",
+    "booking confirmed",
+    "your booking"
+   ],
+   "weight": 0.9
+  },
+  "orders.receipt": {
+   "terms": [
+    "receipt",
+    "your receipt",
+    "order total"
+   ],
+   "weight": 0.9
+  },
+  "social.reaction": {
+   "terms": [
+    "liked your",
+    "loved your",
+    "reacted to",
+    "commented on"
+   ],
+   "weight": 0.9
+  },
+  "social.follow": {
+   "terms": [
+    "followed you",
+    "new follower",
+    "started following"
+   ],
+   "weight": 0.9
+  },
+  "social.feed": {
+   "terms": [
+    "your feed",
+    "trending",
+    "top posts"
+   ],
+   "weight": 0.9
+  },
+  "social.live": {
+   "terms": [
+    "is live",
+    "live now",
+    "streaming"
+   ],
+   "weight": 0.9
+  },
+  "updates.app": {
+   "terms": [
+    "update available",
+    "new version",
+    "update now",
+    "app update"
+   ],
+   "weight": 0.9
+  },
+  "updates.system": {
+   "terms": [
+    "battery low",
+    "storage almost full",
+    "software update"
+   ],
+   "weight": 0.9
+  },
+  "updates.battery": {
+   "terms": [
+    "battery low",
+    "battery level",
+    "charging"
+   ],
+   "weight": 0.9
+  },
+  "updates.storage": {
+   "terms": [
+    "storage almost full",
+    "low on space",
+    "free up space"
+   ],
+   "weight": 0.9
+  },
+  "updates.weather": {
+   "terms": [
+    "forecast",
+    "rain",
+    "storm",
+    "weather alert",
+    "temperature"
+   ],
+   "weight": 0.9
+  },
+  "updates.news": {
+   "terms": [
+    "breaking",
+    "breaking news",
+    "headline",
+    "top stories"
+   ],
+   "weight": 0.9
+  },
+  "channel.promo": {
+   "terms": [
+    "promotions",
+    "offers",
+    "marketing",
+    "deals"
+   ],
+   "weight": 0.9
+  },
+  "channel.messages": {
+   "terms": [
+    "messages",
+    "sms",
+    "chats"
+   ],
+   "weight": 0.9
+  },
+  "channel.transactional": {
+   "terms": [
+    "transactional",
+    "transactions",
+    "receipts",
+    "alerts",
+    "transactions",
+    "bank",
+    "card"
+   ],
+   "weight": 0.9
+  },
+  "channel.security": {
+   "terms": [
+    "security",
+    "login alerts"
+   ],
+   "weight": 0.9
+  },
+  "channel.updates": {
+   "terms": [
+    "updates",
+    "system"
+   ],
+   "weight": 0.9
+  },
+  "channel.social": {
+   "terms": [
+    "social",
+    "community"
+   ],
+   "weight": 0.9
+  },
+  "time.tonight": {
+   "terms": [
+    "tonight",
+    "this evening",
+    "by midnight",
+    "until midnight"
+   ],
+   "weight": 0.9
+  },
+  "channel.calendar": {
+   "terms": [
+    "calendar",
+    "reminders",
+    "events"
+   ],
+   "weight": 0.9
+  },
+  "channel.orders": {
+   "terms": [
+    "orders",
+    "shipping",
+    "delivery",
+    "ride"
+   ],
+   "weight": 0.9
+  }
+ }
+}

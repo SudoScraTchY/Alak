@@ -103,7 +103,9 @@ public sealed class ConceptMatcher
         }
     }
 
-    /// <summary>Scan folded text; yields every concept hit with its span in the folded view.</summary>
+    /// <summary>Scan folded text; yields every concept hit with its span in the folded view.
+    /// A hit counts only at word boundaries: the char before the match and the char after
+    /// must not be a letter or digit (RUL-003, prevents 'address'→'ad', 'saved'→'save').</summary>
     public IEnumerable<ConceptHit> Scan(string folded)
     {
         var current = _root;
@@ -118,8 +120,16 @@ public sealed class ConceptMatcher
             if (current.Outputs.Count > 0)
             {
                 var consumed = TermLength(current);
+                var start = i - consumed + 1;
+                var end = i + 1;
                 foreach (var hit in current.Outputs)
-                    yield return new ConceptHit(hit.ConceptId, (i - consumed + 1, i + 1), hit.Weight, Fuzzy: false, hit.Term);
+                {
+                    // word-boundary: preceding char (if any) must not be alphanumeric
+                    if (start > 0 && char.IsLetterOrDigit(folded[start - 1])) continue;
+                    // following char (if any) must not be alphanumeric
+                    if (end < folded.Length && char.IsLetterOrDigit(folded[end])) continue;
+                    yield return new ConceptHit(hit.ConceptId, (start, end), hit.Weight, Fuzzy: false, hit.Term);
+                }
             }
         }
     }

@@ -100,7 +100,14 @@ public static class RulesEngine
 {
     private static readonly Category[] s_categories = Enum.GetValues<Category>();
 
-    public static ClassificationResult Classify(RawNotification n, PackSet packs)
+    /// <summary>Per-category counts from this app's ingestion history (RUL-011).
+    /// Null = no history yet (fresh app) ⇒ prior contributes nothing.</summary>
+    public sealed record AppPrior(int[] Counts, int Total);
+
+    public static ClassificationResult Classify(RawNotification n, PackSet packs) =>
+        Classify(n, packs, null);
+
+    public static ClassificationResult Classify(RawNotification n, PackSet packs, AppPrior? prior)
     {
         // ---- 0. hard override first: OS-redacted content ⇒ security (RUL-018/1) ----
         if (n.LooksRedactedByOs)
@@ -136,6 +143,24 @@ public static class RulesEngine
                 .Select(g => g.OrderByDescending(c => c.Confidence).First());
             entities.AddRange(codes);
         }
+        // E-01 step 6: attach nearest discount to each promo code (percent/amount/cashback).
+        var discounts = entities.OfType<DiscountEntity>().ToList();
+        var promoCodes = entities.OfType<PromoCodeEntity>().ToList();
+        entities = entities.Select((Entity e) =>
+        {
+            if (e is PromoCodeEntity pc && pc.Discount is null && discounts.Count > 0)
+            {
+                // nearest discount by span distance
+                var pcMid = (pc.Span.Start + pc.Span.End) / 2;
+                var best = discounts.OrderBy(d =>
+                        Math.Abs(((d.Span.Start + d.Span.End) / 2) - pcMid)).First();
+                return pc with { Discount = best };
+            }
+            return e;
+        }).ToList();
+
+        entities.AddRange(MoneyExtractor.Extract(text, hits));
+        entities.AddRange(DatetimeExtractor.Extract(text, n.PostedAtUtcMs, n.TzOffsetMin));
 
         // ---- 4. log-odds scoring (§8.8) ----
         var scores = new float[9];
@@ -168,6 +193,8 @@ public static class RulesEngine
                 case "channel.security": Add(Category.Security, 1.8f); break;
                 case "channel.updates": Add(Category.Updates, 1.8f); break;
                 case "channel.social": Add(Category.Social, 1.8f); break;
+                case "channel.work": Add(Category.Work, 1.8f); break;
+                case "channel.calendar": Add(Category.Work, 1.6f); Add(Category.Updates, 0.3f); break;
             }
         }
 
@@ -182,14 +209,29 @@ public static class RulesEngine
                 "promo.cashback" or "promo.limited" or "promo.urgency.time" or "promo.first_order"
                     => (Category.Offers, 0.9f),
                 "otp.trigger" or "otp.warning" or "security.login" or "security.password"
+                    or "security.alert" or "security.2fa"
                     => (Category.Security, 0.9f),
-                "orders.status" or "orders.tracking" or "orders.ride"
+                "orders.status" or "orders.tracking" or "orders.ride" or "orders.pin"
+                    or "orders.delivery_person" or "orders.receipt" or "orders.flight"
+                    or "orders.booking"
                     => (Category.Orders, 0.9f),
-                "work.meeting" or "work.mention"
+                "work.mention" => (Category.Work, 2.2f), // §8.10 #5: 'mentioned you in #channel' is strongly work
+                "work.meeting" or "work.calendar" or "work.deadline"
+                    or "work.review" or "work.build" or "work.incident" or "work.ticket"
+                    or "work.doc" or "work.assign"
                     => (Category.Work, 0.9f),
-                "social.reaction" => (Category.Social, 0.9f),
-                "updates.app" or "updates.system" => (Category.Updates, 0.9f),
-                "people.missed_call" or "people.voice_message" => (Category.People, 0.9f),
+                "money.debit" or "money.credit" or "money.transfer" or "money.balance"
+                    or "money.bill" or "money.card" or "money.fraud" or "money.refund"
+                    => (Category.Money, 0.9f),
+                "social.reaction" or "social.follow" or "social.feed" or "social.live"
+                    => (Category.Social, 0.9f),
+                "updates.app" or "updates.system" or "updates.battery" or "updates.storage"
+                    or "updates.weather" or "updates.news"
+                    => (Category.Updates, 0.9f),
+                "people.missed_call" or "people.voice_message" or "people.group"
+                    or "people.greeting"
+                    => (Category.People, 0.9f),
+                "promo.no_code" => (Category.Offers, 0.6f),
                 _ => (Category.Other, 0f),
             };
             if (cat != Category.Other)
@@ -207,11 +249,27 @@ public static class RulesEngine
                 case DiscountEntity { Type: DiscountType.Percent or DiscountType.Amount }: Add(Category.Offers, 1.2f); break;
                 case OtpEntity: Add(Category.Security, 6.0f); break;
                 case OrderRefEntity: Add(Category.Orders, 1.4f); break;
+                case MoneyEntity: Add(Category.Money, 2.0f); break;
+                case DatetimeEntity: Add(Category.Work, 0.6f); break;
             }
         }
 
         // emoji signals (NRM-009)
         if (text.EmojiSignals.Promo >= 1) Add(Category.Offers, 0.5f);
+
+        // app prior (§8.8): λ·log((n_c+α)/(N+9α)), α=1, λ=0.6, clamped ±1.5 (RUL-011)
+        if (prior is { Counts: var counts, Total: var total })
+        {
+            const float alpha = 1f, lambda = 0.6f;
+            for (var i = 0; i < 9; i++)
+            {
+                var c = (Category)i;
+                if (c == Category.Other) continue;
+                var w = lambda * MathF.Log((counts[i] + alpha) / (total + 9 * alpha));
+                var clamped = Math.Clamp(w, -1.5f, 1.5f);
+                Add(c, clamped);
+            }
+        }
 
         // ---- 5. softmax decision (§8.8) ----
         var max = scores.Max();
@@ -232,7 +290,15 @@ public static class RulesEngine
         if (confidence < 0.35f) category = Category.Other;
 
         // ---- 6. hard overrides (RUL-018) ----
-        if (otp is not null)
+        // ride PIN: spec §8.10 #7 — share-PIN-for-driver is NOT an OTP.
+        // A 4..8 digit token sits close to an orders.ride/pin hit (within 12 chars).
+        var ridePin = hits.Any(h => h.ConceptId is "orders.ride" or "orders.pin")
+            && Alak.Rules.Extraction.Tokens.Tokenize(text).Any(t =>
+                   t.Value.Trim('.', ',', '!', ':').All(char.IsDigit)
+                && t.Value.Trim('.', ',', '!', ':').Length is >= 4 and <= 8
+                && hits.Any(h => (h.ConceptId is "orders.ride" or "orders.pin")
+                    && Math.Abs(t.FoldedSpan.Start - h.Span.Start) <= 12));
+        if (otp is not null && !ridePin)
         {
             category = Category.Security;
             needsReview = false;
@@ -249,6 +315,17 @@ public static class RulesEngine
         if (entities.OfType<OtpEntity>().Any()) tags.Add(new Tag("verification-code"));
         if (entities.OfType<OrderRefEntity>().Any()) tags.Add(new Tag("delivery"));
         if (hits.Any(h => h.ConceptId == "promo.urgency.time")) tags.Add(new Tag("expiring"));
+        if (hits.Any(h => h.ConceptId == "promo.no_code")) tags.Add(new Tag("no-code-needed"));
+        if (hits.Any(h => h.ConceptId == "orders.ride")) tags.Add(new Tag("ride"));
+        if (entities.OfType<PromoCodeEntity>().Any(p => p.Kind == PromoCodeKind.Referral)) tags.Add(new Tag("referral"));
+        if (hits.Any(h => h.ConceptId == "work.meeting")) tags.Add(new Tag("meeting"));
+        if (hits.Any(h => h.ConceptId == "work.mention")) tags.Add(new Tag("mention"));
+        // ride PIN: digit token near orders.ride/pin context → ride-pin (§8.10 #7)
+        if (ridePin)
+        {
+            tags.Add(new Tag("ride"));
+            tags.Add(new Tag("ride-pin"));
+        }
 
         // ---- evidence trace (RUL-020): top 6 by weight ----
         var evidence = new List<Evidence>();

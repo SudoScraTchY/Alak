@@ -193,6 +193,25 @@ public static class DiscountExtractor
                 yield return new DiscountEntity(DiscountType.Percent, pct, null, null, "text", (os, oe), 0.95f, "E-02");
             }
         }
+        // "50 percent off" / "۳۰ درصد تخفیف": number + percent-word (E-02)
+        var percentWords = new[] { "percent", "pct", "درصد" };
+        foreach (var pw in percentWords)
+        {
+            var idx = 0;
+            while ((idx = folded.IndexOf(' ' + pw, idx, StringComparison.Ordinal)) >= 0)
+            {
+                var wEnd = idx + 1 + pw.Length;
+                if (wEnd < folded.Length && char.IsLetterOrDigit(folded[wEnd])) { idx = wEnd; continue; }
+                var start = idx;
+                while (start > 0 && (char.IsDigit(folded[start - 1]) || folded[start - 1] == '.')) start--;
+                if (start < idx && decimal.TryParse(folded[start..idx], out var pct) && pct is > 0 and <= 100)
+                {
+                    var (os, oe) = n.OriginalSpan(start, wEnd);
+                    yield return new DiscountEntity(DiscountType.Percent, pct, null, null, "text", (os, oe), 0.9f, "E-02");
+                }
+                idx = wEnd;
+            }
+        }
         // free shipping
         if (folded.Contains("free shipping") || folded.Contains("free delivery"))
         {
