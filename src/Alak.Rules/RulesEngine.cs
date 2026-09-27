@@ -209,6 +209,7 @@ public static class RulesEngine
                 "promo.code.trigger" or "promo.code.referral" or "promo.code.gift" or
                 "promo.discount.word" or "promo.free_shipping" or "promo.bogo" or
                 "promo.cashback" or "promo.limited" or "promo.urgency.time" or "promo.first_order"
+                or "promo.claim" or "promo.event"
                     => (Category.Offers, 0.9f),
                 "otp.trigger" or "otp.warning" or "security.login" or "security.password"
                     or "security.alert" or "security.2fa"
@@ -224,6 +225,7 @@ public static class RulesEngine
                     => (Category.Work, 0.9f),
                 "money.debit" or "money.credit" or "money.transfer" or "money.balance"
                     or "money.bill" or "money.card" or "money.fraud" or "money.refund"
+                    or "money.tax"
                     => (Category.Money, 0.9f),
                 "social.reaction" or "social.follow" or "social.feed" or "social.live"
                     => (Category.Social, 0.9f),
