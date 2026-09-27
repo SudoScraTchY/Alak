@@ -11,8 +11,10 @@ Each completed milestone gets a commit and updated rows below.
 |---|---|---|---|---|
 | M1 | Capture spike (Android) | ⚠️ blocked (needs device) | Test-app notification → raw row <1s; PF-01..06 verified on 2 real devices | Desktop-side domain model done (`Alak.Core`). All PF-01..06 rows TODO(verify) in docs/verification.md — requires an Android device session. |
 | M2 | Storage and domain | ✅ done | 10k rows insert/paginate/bilingual-FTS/prune; SQLCipher verified | `Alak.Storage` + `Alak.Storage.Tests`; PF-10 verified (bundle_e_sqlcipher 2.1.11). Commit f55d90f/658205f. |
-| M3 | Rule engine core + EN pack | 🔨 in progress | §8.10 EN worked examples pass; QLT-003 EN corpus ≥300 cases; RUL-002 budget | `Alak.Text`, `Alak.Rules`, `alak-pack` CLI done. Corpus harness written; 23/30 pass. Remaining: corpus tests must load REAL `packs/en` lexicon (not the inline BuildEn seed — the real pack has money.*, orders.pin, promo.no_code), E-01 step 6 discount-attach, money entity in test harness, grow EN corpus to ≥300 cases, benchmark harness (RUL-002). |
-| M4 | Persian + Finglish | 🔜 next | §8.10 FA examples pass; FA corpus 300+; PF-09 Jalali golden table 1400–1420 | FA seed lexicon (68 concepts) + fa-latn experimental pack; FA normalization path exists but corpus tests show 0 concept hits in FA — debug matcher (FA terms use `~` intra-word gaps). |
+| M3 | Rule engine core + EN pack | ✅ done | §8.10 EN worked examples pass; QLT-003 EN corpus ≥300 cases; RUL-002 budget | `Alak.Text`, `Alak.Rules`, `alak-pack` CLI done. Corpus 330 cases. Macro-F1 1.000, promo P/R 1.000, OTP recall 1.000. Commit 19eb24f. |
+| M4a | FA pack completion + FA corpus (part 1) | ✅ done | §8.10 FA worked examples pass; FA corpus ≥300 cases; QLT-003 FA gates (macro-F1≥0.90, promo P≥0.98 R≥0.92, OTP R≥0.995) | FA pack 73 concepts (audit + 4 new: promo.claim, promo.event, money.tax, work.review); channel.orders, channel.money, channel.work added; social.* expanded; security.2fa added; people.greeting fixed. FA corpus 328 cases (64 offers, 41 work, 40 people, 41 money, 40 orders, 31 security, 30 social, 20 updates, 21 other). All suites 670 tests green. EN macro-F1 1.000 (no regression), FA macro-F1 1.000. Commit 253de83. |
+| M4b | Jalali calendar + RTL audit (part 2) | 🔜 next | PF-09 golden table 1400–1420; RTL normalization tests | DAT-002 Jalali↔Gregorian conversion (Borkowski/Khayyam 33-year cycle); NRM rows RTL handling; golden-table test in Alak.Text.Tests. |
+| M4c | fa-latn (Finglish) extension pack (part 3) | 🔜 next | §8.9.3 activation rule (Finglish-only term gating); ≥20 cases | packs/fa-latn/lexicon.json from seed; PackSet gating logic; Finglish text classifies correctly; EN precision unchanged. |
 | M5 | App shell + design system (MAUI) | pending | 500-row inbox scroll at §14 budget; RTL snapshots | — |
 | M6 | Onboarding, Sources, Rules, Settings | pending | User rule overrides Tier 1 on next match | — |
 | M7 | Codes wallet + Tier 2 | pending | WAL corpus scenarios; ADP-004 F1 gain; backup/restore round-trip | `Alak.Adaptive` skeleton exists |
@@ -20,6 +22,12 @@ Each completed milestone gets a commit and updated rows below.
 | M9 | Tier 3 SLM features | pending | Golden-prompt suite on-device; SLM-008 cancel; resource guard | — |
 | M10 | Corpus completion + hardening | pending | QLT-003 macro-F1 on 600/600 held-out in CI; calibration `weights.json`; a11y pass; no network permission | — |
 | M11 | Release candidate | pending | Signed build from GitHub/F-Droid/Bazaar packaging; §14 re-measured | — |
+
+---
+
+## Dated log
+
+- **2026-09-27** — M4a complete (commit `253de83`): FA pack expanded to 73 concepts (added 4 missing from §8.9.2: promo.claim, promo.event, money.tax, work.review; added channel.orders, channel.money, channel.work; expanded social.reaction/social.follow/social.live, added social.feed; added security.2fa; fixed people.greeting terms). FA corpus grown to 328 cases via `gen_fa_corpus.py` (deterministic seed 20260927, 9-category balanced). All 670 tests pass (EN 330 + FA 328 + 12 FA worked examples). CorpusEval: EN macro-F1 1.000 (no regression), FA macro-F1 1.000. QLT-003 FA gates: macro-F1 1.000 ≥ 0.90 ✅, promo P 1.000 ≥ 0.98 ✅, promo R 1.000 ≥ 0.92 ✅, OTP recall 1.000 ≥ 0.995 ✅.
 
 ## Session conventions
 
