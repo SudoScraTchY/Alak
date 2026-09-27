@@ -195,6 +195,8 @@ public static class RulesEngine
                 case "channel.social": Add(Category.Social, 1.8f); break;
                 case "channel.work": Add(Category.Work, 1.8f); break;
                 case "channel.calendar": Add(Category.Work, 1.6f); Add(Category.Updates, 0.3f); break;
+                case "channel.orders": Add(Category.Orders, 1.5f); break;
+                case "channel.money": Add(Category.Money, 1.5f); break;
             }
         }
 
@@ -229,7 +231,8 @@ public static class RulesEngine
                     or "updates.weather" or "updates.news"
                     => (Category.Updates, 0.9f),
                 "people.missed_call" or "people.voice_message" or "people.group"
-                    or "people.greeting"
+                    or "people.greeting" or "people.direct_message" or "people.photo"
+                    or "people.reaction"
                     => (Category.People, 0.9f),
                 "promo.no_code" => (Category.Offers, 0.6f),
                 _ => (Category.Other, 0f),

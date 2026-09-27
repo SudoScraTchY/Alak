@@ -69,6 +69,13 @@ public static class PromoCodeExtractor
         foreach (var anchor in hits.Where(h => s_strong.Contains(h.ConceptId) || h.ConceptId == "promo.code.trigger.weak"))
         {
             var strong = s_strong.Contains(anchor.ConceptId);
+            if (!strong)
+            {
+                // §8.10 #13: 'no code needed' suppresses weak-anchor extraction entirely;
+                // weak anchors also require offer context (§8.6 E-01)
+                var noCode = hits.Any(h => h.ConceptId == "promo.no_code");
+                if (noCode || !offerContext) continue;
+            }
             var (aStart, aEnd) = anchor.Span;
 
             // window: up to 6 tokens after, up to 4 before (no line crossing)
@@ -79,7 +86,7 @@ public static class PromoCodeExtractor
                 var before = te <= aStart && aStart - te <= 25; // ~4 tokens
                 if (!after && !before) continue;
 
-                var candidate = tok.Value.Trim().Trim(':', '"', '\'', '«', '»', '`', '[', ']', '*', '·', ',', '.', '(', ')');
+                var candidate = tok.Value.Trim().Trim(':', '"', '\'', '«', '»', '`', '[', ']', '*', '·', ',', '.', '(', ')', '!', '?', ';');
                 var trimmed = candidate;
                 if (trimmed.Length is < 4 or > 24) continue;
 

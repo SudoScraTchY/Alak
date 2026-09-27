@@ -39,3 +39,11 @@ Each completed milestone gets a commit and updated rows below.
 - Corpus schema: optional app_prior per case (package history), wired through harness.
 - Corpus: 30/30 green (16 worked examples + negatives), perf tests green, full build 0 warnings.
 - INCIDENT: RulesEngine.cs was found wiped to 0 bytes mid-session (cause unknown); restored via git checkout HEAD + re-applied session patches. Diagnostics app excluded from committed tree.
+
+
+## 2026-09-26 — M3 close-out (QLT-003 EN gate)
+- EN corpus 10 → 330 cases (320 synthetic via tests/corpus/gen_en_corpus.py, channel names + promo_code expectations).
+- tools/Alak.CorpusEval: QLT-003 metric harness (per-cat P/R/F1, macro-F1, promo P/R, OTP recall). EN: macro-F1 1.000, promo P=1.000 R=1.000, OTP R=1.000 — ALL GATES PASS.
+- Engine fixes found by the 300-case run: people.direct_message/photo/reaction routing, channel.orders/money arms, E-01 weak-anchor guard (no_code suppression §8.10 #13 + offer-context requirement + sentence-punct trim), promo-code dedupe.
+- Full suite: Text 17, Rules 350, Core 20, Storage 10, InfAbs 21, Adaptive 1 — all green.
+- M3 exit criteria met (§8.10 EN worked examples + QLT-003 EN + RUL-002). Remaining in M3 scope per §16: none. Next: M4 (FA pack + Jalali PF-09).

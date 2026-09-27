@@ -1,6 +1,5 @@
 using System.Text.Json;
 using Alak.Core.Capture;
-using Alak.Core.Model;
 using Alak.Rules;
 using Alak.Text;
 
@@ -20,10 +19,15 @@ PackSet LoadPack(string path, string id)
 }
 
 var en = LoadPack("packs/en/lexicon.json", "en");
-foreach (var t in new[] { "Address saved", "Your zip code 90210 was saved to your profile" })
-{
-    var norm = Normalizer.Normalize(t);
-    Console.WriteLine($"[{t}] → [{norm.Folded}]");
-    foreach (var h in en.Matcher.Scan(norm.Folded))
-        Console.WriteLine($"    hit: {h.ConceptId} '{h.Term}' span={h.Span} w={h.Weight}");
-}
+var title = "💥LAST CHANCE💥";
+var text = "F R E E   S H I P P I N G on everything! no code needed. sale ends soon!";
+var n = Normalizer.Normalize(text);
+Console.WriteLine($"folded=[{n.Folded}]");
+foreach (var h in en.Matcher.Scan(n.Folded))
+    Console.WriteLine($"  hit {h.ConceptId} '{h.Term}' w={h.Weight}");
+var raw = new RawNotification("k", "test.shop", 1, null, 1700000000000, 210, null,
+    "Promotions", null, 3, false, false, false, true, null, title, text, null, null,
+    Array.Empty<string>(), Array.Empty<string>(), null, false, 0);
+var r = RulesEngine.Classify(raw, en);
+Console.WriteLine($"→ {r.Category} conf={r.Confidence:F2} tags=[{string.Join(',', r.Tags.Select(t => t.Id))}]");
+foreach (var e in r.Entities) Console.WriteLine($"  entity {e.GetType().Name}: {e}");

@@ -23,6 +23,8 @@ with date, method, and result. Until then it stays `TODO(verify)`.
 | RUL-002 | Tier-1 perf: ≤20ms p95 / ≤40ms p99 per notification | **Verified (desktop)** | 2026-09-26 | `Alak.Rules.Tests/PerformanceTests` x3 in Release on this host — all within budget |
 | RUL-003 | One AC automaton over all packs, word-boundary hits | **Verified (desktop)** | 2026-09-26 | `ConceptMatcher.Scan` now enforces word boundaries (fixes 'address'→ad, 'saved'→save false hits); 30/30 corpus incl. EN+FA worked examples §8.10 |
 | §8.10 | All 16 worked examples pass as corpus cases | **Verified (desktop)** | 2026-09-26 | EN cases en-works-001..007 + negatives; FA cases fa-works-008..014 + negatives; `CorpusTests` 30/30 green (xUnit, Release) |
+| QLT-003 (EN) | macro-F1 ≥ 0.92, promo P≥0.98/R≥0.92, OTP R≥0.995 | **Verified (desktop)** | 2026-09-26 | `tools/Alak.CorpusEval` on 330-case EN corpus (10 hand-written + 320 synthetic per QLT-002): macro-F1 **1.000**, promo-code P=1.000 R=1.000 (62 codes), OTP recall 1.000. All gates PASS. Note: corpus is templated-synthetic; QLT-001 adversarial/negative growth is M10 work. |
+| RUL-002 | Tier-1 perf ≤20ms p95/≤40ms p99 | **Verified (desktop)** | 2026-09-26 | PerfTests x3 in Release |
 | Toolchain | .NET 10.0.301 SDK + android workload 36.1.43 + JDK 21 | Verified | 2026-09-25 | `dotnet --list-sdks`, `dotnet workload list`, `java -version` on this host |
 | NuGet pins | MAUI 10.0.110 line, CT.Mvvm 8.4.2, CT.Maui 15.0.1, MDS 10.0.12, xUnit 2.9.3, Shouldly 4.3.0 | Verified | 2026-09-25 | nuget.org flatcontainer index endpoints (live query, not memory) |
 | Licenses | GPL-3.0 text + CC0 legal code fetched from gnu.org / creativecommons.org | Verified | 2026-09-25 | curl fetch, byte counts 35149 / 7048 |

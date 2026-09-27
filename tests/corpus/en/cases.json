@@ -178,5 +178,3565 @@
     "no-code-needed"
    ]
   }
+ },
+ {
+  "id": "en-gen-000",
+  "package": "com.shop0",
+  "channel_name": "Marketing",
+  "title": "Store",
+  "text": "Shop now! 5% off everything with code SPRING25",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "SPRING25"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-001",
+  "package": "com.shop1",
+  "channel_name": "Marketing",
+  "title": "Deals",
+  "text": "Use code SAVE10 at checkout for 5% off your order",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "SAVE10"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-002",
+  "package": "com.shop2",
+  "channel_name": "Marketing",
+  "title": "Sale",
+  "text": "5% off today only — code WELCOME15",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "WELCOME15"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-003",
+  "package": "com.shop3",
+  "channel_name": "Marketing",
+  "title": "Shop",
+  "text": "Free shipping on orders over $45 with code HELLO20",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "HELLO20"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-004",
+  "package": "com.shop4",
+  "channel_name": "Marketing",
+  "title": "Newsletter",
+  "text": "Members get 5% off this weekend. Code: TAKE30",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "TAKE30"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-005",
+  "package": "com.shop5",
+  "channel_name": "Marketing",
+  "title": "Boutique",
+  "text": "Your exclusive code VIP40 takes 5% off",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "VIP40"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-006",
+  "package": "com.shop6",
+  "channel_name": "Marketing",
+  "title": "Market",
+  "text": "Flash sale: 5% off sitewide, apply code FRESH50 at checkout",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "FRESH50"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-007",
+  "package": "com.shop0",
+  "channel_name": "Marketing",
+  "title": "Fashion",
+  "text": "New arrivals are here — 5% off with promo code NEW5",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "NEW5"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-008",
+  "package": "com.shop1",
+  "channel_name": "Marketing",
+  "title": "Gadget",
+  "text": "Weekend deal: 5% off + free shipping with code GET15",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "GET15"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-009",
+  "package": "com.shop2",
+  "channel_name": "Marketing",
+  "title": "Coffee",
+  "text": "Your loyalty reward: 5% off your next drink, code DAY20",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "DAY20"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-010",
+  "package": "com.shop3",
+  "channel_name": "Marketing",
+  "title": "Store",
+  "text": "Don't miss out! 10% off everything with code MEGA10",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "MEGA10"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-011",
+  "package": "com.shop4",
+  "channel_name": "Marketing",
+  "title": "Deals",
+  "text": "Use code PLUS25 at checkout for 10% off your order",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "PLUS25"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-012",
+  "package": "com.shop5",
+  "channel_name": "Marketing",
+  "title": "Sale",
+  "text": "10% off today only — code SPRING25",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "SPRING25"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-013",
+  "package": "com.shop6",
+  "channel_name": "Marketing",
+  "title": "Shop",
+  "text": "Free shipping on orders over $89 with code SAVE10",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "SAVE10"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-014",
+  "package": "com.shop0",
+  "channel_name": "Marketing",
+  "title": "Newsletter",
+  "text": "Members get 10% off this weekend. Code: WELCOME15",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "WELCOME15"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-015",
+  "package": "com.shop1",
+  "channel_name": "Marketing",
+  "title": "Boutique",
+  "text": "Your exclusive code HELLO20 takes 10% off",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "HELLO20"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-016",
+  "package": "com.shop2",
+  "channel_name": "Marketing",
+  "title": "Market",
+  "text": "Flash sale: 10% off sitewide, apply code TAKE30 at checkout",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "TAKE30"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-017",
+  "package": "com.shop3",
+  "channel_name": "Marketing",
+  "title": "Fashion",
+  "text": "New arrivals are here — 10% off with promo code VIP40",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "VIP40"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-018",
+  "package": "com.shop4",
+  "channel_name": "Marketing",
+  "title": "Gadget",
+  "text": "Weekend deal: 10% off + free shipping with code FRESH50",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "FRESH50"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-019",
+  "package": "com.shop5",
+  "channel_name": "Marketing",
+  "title": "Coffee",
+  "text": "Your loyalty reward: 10% off your next drink, code NEW5",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "NEW5"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-020",
+  "package": "com.shop6",
+  "channel_name": "Marketing",
+  "title": "Store",
+  "text": "Shop now! 15% off everything with code GET15",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "GET15"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-021",
+  "package": "com.shop0",
+  "channel_name": "Marketing",
+  "title": "Deals",
+  "text": "Use code DAY20 at checkout for 15% off your order",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "DAY20"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-022",
+  "package": "com.shop1",
+  "channel_name": "Marketing",
+  "title": "Sale",
+  "text": "15% off today only — code MEGA10",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "MEGA10"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-023",
+  "package": "com.shop2",
+  "channel_name": "Marketing",
+  "title": "Shop",
+  "text": "Free shipping on orders over $250 with code PLUS25",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "PLUS25"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-024",
+  "package": "com.shop3",
+  "channel_name": "Marketing",
+  "title": "Newsletter",
+  "text": "Members get 15% off this weekend. Code: SPRING25",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "SPRING25"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-025",
+  "package": "com.shop4",
+  "channel_name": "Marketing",
+  "title": "Boutique",
+  "text": "Your exclusive code SAVE10 takes 15% off",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "SAVE10"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-026",
+  "package": "com.shop5",
+  "channel_name": "Marketing",
+  "title": "Market",
+  "text": "Flash sale: 15% off sitewide, apply code WELCOME15 at checkout",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "WELCOME15"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-027",
+  "package": "com.shop6",
+  "channel_name": "Marketing",
+  "title": "Fashion",
+  "text": "New arrivals are here — 15% off with promo code HELLO20",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "HELLO20"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-028",
+  "package": "com.shop0",
+  "channel_name": "Marketing",
+  "title": "Gadget",
+  "text": "Weekend deal: 15% off + free shipping with code TAKE30",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "TAKE30"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-029",
+  "package": "com.shop1",
+  "channel_name": "Marketing",
+  "title": "Coffee",
+  "text": "Your loyalty reward: 15% off your next drink, code VIP40",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "VIP40"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-030",
+  "package": "com.shop2",
+  "channel_name": "Marketing",
+  "title": "Store",
+  "text": "Don't miss out! 20% off everything with code FRESH50",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "FRESH50"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-031",
+  "package": "com.shop3",
+  "channel_name": "Marketing",
+  "title": "Deals",
+  "text": "Use code NEW5 at checkout for 20% off your order",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "NEW5"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-032",
+  "package": "com.shop4",
+  "channel_name": "Marketing",
+  "title": "Sale",
+  "text": "20% off today only — code GET15",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "GET15"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-033",
+  "package": "com.shop5",
+  "channel_name": "Marketing",
+  "title": "Shop",
+  "text": "Free shipping on orders over $12 with code DAY20",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "DAY20"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-034",
+  "package": "com.shop6",
+  "channel_name": "Marketing",
+  "title": "Newsletter",
+  "text": "Members get 20% off this weekend. Code: MEGA10",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "MEGA10"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-035",
+  "package": "com.shop0",
+  "channel_name": "Marketing",
+  "title": "Boutique",
+  "text": "Your exclusive code PLUS25 takes 20% off",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "PLUS25"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-036",
+  "package": "com.shop1",
+  "channel_name": "Marketing",
+  "title": "Market",
+  "text": "Flash sale: 20% off sitewide, apply code SPRING25 at checkout",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "SPRING25"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-037",
+  "package": "com.shop2",
+  "channel_name": "Marketing",
+  "title": "Fashion",
+  "text": "New arrivals are here — 20% off with promo code SAVE10",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "SAVE10"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-038",
+  "package": "com.shop3",
+  "channel_name": "Marketing",
+  "title": "Gadget",
+  "text": "Weekend deal: 20% off + free shipping with code WELCOME15",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "WELCOME15"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-039",
+  "package": "com.shop4",
+  "channel_name": "Marketing",
+  "title": "Coffee",
+  "text": "Your loyalty reward: 20% off your next drink, code HELLO20",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "HELLO20"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-040",
+  "package": "com.shop5",
+  "channel_name": "Marketing",
+  "title": "Store",
+  "text": "Shop now! 25% off everything with code TAKE30",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "TAKE30"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-041",
+  "package": "com.shop6",
+  "channel_name": "Marketing",
+  "title": "Deals",
+  "text": "Use code VIP40 at checkout for 25% off your order",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "VIP40"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-042",
+  "package": "com.shop0",
+  "channel_name": "Marketing",
+  "title": "Sale",
+  "text": "25% off today only — code FRESH50",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "FRESH50"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-043",
+  "package": "com.shop1",
+  "channel_name": "Marketing",
+  "title": "Shop",
+  "text": "Free shipping on orders over $45 with code NEW5",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "NEW5"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-044",
+  "package": "com.shop2",
+  "channel_name": "Marketing",
+  "title": "Newsletter",
+  "text": "Members get 25% off this weekend. Code: GET15",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "GET15"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-045",
+  "package": "com.shop3",
+  "channel_name": "Marketing",
+  "title": "Boutique",
+  "text": "Your exclusive code DAY20 takes 25% off",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "DAY20"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-046",
+  "package": "com.shop4",
+  "channel_name": "Marketing",
+  "title": "Market",
+  "text": "Flash sale: 25% off sitewide, apply code MEGA10 at checkout",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "MEGA10"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-047",
+  "package": "com.shop5",
+  "channel_name": "Marketing",
+  "title": "Fashion",
+  "text": "New arrivals are here — 25% off with promo code PLUS25",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "PLUS25"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-048",
+  "package": "com.shop6",
+  "channel_name": "Marketing",
+  "title": "Gadget",
+  "text": "Weekend deal: 25% off + free shipping with code SPRING25",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "SPRING25"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-049",
+  "package": "com.shop0",
+  "channel_name": "Marketing",
+  "title": "Coffee",
+  "text": "Your loyalty reward: 25% off your next drink, code SAVE10",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "SAVE10"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-050",
+  "package": "com.shop1",
+  "channel_name": "Marketing",
+  "title": "Store",
+  "text": "Don't miss out! 30% off everything with code WELCOME15",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "WELCOME15"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-051",
+  "package": "com.shop2",
+  "channel_name": "Marketing",
+  "title": "Deals",
+  "text": "Use code HELLO20 at checkout for 30% off your order",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "HELLO20"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-052",
+  "package": "com.shop3",
+  "channel_name": "Marketing",
+  "title": "Sale",
+  "text": "30% off today only — code TAKE30",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "TAKE30"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-053",
+  "package": "com.shop4",
+  "channel_name": "Marketing",
+  "title": "Shop",
+  "text": "Free shipping on orders over $89 with code VIP40",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "VIP40"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-054",
+  "package": "com.shop5",
+  "channel_name": "Marketing",
+  "title": "Newsletter",
+  "text": "Members get 30% off this weekend. Code: FRESH50",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "FRESH50"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-055",
+  "package": "com.shop6",
+  "channel_name": "Marketing",
+  "title": "Boutique",
+  "text": "Your exclusive code NEW5 takes 30% off",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "NEW5"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-056",
+  "package": "com.shop0",
+  "channel_name": "Marketing",
+  "title": "Market",
+  "text": "Flash sale: 30% off sitewide, apply code GET15 at checkout",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "GET15"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-057",
+  "package": "com.shop1",
+  "channel_name": "Marketing",
+  "title": "Fashion",
+  "text": "New arrivals are here — 30% off with promo code DAY20",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "DAY20"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-058",
+  "package": "com.shop2",
+  "channel_name": "Marketing",
+  "title": "Gadget",
+  "text": "Weekend deal: 30% off + free shipping with code MEGA10",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "MEGA10"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-059",
+  "package": "com.shop3",
+  "channel_name": "Marketing",
+  "title": "Coffee",
+  "text": "Your loyalty reward: 30% off your next drink, code PLUS25",
+  "expect": {
+   "category": "offers",
+   "entities": [
+    {
+     "type": "promo_code",
+     "code": "PLUS25"
+    }
+   ]
+  }
+ },
+ {
+  "id": "en-gen-060",
+  "package": "com.work0",
+  "channel_name": "Meetings",
+  "title": "Slack",
+  "text": "Sarah mentioned you in #design-review",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-061",
+  "package": "com.work1",
+  "channel_name": "Meetings",
+  "title": "Slack",
+  "text": "New message from Alex in #engineering",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-062",
+  "package": "com.work2",
+  "channel_name": "Meetings",
+  "title": "Teams",
+  "text": "Standup starts in 10 minutes",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-063",
+  "package": "com.work3",
+  "channel_name": "Meetings",
+  "title": "Calendar",
+  "text": "Meeting: sprint planning at 15:45",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-064",
+  "package": "com.work4",
+  "channel_name": "Meetings",
+  "title": "Calendar",
+  "text": "Reminder: 1:1 with your manager at 16:20",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-065",
+  "package": "com.work5",
+  "channel_name": "Meetings",
+  "title": "GitHub",
+  "text": "PR #1234 review requested: fix login flow",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-066",
+  "package": "com.work0",
+  "channel_name": "Meetings",
+  "title": "GitHub",
+  "text": "CI failed on main: tests broken",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-067",
+  "package": "com.work1",
+  "channel_name": "Meetings",
+  "title": "Jira",
+  "text": "ALAK-99 assigned to you: investigate crash",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-068",
+  "package": "com.work2",
+  "channel_name": "Meetings",
+  "title": "Mail",
+  "text": "Invoice approval needed before Friday",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-069",
+  "package": "com.work3",
+  "channel_name": "Meetings",
+  "title": "Docs",
+  "text": "Priya shared a document with you",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-070",
+  "package": "com.work4",
+  "channel_name": "Meetings",
+  "title": "Slack",
+  "text": "Deploy finished: staging is live",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-071",
+  "package": "com.work5",
+  "channel_name": "Meetings",
+  "title": "Notion",
+  "text": "Comment from Sam on Q3 roadmap",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-072",
+  "package": "com.work0",
+  "channel_name": "Meetings",
+  "title": "Slack",
+  "text": "Sarah mentioned you in #design-review",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-073",
+  "package": "com.work1",
+  "channel_name": "Meetings",
+  "title": "Slack",
+  "text": "New message from Alex in #engineering",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-074",
+  "package": "com.work2",
+  "channel_name": "Meetings",
+  "title": "Teams",
+  "text": "Standup starts in 10 minutes",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-075",
+  "package": "com.work3",
+  "channel_name": "Meetings",
+  "title": "Calendar",
+  "text": "Meeting: sprint planning at 15:45",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-076",
+  "package": "com.work4",
+  "channel_name": "Meetings",
+  "title": "Calendar",
+  "text": "Reminder: 1:1 with your manager at 16:20",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-077",
+  "package": "com.work5",
+  "channel_name": "Meetings",
+  "title": "GitHub",
+  "text": "PR #1234 review requested: fix login flow",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-078",
+  "package": "com.work0",
+  "channel_name": "Meetings",
+  "title": "GitHub",
+  "text": "CI failed on main: tests broken",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-079",
+  "package": "com.work1",
+  "channel_name": "Meetings",
+  "title": "Jira",
+  "text": "ALAK-99 assigned to you: investigate crash",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-080",
+  "package": "com.work2",
+  "channel_name": "Meetings",
+  "title": "Mail",
+  "text": "Invoice approval needed before Friday",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-081",
+  "package": "com.work3",
+  "channel_name": "Meetings",
+  "title": "Docs",
+  "text": "Priya shared a document with you",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-082",
+  "package": "com.work4",
+  "channel_name": "Meetings",
+  "title": "Slack",
+  "text": "Deploy finished: staging is live",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-083",
+  "package": "com.work5",
+  "channel_name": "Meetings",
+  "title": "Notion",
+  "text": "Comment from Sam on Q3 roadmap",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-084",
+  "package": "com.work0",
+  "channel_name": "Meetings",
+  "title": "Slack",
+  "text": "Sarah mentioned you in #design-review",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-085",
+  "package": "com.work1",
+  "channel_name": "Meetings",
+  "title": "Slack",
+  "text": "New message from Alex in #engineering",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-086",
+  "package": "com.work2",
+  "channel_name": "Meetings",
+  "title": "Teams",
+  "text": "Standup starts in 10 minutes",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-087",
+  "package": "com.work3",
+  "channel_name": "Meetings",
+  "title": "Calendar",
+  "text": "Meeting: sprint planning at 15:45",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-088",
+  "package": "com.work4",
+  "channel_name": "Meetings",
+  "title": "Calendar",
+  "text": "Reminder: 1:1 with your manager at 16:20",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-089",
+  "package": "com.work5",
+  "channel_name": "Meetings",
+  "title": "GitHub",
+  "text": "PR #1234 review requested: fix login flow",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-090",
+  "package": "com.work0",
+  "channel_name": "Meetings",
+  "title": "GitHub",
+  "text": "CI failed on main: tests broken",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-091",
+  "package": "com.work1",
+  "channel_name": "Meetings",
+  "title": "Jira",
+  "text": "ALAK-99 assigned to you: investigate crash",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-092",
+  "package": "com.work2",
+  "channel_name": "Meetings",
+  "title": "Mail",
+  "text": "Invoice approval needed before Friday",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-093",
+  "package": "com.work3",
+  "channel_name": "Meetings",
+  "title": "Docs",
+  "text": "Priya shared a document with you",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-094",
+  "package": "com.work4",
+  "channel_name": "Meetings",
+  "title": "Slack",
+  "text": "Deploy finished: staging is live",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-095",
+  "package": "com.work5",
+  "channel_name": "Meetings",
+  "title": "Notion",
+  "text": "Comment from Sam on Q3 roadmap",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-096",
+  "package": "com.work0",
+  "channel_name": "Meetings",
+  "title": "Slack",
+  "text": "Sarah mentioned you in #design-review",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-097",
+  "package": "com.work1",
+  "channel_name": "Meetings",
+  "title": "Slack",
+  "text": "New message from Alex in #engineering",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-098",
+  "package": "com.work2",
+  "channel_name": "Meetings",
+  "title": "Teams",
+  "text": "Standup starts in 10 minutes",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-099",
+  "package": "com.work3",
+  "channel_name": "Meetings",
+  "title": "Calendar",
+  "text": "Meeting: sprint planning at 15:45",
+  "expect": {
+   "category": "work"
+  }
+ },
+ {
+  "id": "en-gen-100",
+  "package": "com.msg0",
+  "channel_name": "Messages",
+  "title": "Messages",
+  "text": "Mom: see you at dinner tonight",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-101",
+  "package": "com.msg1",
+  "channel_name": "Messages",
+  "title": "WhatsApp",
+  "text": "Dad: call me when you land",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-102",
+  "package": "com.msg2",
+  "channel_name": "Messages",
+  "title": "Messages",
+  "text": "New message from Emma: are we still on for Saturday?",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-103",
+  "package": "com.msg3",
+  "channel_name": "Messages",
+  "title": "Messenger",
+  "text": "Liam sent you a photo",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-104",
+  "package": "com.msg4",
+  "channel_name": "Messages",
+  "title": "Telegram",
+  "text": "Nora: I'll be 5 minutes late",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-105",
+  "package": "com.msg0",
+  "channel_name": "Messages",
+  "title": "Messages",
+  "text": "Missed call from Dad",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-106",
+  "package": "com.msg1",
+  "channel_name": "Messages",
+  "title": "Phone",
+  "text": "Missed call from +1 555 010 2233",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-107",
+  "package": "com.msg2",
+  "channel_name": "Messages",
+  "title": "Voicemail",
+  "text": "New voicemail from Mom (0:42)",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-108",
+  "package": "com.msg3",
+  "channel_name": "Messages",
+  "title": "Messages",
+  "text": "Emma liked your message",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-109",
+  "package": "com.msg4",
+  "channel_name": "Messages",
+  "title": "WhatsApp",
+  "text": "Voice message from Ahmed",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-110",
+  "package": "com.msg0",
+  "channel_name": "Messages",
+  "title": "Messages",
+  "text": "Mom: see you at dinner tonight",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-111",
+  "package": "com.msg1",
+  "channel_name": "Messages",
+  "title": "WhatsApp",
+  "text": "Dad: call me when you land",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-112",
+  "package": "com.msg2",
+  "channel_name": "Messages",
+  "title": "Messages",
+  "text": "New message from Emma: are we still on for Saturday?",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-113",
+  "package": "com.msg3",
+  "channel_name": "Messages",
+  "title": "Messenger",
+  "text": "Liam sent you a photo",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-114",
+  "package": "com.msg4",
+  "channel_name": "Messages",
+  "title": "Telegram",
+  "text": "Nora: I'll be 5 minutes late",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-115",
+  "package": "com.msg0",
+  "channel_name": "Messages",
+  "title": "Messages",
+  "text": "Missed call from Dad",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-116",
+  "package": "com.msg1",
+  "channel_name": "Messages",
+  "title": "Phone",
+  "text": "Missed call from +1 555 010 2233",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-117",
+  "package": "com.msg2",
+  "channel_name": "Messages",
+  "title": "Voicemail",
+  "text": "New voicemail from Mom (0:42)",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-118",
+  "package": "com.msg3",
+  "channel_name": "Messages",
+  "title": "Messages",
+  "text": "Emma liked your message",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-119",
+  "package": "com.msg4",
+  "channel_name": "Messages",
+  "title": "WhatsApp",
+  "text": "Voice message from Ahmed",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-120",
+  "package": "com.msg0",
+  "channel_name": "Messages",
+  "title": "Messages",
+  "text": "Mom: see you at dinner tonight",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-121",
+  "package": "com.msg1",
+  "channel_name": "Messages",
+  "title": "WhatsApp",
+  "text": "Dad: call me when you land",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-122",
+  "package": "com.msg2",
+  "channel_name": "Messages",
+  "title": "Messages",
+  "text": "New message from Emma: are we still on for Saturday?",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-123",
+  "package": "com.msg3",
+  "channel_name": "Messages",
+  "title": "Messenger",
+  "text": "Liam sent you a photo",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-124",
+  "package": "com.msg4",
+  "channel_name": "Messages",
+  "title": "Telegram",
+  "text": "Nora: I'll be 5 minutes late",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-125",
+  "package": "com.msg0",
+  "channel_name": "Messages",
+  "title": "Messages",
+  "text": "Missed call from Dad",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-126",
+  "package": "com.msg1",
+  "channel_name": "Messages",
+  "title": "Phone",
+  "text": "Missed call from +1 555 010 2233",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-127",
+  "package": "com.msg2",
+  "channel_name": "Messages",
+  "title": "Voicemail",
+  "text": "New voicemail from Mom (0:42)",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-128",
+  "package": "com.msg3",
+  "channel_name": "Messages",
+  "title": "Messages",
+  "text": "Emma liked your message",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-129",
+  "package": "com.msg4",
+  "channel_name": "Messages",
+  "title": "WhatsApp",
+  "text": "Voice message from Ahmed",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-130",
+  "package": "com.msg0",
+  "channel_name": "Messages",
+  "title": "Messages",
+  "text": "Mom: see you at dinner tonight",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-131",
+  "package": "com.msg1",
+  "channel_name": "Messages",
+  "title": "WhatsApp",
+  "text": "Dad: call me when you land",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-132",
+  "package": "com.msg2",
+  "channel_name": "Messages",
+  "title": "Messages",
+  "text": "New message from Emma: are we still on for Saturday?",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-133",
+  "package": "com.msg3",
+  "channel_name": "Messages",
+  "title": "Messenger",
+  "text": "Liam sent you a photo",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-134",
+  "package": "com.msg4",
+  "channel_name": "Messages",
+  "title": "Telegram",
+  "text": "Nora: I'll be 5 minutes late",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-135",
+  "package": "com.msg0",
+  "channel_name": "Messages",
+  "title": "Messages",
+  "text": "Missed call from Dad",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-136",
+  "package": "com.msg1",
+  "channel_name": "Messages",
+  "title": "Phone",
+  "text": "Missed call from +1 555 010 2233",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-137",
+  "package": "com.msg2",
+  "channel_name": "Messages",
+  "title": "Voicemail",
+  "text": "New voicemail from Mom (0:42)",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-138",
+  "package": "com.msg3",
+  "channel_name": "Messages",
+  "title": "Messages",
+  "text": "Emma liked your message",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-139",
+  "package": "com.msg4",
+  "channel_name": "Messages",
+  "title": "WhatsApp",
+  "text": "Voice message from Ahmed",
+  "expect": {
+   "category": "people"
+  }
+ },
+ {
+  "id": "en-gen-140",
+  "package": "com.bank0",
+  "channel_name": "Finance",
+  "title": "Bank",
+  "text": "$45.00 charged to card ending 1000 at STARBUCKS",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-141",
+  "package": "com.bank1",
+  "channel_name": "Finance",
+  "title": "Bank",
+  "text": "Your balance is $12.50.",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-142",
+  "package": "com.bank2",
+  "channel_name": "Finance",
+  "title": "Wallet",
+  "text": "You sent $24.00 to Jordan",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-143",
+  "package": "com.bank3",
+  "channel_name": "Finance",
+  "title": "Wallet",
+  "text": "Payment received: $45.00 from Riley",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-144",
+  "package": "com.bank0",
+  "channel_name": "Finance",
+  "title": "Bank",
+  "text": "Direct deposit of $250.00 posted to your account",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-145",
+  "package": "com.bank1",
+  "channel_name": "Finance",
+  "title": "Card",
+  "text": "Transaction alert: $9.99 at STARBUCKS",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-146",
+  "package": "com.bank2",
+  "channel_name": "Finance",
+  "title": "Bank",
+  "text": "Your statement is ready to view",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-147",
+  "package": "com.bank3",
+  "channel_name": "Finance",
+  "title": "Budget",
+  "text": "You spent $250.00 on groceries this week",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-148",
+  "package": "com.bank0",
+  "channel_name": "Finance",
+  "title": "Bank",
+  "text": "Refund of $9.99 processed to your account",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-149",
+  "package": "com.bank1",
+  "channel_name": "Finance",
+  "title": "Pay",
+  "text": "You paid $12.50 to City Utilities",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-150",
+  "package": "com.bank2",
+  "channel_name": "Finance",
+  "title": "Bank",
+  "text": "$89.99 charged to card ending 1070 at STARBUCKS",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-151",
+  "package": "com.bank3",
+  "channel_name": "Finance",
+  "title": "Bank",
+  "text": "Your balance is $45.00.",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-152",
+  "package": "com.bank0",
+  "channel_name": "Finance",
+  "title": "Wallet",
+  "text": "You sent $60.75 to Jordan",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-153",
+  "package": "com.bank1",
+  "channel_name": "Finance",
+  "title": "Wallet",
+  "text": "Payment received: $89.99 from Riley",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-154",
+  "package": "com.bank2",
+  "channel_name": "Finance",
+  "title": "Bank",
+  "text": "Direct deposit of $12.50 posted to your account",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-155",
+  "package": "com.bank3",
+  "channel_name": "Finance",
+  "title": "Card",
+  "text": "Transaction alert: $24.00 at STARBUCKS",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-156",
+  "package": "com.bank0",
+  "channel_name": "Finance",
+  "title": "Bank",
+  "text": "Your statement is ready to view",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-157",
+  "package": "com.bank1",
+  "channel_name": "Finance",
+  "title": "Budget",
+  "text": "You spent $12.50 on groceries this week",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-158",
+  "package": "com.bank2",
+  "channel_name": "Finance",
+  "title": "Bank",
+  "text": "Refund of $24.00 processed to your account",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-159",
+  "package": "com.bank3",
+  "channel_name": "Finance",
+  "title": "Pay",
+  "text": "You paid $45.00 to City Utilities",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-160",
+  "package": "com.bank0",
+  "channel_name": "Finance",
+  "title": "Bank",
+  "text": "$250.00 charged to card ending 1140 at STARBUCKS",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-161",
+  "package": "com.bank1",
+  "channel_name": "Finance",
+  "title": "Bank",
+  "text": "Your balance is $89.99.",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-162",
+  "package": "com.bank2",
+  "channel_name": "Finance",
+  "title": "Wallet",
+  "text": "You sent $120.00 to Jordan",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-163",
+  "package": "com.bank3",
+  "channel_name": "Finance",
+  "title": "Wallet",
+  "text": "Payment received: $250.00 from Riley",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-164",
+  "package": "com.bank0",
+  "channel_name": "Finance",
+  "title": "Bank",
+  "text": "Direct deposit of $45.00 posted to your account",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-165",
+  "package": "com.bank1",
+  "channel_name": "Finance",
+  "title": "Card",
+  "text": "Transaction alert: $60.75 at STARBUCKS",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-166",
+  "package": "com.bank2",
+  "channel_name": "Finance",
+  "title": "Bank",
+  "text": "Your statement is ready to view",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-167",
+  "package": "com.bank3",
+  "channel_name": "Finance",
+  "title": "Budget",
+  "text": "You spent $45.00 on groceries this week",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-168",
+  "package": "com.bank0",
+  "channel_name": "Finance",
+  "title": "Bank",
+  "text": "Refund of $60.75 processed to your account",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-169",
+  "package": "com.bank1",
+  "channel_name": "Finance",
+  "title": "Pay",
+  "text": "You paid $89.99 to City Utilities",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-170",
+  "package": "com.bank2",
+  "channel_name": "Finance",
+  "title": "Bank",
+  "text": "$12.50 charged to card ending 1210 at STARBUCKS",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-171",
+  "package": "com.bank3",
+  "channel_name": "Finance",
+  "title": "Bank",
+  "text": "Your balance is $250.00.",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-172",
+  "package": "com.bank0",
+  "channel_name": "Finance",
+  "title": "Wallet",
+  "text": "You sent $9.99 to Jordan",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-173",
+  "package": "com.bank1",
+  "channel_name": "Finance",
+  "title": "Wallet",
+  "text": "Payment received: $12.50 from Riley",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-174",
+  "package": "com.bank2",
+  "channel_name": "Finance",
+  "title": "Bank",
+  "text": "Direct deposit of $89.99 posted to your account",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-175",
+  "package": "com.bank3",
+  "channel_name": "Finance",
+  "title": "Card",
+  "text": "Transaction alert: $120.00 at STARBUCKS",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-176",
+  "package": "com.bank0",
+  "channel_name": "Finance",
+  "title": "Bank",
+  "text": "Your statement is ready to view",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-177",
+  "package": "com.bank1",
+  "channel_name": "Finance",
+  "title": "Budget",
+  "text": "You spent $89.99 on groceries this week",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-178",
+  "package": "com.bank2",
+  "channel_name": "Finance",
+  "title": "Bank",
+  "text": "Refund of $120.00 processed to your account",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-179",
+  "package": "com.bank3",
+  "channel_name": "Finance",
+  "title": "Pay",
+  "text": "You paid $250.00 to City Utilities",
+  "expect": {
+   "category": "money"
+  }
+ },
+ {
+  "id": "en-gen-180",
+  "package": "com.shop0",
+  "channel_name": "Order status",
+  "title": "Shop",
+  "text": "Order 100000 has shipped — arriving tomorrow",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-181",
+  "package": "com.shop1",
+  "channel_name": "Order status",
+  "title": "Shop",
+  "text": "Your order 100013 is out for delivery",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-182",
+  "package": "com.shop2",
+  "channel_name": "Order status",
+  "title": "Shop",
+  "text": "Order 100026 delivered. Rate your experience?",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-183",
+  "package": "com.shop3",
+  "channel_name": "Order status",
+  "title": "Food",
+  "text": "Your food is on the way — arriving in 20 minutes",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-184",
+  "package": "com.shop4",
+  "channel_name": "Order status",
+  "title": "Food",
+  "text": "Courier assigned to order 100052",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-185",
+  "package": "com.shop5",
+  "channel_name": "Order status",
+  "title": "Ride",
+  "text": "Your driver is arriving",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-186",
+  "package": "com.shop6",
+  "channel_name": "Order status",
+  "title": "Ride",
+  "text": "You're 3 minutes away from your destination",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-187",
+  "package": "com.shop0",
+  "channel_name": "Order status",
+  "title": "Shop",
+  "text": "Order 100091 confirmed — we'll email tracking soon",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-188",
+  "package": "com.shop1",
+  "channel_name": "Order status",
+  "title": "Parcel",
+  "text": "Package 100104 is at your front door",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-189",
+  "package": "com.shop2",
+  "channel_name": "Order status",
+  "title": "Shop",
+  "text": "Return for order 100117 was received",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-190",
+  "package": "com.shop3",
+  "channel_name": "Order status",
+  "title": "Shop",
+  "text": "Order 100130 has shipped — arriving tomorrow",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-191",
+  "package": "com.shop4",
+  "channel_name": "Order status",
+  "title": "Shop",
+  "text": "Your order 100143 is out for delivery",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-192",
+  "package": "com.shop5",
+  "channel_name": "Order status",
+  "title": "Shop",
+  "text": "Order 100156 delivered. Rate your experience?",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-193",
+  "package": "com.shop6",
+  "channel_name": "Order status",
+  "title": "Food",
+  "text": "Your food is on the way — arriving in 20 minutes",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-194",
+  "package": "com.shop0",
+  "channel_name": "Order status",
+  "title": "Food",
+  "text": "Courier assigned to order 100182",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-195",
+  "package": "com.shop1",
+  "channel_name": "Order status",
+  "title": "Ride",
+  "text": "Your driver is arriving",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-196",
+  "package": "com.shop2",
+  "channel_name": "Order status",
+  "title": "Ride",
+  "text": "You're 3 minutes away from your destination",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-197",
+  "package": "com.shop3",
+  "channel_name": "Order status",
+  "title": "Shop",
+  "text": "Order 100221 confirmed — we'll email tracking soon",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-198",
+  "package": "com.shop4",
+  "channel_name": "Order status",
+  "title": "Parcel",
+  "text": "Package 100234 is at your front door",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-199",
+  "package": "com.shop5",
+  "channel_name": "Order status",
+  "title": "Shop",
+  "text": "Return for order 100247 was received",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-200",
+  "package": "com.shop6",
+  "channel_name": "Order status",
+  "title": "Shop",
+  "text": "Order 100260 has shipped — arriving tomorrow",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-201",
+  "package": "com.shop0",
+  "channel_name": "Order status",
+  "title": "Shop",
+  "text": "Your order 100273 is out for delivery",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-202",
+  "package": "com.shop1",
+  "channel_name": "Order status",
+  "title": "Shop",
+  "text": "Order 100286 delivered. Rate your experience?",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-203",
+  "package": "com.shop2",
+  "channel_name": "Order status",
+  "title": "Food",
+  "text": "Your food is on the way — arriving in 20 minutes",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-204",
+  "package": "com.shop3",
+  "channel_name": "Order status",
+  "title": "Food",
+  "text": "Courier assigned to order 100312",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-205",
+  "package": "com.shop4",
+  "channel_name": "Order status",
+  "title": "Ride",
+  "text": "Your driver is arriving",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-206",
+  "package": "com.shop5",
+  "channel_name": "Order status",
+  "title": "Ride",
+  "text": "You're 3 minutes away from your destination",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-207",
+  "package": "com.shop6",
+  "channel_name": "Order status",
+  "title": "Shop",
+  "text": "Order 100351 confirmed — we'll email tracking soon",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-208",
+  "package": "com.shop0",
+  "channel_name": "Order status",
+  "title": "Parcel",
+  "text": "Package 100364 is at your front door",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-209",
+  "package": "com.shop1",
+  "channel_name": "Order status",
+  "title": "Shop",
+  "text": "Return for order 100377 was received",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-210",
+  "package": "com.shop2",
+  "channel_name": "Order status",
+  "title": "Shop",
+  "text": "Order 100390 has shipped — arriving tomorrow",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-211",
+  "package": "com.shop3",
+  "channel_name": "Order status",
+  "title": "Shop",
+  "text": "Your order 100403 is out for delivery",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-212",
+  "package": "com.shop4",
+  "channel_name": "Order status",
+  "title": "Shop",
+  "text": "Order 100416 delivered. Rate your experience?",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-213",
+  "package": "com.shop5",
+  "channel_name": "Order status",
+  "title": "Food",
+  "text": "Your food is on the way — arriving in 20 minutes",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-214",
+  "package": "com.shop6",
+  "channel_name": "Order status",
+  "title": "Food",
+  "text": "Courier assigned to order 100442",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-215",
+  "package": "com.shop0",
+  "channel_name": "Order status",
+  "title": "Ride",
+  "text": "Your driver is arriving",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-216",
+  "package": "com.shop1",
+  "channel_name": "Order status",
+  "title": "Ride",
+  "text": "You're 3 minutes away from your destination",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-217",
+  "package": "com.shop2",
+  "channel_name": "Order status",
+  "title": "Shop",
+  "text": "Order 100481 confirmed — we'll email tracking soon",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-218",
+  "package": "com.shop3",
+  "channel_name": "Order status",
+  "title": "Parcel",
+  "text": "Package 100494 is at your front door",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-219",
+  "package": "com.shop4",
+  "channel_name": "Order status",
+  "title": "Shop",
+  "text": "Return for order 100507 was received",
+  "expect": {
+   "category": "orders"
+  }
+ },
+ {
+  "id": "en-gen-220",
+  "package": "com.auth0",
+  "channel_name": "Verification",
+  "title": "Bank",
+  "text": "Your verification code is 100000. Don't share it.",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-221",
+  "package": "com.auth1",
+  "channel_name": "Verification",
+  "title": "Auth",
+  "text": "Your login code is 100137",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-222",
+  "package": "com.auth2",
+  "channel_name": "Verification",
+  "title": "Bank",
+  "text": "Passcode: 100274 — valid for 5 minutes",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-223",
+  "package": "com.auth0",
+  "channel_name": "Verification",
+  "title": "Auth",
+  "text": "100411 is your one-time code",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-224",
+  "package": "com.auth1",
+  "channel_name": "Verification",
+  "title": "Bank",
+  "text": "Confirm your number with code 100548",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-225",
+  "package": "com.auth2",
+  "channel_name": "Verification",
+  "title": "Security",
+  "text": "New device signed in to your account",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-226",
+  "package": "com.auth0",
+  "channel_name": "Verification",
+  "title": "Auth",
+  "text": "Two-factor code: 100822",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-227",
+  "package": "com.auth1",
+  "channel_name": "Verification",
+  "title": "Bank",
+  "text": "Heads up: password changed on your account",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-228",
+  "package": "com.auth2",
+  "channel_name": "Verification",
+  "title": "Bank",
+  "text": "Your verification code is 101096. Don't share it.",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-229",
+  "package": "com.auth0",
+  "channel_name": "Verification",
+  "title": "Auth",
+  "text": "Your login code is 101233",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-230",
+  "package": "com.auth1",
+  "channel_name": "Verification",
+  "title": "Bank",
+  "text": "Passcode: 101370 — valid for 5 minutes",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-231",
+  "package": "com.auth2",
+  "channel_name": "Verification",
+  "title": "Auth",
+  "text": "101507 is your one-time code",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-232",
+  "package": "com.auth0",
+  "channel_name": "Verification",
+  "title": "Bank",
+  "text": "Confirm your number with code 101644",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-233",
+  "package": "com.auth1",
+  "channel_name": "Verification",
+  "title": "Security",
+  "text": "New device signed in to your account",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-234",
+  "package": "com.auth2",
+  "channel_name": "Verification",
+  "title": "Auth",
+  "text": "Two-factor code: 101918",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-235",
+  "package": "com.auth0",
+  "channel_name": "Verification",
+  "title": "Bank",
+  "text": "Heads up: password changed on your account",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-236",
+  "package": "com.auth1",
+  "channel_name": "Verification",
+  "title": "Bank",
+  "text": "Your verification code is 102192. Don't share it.",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-237",
+  "package": "com.auth2",
+  "channel_name": "Verification",
+  "title": "Auth",
+  "text": "Your login code is 102329",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-238",
+  "package": "com.auth0",
+  "channel_name": "Verification",
+  "title": "Bank",
+  "text": "Passcode: 102466 — valid for 5 minutes",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-239",
+  "package": "com.auth1",
+  "channel_name": "Verification",
+  "title": "Auth",
+  "text": "102603 is your one-time code",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-240",
+  "package": "com.auth2",
+  "channel_name": "Verification",
+  "title": "Bank",
+  "text": "Confirm your number with code 102740",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-241",
+  "package": "com.auth0",
+  "channel_name": "Verification",
+  "title": "Security",
+  "text": "New device signed in to your account",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-242",
+  "package": "com.auth1",
+  "channel_name": "Verification",
+  "title": "Auth",
+  "text": "Two-factor code: 103014",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-243",
+  "package": "com.auth2",
+  "channel_name": "Verification",
+  "title": "Bank",
+  "text": "Heads up: password changed on your account",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-244",
+  "package": "com.auth0",
+  "channel_name": "Verification",
+  "title": "Bank",
+  "text": "Your verification code is 103288. Don't share it.",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-245",
+  "package": "com.auth1",
+  "channel_name": "Verification",
+  "title": "Auth",
+  "text": "Your login code is 103425",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-246",
+  "package": "com.auth2",
+  "channel_name": "Verification",
+  "title": "Bank",
+  "text": "Passcode: 103562 — valid for 5 minutes",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-247",
+  "package": "com.auth0",
+  "channel_name": "Verification",
+  "title": "Auth",
+  "text": "103699 is your one-time code",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-248",
+  "package": "com.auth1",
+  "channel_name": "Verification",
+  "title": "Bank",
+  "text": "Confirm your number with code 103836",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-249",
+  "package": "com.auth2",
+  "channel_name": "Verification",
+  "title": "Security",
+  "text": "New device signed in to your account",
+  "expect": {
+   "category": "security"
+  }
+ },
+ {
+  "id": "en-gen-250",
+  "package": "com.soc0",
+  "channel_name": "Community",
+  "title": "Insta",
+  "text": "alex_dev liked your photo",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-251",
+  "package": "com.soc1",
+  "channel_name": "Community",
+  "title": "Tok",
+  "text": "New follower: sam_codes",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-252",
+  "package": "com.soc2",
+  "channel_name": "Community",
+  "title": "Insta",
+  "text": "You have 3 new follower requests",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-253",
+  "package": "com.soc3",
+  "channel_name": "Community",
+  "title": "X",
+  "text": "Your post got 12 new likes",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-254",
+  "package": "com.soc0",
+  "channel_name": "Community",
+  "title": "Tok",
+  "text": "kate posted a new video: morning routine",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-255",
+  "package": "com.soc1",
+  "channel_name": "Community",
+  "title": "Insta",
+  "text": "Story mention from leo",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-256",
+  "package": "com.soc2",
+  "channel_name": "Community",
+  "title": "X",
+  "text": "Trending in your area: city marathon",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-257",
+  "package": "com.soc3",
+  "channel_name": "Community",
+  "title": "Tok",
+  "text": "Your video reached 1,000 views",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-258",
+  "package": "com.soc0",
+  "channel_name": "Community",
+  "title": "Insta",
+  "text": "alex_dev liked your photo",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-259",
+  "package": "com.soc1",
+  "channel_name": "Community",
+  "title": "Tok",
+  "text": "New follower: sam_codes",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-260",
+  "package": "com.soc2",
+  "channel_name": "Community",
+  "title": "Insta",
+  "text": "You have 3 new follower requests",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-261",
+  "package": "com.soc3",
+  "channel_name": "Community",
+  "title": "X",
+  "text": "Your post got 12 new likes",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-262",
+  "package": "com.soc0",
+  "channel_name": "Community",
+  "title": "Tok",
+  "text": "kate posted a new video: morning routine",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-263",
+  "package": "com.soc1",
+  "channel_name": "Community",
+  "title": "Insta",
+  "text": "Story mention from leo",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-264",
+  "package": "com.soc2",
+  "channel_name": "Community",
+  "title": "X",
+  "text": "Trending in your area: city marathon",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-265",
+  "package": "com.soc3",
+  "channel_name": "Community",
+  "title": "Tok",
+  "text": "Your video reached 1,000 views",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-266",
+  "package": "com.soc0",
+  "channel_name": "Community",
+  "title": "Insta",
+  "text": "alex_dev liked your photo",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-267",
+  "package": "com.soc1",
+  "channel_name": "Community",
+  "title": "Tok",
+  "text": "New follower: sam_codes",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-268",
+  "package": "com.soc2",
+  "channel_name": "Community",
+  "title": "Insta",
+  "text": "You have 3 new follower requests",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-269",
+  "package": "com.soc3",
+  "channel_name": "Community",
+  "title": "X",
+  "text": "Your post got 12 new likes",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-270",
+  "package": "com.soc0",
+  "channel_name": "Community",
+  "title": "Tok",
+  "text": "kate posted a new video: morning routine",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-271",
+  "package": "com.soc1",
+  "channel_name": "Community",
+  "title": "Insta",
+  "text": "Story mention from leo",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-272",
+  "package": "com.soc2",
+  "channel_name": "Community",
+  "title": "X",
+  "text": "Trending in your area: city marathon",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-273",
+  "package": "com.soc3",
+  "channel_name": "Community",
+  "title": "Tok",
+  "text": "Your video reached 1,000 views",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-274",
+  "package": "com.soc0",
+  "channel_name": "Community",
+  "title": "Insta",
+  "text": "alex_dev liked your photo",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-275",
+  "package": "com.soc1",
+  "channel_name": "Community",
+  "title": "Tok",
+  "text": "New follower: sam_codes",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-276",
+  "package": "com.soc2",
+  "channel_name": "Community",
+  "title": "Insta",
+  "text": "You have 3 new follower requests",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-277",
+  "package": "com.soc3",
+  "channel_name": "Community",
+  "title": "X",
+  "text": "Your post got 12 new likes",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-278",
+  "package": "com.soc0",
+  "channel_name": "Community",
+  "title": "Tok",
+  "text": "kate posted a new video: morning routine",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-279",
+  "package": "com.soc1",
+  "channel_name": "Community",
+  "title": "Insta",
+  "text": "Story mention from leo",
+  "expect": {
+   "category": "social"
+  }
+ },
+ {
+  "id": "en-gen-280",
+  "package": "com.os0",
+  "channel_name": "System",
+  "title": "OS",
+  "text": "System update available: security patch",
+  "expect": {
+   "category": "updates"
+  }
+ },
+ {
+  "id": "en-gen-281",
+  "package": "com.os1",
+  "channel_name": "System",
+  "title": "OS",
+  "text": "Storage almost full: 500 MB remaining",
+  "expect": {
+   "category": "updates"
+  }
+ },
+ {
+  "id": "en-gen-282",
+  "package": "com.os2",
+  "channel_name": "System",
+  "title": "Battery",
+  "text": "Battery at 15% — consider charging",
+  "expect": {
+   "category": "updates"
+  }
+ },
+ {
+  "id": "en-gen-283",
+  "package": "com.os0",
+  "channel_name": "System",
+  "title": "Weather",
+  "text": "Rain expected around 6 PM today",
+  "expect": {
+   "category": "updates"
+  }
+ },
+ {
+  "id": "en-gen-284",
+  "package": "com.os1",
+  "channel_name": "System",
+  "title": "Play",
+  "text": "3 apps updated in the background",
+  "expect": {
+   "category": "updates"
+  }
+ },
+ {
+  "id": "en-gen-285",
+  "package": "com.os2",
+  "channel_name": "System",
+  "title": "OS",
+  "text": "Screenshot saved",
+  "expect": {
+   "category": "updates"
+  }
+ },
+ {
+  "id": "en-gen-286",
+  "package": "com.os0",
+  "channel_name": "System",
+  "title": "Backup",
+  "text": "Last backup: yesterday 11:42 PM",
+  "expect": {
+   "category": "updates"
+  }
+ },
+ {
+  "id": "en-gen-287",
+  "package": "com.os1",
+  "channel_name": "System",
+  "title": "OS",
+  "text": "System update available: security patch",
+  "expect": {
+   "category": "updates"
+  }
+ },
+ {
+  "id": "en-gen-288",
+  "package": "com.os2",
+  "channel_name": "System",
+  "title": "OS",
+  "text": "Storage almost full: 500 MB remaining",
+  "expect": {
+   "category": "updates"
+  }
+ },
+ {
+  "id": "en-gen-289",
+  "package": "com.os0",
+  "channel_name": "System",
+  "title": "Battery",
+  "text": "Battery at 15% — consider charging",
+  "expect": {
+   "category": "updates"
+  }
+ },
+ {
+  "id": "en-gen-290",
+  "package": "com.os1",
+  "channel_name": "System",
+  "title": "Weather",
+  "text": "Rain expected around 6 PM today",
+  "expect": {
+   "category": "updates"
+  }
+ },
+ {
+  "id": "en-gen-291",
+  "package": "com.os2",
+  "channel_name": "System",
+  "title": "Play",
+  "text": "3 apps updated in the background",
+  "expect": {
+   "category": "updates"
+  }
+ },
+ {
+  "id": "en-gen-292",
+  "package": "com.os0",
+  "channel_name": "System",
+  "title": "OS",
+  "text": "Screenshot saved",
+  "expect": {
+   "category": "updates"
+  }
+ },
+ {
+  "id": "en-gen-293",
+  "package": "com.os1",
+  "channel_name": "System",
+  "title": "Backup",
+  "text": "Last backup: yesterday 11:42 PM",
+  "expect": {
+   "category": "updates"
+  }
+ },
+ {
+  "id": "en-gen-294",
+  "package": "com.os2",
+  "channel_name": "System",
+  "title": "OS",
+  "text": "System update available: security patch",
+  "expect": {
+   "category": "updates"
+  }
+ },
+ {
+  "id": "en-gen-295",
+  "package": "com.os0",
+  "channel_name": "System",
+  "title": "OS",
+  "text": "Storage almost full: 500 MB remaining",
+  "expect": {
+   "category": "updates"
+  }
+ },
+ {
+  "id": "en-gen-296",
+  "package": "com.os1",
+  "channel_name": "System",
+  "title": "Battery",
+  "text": "Battery at 15% — consider charging",
+  "expect": {
+   "category": "updates"
+  }
+ },
+ {
+  "id": "en-gen-297",
+  "package": "com.os2",
+  "channel_name": "System",
+  "title": "Weather",
+  "text": "Rain expected around 6 PM today",
+  "expect": {
+   "category": "updates"
+  }
+ },
+ {
+  "id": "en-gen-298",
+  "package": "com.os0",
+  "channel_name": "System",
+  "title": "Play",
+  "text": "3 apps updated in the background",
+  "expect": {
+   "category": "updates"
+  }
+ },
+ {
+  "id": "en-gen-299",
+  "package": "com.os1",
+  "channel_name": "System",
+  "title": "OS",
+  "text": "Screenshot saved",
+  "expect": {
+   "category": "updates"
+  }
+ },
+ {
+  "id": "en-gen-300",
+  "package": "com.misc0",
+  "channel_name": "Miscellaneous",
+  "title": "Misc",
+  "text": "Your zip code 90210 was saved to your profile",
+  "expect": {
+   "category": "other"
+  }
+ },
+ {
+  "id": "en-gen-301",
+  "package": "com.misc1",
+  "channel_name": "Miscellaneous",
+  "title": "Misc",
+  "text": "Backup completed successfully",
+  "expect": {
+   "category": "other"
+  }
+ },
+ {
+  "id": "en-gen-302",
+  "package": "com.misc2",
+  "channel_name": "Miscellaneous",
+  "title": "Random",
+  "text": "You have a new memory in your gallery",
+  "expect": {
+   "category": "other"
+  }
+ },
+ {
+  "id": "en-gen-303",
+  "package": "com.misc3",
+  "channel_name": "Miscellaneous",
+  "title": "Misc",
+  "text": "Terms of service updated — tap to review",
+  "expect": {
+   "category": "other"
+  }
+ },
+ {
+  "id": "en-gen-304",
+  "package": "com.misc4",
+  "channel_name": "Miscellaneous",
+  "title": "Care",
+  "text": "How are we doing? Rate your last order",
+  "expect": {
+   "category": "other"
+  }
+ },
+ {
+  "id": "en-gen-305",
+  "package": "com.misc0",
+  "channel_name": "Miscellaneous",
+  "title": "Care",
+  "text": "Account tip: set a profile photo",
+  "expect": {
+   "category": "other"
+  }
+ },
+ {
+  "id": "en-gen-306",
+  "package": "com.misc1",
+  "channel_name": "Miscellaneous",
+  "title": "Care",
+  "text": "Complete your profile to get started",
+  "expect": {
+   "category": "other"
+  }
+ },
+ {
+  "id": "en-gen-307",
+  "package": "com.misc2",
+  "channel_name": "Miscellaneous",
+  "title": "Misc",
+  "text": "Weekly digest: 5 tips for better sleep",
+  "expect": {
+   "category": "other"
+  }
+ },
+ {
+  "id": "en-gen-308",
+  "package": "com.misc3",
+  "channel_name": "Miscellaneous",
+  "title": "Care",
+  "text": "Thanks for signing up! Complete your profile",
+  "expect": {
+   "category": "other"
+  }
+ },
+ {
+  "id": "en-gen-309",
+  "package": "com.misc4",
+  "channel_name": "Miscellaneous",
+  "title": "Misc",
+  "text": "Your zip code 90210 was saved to your profile",
+  "expect": {
+   "category": "other"
+  }
+ },
+ {
+  "id": "en-gen-310",
+  "package": "com.misc0",
+  "channel_name": "Miscellaneous",
+  "title": "Misc",
+  "text": "Backup completed successfully",
+  "expect": {
+   "category": "other"
+  }
+ },
+ {
+  "id": "en-gen-311",
+  "package": "com.misc1",
+  "channel_name": "Miscellaneous",
+  "title": "Random",
+  "text": "You have a new memory in your gallery",
+  "expect": {
+   "category": "other"
+  }
+ },
+ {
+  "id": "en-gen-312",
+  "package": "com.misc2",
+  "channel_name": "Miscellaneous",
+  "title": "Misc",
+  "text": "Terms of service updated — tap to review",
+  "expect": {
+   "category": "other"
+  }
+ },
+ {
+  "id": "en-gen-313",
+  "package": "com.misc3",
+  "channel_name": "Miscellaneous",
+  "title": "Care",
+  "text": "How are we doing? Rate your last order",
+  "expect": {
+   "category": "other"
+  }
+ },
+ {
+  "id": "en-gen-314",
+  "package": "com.misc4",
+  "channel_name": "Miscellaneous",
+  "title": "Care",
+  "text": "Account tip: set a profile photo",
+  "expect": {
+   "category": "other"
+  }
+ },
+ {
+  "id": "en-gen-315",
+  "package": "com.misc0",
+  "channel_name": "Miscellaneous",
+  "title": "Care",
+  "text": "Complete your profile to get started",
+  "expect": {
+   "category": "other"
+  }
+ },
+ {
+  "id": "en-gen-316",
+  "package": "com.misc1",
+  "channel_name": "Miscellaneous",
+  "title": "Misc",
+  "text": "Weekly digest: 5 tips for better sleep",
+  "expect": {
+   "category": "other"
+  }
+ },
+ {
+  "id": "en-gen-317",
+  "package": "com.misc2",
+  "channel_name": "Miscellaneous",
+  "title": "Care",
+  "text": "Thanks for signing up! Complete your profile",
+  "expect": {
+   "category": "other"
+  }
+ },
+ {
+  "id": "en-gen-318",
+  "package": "com.misc3",
+  "channel_name": "Miscellaneous",
+  "title": "Misc",
+  "text": "Your zip code 90210 was saved to your profile",
+  "expect": {
+   "category": "other"
+  }
+ },
+ {
+  "id": "en-gen-319",
+  "package": "com.misc4",
+  "channel_name": "Miscellaneous",
+  "title": "Misc",
+  "text": "Backup completed successfully",
+  "expect": {
+   "category": "other"
+  }
  }
 ]
