@@ -23,5 +23,7 @@
   "license": "CC0-1.0",
   "dependsOn": [
     "en"
-  ]
+  ],
+  "experimental": true,
+  "notes": "Experimental Finglish extension pack (§8.9.3). Activates only on Finglish-only terms; never reduces EN precision."
 }
