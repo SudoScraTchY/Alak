@@ -1,0 +1,368 @@
+{
+  "audit_metadata": {
+    "description": "RTL/Bidi audit corpus for FA pack (Arabic script). Covers LTR/RTL mismatches, Bidi_Control chars, NFKC vs NFD stability, and Zero-Width joiners.",
+    "spec_references": ["NRM-002", "NRM-003", "NRM-004", "NRM-006", "LNG-001"],
+    "generated": "2026-10-03",
+    "total_cases": 47
+  },
+  "cases": [
+    {
+      "id": "rtl-001",
+      "category": "bidi_control_removal",
+      "description": "Right-to-Left Mark (U+200F) glued to Latin text should be stripped from Folded but kept in Text",
+      "input": "code SAVE20\u200F now",
+      "expect_folded": "code save20 now",
+      "expect_text_contains": "SAVE20\u200F",
+      "expect_folded_not_contains": "\u200F"
+    },
+    {
+      "id": "rtl-002",
+      "category": "bidi_control_removal",
+      "description": "Left-to-Right Mark (U+200E) glued to Persian text should be stripped from Folded",
+      "input": "کد\u200ESAVE20",
+      "expect_folded": "کد save20",
+      "expect_text_contains": "SAVE20",
+      "expect_folded_not_contains": "\u200E"
+    },
+    {
+      "id": "rtl-003",
+      "category": "bidi_control_removal",
+      "description": "Right-to-Left Embedding (U+202B) should be stripped from Folded",
+      "input": "price \u202B\u06F5\u06F0\u202C تومان",
+      "expect_folded": "price 50 تومان",
+      "expect_folded_not_contains": "\u202B"
+    },
+    {
+      "id": "rtl-004",
+      "category": "bidi_control_removal",
+      "description": "Left-to-Right Embedding (U+202A) should be stripped from Folded",
+      "input": "\u202ASAVE20\u202C تخفیف",
+      "expect_folded": "save20 تخفیف",
+      "expect_folded_not_contains": "\u202A"
+    },
+    {
+      "id": "rtl-005",
+      "category": "bidi_control_removal",
+      "description": "Right-to-Left Override (U+202E) should be stripped from Folded",
+      "input": "کد \u202ESAVE20\u202C",
+      "expect_folded": "کد save20",
+      "expect_folded_not_contains": "\u202E"
+    },
+    {
+      "id": "rtl-006",
+      "category": "bidi_control_removal",
+      "description": "Left-to-Right Override (U+202D) should be stripped from Folded",
+      "input": "\u202DSAVE20\u202C کد",
+      "expect_folded": "save20 کد",
+      "expect_folded_not_contains": "\u202D"
+    },
+    {
+      "id": "rtl-007",
+      "category": "bidi_control_removal",
+      "description": "Right-to-Right Isolate (U+2067) should be stripped from Folded",
+      "input": "\u2067SAVE20\u2069",
+      "expect_folded": "save20",
+      "expect_folded_not_contains": "\u2067"
+    },
+    {
+      "id": "rtl-008",
+      "category": "bidi_control_removal",
+      "description": "Left-to-Right Isolate (U+2066) should be stripped from Folded",
+      "input": "\u2066SAVE20\u2069",
+      "expect_folded": "save20",
+      "expect_folded_not_contains": "\u2066"
+    },
+    {
+      "id": "rtl-009",
+      "category": "bidi_control_removal",
+      "description": "First Strong Isolate (U+2068) should be stripped from Folded",
+      "input": "\u2068SAVE20\u2069",
+      "expect_folded": "save20",
+      "expect_folded_not_contains": "\u2068"
+    },
+    {
+      "id": "rtl-010",
+      "category": "bidi_control_removal",
+      "description": "Pop Directional Isolate (U+2069) should be stripped from Folded",
+      "input": "\u2068SAVE20\u2069",
+      "expect_folded": "save20",
+      "expect_folded_not_contains": "\u2069"
+    },
+    {
+      "id": "rtl-011",
+      "category": "bidi_control_removal",
+      "description": "Zero Width Space (U+200B) should be stripped from Folded",
+      "input": "SAVE\u200B20",
+      "expect_folded": "save20",
+      "expect_folded_not_contains": "\u200B"
+    },
+    {
+      "id": "rtl-012",
+      "category": "bidi_control_removal",
+      "description": "Zero Width Non-Joiner (U+200C) should become space in Folded",
+      "input": "می\u200Cشود",
+      "expect_folded": "می شود",
+      "expect_folded_contains": " "
+    },
+    {
+      "id": "rtl-013",
+      "category": "bidi_control_removal",
+      "description": "Zero Width Joiner (U+200D) should be stripped from Folded",
+      "input": "تخفی\u200Dف",
+      "expect_folded": "تخفیف",
+      "expect_folded_not_contains": "\u200D"
+    },
+    {
+      "id": "rtl-014",
+      "category": "bidi_control_removal",
+      "description": "Soft Hyphen (U+00AD) should be stripped from Folded",
+      "input": "SAVE\u00AD20",
+      "expect_folded": "save20",
+      "expect_folded_not_contains": "\u00AD"
+    },
+    {
+      "id": "rtl-015",
+      "category": "bidi_control_removal",
+      "description": "Byte Order Mark (U+FEFF) should be stripped from Folded",
+      "input": "\uFEFFSAVE20",
+      "expect_folded": "save20",
+      "expect_folded_not_contains": "\uFEFF"
+    },
+    {
+      "id": "rtl-016",
+      "category": "zwj_handling",
+      "description": "ZWJ in Persian text should be removed in Folded (not become space)",
+      "input": "می\u200Dخواهد",
+      "expect_folded": "میخواهد",
+      "expect_folded_not_contains": "\u200D"
+    },
+    {
+      "id": "rtl-017",
+      "category": "zwj_handling",
+      "description": "Multiple ZWJs should all be removed",
+      "input": "ک\u200Dد\u200D",
+      "expect_folded": "کد",
+      "expect_folded_not_contains": "\u200D"
+    },
+    {
+      "id": "rtl-018",
+      "category": "zwj_handling",
+      "description": "ZWJ between Persian and Latin should be removed",
+      "input": "کد\u200DSAVE20",
+      "expect_folded": "کد save20",
+      "expect_folded_not_contains": "\u200D"
+    },
+    {
+      "id": "rtl-019",
+      "category": "nfc_nfd_stability",
+      "description": "NFKC should normalize composed Persian characters",
+      "input": "أ\u0654",
+      "expect_folded": "ا",
+      "description_detail": "NFKC should compose to precomposed form"
+    },
+    {
+      "id": "rtl-020",
+      "category": "nfc_nfd_stability",
+      "description": "Arabic presentation forms should normalize to base letters",
+      "input": "\uFB50",
+      "expect_folded": "ی",
+      "description_detail": "Presentation forms fold to base letter"
+    },
+    {
+      "id": "rtl-021",
+      "category": "nfc_nfd_stability",
+      "description": "Tatweel (U+0640) should be removed",
+      "input": "تخ\u0640\u0640ف\u0640\u0640یف",
+      "expect_folded": "تخفیف",
+      "expect_folded_not_contains": "\u0640"
+    },
+    {
+      "id": "rtl-022",
+      "category": "nfc_nfd_stability",
+      "description": "Harakat (diacritics U+064B-U+065F) should be removed",
+      "input": "\u062A\u064E\u062E\u064E\u0641\u064E\u06CC\u064F\u0641",
+      "expect_folded": "تخفیف",
+      "expect_folded_not_contains_any": ["\u064E", "\u064F", "\u0650", "\u064B", "\u064C", "\u064D"]
+    },
+    {
+      "id": "rtl-023",
+      "category": "nfc_nfd_stability",
+      "description": "Superscript Alef (U+0670) should be removed",
+      "input": "آ\u0670",
+      "expect_folded": "آ",
+      "expect_folded_not_contains": "\u0670"
+    },
+    {
+      "id": "rtl-024",
+      "category": "nfc_nfd_stability",
+      "description": "Arabic-Indic digits should normalize to ASCII",
+      "input": "\u0661\u0662\u0663",
+      "expect_folded": "123"
+    },
+    {
+      "id": "rtl-025",
+      "category": "nfc_nfd_stability",
+      "description": "Persian digits should normalize to ASCII",
+      "input": "\u06F1\u06F2\u06F3",
+      "expect_folded": "123"
+    },
+    {
+      "id": "rtl-026",
+      "category": "nfc_nfd_stability",
+      "description": "Arabic thousands separator should become comma",
+      "input": "\u06F1\u066C\u06F2\u06F3\u06F4",
+      "expect_folded": "1,234"
+    },
+    {
+      "id": "rtl-027",
+      "category": "nfc_nfd_stability",
+      "description": "Arabic decimal separator should become period",
+      "input": "\u06F1\u06F2\u066B\u06F3\u06F4",
+      "expect_folded": "12.34"
+    },
+    {
+      "id": "rtl-028",
+      "category": "nfc_nfd_stability",
+      "description": "Percent sign should normalize",
+      "input": "\u06F5\u06F0\u066A",
+      "expect_folded": "50%"
+    },
+    {
+      "id": "rtl-029",
+      "category": "nfc_nfd_stability",
+      "description": "Arabic comma should normalize",
+      "input": "سلام\u060C دنیا",
+      "expect_folded": "سلام\u060C دنیا"
+    },
+    {
+      "id": "rtl-030",
+      "category": "nfc_nfd_stability",
+      "description": "Arabic semicolon should normalize",
+      "input": "سلام\u061B دنیا",
+      "expect_folded": "سلام\u061B دنیا"
+    },
+    {
+      "id": "rtl-031",
+      "category": "nfc_nfd_stability",
+      "description": "Arabic question mark should normalize",
+      "input": "چطورید\u061F",
+      "expect_folded": "چطورید\u061F"
+    },
+    {
+      "id": "rtl-032",
+      "category": "letter_unification",
+      "description": "Arabic Yeh (U+064A) should unify to Persian Yeh (U+06CC)",
+      "input": "\u0643\u062F \u062A\u062E\u0641\u064A\u0641",
+      "expect_folded": "کد تخفیف"
+    },
+    {
+      "id": "rtl-033",
+      "category": "letter_unification",
+      "description": "Arabic Alef Maksura (U+0649) should unify to Persian Yeh",
+      "input": "\u0645\u0631\u0649",
+      "expect_folded": "مری"
+    },
+    {
+      "id": "rtl-034",
+      "category": "letter_unification",
+      "description": "Arabic Kaf (U+0643) should unify to Persian Kaf (U+06A9)",
+      "input": "\u0643\u062A\u0627\u0628",
+      "expect_folded": "کتاب"
+    },
+    {
+      "id": "rtl-035",
+      "category": "letter_unification",
+      "description": "Arabic Teh Marbuta (U+0629) should unify to Heh (U+0647)",
+      "input": "\u0634\u0647\u0631\u0629",
+      "expect_folded": "شهره"
+    },
+    {
+      "id": "rtl-036",
+      "category": "letter_unification",
+      "description": "Arabic Heh Goal (U+06C0) should unify to Heh",
+      "input": "\u067E\u06C0",
+      "expect_folded": "په"
+    },
+    {
+      "id": "rtl-037",
+      "category": "letter_unification",
+      "description": "Arabic Alef with Hamza Above (U+0623) should unify to Alef",
+      "input": "\u0623\u0645\u0627\u0646",
+      "expect_folded": "امن"
+    },
+    {
+      "id": "rtl-038",
+      "category": "letter_unification",
+      "description": "Arabic Alef with Hamza Below (U+0625) should unify to Alef",
+      "input": "\u0625\u0633\u0644\u0627\u0645",
+      "expect_folded": "اسلام"
+    },
+    {
+      "id": "rtl-039",
+      "category": "letter_unification",
+      "description": "Arabic Waw with Hamza (U+0624) should unify to Waw",
+      "input": "\u0624\u0645\u06CC\u062F",
+      "expect_folded": "امید"
+    },
+    {
+      "id": "rtl-040",
+      "category": "letter_unification",
+      "description": "Arabic Yeh with Hamza (U+0626) should unify to Persian Yeh",
+      "input": "\u0626\u0645\u0627\u0646",
+      "expect_folded": "ایمان"
+    },
+    {
+      "id": "rtl-041",
+      "category": "mixed_script",
+      "description": "Mixed Persian/Latin with bidi controls should handle correctly",
+      "input": "کد SAVE20 را وارد کنید",
+      "expect_folded": "کد save20 را وارد کنید",
+      "expect_script_runs": ["Arab", "Latn", "Arab"]
+    },
+    {
+      "id": "rtl-042",
+      "category": "mixed_script",
+      "description": "Persian digits mixed with Latin should normalize",
+      "input": "قیمت \u06F1\u06F2\u06F3 دلار",
+      "expect_folded": "قیمت 123 دلار",
+      "expect_script_runs": ["Arab", "Latn"]
+    },
+    {
+      "id": "rtl-043",
+      "category": "mixed_script",
+      "description": "RTL text with LTR numbers should maintain span mapping",
+      "input": "تخفیف \u06F5\u06F0\u066A",
+      "expect_folded": "تخفیف 50%",
+      "expect_script_runs": ["Arab", "Latn"]
+    },
+    {
+      "id": "rtl-044",
+      "category": "span_mapping",
+      "description": "Span mapping should work with bidi controls present",
+      "input": "کد\u200F SAVE20\u200E",
+      "expect_span_mapping_works": true
+    },
+    {
+      "id": "rtl-045",
+      "category": "span_mapping",
+      "description": "Span mapping should work with ZWNJ",
+      "input": "می\u200Cشود",
+      "expect_span_mapping_works": true
+    },
+    {
+      "id": "rtl-046",
+      "category": "edge_case",
+      "description": "Empty string should normalize to empty",
+      "input": "",
+      "expect_folded": "",
+      "expect_text": ""
+    },
+    {
+      "id": "rtl-047",
+      "category": "edge_case",
+      "description": "Only bidi controls should normalize to empty folded",
+      "input": "\u200F\u200E\u202A\u202B\u202C\u202D\u202E\u2066\u2067\u2068\u2069\u200B\u200C\u200D\u00AD\uFEFF",
+      "expect_folded": ""
+    }
+  ]
+}
