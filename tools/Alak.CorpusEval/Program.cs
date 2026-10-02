@@ -26,7 +26,32 @@ foreach (var concept in doc.RootElement.GetProperty("concepts").EnumerateObject(
     }
     concepts[concept.Name] = terms;
 }
-var packs = PackSet.Compile(new[] { new LanguagePack(lang, concepts) });
+// Extension packs (§8.9.3): a lang like 'fa-latn' depends on 'en' — load the base
+// pack first, then the extension, mirroring the shipped pack-set order.
+var enPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "packs", "en", "lexicon.json"));
+var packList = new List<LanguagePack>();
+if (lang != "en" && File.Exists(enPath))
+    packList.Add(LoadPackFile(enPath, "en"));
+packList.Add(new LanguagePack(lang, concepts));
+var packs = PackSet.Compile(packList);
+
+LanguagePack LoadPackFile(string path, string id)
+{
+    using var d = JsonDocument.Parse(File.ReadAllText(path));
+    var cs = new Dictionary<string, IReadOnlyList<(string Term, float Weight)>>();
+    foreach (var concept in d.RootElement.GetProperty("concepts").EnumerateObject())
+    {
+        var w2 = concept.Value.TryGetProperty("weight", out var w) ? (float)w.GetDouble() : 0.9f;
+        var ts = new List<(string, float)>();
+        foreach (var t in concept.Value.GetProperty("terms").EnumerateArray())
+        {
+            if (t.ValueKind == JsonValueKind.String) ts.Add((t.GetString()!, w2));
+            else if (t.ValueKind == JsonValueKind.Array) ts.Add((t[0].GetString()!, (float)t[1].GetDouble()));
+        }
+        cs[concept.Name] = ts;
+    }
+    return new LanguagePack(id, cs);
+}
 
 // load corpus
 var cases = JsonDocument.Parse(File.ReadAllText(corpusPath)).RootElement.EnumerateArray().ToList();

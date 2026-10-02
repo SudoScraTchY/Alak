@@ -17,6 +17,7 @@ public class CorpusTests
 
     public static IEnumerable<object[]> EnCases() => Load("en");
     public static IEnumerable<object[]> FaCases() => Load("fa");
+    public static IEnumerable<object[]> FaLatnCases() => Load("fa-latn");
 
     private static IEnumerable<object[]> Load(string lang)
     {
@@ -95,6 +96,21 @@ public class CorpusTests
             $"case {c.Id}: got {r.Category}, confidence {r.Confidence:F2}");
     }
 
+    [Theory]
+    [MemberData(nameof(FaLatnCases))]
+    public void FA_LATN_CorpusCase(CorpusCase c)
+    {
+        // §8.9.3: fa-latn is an experimental extension pack (dependsOn: en) — it must
+        // only activate on Finglish-only terms and never change EN scoring. Corpus
+        // cases run with en + fa-latn compiled together (the shipped configuration).
+        var n = ToRaw(c);
+        var packs = PackSet.Compile(EnPlusFaLatnPack());
+        var r = RulesEngine.Classify(n, packs, ToPrior(c));
+        var expected = JsonSerializer.Deserialize<Expect>(c.Expect.GetRawText())!;
+        r.Category.ShouldBe(Enum.Parse<Category>(expected.Category, ignoreCase: true),
+            $"case {c.Id}: got {r.Category}, confidence {r.Confidence:F2}");
+    }
+
     private static RulesEngine.AppPrior? ToPrior(CorpusCase c)
     {
         if (c.AppPrior is null or { Count: 0 }) return null;
@@ -126,6 +142,15 @@ public class CorpusTests
         var lexiconPath = Path.Combine(s_root, "..", "..", "packs", "fa", "lexicon.json");
         return LoadPack(lexiconPath, "fa");
     }
+
+    internal static LanguagePack FaLatnPack()
+    {
+        var lexiconPath = Path.Combine(s_root, "..", "..", "packs", "fa-latn", "lexicon.json");
+        return LoadPack(lexiconPath, "fa-latn");
+    }
+
+    /// <summary>Extension-pack load order per §8.9.3: base pack (en) first, fa-latn after.</summary>
+    internal static IReadOnlyList<LanguagePack> EnPlusFaLatnPack() => new[] { EnPack(), FaLatnPack() };
 
     private static LanguagePack EnPack()
     {

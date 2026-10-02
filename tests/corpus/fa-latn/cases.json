@@ -1,0 +1,250 @@
+[
+  {
+    "id": "fa-latn-gen-000",
+    "package": "test.finglish0",
+    "channel_name": "foroosh vizhe",
+    "title": "foroosh vizhe",
+    "text": "kod takhfif TAKHFIF25 baraye 50% takhfif",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "TAKHFIF25"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-latn-gen-001",
+    "package": "test.finglish1",
+    "channel_name": "takhfif ha",
+    "title": "takhfif ha",
+    "text": "takhfif 30 darsadi ba kod takhfif SAVE10FA",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "SAVE10FA"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-latn-gen-002",
+    "package": "test.finglish2",
+    "channel_name": "jashnvareh",
+    "title": "jashnvareh",
+    "text": "foroosh vizhe emshab! kod hediye JASHN1405",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "JASHN1405"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-latn-gen-003",
+    "package": "test.finglish3",
+    "channel_name": "takhfif",
+    "title": "takhfif",
+    "text": "ersal rayegan baraye kharid balaye 750000 toman ba kod takhfif RAYEGAN50",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "RAYEGAN50"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-latn-gen-004",
+    "package": "test.finglish4",
+    "channel_name": "forush vizhe",
+    "title": "forush vizhe",
+    "text": "ta payan emshab 25% takhfif site. code takhfif: EMSHAB99",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "EMSHAB99"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-latn-gen-005",
+    "package": "test.finglish5",
+    "channel_name": "foroosh",
+    "title": "foroosh",
+    "text": "kod hediye HEDIYEH20 baraye sabt nam rayegan",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "HEDIYEH20"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-latn-gen-006",
+    "package": "test.finglish6",
+    "channel_name": "akhbar",
+    "title": "akhbar",
+    "text": "emshab ta 30 darsad takhfif, fori bidar shavad",
+    "expect": {
+      "category": "offers"
+    }
+  },
+  {
+    "id": "fa-latn-gen-007",
+    "package": "test.finglish7",
+    "channel_name": "takhfifha",
+    "title": "takhfifha",
+    "text": "40% takhfif kart be kart ba mojoodi kafi",
+    "expect": {
+      "category": "offers"
+    }
+  },
+  {
+    "id": "fa-latn-gen-008",
+    "package": "test.bank8",
+    "channel_name": "variz anjam shod",
+    "title": "variz anjam shod",
+    "text": "mojoodi shoma 500000 toman ast",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-latn-gen-009",
+    "package": "test.bank9",
+    "channel_name": "bank",
+    "title": "bank",
+    "text": "bardasht 1200000 tomani anjam shod. mojoodi: 250000 toman",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-latn-gen-010",
+    "package": "test.bank10",
+    "channel_name": "kart be kart",
+    "title": "kart be kart",
+    "text": "variz 250000 toman be kart dide shod",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-latn-gen-011",
+    "package": "test.bank11",
+    "channel_name": "banki",
+    "title": "banki",
+    "text": "mojoodi you 750000 toman mibashad",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-latn-gen-012",
+    "package": "test.orders12",
+    "channel_name": "sefaresh",
+    "title": "sefaresh",
+    "text": "sefaresh shoma amadeh ersal ast",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-latn-gen-013",
+    "package": "test.orders13",
+    "channel_name": "orders",
+    "title": "orders",
+    "text": "sefaresh #1039 ersal shod",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-latn-gen-014",
+    "package": "test.orders14",
+    "channel_name": "pik",
+    "title": "pik",
+    "text": "sefaresh shoma dar rahe guyayi ast",
+    "expect": {
+      "category": "other"
+    }
+  },
+  {
+    "id": "fa-latn-gen-015",
+    "package": "test.orders15",
+    "channel_name": "sefaresh ha",
+    "title": "sefaresh ha",
+    "text": "sefaresh shoma 1045 dakika digar mirasad",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-latn-gen-016",
+    "package": "test.en16",
+    "channel_name": "Deals",
+    "title": "Deals",
+    "text": "Big sale this weekend: 50% off everything with code SAVE50",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "SAVE50"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-latn-gen-017",
+    "package": "test.en17",
+    "channel_name": "Messages",
+    "title": "Messages",
+    "text": "Hey, are we still on for tonight?",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-latn-gen-018",
+    "package": "test.en18",
+    "channel_name": "bank",
+    "title": "bank",
+    "text": "Your verification code is 555123. Do not share it with anyone.",
+    "expect": {
+      "category": "security",
+      "entities": [
+        {
+          "type": "otp",
+          "length": 6
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-latn-gen-019",
+    "package": "test.en19",
+    "channel_name": "Updates",
+    "title": "Updates",
+    "text": "System update available. Tap to install.",
+    "expect": {
+      "category": "updates"
+    }
+  }
+]

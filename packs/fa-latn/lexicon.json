@@ -1,0 +1,70 @@
+{
+  "concepts": {
+    "promo.code.trigger": {
+      "terms": [
+        "kod~takhfif",
+        "kod~hediye",
+        "code~takhfif"
+      ],
+      "weight": 1.0
+    },
+    "promo.discount.word": {
+      "terms": [
+        "takhfif"
+      ],
+      "weight": 0.9
+    },
+    "promo.free_shipping": {
+      "terms": [
+        "ersal~rayegan",
+        "rayegan"
+      ],
+      "weight": 0.9
+    },
+    "promo.urgency.time": {
+      "terms": [
+        "ta~payan~emshab",
+        "ta~emshab"
+      ],
+      "weight": 0.9
+    },
+    "promo.limited": {
+      "terms": [
+        "fori"
+      ],
+      "weight": 0.9
+    },
+    "money.transfer": {
+      "terms": [
+        "variz",
+        "bardasht"
+      ],
+      "weight": 0.9
+    },
+    "money.balance": {
+      "terms": [
+        "mojoodi"
+      ],
+      "weight": 0.9
+    },
+    "money.card": {
+      "terms": [
+        "kart~be~kart"
+      ],
+      "weight": 0.9
+    },
+    "orders.status": {
+      "terms": [
+        "sefaresh"
+      ],
+      "weight": 0.9
+    },
+    "channel.promo": {
+      "terms": [
+        "foroosh~vizhe",
+        "forush~vizhe"
+      ],
+      "weight": 0.9
+    }
+  }
+}
