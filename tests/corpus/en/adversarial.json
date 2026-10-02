@@ -1,0 +1,662 @@
+[
+  {
+    "id": "en-adv-obf-001",
+    "package": "test.shop",
+    "channel_name": "Promotions",
+    "title": "S P R I N G   S A L E",
+    "text": "25% off with code S P R I N G 2 5",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "obfuscation"
+    }
+  },
+  {
+    "id": "en-adv-obf-002",
+    "package": "test.shop",
+    "channel_name": "Deals",
+    "title": "F L A S H   S A L E",
+    "text": "Use code S A V E 2 0 for 20% discount",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "obfuscation"
+    }
+  },
+  {
+    "id": "en-adv-obf-003",
+    "package": "test.bank",
+    "channel_name": "Security",
+    "title": "V E R I F I C A T I O N",
+    "text": "Your code is 4 8 2 9 1 3",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "obfuscation"
+    }
+  },
+  {
+    "id": "en-adv-obf-004",
+    "package": "test.app",
+    "channel_name": "Updates",
+    "title": "N E W   V E R S I O N",
+    "text": "Update to v2.5.0 now",
+    "expect": {
+      "category": "updates",
+      "adversarial_type": "obfuscation"
+    }
+  },
+  {
+    "id": "en-adv-obf-005",
+    "package": "test.ride",
+    "channel_name": "Orders",
+    "title": "R I D E   A R R I V I N G",
+    "text": "Driver is 3 min away",
+    "expect": {
+      "category": "updates",
+      "adversarial_type": "obfuscation"
+    }
+  },
+  {
+    "id": "en-adv-obf-006",
+    "package": "test.food",
+    "channel_name": "Offers",
+    "title": "F R E E   D E L I V E R Y",
+    "text": "Code F R E E S H I P for free delivery",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "obfuscation"
+    }
+  },
+  {
+    "id": "en-adv-mixed-001",
+    "package": "test.shop",
+    "channel_name": "Promotions",
+    "title": "Sale تخفیف предложение",
+    "text": "25% off with code تخفیف предложение ABC123 1080",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "mixed_scripts"
+    }
+  },
+  {
+    "id": "en-adv-mixed-002",
+    "package": "test.bank",
+    "channel_name": "Security",
+    "title": "Alert اعتبار скидка",
+    "text": "Your verification code is اعتبار скидка ABC123 9155",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "mixed_scripts"
+    }
+  },
+  {
+    "id": "en-adv-mixed-003",
+    "package": "test.app",
+    "channel_name": "Updates",
+    "title": "Update پیشنهاد предложение",
+    "text": "New version available پیشنهاد предложение ABC123 2750",
+    "expect": {
+      "category": "updates",
+      "adversarial_type": "mixed_scripts"
+    }
+  },
+  {
+    "id": "en-adv-mixed-004",
+    "package": "test.ride",
+    "channel_name": "Orders",
+    "title": "Ride بانک предложение",
+    "text": "Driver arriving in بانک предложение ABC123 5885",
+    "expect": {
+      "category": "updates",
+      "adversarial_type": "mixed_scripts"
+    }
+  },
+  {
+    "id": "en-adv-mixed-005",
+    "package": "test.food",
+    "channel_name": "Offers",
+    "title": "Delivery تخفیف магазин",
+    "text": "Free delivery with code تخفیف магазин ABC123 8800",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "mixed_scripts"
+    }
+  },
+  {
+    "id": "en-adv-mixed-006",
+    "package": "test.store",
+    "channel_name": "News",
+    "title": "News بانک карта",
+    "text": "Check out our latest بانک карта ABC123 3034",
+    "expect": {
+      "category": "updates",
+      "adversarial_type": "mixed_scripts"
+    }
+  },
+  {
+    "id": "en-adv-glue-001",
+    "package": "test.shop",
+    "channel_name": "Promotions",
+    "title": "Sale",
+    "text": "50%offcode:SPRING25",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "punctuation_glue"
+    }
+  },
+  {
+    "id": "en-adv-glue-002",
+    "package": "test.shop",
+    "channel_name": "Deals",
+    "title": "Flash",
+    "text": "20pctoffuseSAVE20now",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "punctuation_glue"
+    }
+  },
+  {
+    "id": "en-adv-glue-003",
+    "package": "test.bank",
+    "channel_name": "Security",
+    "title": "Alert",
+    "text": "CODE:482913VERIFY",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "punctuation_glue"
+    }
+  },
+  {
+    "id": "en-adv-glue-004",
+    "package": "test.app",
+    "channel_name": "Updates",
+    "title": "New",
+    "text": "v2.5.0available:update",
+    "expect": {
+      "category": "updates",
+      "adversarial_type": "punctuation_glue"
+    }
+  },
+  {
+    "id": "en-adv-glue-005",
+    "package": "test.ride",
+    "channel_name": "Orders",
+    "title": "Ride",
+    "text": "Driver:3mineta:arriving!!!",
+    "expect": {
+      "category": "updates",
+      "adversarial_type": "punctuation_glue"
+    }
+  },
+  {
+    "id": "en-adv-glue-006",
+    "package": "test.food",
+    "channel_name": "Offers",
+    "title": "Delivery",
+    "text": "!!Free:codeFREESHIPapply??",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "punctuation_glue"
+    }
+  },
+  {
+    "id": "en-adv-rtl-001",
+    "package": "test.shop",
+    "channel_name": "Promotions",
+    "title": "S‏pri‏ng ‏Sal‏e",
+    "text": "2‏5% o‏ff w‏ith ‏code‏ SPR‏ING2‏5",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "rtl_marks"
+    }
+  },
+  {
+    "id": "en-adv-rtl-002",
+    "package": "test.bank",
+    "channel_name": "Security",
+    "title": "B‮ank‮ Al‮ert‮",
+    "text": "Y‮our ‮code‮ is ‮4829‮13",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "rtl_marks"
+    }
+  },
+  {
+    "id": "en-adv-rtl-003",
+    "package": "test.app",
+    "channel_name": "Updates",
+    "title": "A‭pp ‭Upd‭ate‭",
+    "text": "V‭ersi‭on 2‭.5.0‭ ava‭ilab‭le",
+    "expect": {
+      "category": "updates",
+      "adversarial_type": "rtl_marks"
+    }
+  },
+  {
+    "id": "en-adv-rtl-004",
+    "package": "test.ride",
+    "channel_name": "Orders",
+    "title": "R‏‏ide‏‏ St‏‏atu‏‏s",
+    "text": "D‏‏rive‏‏r ar‏‏rivi‏‏ng i‏‏n 3 ‏‏min",
+    "expect": {
+      "category": "updates",
+      "adversarial_type": "rtl_marks"
+    }
+  },
+  {
+    "id": "en-adv-rtl-005",
+    "package": "test.food",
+    "channel_name": "Offers",
+    "title": "F‮text‬ree‮text‬ De‮text‬liv‮text‬ery‮text‬",
+    "text": "U‮text‬se c‮text‬ode ‮text‬FREE‮text‬SHIP‮text‬",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "rtl_marks"
+    }
+  },
+  {
+    "id": "en-adv-rtl-006",
+    "package": "test.store",
+    "channel_name": "News",
+    "title": "C‏lea‏ran‏ce",
+    "text": "7‏0% o‏ff e‏very‏thin‏g",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "rtl_marks"
+    }
+  },
+  {
+    "id": "en-adv-emoji-001",
+    "package": "test.shop",
+    "channel_name": "Promotions",
+    "title": "🔥💰🎁🎉💯",
+    "text": "🔥💰🎁🎉💯🔥💰🎁🎉💯🔥💰🎁🎉💯",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "emoji_only"
+    }
+  },
+  {
+    "id": "en-adv-emoji-002",
+    "package": "test.app",
+    "channel_name": "Rewards",
+    "title": "💸🛍️🏷️💰🔥",
+    "text": "💸🛍️🏷️💰🔥💸🛍️🏷️💰🔥💸🛍️🏷️💰🔥",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "emoji_only"
+    }
+  },
+  {
+    "id": "en-adv-emoji-003",
+    "package": "test.game",
+    "channel_name": "Offers",
+    "title": "🚀⚡💎🎁💯",
+    "text": "🚀⚡💎🎁💯🚀⚡💎🎁💯🚀⚡💎🎁💯",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "emoji_only"
+    }
+  },
+  {
+    "id": "en-adv-emoji-004",
+    "package": "test.store",
+    "channel_name": "Deals",
+    "title": "💰💸🤑💵💴",
+    "text": "💰💸🤑💵💴💰💸🤑💵💴💰💸🤑💵💴",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "emoji_only"
+    }
+  },
+  {
+    "id": "en-adv-emoji-005",
+    "package": "test.food",
+    "channel_name": "Flash Sale",
+    "title": "🎉🎊🥳🎁🎈",
+    "text": "🎉🎊🥳🎁🎈🎉🎊🥳🎁🎈🎉🎊🥳🎁🎈",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "emoji_only"
+    }
+  },
+  {
+    "id": "en-adv-emoji-006",
+    "package": "test.ride",
+    "channel_name": "Specials",
+    "title": "🔥⚡💥💯🚀",
+    "text": "🔥⚡💥💯🚀🔥⚡💥💯🚀🔥⚡💥💯🚀",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "emoji_only"
+    }
+  },
+  {
+    "id": "en-adv-empty-title-001",
+    "package": "test.shop",
+    "channel_name": "Promotions",
+    "title": "",
+    "text": "25% off everything with code SPRING25",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "empty_title"
+    }
+  },
+  {
+    "id": "en-adv-empty-title-002",
+    "package": "test.bank",
+    "channel_name": "Security",
+    "title": "",
+    "text": "Your verification code is 482913. Do not share.",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "empty_title"
+    }
+  },
+  {
+    "id": "en-adv-empty-title-003",
+    "package": "test.app",
+    "channel_name": "Updates",
+    "title": "",
+    "text": "Version 2.5.0 is now available with bug fixes.",
+    "expect": {
+      "category": "updates",
+      "adversarial_type": "empty_title"
+    }
+  },
+  {
+    "id": "en-adv-empty-title-004",
+    "package": "test.ride",
+    "channel_name": "Orders",
+    "title": "",
+    "text": "Your driver is arriving in 3 minutes.",
+    "expect": {
+      "category": "updates",
+      "adversarial_type": "empty_title"
+    }
+  },
+  {
+    "id": "en-adv-empty-title-005",
+    "package": "test.food",
+    "channel_name": "Offers",
+    "title": "",
+    "text": "Free delivery on orders over $25 with code FREESHIP",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "empty_title"
+    }
+  },
+  {
+    "id": "en-adv-empty-title-006",
+    "package": "test.store",
+    "channel_name": "News",
+    "title": "",
+    "text": "Clearance sale: 70% off all items today only.",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "empty_title"
+    }
+  },
+  {
+    "id": "en-adv-large-001",
+    "package": "test.app",
+    "channel_name": "Updates",
+    "title": "Long Article 1",
+    "text": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis e Code: BIGSALE50 for 50% off.",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "large_body"
+    }
+  },
+  {
+    "id": "en-adv-large-002",
+    "package": "test.news",
+    "channel_name": "Newsletter",
+    "title": "Long Article 2",
+    "text": "Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nemo enim ipsam voluptatem quia volup Code: BIGSALE50 for 50% off.",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "large_body"
+    }
+  },
+  {
+    "id": "en-adv-large-003",
+    "package": "test.blog",
+    "channel_name": "Blog",
+    "title": "Long Article 3",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate Code: BIGSALE50 for 50% off.",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "large_body"
+    }
+  },
+  {
+    "id": "en-adv-large-004",
+    "package": "test.shop",
+    "channel_name": "Announcements",
+    "title": "Long Article 4",
+    "text": "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Duis aute irure do Code: BIGSALE50 for 50% off.",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "large_body"
+    }
+  },
+  {
+    "id": "en-adv-large-005",
+    "package": "test.service",
+    "channel_name": "Digest",
+    "title": "Long Article 5",
+    "text": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, Code: BIGSALE50 for 50% off.",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "large_body"
+    }
+  },
+  {
+    "id": "en-adv-large-006",
+    "package": "test.platform",
+    "channel_name": "Notifications",
+    "title": "Long Article 6",
+    "text": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, q Code: BIGSALE50 for 50% off.",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "large_body"
+    }
+  },
+  {
+    "id": "en-adv-trunc-001",
+    "package": "test.shop",
+    "channel_name": "Promotions",
+    "title": "Spring Sale",
+    "text": "25% off everything with code SPRIN…",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "truncated_text"
+    }
+  },
+  {
+    "id": "en-adv-trunc-002",
+    "package": "test.bank",
+    "channel_name": "Security",
+    "title": "Bank Alert",
+    "text": "Your verification code is 482…",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "truncated_text"
+    }
+  },
+  {
+    "id": "en-adv-trunc-003",
+    "package": "test.app",
+    "channel_name": "Updates",
+    "title": "App Update",
+    "text": "Version 2.5.0 avai…",
+    "expect": {
+      "category": "updates",
+      "adversarial_type": "truncated_text"
+    }
+  },
+  {
+    "id": "en-adv-trunc-004",
+    "package": "test.ride",
+    "channel_name": "Orders",
+    "title": "Ride Status",
+    "text": "Your driver is ar…",
+    "expect": {
+      "category": "updates",
+      "adversarial_type": "truncated_text"
+    }
+  },
+  {
+    "id": "en-adv-trunc-005",
+    "package": "test.food",
+    "channel_name": "Offers",
+    "title": "Free Delivery",
+    "text": "Free delivery on orders …",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "truncated_text"
+    }
+  },
+  {
+    "id": "en-adv-trunc-006",
+    "package": "test.store",
+    "channel_name": "News",
+    "title": "Clearance",
+    "text": "70% off everything …",
+    "expect": {
+      "category": "offers",
+      "adversarial_type": "truncated_text"
+    }
+  },
+  {
+    "id": "en-adv-inbox-001",
+    "package": "test.mail",
+    "channel_name": "Email",
+    "title": "New Messages",
+    "text": "From: john@example.com — Meeting at 2pm\nFrom: sarah@example.com — Please review the doc\nFrom: team@example.com — Sprint retrospective tomorrow",
+    "expect": {
+      "category": "work",
+      "adversarial_type": "inbox_style_lines"
+    }
+  },
+  {
+    "id": "en-adv-inbox-002",
+    "package": "test.chat",
+    "channel_name": "Messages",
+    "title": "Group Chat",
+    "text": "Alice: Hey everyone!\nBob: What's the plan for today?\nCharlie: Meeting in 10 mins",
+    "expect": {
+      "category": "work",
+      "adversarial_type": "inbox_style_lines"
+    }
+  },
+  {
+    "id": "en-adv-inbox-003",
+    "package": "test.app",
+    "channel_name": "Notifications",
+    "title": "Activity",
+    "text": "You have 3 new followers\nYour post got 50 likes\nNew comment on your photo",
+    "expect": {
+      "category": "social",
+      "adversarial_type": "inbox_style_lines"
+    }
+  },
+  {
+    "id": "en-adv-inbox-004",
+    "package": "test.shop",
+    "channel_name": "Orders",
+    "title": "Order Updates",
+    "text": "Order #12345 shipped\nOrder #12346 delivered\nOrder #12347 processing",
+    "expect": {
+      "category": "orders",
+      "adversarial_type": "inbox_style_lines"
+    }
+  },
+  {
+    "id": "en-adv-inbox-005",
+    "package": "test.bank",
+    "channel_name": "Alerts",
+    "title": "Transactions",
+    "text": "$25.00 at STARBUCKS\n$45.00 at AMAZON\n$12.50 at UBER",
+    "expect": {
+      "category": "money",
+      "adversarial_type": "inbox_style_lines"
+    }
+  },
+  {
+    "id": "en-adv-inbox-006",
+    "package": "test.social",
+    "channel_name": "Social",
+    "title": "Activity Feed",
+    "text": "John liked your photo\nSarah commented on your post\nMike shared your story",
+    "expect": {
+      "category": "social",
+      "adversarial_type": "inbox_style_lines"
+    }
+  },
+  {
+    "id": "en-adv-msg-001",
+    "package": "test.chat",
+    "channel_name": "Messages",
+    "title": "Team Chat",
+    "text": "Sarah: The deadline is Friday\nMike: Got it, I'll finish by Thursday\nSarah: Perfect, thanks!",
+    "expect": {
+      "category": "work",
+      "adversarial_type": "messaging_style_threads"
+    }
+  },
+  {
+    "id": "en-adv-msg-002",
+    "package": "test.ride",
+    "channel_name": "Messages",
+    "title": "Driver Chat",
+    "text": "Driver: I'm at the pickup location\nYou: Great, coming down now\nDriver: See you in 2 min",
+    "expect": {
+      "category": "orders",
+      "adversarial_type": "messaging_style_threads"
+    }
+  },
+  {
+    "id": "en-adv-msg-003",
+    "package": "test.support",
+    "channel_name": "Support",
+    "title": "Customer Support",
+    "text": "Agent: How can I help you?\nUser: My order #12345 hasn't arrived\nAgent: Let me check that for you",
+    "expect": {
+      "category": "people",
+      "adversarial_type": "messaging_style_threads"
+    }
+  },
+  {
+    "id": "en-adv-msg-004",
+    "package": "test.family",
+    "channel_name": "Family",
+    "title": "Family Group",
+    "text": "Mom: Dinner at 7?\nDad: Sounds good\nYou: I'll be there",
+    "expect": {
+      "category": "people",
+      "adversarial_type": "messaging_style_threads"
+    }
+  },
+  {
+    "id": "en-adv-msg-005",
+    "package": "test.work",
+    "channel_name": "Work",
+    "title": "Project Channel",
+    "text": "PM: Sprint review at 3pm\nDev: Demo ready\nPM: Great, see you there",
+    "expect": {
+      "category": "work",
+      "adversarial_type": "messaging_style_threads"
+    }
+  },
+  {
+    "id": "en-adv-msg-006",
+    "package": "test.market",
+    "channel_name": "Market",
+    "title": "Seller Chat",
+    "text": "Seller: Item still available?\nBuyer: Yes, I'll take it\nSeller: Great, when to meet?",
+    "expect": {
+      "category": "social",
+      "adversarial_type": "messaging_style_threads"
+    }
+  }
+]
