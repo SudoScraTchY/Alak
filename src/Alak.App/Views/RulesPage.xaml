@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Alak.App.ViewModels"
+             xmlns:converters="clr-namespace:Alak.App.Converters"
+             x:Class="Alak.App.Views.RulesPage"
+             x:DataType="viewmodels:RulesViewModel"
+             Title="Rules">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BoolToFontWeightConverter x:Key="BoolToFontWeightConverter" />
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <VerticalStackLayout Spacing="0" Padding="0">
+        <!-- Add Rule Section -->
+        <Frame Style="{StaticResource Frame.Card}" Margin="16,16,16,8">
+            <VerticalStackLayout Spacing="12">
+                <Label Text="Add New Rule" Style="{StaticResource Label.Title}" />
+
+                <Entry Placeholder="Pattern (e.g., 'promo code', 'OTP', sender name)"
+                       Text="{Binding NewRulePattern}"
+                       Style="{StaticResource Entry.Standard}"
+                       ClearButtonVisibility="WhileEditing" />
+
+                <HorizontalStackLayout Spacing="12">
+                    <Picker Title="Category"
+                            ItemsSource="{Binding Source={x:Static viewmodels:RulesViewModel.NotificationCategoryValues}}"
+                            SelectedItem="{Binding NewRuleCategory}"
+                            Style="{StaticResource Picker.Standard}"
+                            WidthRequest="140" />
+
+                    <Picker Title="Action"
+                            ItemsSource="{Binding Source={x:Static viewmodels:RulesViewModel.RuleActionValues}}"
+                            SelectedItem="{Binding NewRuleAction}"
+                            Style="{StaticResource Picker.Standard}"
+                            WidthRequest="120" />
+
+                    <Picker Title="Match"
+                            ItemsSource="{Binding Source={x:Static viewmodels:RulesViewModel.RuleMatchModeValues}}"
+                            SelectedItem="{Binding NewRuleMatchMode}"
+                            Style="{StaticResource Picker.Standard}"
+                            WidthRequest="130" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Spacing="12">
+                    <Entry Placeholder="Priority (0=first)"
+                           Text="{Binding NewRulePriority, StringFormat='{0}'}"
+                           Keyboard="Numeric"
+                           Style="{StaticResource Entry.Standard}"
+                           WidthRequest="120" />
+
+                    <Switch IsToggled="{Binding NewRuleCaseSensitive}"
+                            HorizontalOptions="Start" />
+                    <Label Text="Case Sensitive"
+                           VerticalOptions="Center"
+                           Style="{StaticResource Label.Caption}" />
+                </HorizontalStackLayout>
+
+                <Button Text="Add Rule"
+                        Command="{Binding AddRuleCommand}"
+                        Style="{StaticResource Button.Primary}"
+                        IsEnabled="{Binding NewRulePattern, Converter={StaticResource InverseBoolConverter}}" />
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Rules List -->
+        <Frame Style="{StaticResource Frame.Card}" Margin="16,8,16,16">
+            <VerticalStackLayout Spacing="0">
+                <HorizontalStackLayout>
+                    <Label Text="Your Rules"
+                           Style="{StaticResource Label.Title}"
+                           VerticalOptions="Center" />
+                    <Label Text="{Binding Rules.Count, StringFormat='({0})'}"
+                           Style="{StaticResource Label.Caption}"
+                           VerticalOptions="Center"
+                           TextColor="{StaticResource OnSurfaceVariant}" />
+                </HorizontalStackLayout>
+
+                <CollectionView ItemsSource="{Binding Rules}"
+                                SelectionMode="None"
+                                Margin="0,8,0,0">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="viewmodels:UserRuleViewModel">
+                            <Grid ColumnDefinitions="Auto,*,Auto,Auto" RowDefinitions="Auto,Auto" Padding="12,8" ColumnSpacing="12">
+                                <!-- Enabled Toggle -->
+                                <Switch Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
+                                        IsToggled="{Binding Rule.Enabled, Mode=TwoWay}"
+                                        Toggled="OnRuleToggled"
+                                        VerticalOptions="Center" />
+
+                                <!-- Pattern -->
+                                <Label Grid.Row="0" Grid.Column="1"
+                                       Text="{Binding Pattern}"
+                                       Style="{StaticResource Label.Body}"
+                                       FontAttributes="{Binding Rule.Enabled, Converter={StaticResource BoolToFontWeightConverter}}" />
+
+                                <!-- Category Badge -->
+                                <Frame Grid.Row="0" Grid.Column="2"
+                                       Style="{StaticResource Frame.Chip}"
+                                       BackgroundColor="{Binding Rule.Category, Converter={StaticResource TintConverter}}"
+                                       Padding="8,2"
+                                       HasShadow="False"
+                                       VerticalOptions="Center">
+                                    <Label Text="{Binding Category}"
+                                           Style="{StaticResource Label.Caption}"
+                                           TextColor="{StaticResource OnSurface}"
+                                           FontSize="10" />
+                                </Frame>
+
+                                <!-- Action Badge -->
+                                <Frame Grid.Row="1" Grid.Column="2"
+                                       Style="{StaticResource Frame.Chip}"
+                                       BackgroundColor="{Binding Rule.Action, Converter={StaticResource TintConverter}}"
+                                       Padding="8,2"
+                                       HasShadow="False"
+                                       VerticalOptions="Center">
+                                    <Label Text="{Binding Action}"
+                                           Style="{StaticResource Label.Caption}"
+                                           TextColor="{StaticResource OnSurface}"
+                                           FontSize="10" />
+                                </Frame>
+
+                                <!-- Match Mode + Priority -->
+                                <VerticalStackLayout Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" Spacing="2" HorizontalOptions="End">
+                                    <Label Text="{Binding MatchMode}"
+                                           Style="{StaticResource Label.Overline}"
+                                           TextColor="{StaticResource OnSurfaceVariant}" />
+                                    <Label Text="{Binding Priority, StringFormat='Pri: {0}'}"
+                                           Style="{StaticResource Label.Overline}"
+                                           TextColor="{StaticResource OnSurfaceVariant}" />
+                                </VerticalStackLayout>
+
+                                <!-- Delete Button -->
+                                <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="4"
+                                        Text="🗑"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:RulesViewModel}}, Path=DeleteRuleCommand}"
+                                        CommandParameter="{Binding .}"
+                                        Style="{StaticResource Button.Ghost}"
+                                        Padding="8"
+                                        BackgroundColor="Transparent"
+                                        BorderWidth="0"
+                                        VerticalOptions="Center" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout Spacing="12" HorizontalOptions="Center" VerticalOptions="Center" Padding="32">
+                            <Label Text="📋" FontSize="48" />
+                            <Label Text="No rules yet"
+                                   Style="{StaticResource Label.Title}" />
+                            <Label Text="Add a rule above to filter notifications before AI classification"
+                                   Style="{StaticResource Label.Body}"
+                                   TextColor="{StaticResource OnSurfaceVariant}"
+                                   HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+            </VerticalStackLayout>
+        </Frame>
+    </VerticalStackLayout>
+</ContentPage>

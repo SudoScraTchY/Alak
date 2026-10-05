@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Alak.App.ViewModels"
+             x:Class="Alak.App.Views.OnboardingPage"
+             x:DataType="vm:OnboardingViewModel"
+             BackgroundColor="{StaticResource PageBackground}">
+
+    <ContentPage.BindingContext>
+        <vm:OnboardingViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid RowDefinitions="Auto,*,Auto" RowSpacing="24" Margin="24,48,24,24">
+        <!-- Progress indicator -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,*,*,*,*" ColumnSpacing="8">
+            <BoxView Grid.Column="0" HeightRequest="4" CornerRadius="2"
+                     Color="{Binding CurrentStep, Converter={StaticResource StepToColorConverter}, ConverterParameter=0}" />
+            <BoxView Grid.Column="1" HeightRequest="4" CornerRadius="2"
+                     Color="{Binding CurrentStep, Converter={StaticResource StepToColorConverter}, ConverterParameter=1}" />
+            <BoxView Grid.Column="2" HeightRequest="4" CornerRadius="2"
+                     Color="{Binding CurrentStep, Converter={StaticResource StepToColorConverter}, ConverterParameter=2}" />
+            <BoxView Grid.Column="3" HeightRequest="4" CornerRadius="2"
+                     Color="{Binding CurrentStep, Converter={StaticResource StepToColorConverter}, ConverterParameter=3}" />
+            <BoxView Grid.Column="4" HeightRequest="4" CornerRadius="2"
+                     Color="{Binding CurrentStep, Converter={StaticResource StepToColorConverter}, ConverterParameter=4}" />
+        </Grid>
+
+        <!-- Content -->
+        <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto" RowSpacing="24" VerticalOptions="Center">
+            <Label Grid.Row="0"
+                   Text="{Binding StepTitle}"
+                   Style="{StaticResource Text.Display}"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center" />
+
+            <Label Grid.Row="1"
+                   Text="{Binding StepDescription}"
+                   Style="{StaticResource Text.Body}"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   MaxLines="3"
+                   LineBreakMode="WordWrap" />
+
+            <!-- Step-specific content -->
+            <Grid Grid.Row="2" IsVisible="{Binding CurrentStep, Converter={StaticResource StepEqualsConverter}, ConverterParameter=1}">
+                <!-- Language selection -->
+                <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="16">
+                    <Label Text="Display Language" Style="{StaticResource Text.Label}" HorizontalOptions="Center" />
+                    <Picker SelectedItem="{Binding SelectedLanguage}"
+                            WidthRequest="280"
+                            HorizontalOptions="Center">
+                        <Picker.Items>
+                            <x:String>fa (Persian)</x:String>
+                            <x:String>fa-latn (Finglish)</x:String>
+                            <x:String>en (English)</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Row="2" IsVisible="{Binding CurrentStep, Converter={StaticResource StepEqualsConverter}, ConverterParameter=2}">
+                <!-- Calendar selection -->
+                <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="16">
+                    <Label Text="Calendar System" Style="{StaticResource Text.Label}" HorizontalOptions="Center" />
+                    <Picker SelectedItem="{Binding SelectedCalendar}"
+                            WidthRequest="280"
+                            HorizontalOptions="Center">
+                        <Picker.Items>
+                            <x:String>jalali (Solar Hijri)</x:String>
+                            <x:String>gregorian</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Row="2" IsVisible="{Binding CurrentStep, Converter={StaticResource StepEqualsConverter}, ConverterParameter=3}">
+                <!-- Permissions -->
+                <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="16">
+                    <Label Text="Notification Access Required" Style="{StaticResource Text.Label}" HorizontalOptions="Center" />
+                    <Label Text="Alak needs permission to read your notifications to classify them." 
+                           Style="{StaticResource Text.BodySecondary}"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center" />
+                    <Button Text="Grant Permission"
+                            Style="{StaticResource Button.Primary}"
+                            WidthRequest="200"
+                            HorizontalOptions="Center"
+                            Command="{Binding NextCommand}" />
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <!-- Navigation buttons -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
+            <Button Grid.Column="1"
+                    Text="Back"
+                    Style="{StaticResource Button.Secondary}"
+                    Command="{Binding BackCommand}"
+                    IsVisible="{Binding CurrentStep, Converter={StaticResource StepGreaterThanConverter}, ConverterParameter=0}"
+                    WidthRequest="100" />
+            <Button Grid.Column="2"
+                    Text="{Binding NextButtonText}"
+                    Style="{StaticResource Button.Primary}"
+                    Command="{Binding NextCommand}"
+                    WidthRequest="120" />
+        </Grid>
+    </Grid>
+</ContentPage>

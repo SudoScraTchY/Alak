@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Alak.App.ViewModels"
+             xmlns:views="clr-namespace:Alak.App.Views"
+             xmlns:controls="clr-namespace:Alak.App.Controls"
+             x:Class="Alak.App.Views.InboxPage"
+             x:DataType="vm:InboxViewModel"
+             BackgroundColor="{StaticResource PageBackground}">
+
+    <ContentPage.BindingContext>
+        <vm:InboxViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+        <!-- ===== SEARCH BAR ===== -->
+        <SearchBar Grid.Row="0"
+                   Style="{StaticResource SearchBar.Standard}"
+                   Text="{Binding SearchQuery, Mode=TwoWay}"
+                   Placeholder="Search notifications..."
+                   SearchCommand="{Binding RefreshCommand}" />
+
+        <!-- ===== CATEGORY TABS ===== -->
+        <ScrollView Grid.Row="1" Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+            <StackLayout Orientation="Horizontal" Spacing="8" Margin="16,8,16,0" BindableLayout.ItemsSource="{Binding CategoryFilters}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="vm:CategoryFilter">
+                        <Button Text="{Binding Label}"
+                                Style="{StaticResource Button.TextOnly}"
+                                TextColor="{Binding MarkColor}"
+                                FontAttributes="Bold"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:InboxViewModel}}, Path=CategoryFilterChangedCommand}"
+                                CommandParameter="{Binding}" />
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </StackLayout>
+        </ScrollView>
+
+        <!-- ===== NOTIFICATION LIST ===== -->
+        <RefreshView Grid.Row="2" 
+                     Style="{StaticResource RefreshView.Standard}"
+                     IsRefreshing="{Binding IsRefreshing}"
+                     Command="{Binding RefreshCommand}">
+            <CollectionView Style="{StaticResource CollectionView.Inbox}"
+                            ItemsSource="{Binding Notifications}"
+                            SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="vm:NotificationViewModel">
+                        <Grid ColumnDefinitions="4,*" RowDefinitions="Auto,Auto,Auto" Margin="0" Padding="0">
+                            <!-- Category spine -->
+                            <BoxView Grid.Row="0" Grid.RowSpan="3" Grid.Column="0"
+                                     Style="{StaticResource BoxView.CategorySpine}"
+                                     Color="{Binding CategoryMarkColor}" />
+
+                            <!-- Main card -->
+                            <Frame Grid.Row="0" Grid.RowSpan="3" Grid.Column="1"
+                                   Style="{StaticResource Frame.ListItem}"
+                                   Margin="16,8,16,8">
+                                <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                                    <!-- Row 0: Title + Time -->
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           Text="{Binding Title}"
+                                           Style="{StaticResource Text.Title}"
+                                           FontAttributes="{Binding IsRead, Converter={StaticResource BoolToFontWeightConverter}, ConverterParameter=false}"
+                                           MaxLines="1"
+                                           LineBreakMode="TailTruncation" />
+                                    <Label Grid.Row="0" Grid.Column="1"
+                                           Text="{Binding Timestamp, Converter={StaticResource RelativeTimeConverter}}"
+                                           Style="{StaticResource Text.Caption}"
+                                           HorizontalOptions="End"
+                                           VerticalOptions="Center" />
+
+                                    <!-- Row 1: Text preview -->
+                                    <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                           Text="{Binding Text}"
+                                           Style="{StaticResource Text.BodySecondary}"
+                                           MaxLines="2"
+                                           LineBreakMode="TailTruncation"
+                                           Margin="0,8,0,0" />
+
+                                    <!-- Row 2: Channel + Category chip + Actions -->
+                                    <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                                          ColumnDefinitions="Auto,*,Auto,Auto"
+                                          Margin="0,12,0,0">
+                                        <Label Grid.Column="0"
+                                               Text="{Binding ChannelName}"
+                                               Style="{StaticResource Text.Caption}"
+                                               TextColor="{Binding CategoryTintColor}" />
+                                        
+                                        <Frame Grid.Column="1"
+                                               Style="{StaticResource Frame.Chip}"
+                                               BackgroundColor="{Binding CategoryTintColor}"
+                                               HorizontalOptions="Start"
+                                               Margin="12,0,0,0"
+                                               IsVisible="{Binding Category, Converter={StaticResource StringNotEmptyConverter}}">
+                                            <Label Text="{Binding Category, Converter={StaticResource CategoryLabelConverter}}"
+                                                   Style="{StaticResource Text.Caption}"
+                                                   TextColor="{Binding CategoryMarkColor}"
+                                                   FontAttributes="Bold" />
+                                        </Frame>
+
+                                        <!-- Copy code button (if has code) -->
+                                        <Button Grid.Column="2"
+                                                Text="Copy"
+                                                Style="{StaticResource Button.TextOnly}"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:InboxViewModel}}, Path=CopyCodeCommand}"
+                                                CommandParameter="{Binding}"
+                                                IsVisible="{Binding HasCode}"
+                                                ToolTipProperties.Text="Copy code" />
+
+                                        <!-- Dismiss button -->
+                                        <Button Grid.Column="3"
+                                                Text="✕"
+                                                Style="{StaticResource Button.TextOnly}"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:InboxViewModel}}, Path=DismissCommand}"
+                                                CommandParameter="{Binding}"
+                                                FontSize="18"
+                                                ToolTipProperties.Text="Dismiss" />
+                                    </Grid>
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.EmptyView>
+                    <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="16" VerticalOptions="Center" Margin="32">
+                        <Label Grid.Row="0"
+                               Text="📭"
+                               FontSize="64"
+                               HorizontalOptions="Center" />
+                        <Label Grid.Row="1"
+                               Text="No notifications yet"
+                               Style="{StaticResource Text.Display}"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
+                        <Label Grid.Row="2"
+                               Text="Pull to refresh or scan a QR code to get started"
+                               Style="{StaticResource Text.BodySecondary}"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
+                    </Grid>
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </RefreshView>
+
+        <!-- ===== UNREAD BADGE / FAB ===== -->
+        <Grid Grid.Row="3" Margin="16,0,16,24">
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="16">
+                <Button Text="Scan QR"
+                        Style="{StaticResource Button.Primary}"
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type views:InboxPage}}, Path=ScanCommand}" />
+                <Button Text="Settings"
+                        Style="{StaticResource Button.Secondary}"
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type views:InboxPage}}, Path=SettingsCommand}" />
+            </HorizontalStackLayout>
+        </Grid>
+    </Grid>
+</ContentPage>

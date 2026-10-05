@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Alak.App.ViewModels"
+             x:Class="Alak.App.Views.StubDetailPage"
+             x:DataType="vm:StubDetailViewModel"
+             BackgroundColor="{StaticResource PageBackground}"
+             Title="Detail">
+
+    <ContentPage.BindingContext>
+        <vm:StubDetailViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <!-- Stub card - ticket shape per §12.7 -->
+        <Frame Style="{StaticResource Frame.Stub}" 
+               Margin="16,16,16,24"
+               HorizontalOptions="Center"
+               VerticalOptions="Start">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="12">
+                <!-- Top tear edge -->
+                <BoxView Grid.Row="0" HeightRequest="8" 
+                         Color="{StaticResource Divider}"
+                         HorizontalOptions="Fill" />
+
+                <!-- Category + Code -->
+                <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                    <!-- Category mark -->
+                    <Frame Grid.Column="0" Style="{StaticResource Frame.Chip}"
+                           BackgroundColor="{Binding Notification.CategoryTintColor}"
+                           Padding="12,6"
+                           VerticalOptions="Start">
+                        <Label Text="{Binding Notification.Category, Converter={StaticResource CategoryLabelConverter}}"
+                               Style="{StaticResource Text.Label}"
+                               TextColor="{Binding Notification.CategoryMarkColor}" />
+                    </Frame>
+
+                    <!-- Title -->
+                    <Label Grid.Column="1"
+                           Text="{Binding Notification.Title}"
+                           Style="{StaticResource Text.Title}"
+                           VerticalOptions="Center"
+                           MaxLines="2"
+                           LineBreakMode="TailTruncation" />
+
+                    <!-- Channel icon -->
+                    <Label Grid.Column="2" Text="📱" FontSize="24" VerticalOptions="Center" />
+                </Grid>
+
+                <!-- Divider -->
+                <BoxView Grid.Row="2" HeightRequest="0.5" Color="{StaticResource Divider}" />
+
+                <!-- Main content: Code or Text -->
+                <Grid Grid.Row="3" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <StackLayout Grid.Column="0" Spacing="8">
+                        <Label Text="{Binding Notification.Text}"
+                               Style="{StaticResource Text.Body}"
+                               LineBreakMode="WordWrap" />
+
+                        <Label IsVisible="{Binding Notification.HasCode}"
+                               Text="{Binding Notification.ExtractedCode}"
+                               Style="{StaticResource Text.Code}"
+                               LineBreakMode="WordWrap" />
+                    </StackLayout>
+
+                    <!-- Copy button -->
+                    <Button Grid.Column="1"
+                            Text="Copy"
+                            Style="{StaticResource Button.Primary}"
+                            Command="{Binding CopyCodeCommand}"
+                            IsVisible="{Binding Notification.HasCode}"
+                            WidthRequest="80"
+                            HeightRequest="40"
+                            VerticalOptions="Start" />
+                </Grid>
+
+                <!-- Bottom actions -->
+                <Grid Grid.Row="4" ColumnDefinitions="*,*,*" ColumnSpacing="8" Margin="0,8,0,0">
+                    <Button Grid.Column="0"
+                            Text="Share"
+                            Style="{StaticResource Button.Secondary}"
+                            Command="{Binding ShareCommand}" />
+                    <Button Grid.Column="1"
+                            Text="Open"
+                            Style="{StaticResource Button.Primary}"
+                            Command="{Binding DismissCommand}" />
+                    <Button Grid.Column="2"
+                            Text="Dismiss"
+                            Style="{StaticResource Button.TextOnly}"
+                            Command="{Binding DismissCommand}"
+                            TextColor="{StaticResource ErrorColor}" />
+                </Grid>
+            </Grid>
+        </Frame>
+
+        <!-- Context info below stub -->
+        <Frame Style="{StaticResource Frame.Card}" Margin="16,0,16,24">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="12">
+                <Label Grid.Row="0" Text="Details" Style="{StaticResource Text.Label}" />
+                
+                <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                    <Label Grid.Column="0" Text="Channel:" Style="{StaticResource Text.BodySecondary}" />
+                    <Label Grid.Column="1" Text="{Binding Notification.ChannelName}" Style="{StaticResource Text.Body}" />
+                    <Label Grid.Column="2" Text="{Binding Notification.Timestamp, Converter={StaticResource RelativeTimeConverter}}" Style="{StaticResource Text.Caption}" />
+                </Grid>
+
+                <Grid Grid.Row="2" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                    <Label Grid.Column="0" Text="Package:" Style="{StaticResource Text.BodySecondary}" />
+                    <Label Grid.Column="1" Text="{Binding Notification.Package}" Style="{StaticResource Text.Body}" />
+                </Grid>
+
+                <Grid Grid.Row="3" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                    <Label Grid.Column="0" Text="Category:" Style="{StaticResource Text.BodySecondary}" />
+                    <Frame Grid.Column="1" Style="{StaticResource Frame.Chip}"
+                           BackgroundColor="{Binding Notification.CategoryTintColor}"
+                           HorizontalOptions="Start">
+                        <Label Text="{Binding Notification.Category, Converter={StaticResource CategoryLabelConverter}}"
+                               Style="{StaticResource Text.Caption}"
+                               TextColor="{Binding Notification.CategoryMarkColor}"
+                               FontAttributes="Bold" />
+                    </Frame>
+                </Grid>
+            </Grid>
+        </Frame>
+    </ScrollView>
+</ContentPage>

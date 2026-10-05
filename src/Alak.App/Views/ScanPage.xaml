@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Alak.App.ViewModels"
+             x:Class="Alak.App.Views.ScanPage"
+             x:DataType="vm:ScanViewModel"
+             BackgroundColor="{StaticResource PageBackground}"
+             Title="Scan QR Code">
+
+    <ContentPage.BindingContext>
+        <vm:ScanViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid RowDefinitions="*,Auto,Auto" RowSpacing="24" Margin="24,24,24,32">
+        <!-- Camera preview area -->
+        <Frame Grid.Row="0" Style="{StaticResource Frame.Card}" 
+               HeightRequest="300" VerticalOptions="Center"
+               HasShadow="True">
+            <Grid>
+                <!-- Camera preview placeholder -->
+                <BoxView Color="{StaticResource Divider}" />
+                
+                <!-- Scan frame overlay -->
+                <Frame WidthRequest="240" HeightRequest="240"
+                       CornerRadius="12"
+                       BorderColor="{StaticResource Mark.Promo}"
+                       BorderWidth="3"
+                       BackgroundColor="Transparent"
+                       HasShadow="False"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center">
+                    <Grid>
+                        <!-- Corner brackets -->
+                        <BoxView WidthRequest="30" HeightRequest="3" 
+                                 Color="{StaticResource Mark.Promo}"
+                                 HorizontalOptions="Start" VerticalOptions="Start" />
+                        <BoxView WidthRequest="3" HeightRequest="30" 
+                                 Color="{StaticResource Mark.Promo}"
+                                 HorizontalOptions="Start" VerticalOptions="Start" />
+                        <BoxView WidthRequest="30" HeightRequest="3" 
+                                 Color="{StaticResource Mark.Promo}"
+                                 HorizontalOptions="End" VerticalOptions="Start" />
+                        <BoxView WidthRequest="3" HeightRequest="30" 
+                                 Color="{StaticResource Mark.Promo}"
+                                 HorizontalOptions="End" VerticalOptions="Start" />
+                        <BoxView WidthRequest="30" HeightRequest="3" 
+                                 Color="{StaticResource Mark.Promo}"
+                                 HorizontalOptions="Start" VerticalOptions="End" />
+                        <BoxView WidthRequest="3" HeightRequest="30" 
+                                 Color="{StaticResource Mark.Promo}"
+                                 HorizontalOptions="Start" VerticalOptions="End" />
+                        <BoxView WidthRequest="30" HeightRequest="3" 
+                                 Color="{StaticResource Mark.Promo}"
+                                 HorizontalOptions="End" VerticalOptions="End" />
+                        <BoxView WidthRequest="3" HeightRequest="30" 
+                                 Color="{StaticResource Mark.Promo}"
+                                 HorizontalOptions="End" VerticalOptions="End" />
+                        
+                        <!-- Scanning line animation -->
+                        <BoxView x:Name="ScanLine" 
+                                 WidthRequest="220" HeightRequest="2"
+                                 Color="{StaticResource Mark.Promo}"
+                                 HorizontalOptions="Center" VerticalOptions="Start"
+                                 Opacity="0.8" />
+                    </Grid>
+                </Frame>
+
+                <Label Text="{Binding StatusText}"
+                       Style="{StaticResource Text.BodySecondary}"
+                       HorizontalOptions="Center"
+                       VerticalOptions="End"
+                       Margin="0,0,0,24" />
+            </Grid>
+        </Frame>
+
+        <!-- Result display -->
+        <Frame Grid.Row="1" Style="{StaticResource Frame.Card}"
+               IsVisible="{Binding HasResult}"
+               Margin="0">
+            <Grid RowDefinitions="Auto,Auto" RowSpacing="12">
+                <Label Grid.Row="0"
+                       Text="Detected:"
+                       Style="{StaticResource Text.Label}" />
+                <Label Grid.Row="1"
+                       Text="{Binding ResultText}"
+                       Style="{StaticResource Text.Code}"
+                       LineBreakMode="WordWrap"
+                       MaxLines="3" />
+            </Grid>
+        </Frame>
+
+        <!-- Action buttons -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="16">
+            <Button Grid.Column="0"
+                    Text="Scan"
+                    Style="{StaticResource Button.Primary}"
+                    Command="{Binding StartScanCommand}"
+                    IsEnabled="{Binding IsScanning, Converter={StaticResource InverseBoolConverter}}"
+                    IsVisible="{Binding HasResult, Converter={StaticResource InverseBoolConverter}}" />
+            <Button Grid.Column="1"
+                    Text="Cancel"
+                    Style="{StaticResource Button.Secondary}"
+                    Command="{Binding CancelCommand}"
+                    IsVisible="{Binding HasResult, Converter={StaticResource InverseBoolConverter}}" />
+
+            <Button Grid.Column="0"
+                    Text="Process"
+                    Style="{StaticResource Button.Primary}"
+                    Command="{Binding ProcessResultCommand}"
+                    IsVisible="{Binding HasResult}" />
+            <Button Grid.Column="1"
+                    Text="Rescan"
+                    Style="{StaticResource Button.Secondary}"
+                    Command="{Binding StartScanCommand}"
+                    IsVisible="{Binding HasResult}" />
+        </Grid>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Alak.App.ViewModels"
+             xmlns:conv="clr-namespace:Alak.App.Converters"
+             x:Class="Alak.App.Views.SourcesPage"
+             x:DataType="vm:SourcesViewModel"
+             BackgroundColor="{StaticResource PageBackground}"
+             Title="Sources">
+
+    <ContentPage.BindingContext>
+        <vm:SourcesViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <conv:BoolToFontWeightConverter x:Key="BoolToFontWeightConverter" />
+            <conv:InverseBoolConverter x:Key="InverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*,Auto" RowSpacing="0">
+        <!-- Header with refresh button -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="12" Margin="16,16,16,8">
+            <Label Text="Notification Sources" Style="{StaticResource Text.Title}" VerticalOptions="Center" />
+            <Button Grid.Column="1"
+                    Text="Refresh"
+                    Command="{Binding LoadSourcesCommand}"
+                    Style="{StaticResource Button.Secondary}"
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}" />
+        </Grid>
+
+        <!-- Sources list -->
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Sources}"
+                        SelectionMode="None"
+                        Margin="16,0">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Style="{StaticResource Frame.Card}" Margin="0,0,0,12" Padding="16">
+                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="12" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                            <!-- Source header: icon + name + count -->
+                            <Grid Grid.Row="0" Grid.ColumnSpan="2" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                                <Image Grid.Column="0"
+                                       Source="{Binding PackageName, Converter={StaticResource PackageToIconConverter}}"
+                                       WidthRequest="40" HeightRequest="40"
+                                       Aspect="AspectFit" />
+                                <StackLayout Grid.Column="1" Spacing="2">
+                                    <Label Text="{Binding DisplayName}" Style="{StaticResource Text.Body}" FontAttributes="Bold" />
+                                    <Label Text="{Binding SourceKey}" Style="{StaticResource Text.Caption}" TextColor="{StaticResource TextSecondary}" />
+                                </StackLayout>
+                                <Label Grid.Column="2"
+                                       Text="{Binding Count, StringFormat='{0} notifications'}"
+                                       Style="{StaticResource Text.Caption}"
+                                       TextColor="{StaticResource TextSecondary}"
+                                       VerticalOptions="Center" />
+                            </Grid>
+
+                            <!-- Category selector -->
+                            <Grid Grid.Row="1" Grid.ColumnSpan="2" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                                <Label Grid.Column="0" Text="Category" Style="{StaticResource Text.Label}" VerticalOptions="Center" WidthRequest="80" />
+                                <Picker Grid.Column="1"
+                                        ItemsSource="{Binding Source={x:Static vm:RulesViewModel.AvailableCategories}}"
+                                        SelectedItem="{Binding SelectedCategory}"
+                                        Title="Select category"
+                                        Style="{StaticResource Picker.Standard}" />
+                                <Label Grid.Column="2"
+                                       Text="{Binding CurrentDefaultCategory, StringFormat='Current: {0}', FallbackValue='Current: Auto'}"
+                                       Style="{StaticResource Text.Caption}"
+                                       TextColor="{StaticResource TextSecondary}"
+                                       VerticalOptions="Center" />
+                            </Grid>
+
+                            <!-- Capture depth selector -->
+                            <Grid Grid.Row="2" Grid.ColumnSpan="2" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                                <Label Grid.Column="0" Text="Depth" Style="{StaticResource Text.Label}" VerticalOptions="Center" WidthRequest="80" />
+                                <Picker Grid.Column="1"
+                                        ItemsSource="{Binding Source={x:Static vm:RulesViewModel.AvailableCaptureDepths}}"
+                                        SelectedItem="{Binding SelectedCaptureDepth}"
+                                        Title="Select capture depth"
+                                        Style="{StaticResource Picker.Standard}" />
+                                <Label Grid.Column="2"
+                                       Text="{Binding CurrentCaptureDepth, StringFormat='Current: {0}', FallbackValue='Current: Default'}"
+                                       Style="{StaticResource Text.Caption}"
+                                       TextColor="{StaticResource TextSecondary}"
+                                       VerticalOptions="Center" />
+                            </Grid>
+
+                            <!-- Mute / Auto-archive toggles -->
+                            <Grid Grid.Row="3" Grid.ColumnSpan="2" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="16">
+                                <Label Grid.Column="0" Text="Mute (skip inbox)" Style="{StaticResource Text.Label}" VerticalOptions="Center" />
+                                <Switch Grid.Column="1"
+                                        IsToggled="{Binding Mute, Mode=TwoWay}"
+                                        Style="{StaticResource Switch.Standard}" />
+                                <Label Grid.Column="2" Text="Auto-archive" Style="{StaticResource Text.Label}" VerticalOptions="Center" />
+                                <Switch Grid.Column="2"
+                                        IsToggled="{Binding AutoArchive, Mode=TwoWay}"
+                                        Style="{StaticResource Switch.Standard}" />
+                            </Grid>
+
+                            <!-- Action buttons -->
+                            <Grid Grid.Row="4" Grid.ColumnSpan="2" ColumnDefinitions="*,*,Auto" ColumnSpacing="12">
+                                <Button Grid.Column="0"
+                                        Text="Save Settings"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SourcesViewModel}}, Path=SaveSourceSettingsCommand}"
+                                        CommandParameter="{Binding .}"
+                                        Style="{StaticResource Button.Primary}"
+                                        IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type vm:SourcesViewModel}}, Path=IsLoading, Converter={StaticResource InverseBoolConverter}}" />
+                                <Button Grid.Column="1"
+                                        Text="Apply to Existing"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SourcesViewModel}}, Path=ApplyToExistingCommand}"
+                                        CommandParameter="{Binding .}"
+                                        Style="{StaticResource Button.Secondary}"
+                                        IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type vm:SourcesViewModel}}, Path=IsLoading, Converter={StaticResource InverseBoolConverter}}" />
+                            </Grid>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+            <CollectionView.EmptyView>
+                <Grid VerticalOptions="Center" HorizontalOptions="Center" Margin="24">
+                    <StackLayout Spacing="16" HorizontalOptions="Center">
+                        <Label Text="📭" FontSize="48" HorizontalOptions="Center" />
+                        <Label Text="No sources yet" Style="{StaticResource Text.Title}" HorizontalOptions="Center" />
+                        <Label Text="Sources appear after notifications arrive. Pull to refresh or wait for new notifications." 
+                               Style="{StaticResource Text.Body}" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center" />
+                        <Button Text="Refresh Now"
+                                Command="{Binding LoadSourcesCommand}"
+                                Style="{StaticResource Button.Primary}"
+                                WidthRequest="200" />
+                    </StackLayout>
+                </Grid>
+            </CollectionView.EmptyView>
+        </CollectionView>
+
+        <!-- Status bar -->
+        <Frame Grid.Row="2" Style="{StaticResource Frame.Card}" Margin="16,8,16,16" Padding="12,8" IsVisible="{Binding IsLoading}">
+            <Label Text="{Binding StatusMessage}" Style="{StaticResource Text.Body}" HorizontalOptions="Center" />
+        </Frame>
+    </Grid>
+</ContentPage>

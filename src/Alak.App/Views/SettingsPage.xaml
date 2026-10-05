@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Alak.App.ViewModels"
+             x:Class="Alak.App.Views.SettingsPage"
+             x:DataType="vm:SettingsViewModel"
+             BackgroundColor="{StaticResource PageBackground}"
+             Title="Settings">
+
+    <ContentPage.BindingContext>
+        <vm:SettingsViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="24" Margin="16,16,16,24">
+            <!-- General -->
+            <Frame Grid.Row="0" Style="{StaticResource Frame.Card}" Margin="0">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="16">
+                    <Label Grid.Row="0" Text="General" Style="{StaticResource Text.Label}" />
+                    
+                    <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <StackLayout>
+                            <Label Text="Notifications" Style="{StaticResource Text.Body}" />
+                            <Label Text="Receive notification alerts" Style="{StaticResource Text.Caption}" />
+                        </StackLayout>
+                        <Switch Grid.Column="1" 
+                                IsToggled="{Binding NotificationsEnabled}"
+                                Style="{StaticResource Switch.Standard}" />
+                    </Grid>
+
+                    <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <StackLayout>
+                            <Label Text="Adaptive Learning" Style="{StaticResource Text.Body}" />
+                            <Label Text="Personalize classification from dismissals" Style="{StaticResource Text.Caption}" />
+                        </StackLayout>
+                        <Switch Grid.Column="1" 
+                                IsToggled="{Binding AdaptiveLearningEnabled}"
+                                Style="{StaticResource Switch.Standard}" />
+                    </Grid>
+
+                    <Grid Grid.Row="3" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <StackLayout>
+                            <Label Text="Dark Mode" Style="{StaticResource Text.Body}" />
+                            <Label Text="Use dark theme" Style="{StaticResource Text.Caption}" />
+                        </StackLayout>
+                        <Switch Grid.Column="1" 
+                                IsToggled="{Binding DarkModeEnabled}"
+                                Style="{StaticResource Switch.Standard}" />
+                    </Grid>
+
+                    <Grid Grid.Row="4" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <StackLayout>
+                            <Label Text="RTL Layout" Style="{StaticResource Text.Body}" />
+                            <Label Text="Right-to-left for Persian" Style="{StaticResource Text.Caption}" />
+                        </StackLayout>
+                        <Switch Grid.Column="1" 
+                                IsToggled="{Binding RtlLayoutEnabled}"
+                                Style="{StaticResource Switch.Standard}" />
+                    </Grid>
+                </Grid>
+            </Frame>
+
+            <!-- Global Settings (spec §11.4) -->
+            <Frame Grid.Row="1" Style="{StaticResource Frame.Card}" Margin="0">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="16">
+                    <Label Grid.Row="0" Text="Global Settings" Style="{StaticResource Text.Label}" />
+
+                    <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <Label Text="Theme" Style="{StaticResource Text.Body}" VerticalOptions="Center" />
+                        <Picker Grid.Column="1" Style="{StaticResource Picker.Standard}"
+                                SelectedItem="{Binding SelectedTheme}"
+                                WidthRequest="150">
+                            <Picker.Items>
+                                <x:String>system</x:String>
+                                <x:String>light</x:String>
+                                <x:String>dark</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </Grid>
+
+                    <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <Label Text="UI Language" Style="{StaticResource Text.Body}" VerticalOptions="Center" />
+                        <Picker Grid.Column="1" Style="{StaticResource Picker.Standard}"
+                                SelectedItem="{Binding SelectedLanguage}"
+                                WidthRequest="150">
+                            <Picker.Items>
+                                <x:String>system</x:String>
+                                <x:String>en</x:String>
+                                <x:String>fa</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </Grid>
+
+                    <Grid Grid.Row="3" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <Label Text="Calendar" Style="{StaticResource Text.Body}" VerticalOptions="Center" />
+                        <Picker Grid.Column="1" Style="{StaticResource Picker.Standard}"
+                                SelectedItem="{Binding SelectedCalendar}"
+                                WidthRequest="150">
+                            <Picker.Items>
+                                <x:String>auto</x:String>
+                                <x:String>gregorian</x:String>
+                                <x:String>jalali</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </Grid>
+
+                    <Grid Grid.Row="4" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <Label Text="Digits" Style="{StaticResource Text.Body}" VerticalOptions="Center" />
+                        <Picker Grid.Column="1" Style="{StaticResource Picker.Standard}"
+                                SelectedItem="{Binding SelectedDigits}"
+                                WidthRequest="150">
+                            <Picker.Items>
+                                <x:String>auto</x:String>
+                                <x:String>latin</x:String>
+                                <x:String>persian</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </Grid>
+
+                    <Grid Grid.Row="5" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <Label Text="SLM Performance Profile" Style="{StaticResource Text.Body}" VerticalOptions="Center" />
+                        <Picker Grid.Column="1" Style="{StaticResource Picker.Standard}"
+                                SelectedItem="{Binding SelectedPerformanceProfile}"
+                                WidthRequest="150">
+                            <Picker.Items>
+                                <x:String>battery</x:String>
+                                <x:String>balanced</x:String>
+                                <x:String>quality</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </Grid>
+
+                    <Grid Grid.Row="6" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <StackLayout>
+                            <Label Text="Tier 2 (SLM)" Style="{StaticResource Text.Body}" />
+                            <Label Text="Enable on-device SLM reranker" Style="{StaticResource Text.Caption}" />
+                        </StackLayout>
+                        <Switch Grid.Column="1" 
+                                IsToggled="{Binding Tier2Enabled}"
+                                Style="{StaticResource Switch.Standard}" />
+                    </Grid>
+
+                    <Grid Grid.Row="7" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <StackLayout>
+                            <Label Text="App Lock (Biometric/PIN)" Style="{StaticResource Text.Body}" />
+                            <Label Text="Require auth to open app" Style="{StaticResource Text.Caption}" />
+                        </StackLayout>
+                        <Switch Grid.Column="1" 
+                                IsToggled="{Binding AppLockEnabled}"
+                                Style="{StaticResource Switch.Standard}" />
+                    </Grid>
+                </Grid>
+            </Frame>
+
+            <!-- Display and Privacy -->
+            <Frame Grid.Row="2" Style="{StaticResource Frame.Card}" Margin="0">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="16">
+                    <Label Grid.Row="0" Text="Display &amp; Privacy" Style="{StaticResource Text.Label}" />
+
+                    <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <StackLayout>
+                            <Label Text="Hide Amounts in Lists" Style="{StaticResource Text.Body}" />
+                            <Label Text="Mask currency amounts in notification list" Style="{StaticResource Text.Caption}" />
+                        </StackLayout>
+                        <Switch Grid.Column="1" 
+                                IsToggled="{Binding HideAmountsInLists}"
+                                Style="{StaticResource Switch.Standard}" />
+                    </Grid>
+
+                    <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <StackLayout>
+                            <Label Text="Notification Reminders" Style="{StaticResource Text.Body}" />
+                            <Label Text="Show reminders for unread notifications" Style="{StaticResource Text.Caption}" />
+                        </StackLayout>
+                        <Switch Grid.Column="1" 
+                                IsToggled="{Binding NotificationRemindersEnabled}"
+                                Style="{StaticResource Switch.Standard}" />
+                    </Grid>
+
+                    <Grid Grid.Row="3" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <StackLayout>
+                            <Label Text="Global Size Cap (MB)" Style="{StaticResource Text.Body}" />
+                            <Label Text="0 = unlimited, max DB size" Style="{StaticResource Text.Caption}" />
+                        </StackLayout>
+                        <Entry Grid.Column="1"
+                               Text="{Binding GlobalSizeCapMb}"
+                               Keyboard="Numeric"
+                               WidthRequest="80"
+                               Style="{StaticResource Entry.Standard}" />
+                    </Grid>
+                </Grid>
+            </Frame>
+
+            <!-- Data Management -->
+            <Frame Grid.Row="3" Style="{StaticResource Frame.Card}" Margin="0">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="16">
+                    <Label Grid.Row="0" Text="Data Management" Style="{StaticResource Text.Label}" />
+
+                    <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <StackLayout>
+                            <Label Text="Stored Notifications" Style="{StaticResource Text.Body}" />
+                            <Label Text="{Binding NotificationCount, StringFormat='{0} notifications'}" Style="{StaticResource Text.Caption}" />
+                        </StackLayout>
+                        <Label Grid.Column="1" Text="{Binding StorageSize}" Style="{StaticResource Text.Caption}" VerticalOptions="Center" />
+                    </Grid>
+
+                    <Button Grid.Row="2"
+                            Text="Save Global Settings"
+                            Style="{StaticResource Button.Primary}"
+                            Command="{Binding SaveGlobalSettingsCommand}"
+                            HorizontalOptions="Fill" />
+
+                    <Button Grid.Row="3"
+                            Text="Export Data (JSON)"
+                            Style="{StaticResource Button.Secondary}"
+                            Command="{Binding ExportDataCommand}"
+                            HorizontalOptions="Fill" />
+
+                    <Button Grid.Row="4"
+                            Text="Clear All Data"
+                            Style="{StaticResource Button.Secondary}"
+                            Command="{Binding ClearDataCommand}"
+                            TextColor="{StaticResource ErrorColor}"
+                            BorderColor="{StaticResource ErrorColor}"
+                            HorizontalOptions="Fill" />
+                </Grid>
+            </Frame>
+
+            <!-- Onboarding -->
+            <Frame Grid.Row="4" Style="{StaticResource Frame.Card}" Margin="0">
+                <Grid RowDefinitions="Auto,Auto" RowSpacing="16">
+                    <Label Grid.Row="0" Text="Onboarding" Style="{StaticResource Text.Label}" />
+                    <Button Grid.Row="1"
+                            Text="Re-run Onboarding"
+                            Style="{StaticResource Button.Secondary}"
+                            Command="{Binding OpenOnboardingCommand}"
+                            HorizontalOptions="Fill" />
+                </Grid>
+            </Frame>
+
+            <!-- About -->
+            <Frame Grid.Row="5" Style="{StaticResource Frame.Card}" Margin="0">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="12">
+                    <Label Grid.Row="0" Text="About" Style="{StaticResource Text.Label}" />
+                    
+                    <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <Label Text="Version" Style="{StaticResource Text.Body}" />
+                        <Label Grid.Column="1" Text="{Binding AppVersion}" Style="{StaticResource Text.Caption}" />
+                    </Grid>
+
+                    <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <Label Text="Framework" Style="{StaticResource Text.Body}" />
+                        <Label Grid.Column="1" Text=".NET MAUI / .NET 10" Style="{StaticResource Text.Caption}" />
+                    </Grid>
+
+                    <Label Grid.Row="3" 
+                           Text="Alak — Smart Persian Notification Classifier"
+                           Style="{StaticResource Text.Caption}"
+                           HorizontalOptions="Center" />
+
+                    <Label Grid.Row="4" 
+                           Text="Built with MAUI, SQLite, and local SLM"
+                           Style="{StaticResource Text.Caption}"
+                           HorizontalOptions="Center" />
+                </Grid>
+            </Frame>
+        </Grid>
+    </ScrollView>
+</ContentPage>

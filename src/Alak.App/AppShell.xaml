@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        xmlns:views="clr-namespace:Alak.App.Views"
+        xmlns:local="clr-namespace:Alak.App"
+        x:Class="Alak.App.AppShell"
+        Shell.BackgroundColor="{StaticResource PageBackground}"
+        Shell.ForeColor="{StaticResource PrimaryText}"
+        Shell.TitleColor="{StaticResource PrimaryText}"
+        Shell.TabBarBackgroundColor="{StaticResource CardBackground}"
+        Shell.TabBarForegroundColor="{StaticResource TertiaryText}"
+        Shell.TabBarSelectedForegroundColor="{StaticResource Mark.Promo}"
+        Shell.TabBarUnselectedForegroundColor="{StaticResource TertiaryText}"
+        Shell.FlyoutBehavior="Disabled">
+
+    <!-- ===== REGISTER ROUTES (GoToAsync) ===== -->
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <ContentView>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <ContentPresenter />
+                </Grid>
+            </ContentView>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
+    <!-- ===== MAIN NAVIGATION (Bottom tabs per §13) ===== -->
+    <TabBar>
+        <!-- Inbox Tab -->
+        <Tab Title="Inbox" Icon="inbox.svg" Route="inbox">
+            <ShellContent ContentTemplate="{DataTemplate views:InboxPage}" Route="inbox" />
+        </Tab>
+
+        <!-- Scan/Compose Tab (center FAB-style) -->
+        <Tab Title="Scan" Icon="scan.svg" Route="scan">
+            <ShellContent ContentTemplate="{DataTemplate views:ScanPage}" Route="scan" />
+        </Tab>
+
+        <!-- Settings Tab -->
+        <Tab Title="Settings" Icon="settings.svg" Route="settings">
+            <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" Route="settings" />
+        </Tab>
+
+        <!-- Rules Tab -->
+        <Tab Title="Rules" Icon="settings.svg" Route="rules">
+            <ShellContent ContentTemplate="{DataTemplate views:RulesPage}" Route="rules" />
+        </Tab>
+    </TabBar>
+
+    <!-- ===== MODAL ROUTES (push via GoToAsync) ===== -->
+    <ShellContent Route="detail" ContentTemplate="{DataTemplate views:DetailPage}" />
+    <ShellContent Route="onboarding" ContentTemplate="{DataTemplate views:OnboardingPage}" />
+    <ShellContent Route="scan" ContentTemplate="{DataTemplate views:ScanPage}" />
+    <ShellContent Route="settings" ContentTemplate="{DataTemplate views:SettingsPage}" />
+    <ShellContent Route="rules" ContentTemplate="{DataTemplate views:RulesPage}" />
+    <ShellContent Route="stub-detail" ContentTemplate="{DataTemplate views:StubDetailPage}" />
+
+</Shell>

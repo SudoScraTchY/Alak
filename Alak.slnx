@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/Alak.Adaptive/Alak.Adaptive.csproj" />
+    <Project Path="src/Alak.App/Alak.App.csproj" />
     <Project Path="src/Alak.Core/Alak.Core.csproj" />
     <Project Path="src/Alak.Inference.Abstractions/Alak.Inference.Abstractions.csproj" />
     <Project Path="src/Alak.Packs.Tool/Alak.Packs.Tool.csproj" />

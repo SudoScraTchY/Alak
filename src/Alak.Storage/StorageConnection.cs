@@ -49,6 +49,15 @@ public sealed class StorageConnection : IDisposable
         cmd.ExecuteNonQuery();
     }
 
+    public void Execute(string sql, SqliteTransaction tx, params (string, object?)[] args)
+    {
+        using var cmd = _con.CreateCommand();
+        cmd.CommandText = sql;
+        cmd.Transaction = tx;
+        foreach (var (n, v) in args) cmd.Parameters.AddWithValue(n, v ?? DBNull.Value);
+        cmd.ExecuteNonQuery();
+    }
+
     /// <summary>Execute a DELETE and return the number of affected rows.</summary>
     public int ExecuteDelete(string sql, params (string, object?)[] args)
     {
@@ -59,185 +68,194 @@ public sealed class StorageConnection : IDisposable
     }
 
     public void Dispose() => _con.Dispose();
-}
 
-/// <summary>Versioned schema migrations (spec §6.6): schema_migrations table is normative.</summary>
-internal static class Migrations
-{
-    public static void Apply(SqliteConnection con)
+    public long LastInsertRowId
     {
-        con.ExecuteNonQuery("CREATE TABLE IF NOT EXISTS schema_migrations (version INTEGER PRIMARY KEY, applied_at INTEGER NOT NULL);");
-
-        var applied = new HashSet<long>();
-        using (var cmd = con.CreateCommand())
+        get
         {
-            cmd.CommandText = "SELECT version FROM schema_migrations";
-            using var r = cmd.ExecuteReader();
-            while (r.Read()) applied.Add(r.GetInt64(0));
-        }
-
-        long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        foreach (var kv in All().OrderBy(kv => kv.Item1))
-        {
-            var version = kv.Item1;
-            var sql = kv.Item2;
-            if (applied.Contains(version)) continue;
-            using var tx = con.BeginTransaction();
-            using var cmd = con.CreateCommand();
-            cmd.Transaction = tx;
-            cmd.CommandText = sql;
-            cmd.ExecuteNonQuery();
-            cmd.CommandText = "INSERT INTO schema_migrations(version, applied_at) VALUES ($v, $t)";
-            cmd.Parameters.AddWithValue("$v", version);
-            cmd.Parameters.AddWithValue("$t", now);
-            cmd.ExecuteNonQuery();
-            tx.Commit();
+            using var cmd = _con.CreateCommand();
+            cmd.CommandText = "SELECT last_insert_rowid();";
+            return Convert.ToInt64(cmd.ExecuteScalar());
         }
     }
 
-    private static IEnumerable<(long, string)> All() => new[]
+    public SqliteTransaction BeginTransaction()
     {
-        (1L, """
-            CREATE TABLE apps (
-              package         TEXT PRIMARY KEY,
-              label           TEXT,
-              first_seen_at   INTEGER NOT NULL,
-              default_category TEXT,
-              depth           INTEGER,
-              muted           INTEGER NOT NULL DEFAULT 0,
-              auto_archive    INTEGER NOT NULL DEFAULT 0,
-              region_hint     TEXT,
-              notif_count     INTEGER NOT NULL DEFAULT 0,
-              last_seen_at    INTEGER,
-              icon_png        BLOB
-            );
+        return _con.BeginTransaction();
+    }
 
-            CREATE TABLE notifications (
-              id              INTEGER PRIMARY KEY,
-              uid             TEXT NOT NULL UNIQUE,
-              sbn_key         TEXT NOT NULL,
-              package         TEXT NOT NULL REFERENCES apps(package),
-              posted_at       INTEGER NOT NULL,
-              captured_at     INTEGER NOT NULL,
-              updated_at      INTEGER NOT NULL,
-              removed_at      INTEGER,
-              removal_reason  INTEGER,
-              tz_offset_min   INTEGER NOT NULL,
-              channel_id      TEXT,
-              channel_name    TEXT,
-              android_category TEXT,
-              importance      INTEGER,
-              group_key       TEXT,
-              title           TEXT,
-              text            TEXT,
-              big_text        TEXT,
-              sub_text        TEXT,
-              lines_json      TEXT,
-              actions_json    TEXT,
-              depth           INTEGER NOT NULL,
-              redacted        INTEGER NOT NULL DEFAULT 0,
-              langs           TEXT,
-              category        TEXT NOT NULL DEFAULT 'other',
-              category_source TEXT NOT NULL DEFAULT 'rules',
-              confidence      REAL NOT NULL DEFAULT 0,
-              needs_review    INTEGER NOT NULL DEFAULT 0,
-              tags_json       TEXT,
-              evidence_json   TEXT,
-              content_hash    TEXT NOT NULL,
-              dup_of          INTEGER REFERENCES notifications(id),
-              dup_count       INTEGER NOT NULL DEFAULT 1,
-              state           INTEGER NOT NULL DEFAULT 0,
-              pinned          INTEGER NOT NULL DEFAULT 0,
-              rules_version   TEXT,
-              enriched_at     INTEGER
-            );
-            CREATE INDEX ix_n_posted   ON notifications(posted_at DESC);
-            CREATE INDEX ix_n_sbn     ON notifications(sbn_key);
-            CREATE INDEX ix_n_review  ON notifications(posted_at DESC) WHERE needs_review = 1;
-            CREATE INDEX ix_n_unenriched ON notifications(id) WHERE enriched_at IS NULL;
+    public SqliteCommand CreateCommand()
+    {
+        return _con.CreateCommand();
+    }
 
-            CREATE TABLE entities (
-              id              INTEGER PRIMARY KEY,
-              notification_id INTEGER NOT NULL REFERENCES notifications(id) ON DELETE CASCADE,
-              type            TEXT NOT NULL,
-              value_json      TEXT NOT NULL,
-              field           TEXT NOT NULL,
-              span_start      INTEGER,
-              span_end        INTEGER,
-              confidence      REAL NOT NULL,
-              rule_id         TEXT
-            );
-            CREATE INDEX ix_e_notif ON entities(notification_id);
-            CREATE INDEX ix_e_type  ON entities(type);
+    /// <summary>
+    /// Database schema migrations.
+    /// </summary>
+    internal static class Migrations
+    {
+        private static IEnumerable<(long, string)> All() => new[]
+        {
+            (1L, @"
+                CREATE TABLE apps (
+                  package         TEXT PRIMARY KEY,
+                  label           TEXT,
+                  first_seen_at   INTEGER NOT NULL,
+                  default_category TEXT,
+                  depth           INTEGER,
+                  muted           INTEGER NOT NULL DEFAULT 0,
+                  auto_archive    INTEGER NOT NULL DEFAULT 0,
+                  region_hint     TEXT,
+                  notif_count     INTEGER NOT NULL DEFAULT 0,
+                  last_seen_at    INTEGER,
+                  icon_png        BLOB
+                );
 
-            CREATE TABLE promo_codes (
-              id              INTEGER PRIMARY KEY,
-              code            TEXT NOT NULL,
-              code_norm       TEXT NOT NULL,
-              package         TEXT NOT NULL REFERENCES apps(package),
-              store_name      TEXT,
-              kind            TEXT NOT NULL DEFAULT 'promo',
-              discount_json   TEXT,
-              min_spend_json  TEXT,
-              cap_json        TEXT,
-              conditions_json TEXT,
-              first_seen_at   INTEGER NOT NULL,
-              last_seen_at    INTEGER NOT NULL,
-              times_seen      INTEGER NOT NULL DEFAULT 1,
-              notification_id INTEGER REFERENCES notifications(id) ON DELETE SET NULL,
-              valid_until     INTEGER,
-              valid_until_precision INTEGER,
-              status          INTEGER NOT NULL DEFAULT 0,
-              used_at         INTEGER,
-              note            TEXT,
-              reminder_at     INTEGER,
-              UNIQUE (code_norm, package)
-            );
+                CREATE TABLE notifications (
+                  id              INTEGER PRIMARY KEY,
+                  uid             TEXT NOT NULL UNIQUE,
+                  sbn_key         TEXT NOT NULL,
+                  package         TEXT NOT NULL REFERENCES apps(package),
+                  posted_at       INTEGER NOT NULL,
+                  captured_at     INTEGER NOT NULL,
+                  updated_at      INTEGER NOT NULL,
+                  removed_at      INTEGER,
+                  removal_reason  INTEGER,
+                  tz_offset_min   INTEGER NOT NULL,
+                  channel_id      TEXT,
+                  channel_name    TEXT,
+                  android_category TEXT,
+                  importance      INTEGER,
+                  group_key       TEXT,
+                  title           TEXT,
+                  text            TEXT,
+                  big_text        TEXT,
+                  sub_text        TEXT,
+                  lines_json      TEXT,
+                  actions_json    TEXT,
+                  depth           INTEGER,
+                  category        TEXT,
+                  content_hash    TEXT,
+                                    pinned          INTEGER NOT NULL DEFAULT 0,
+                                    state           INTEGER NOT NULL DEFAULT 0,
+                                    account_email   TEXT,
+                                    evidence_json   TEXT,
+                                    needs_review    INTEGER NOT NULL DEFAULT 0
+                                  );
 
-            CREATE VIRTUAL TABLE notification_fts USING fts5(
-              title_n, body_n, sender_n,
-              tokenize = 'unicode61 remove_diacritics 2'
-            );
+                CREATE INDEX ix_notifications_package ON notifications(package);
+                CREATE INDEX ix_notifications_posted ON notifications(posted_at);
 
-            CREATE TABLE user_rules (
-              id INTEGER PRIMARY KEY, name TEXT NOT NULL, enabled INTEGER NOT NULL DEFAULT 1,
-              priority INTEGER NOT NULL DEFAULT 100, match_json TEXT NOT NULL, action_json TEXT NOT NULL,
-              hit_count INTEGER NOT NULL DEFAULT 0, created_at INTEGER NOT NULL
-            );
+                CREATE TABLE packs (
+                  id TEXT PRIMARY KEY, version TEXT NOT NULL, enabled INTEGER NOT NULL DEFAULT 1,
+                  source TEXT NOT NULL, sha256 TEXT NOT NULL, installed_at INTEGER NOT NULL
+                );
 
-            CREATE TABLE corrections (
-              id INTEGER PRIMARY KEY, notification_id INTEGER, package TEXT NOT NULL,
-              features_blob BLOB NOT NULL,
-              from_category TEXT, to_category TEXT NOT NULL, created_at INTEGER NOT NULL
-            );
+                CREATE TABLE settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);
 
-            CREATE TABLE digests (
-              id INTEGER PRIMARY KEY, day TEXT NOT NULL, kind TEXT NOT NULL,
-              content_json TEXT NOT NULL, model_id INTEGER, created_at INTEGER NOT NULL,
-              UNIQUE (day, kind)
-            );
+                                -- FTS5 virtual table for full-text search (PF-10)
+                                CREATE VIRTUAL TABLE notification_fts USING fts5(
+                                  title_n, body_n, sender_n,
+                                  tokenize = 'unicode61 remove_diacritics 2'
+                                );
 
-            CREATE TABLE slm_results (
-              id INTEGER PRIMARY KEY, notification_id INTEGER REFERENCES notifications(id) ON DELETE CASCADE,
-              task TEXT NOT NULL, model_id INTEGER, input_hash TEXT NOT NULL, output_json TEXT,
-              valid INTEGER NOT NULL DEFAULT 0, tokens_in INTEGER, tokens_out INTEGER,
-              duration_ms INTEGER, created_at INTEGER NOT NULL
-            );
+                                -- Additional tables per spec §6.6
+                                CREATE TABLE entities (
+                                  id INTEGER PRIMARY KEY, notification_id INTEGER NOT NULL REFERENCES notifications(id) ON DELETE CASCADE,
+                                  type INTEGER NOT NULL, value TEXT NOT NULL, span_start INTEGER, span_end INTEGER
+                                );
+                                CREATE INDEX ix_entities_notification ON entities(notification_id);
 
-            CREATE TABLE models (
-              id INTEGER PRIMARY KEY, display_name TEXT NOT NULL, path TEXT NOT NULL, format TEXT NOT NULL,
-              engine TEXT NOT NULL, size_bytes INTEGER NOT NULL, sha256 TEXT NOT NULL, metadata_json TEXT,
-              benchmark_json TEXT, added_at INTEGER NOT NULL, last_used_at INTEGER, is_active INTEGER NOT NULL DEFAULT 0
-            );
+                                CREATE TABLE promo_codes (
+                                  code_norm TEXT PRIMARY KEY, raw_code TEXT, valid_until_precision INTEGER,
+                                  first_seen INTEGER, last_seen INTEGER, use_count INTEGER NOT NULL DEFAULT 0,
+                                  source_package TEXT REFERENCES apps(package)
+                                );
 
-            CREATE TABLE packs (
-              id TEXT PRIMARY KEY, version TEXT NOT NULL, enabled INTEGER NOT NULL DEFAULT 1,
-              source TEXT NOT NULL, sha256 TEXT NOT NULL, installed_at INTEGER NOT NULL
-            );
+                                CREATE TABLE corrections (
+                                  id INTEGER PRIMARY KEY, original_uid TEXT NOT NULL, corrected_uid TEXT,
+                                  features_blob BLOB, confidence REAL, applied_at INTEGER
+                                );
+                                CREATE INDEX ix_corrections_original ON corrections(original_uid);
 
-            CREATE TABLE settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);
-            """),
-    };
+                                CREATE TABLE digests (
+                                  id INTEGER PRIMARY KEY, period_start INTEGER NOT NULL, period_end INTEGER NOT NULL,
+                                  category INTEGER NOT NULL, summary_json TEXT NOT NULL, generated_at INTEGER NOT NULL
+                                );
+
+                                CREATE TABLE slm_results (
+                                  id INTEGER PRIMARY KEY, notification_uid TEXT NOT NULL,
+                                  intent TEXT, confidence REAL, latency_ms INTEGER, model_sha TEXT,
+                                  created_at INTEGER NOT NULL
+                                );
+                                CREATE INDEX ix_slm_results_notification ON slm_results(notification_uid);
+
+                                CREATE TABLE models (
+                                  sha256 TEXT PRIMARY KEY, variant TEXT, quant TEXT, bytes INTEGER,
+                                  created_at INTEGER, source_url TEXT
+                                );
+                            "),
+
+            // Migration 3: user_rules table + global_settings table (M6, §11.1–11.4, PER-001..004)
+            (3L, @"
+                CREATE TABLE user_rules (
+                  id                  INTEGER PRIMARY KEY AUTOINCREMENT,
+                  priority            INTEGER NOT NULL,
+                  enabled             INTEGER NOT NULL DEFAULT 1,
+                  match_package       TEXT,
+                  match_channel       TEXT,
+                  match_title_regex   TEXT,
+                  match_text_regex    TEXT,
+                  match_sender_regex  TEXT,
+                  match_mode          INTEGER NOT NULL DEFAULT 0,
+                  target_category     INTEGER,
+                  target_read_state   INTEGER,
+                  target_importance   INTEGER,
+                  action_label_override TEXT,
+                  created_at          TEXT NOT NULL,
+                  updated_at          TEXT NOT NULL
+                );
+                CREATE INDEX ix_user_rules_priority_enabled ON user_rules(priority, enabled);
+
+                CREATE TABLE global_settings (
+                  key   TEXT PRIMARY KEY,
+                  value TEXT NOT NULL
+                );
+            "),
+        };
+
+        public static void Apply(SqliteConnection con)
+        {
+            con.ExecuteNonQuery("CREATE TABLE IF NOT EXISTS schema_migrations (version INTEGER PRIMARY KEY, applied_at INTEGER NOT NULL);");
+
+            var applied = new HashSet<long>();
+            using (var cmd = con.CreateCommand())
+            {
+                cmd.CommandText = "SELECT version FROM schema_migrations";
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                    applied.Add(reader.GetInt64(0));
+            }
+
+            foreach (var (version, sql) in All())
+            {
+                if (!applied.Contains(version))
+                {
+                    using var tx = con.BeginTransaction();
+                    // Split by semicolon and execute each statement separately
+                    foreach (var stmt in sql.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+                    {
+                        if (!string.IsNullOrWhiteSpace(stmt))
+                        {
+                            con.ExecuteNonQuery(stmt);
+                        }
+                    }
+                    con.ExecuteNonQuery($"INSERT INTO schema_migrations (version, applied_at) VALUES ({version}, {DateTimeOffset.UtcNow.ToUnixTimeSeconds()});");
+                    tx.Commit();
+                }
+            }
+        }
+    }
 }
 
 internal static class SqliteExtensions

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Alak.App.ViewModels"
+             x:Class="Alak.App.Views.DetailPage"
+             x:DataType="vm:DetailViewModel"
+             BackgroundColor="{StaticResource PageBackground}">
+
+    <ContentPage.BindingContext>
+        <vm:DetailViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,*" RowSpacing="16" Margin="16,16,16,24">
+            <!-- Category spine + chip -->
+            <Grid Grid.Row="0" ColumnDefinitions="4,*,Auto" Margin="0,0,0,8">
+                <BoxView Grid.Column="0" Grid.RowSpan="2"
+                         WidthRequest="4"
+                         Color="{Binding Notification.CategoryMarkColor}"
+                         VerticalOptions="Fill" />
+                
+                <StackLayout Grid.Column="1" Spacing="4">
+                    <Label Text="{Binding Notification.Title}"
+                           Style="{StaticResource Text.Title}" />
+                    <Frame Style="{StaticResource Frame.Chip}"
+                           BackgroundColor="{Binding Notification.CategoryTintColor}"
+                           HorizontalOptions="Start"
+                           Padding="12,4">
+                        <Label Text="{Binding Notification.Category, Converter={StaticResource CategoryLabelConverter}}"
+                               Style="{StaticResource Text.Caption}"
+                               TextColor="{Binding Notification.CategoryMarkColor}"
+                               FontAttributes="Bold" />
+                    </Frame>
+                </StackLayout>
+
+                <Label Grid.Column="2"
+                       Text="{Binding Notification.Timestamp, Converter={StaticResource RelativeTimeConverter}}"
+                       Style="{StaticResource Text.Caption}"
+                       VerticalOptions="Center"
+                       HorizontalOptions="End" />
+            </Grid>
+
+            <!-- Channel info -->
+            <Frame Grid.Row="1" Style="{StaticResource Frame.Card}" Margin="0">
+                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                    <Label Text="📱" FontSize="24" VerticalOptions="Center" />
+                    <StackLayout Grid.Column="1" Spacing="2">
+                        <Label Text="{Binding Notification.ChannelName}"
+                               Style="{StaticResource Text.Body}"
+                               FontAttributes="Bold" />
+                        <Label Text="{Binding Notification.Package}"
+                               Style="{StaticResource Text.Caption}" />
+                    </StackLayout>
+                </Grid>
+            </Frame>
+
+            <!-- Full text -->
+            <Frame Grid.Row="2" Style="{StaticResource Frame.Card}" Margin="0">
+                <Label Text="{Binding Notification.Text}"
+                       Style="{StaticResource Text.Body}"
+                       LineBreakMode="WordWrap" />
+            </Frame>
+
+            <!-- Extracted code (if any) -->
+            <Frame Grid.Row="3" Style="{StaticResource Frame.Card}" Margin="0"
+                   IsVisible="{Binding Notification.HasCode}">
+                <Grid RowDefinitions="Auto,Auto" RowSpacing="12">
+                    <Label Text="Extracted Code"
+                           Style="{StaticResource Text.Label}" />
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                        <Label Grid.Column="0"
+                               Text="{Binding Notification.ExtractedCode}"
+                               Style="{StaticResource Text.Code}"
+                               LineBreakMode="WordWrap"
+                               VerticalOptions="Center" />
+                        <Button Grid.Column="1"
+                                Text="Copy"
+                                Style="{StaticResource Button.Primary}"
+                                Command="{Binding CopyCodeCommand}"
+                                WidthRequest="100"
+                                VerticalOptions="Center" />
+                    </Grid>
+                </Grid>
+            </Frame>
+
+            <!-- Actions -->
+            <Grid Grid.Row="4" ColumnDefinitions="*,*,*" ColumnSpacing="12">
+                <Button Grid.Column="0"
+                        Text="Mark Read"
+                        Style="{StaticResource Button.Secondary}"
+                        Command="{Binding MarkReadCommand}"
+                        IsVisible="{Binding Notification.IsRead, Converter={StaticResource InverseBoolConverter}}" />
+                <Button Grid.Column="1"
+                        Text="Share"
+                        Style="{StaticResource Button.Secondary}"
+                        Command="{Binding ShareCommand}" />
+                <Button Grid.Column="2"
+                        Text="Delete"
+                        Style="{StaticResource Button.Secondary}"
+                        Command="{Binding DeleteCommand}"
+                        TextColor="{StaticResource ErrorColor}"
+                        BorderColor="{StaticResource ErrorColor}" />
+            </Grid>
+
+            <!-- Spacer -->
+            <BoxView Grid.Row="5" HeightRequest="100" Color="Transparent" />
+        </Grid>
+    </ScrollView>
+</ContentPage>

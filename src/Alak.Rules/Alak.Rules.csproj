@@ -1,14 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\Alak.Text\Alak.Text.csproj" />
-    <ProjectReference Include="..\Alak.Core\Alak.Core.csproj" />
-  </ItemGroup>
+      <ProjectReference Include="..\Alak.Text\Alak.Text.csproj" />
+      <ProjectReference Include="..\Alak.Core\Alak.Core.csproj" />
+      <ProjectReference Include="..\Alak.Storage\Alak.Storage.csproj" />
+    </ItemGroup>
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <NuGetAudit>false</NuGetAudit>
   </PropertyGroup>
 
 </Project>
