@@ -40,6 +40,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IUserRulesRepository, UserRulesRepository>();
         builder.Services.AddSingleton<IAdaptiveEngine, AdaptiveEngine>();
         builder.Services.AddSingleton<IInferenceEngine, InferenceEngineStub>(); // M8 will swap
+        builder.Services.AddSingleton<IPromoCodeRepository, PromoCodeRepository>();
 
         // ViewModels
         builder.Services.AddTransient<InboxViewModel>();
@@ -48,6 +49,7 @@ public static class MauiProgram
         builder.Services.AddTransient<OnboardingViewModel>();
         builder.Services.AddTransient<RulesViewModel>();
         builder.Services.AddTransient<StubDetailViewModel>();
+        builder.Services.AddTransient<WalletViewModel>();
 
         // Storage
         var dbPath = Path.Combine(FileSystem.AppDataDirectory, "alak.db");

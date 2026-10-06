@@ -44,6 +44,11 @@
             <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" Route="settings" />
         </Tab>
 
+        <!-- Wallet/Codes Tab -->
+        <Tab Title="Codes" Icon="inbox.svg" Route="wallet">
+            <ShellContent ContentTemplate="{DataTemplate views:WalletPage}" Route="wallet" />
+        </Tab>
+
         <!-- Rules Tab -->
         <Tab Title="Rules" Icon="settings.svg" Route="rules">
             <ShellContent ContentTemplate="{DataTemplate views:RulesPage}" Route="rules" />
@@ -57,5 +62,6 @@
     <ShellContent Route="settings" ContentTemplate="{DataTemplate views:SettingsPage}" />
     <ShellContent Route="rules" ContentTemplate="{DataTemplate views:RulesPage}" />
     <ShellContent Route="stub-detail" ContentTemplate="{DataTemplate views:StubDetailPage}" />
+    <ShellContent Route="wallet" ContentTemplate="{DataTemplate views:WalletPage}" />
 
 </Shell>
