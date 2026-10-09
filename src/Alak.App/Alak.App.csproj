@@ -11,6 +11,13 @@
     <!-- Disable default Material3 theme to avoid missing color resources -->
     <AndroidUseMaterial3DefaultTheme>false</AndroidUseMaterial3DefaultTheme>
 
+    <!-- Embed assemblies in APK (Fast Deployment staging is flaky on x86_64 emulators) -->
+    <AndroidFastDeploymentType>None</AndroidFastDeploymentType>
+    <!-- Self-contained runtime: no shared Mono runtime dependency (emulator lacks it) -->
+    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <!-- Include x86_64 for the API 30 emulator alongside arm64 for physical devices -->
+    <RuntimeIdentifiers>android-arm64;android-x64</RuntimeIdentifiers>
+
     <!-- Display name -->
     <ApplicationTitle>Alak</ApplicationTitle>
 
@@ -26,11 +33,6 @@
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
     <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</TargetPlatformMinVersion>
     <AndroidTargetSdkVersion>36</AndroidTargetSdkVersion>
-
-    <!-- Required for Android 13+ restricted settings handling -->
-    <AndroidManifestPlaceholders>
-      <notificationListenerServicePermission>android.permission.BIND_NOTIFICATION_LISTENER_SERVICE</notificationListenerServicePermission>
-    </AndroidManifestPlaceholders>
   </PropertyGroup>
 
   <ItemGroup>
@@ -53,11 +55,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
-    <PackageReference Include="CommunityToolkit.Maui" Version="9.0.0" />
-    <PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="3.116.1" />
-    <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.0-rc.1.*" />
-    <PackageReference Include="Xamarin.Google.Android.Material" Version="1.12.0.6" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="CommunityToolkit.Maui" Version="15.0.1" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.110" />
+    <PackageReference Include="Xamarin.Google.Android.Material" Version="1.14.0.6" />
   </ItemGroup>
 
   <ItemGroup>
