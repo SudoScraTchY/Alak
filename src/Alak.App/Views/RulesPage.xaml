@@ -141,7 +141,7 @@
                                         Style="{StaticResource Button.Ghost}"
                                         Padding="8"
                                         BackgroundColor="Transparent"
-                                        BorderWidth="0"
+                                        BorderColor="Transparent"
                                         VerticalOptions="Center" />
                             </Grid>
                         </DataTemplate>

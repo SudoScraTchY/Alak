@@ -98,7 +98,6 @@
         <Setter Property="TextColor" Value="{StaticResource PrimaryText}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="BorderColor" Value="{StaticResource Divider}" />
-        <Setter Property="BorderWidth" Value="1" />
         <Setter Property="CornerRadius" Value="{StaticResource Radius.MD}" />
         <Setter Property="HeightRequest" Value="48" />
         <Setter Property="Padding" Value="24,0" />

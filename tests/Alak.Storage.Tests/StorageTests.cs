@@ -32,7 +32,8 @@ public class SchemaTests
         ColumnExists(con, "notifications", "evidence_json").ShouldBeTrue();
         ColumnExists(con, "notifications", "needs_review").ShouldBeTrue();
         ColumnExists(con, "promo_codes", "code_norm").ShouldBeTrue();
-        ColumnExists(con, "promo_codes", "valid_until_precision").ShouldBeTrue();
+        ColumnExists(con, "promo_codes", "package").ShouldBeTrue();       // §13.8 wallet schema (migration 5)
+        ColumnExists(con, "promo_codes", "valid_until").ShouldBeTrue();
         ColumnExists(con, "corrections", "features_blob").ShouldBeTrue();
         ColumnExists(con, "models", "sha256").ShouldBeTrue();
     }

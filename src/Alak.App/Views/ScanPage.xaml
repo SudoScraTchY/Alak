@@ -19,7 +19,7 @@
                 <Frame WidthRequest="240" HeightRequest="240"
                        CornerRadius="12"
                        BorderColor="{StaticResource Mark.Promo}"
-                       BorderWidth="3"
+                       Padding="0"
                        BackgroundColor="Transparent"
                        HasShadow="False"
                        HorizontalOptions="Center"

@@ -229,6 +229,44 @@ public sealed class StorageConnection : IDisposable
                 ALTER TABLE notifications ADD COLUMN is_persian INTEGER NOT NULL DEFAULT 0;
                 ALTER TABLE notifications ADD COLUMN extracted_code TEXT;
             "),
+
+            // Migration 5: promo_codes schema from migration 3 predates the §13.8 wallet schema
+            // PromoCodeRepository expects. Recreate with the normative wallet schema.
+            (5L, @"
+                DROP TABLE IF EXISTS promo_codes;
+                CREATE TABLE promo_codes (
+                  id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  code_norm TEXT NOT NULL,
+                  raw_code TEXT NOT NULL,
+                  package TEXT NOT NULL,
+                  account_email TEXT,
+                  channel_id TEXT,
+                  status INTEGER NOT NULL DEFAULT 0,
+                  confidence REAL NOT NULL,
+                  kind INTEGER NOT NULL DEFAULT 0,
+                  discount_value REAL,
+                  discount_type INTEGER,
+                  currency TEXT,
+                  min_spend REAL,
+                  cap REAL,
+                  scope TEXT,
+                  first_order INTEGER NOT NULL DEFAULT 0,
+                  single_use INTEGER NOT NULL DEFAULT 0,
+                  valid_from INTEGER,
+                  valid_until INTEGER,
+                  store_hint TEXT,
+                  first_seen_at INTEGER NOT NULL,
+                  last_seen_at INTEGER NOT NULL,
+                  times_seen INTEGER NOT NULL DEFAULT 1,
+                  reminder_24h_at INTEGER,
+                  reminder_morning_at INTEGER,
+                  reminder_custom_at INTEGER,
+                  UNIQUE(code_norm, package)
+                );
+                CREATE INDEX IF NOT EXISTS idx_promo_codes_package ON promo_codes(package);
+                CREATE INDEX IF NOT EXISTS idx_promo_codes_status ON promo_codes(status);
+                CREATE INDEX IF NOT EXISTS idx_promo_codes_valid_until ON promo_codes(valid_until);
+            "),
         };
 
         public static void Apply(SqliteConnection con)
