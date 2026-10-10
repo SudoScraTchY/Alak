@@ -222,6 +222,13 @@ public sealed class StorageConnection : IDisposable
                   value TEXT NOT NULL
                 );
             "),
+
+            // Migration 4: app-facing columns used by NotificationRepository (M8)
+            (4L, @"
+                ALTER TABLE notifications ADD COLUMN is_read INTEGER NOT NULL DEFAULT 0;
+                ALTER TABLE notifications ADD COLUMN is_persian INTEGER NOT NULL DEFAULT 0;
+                ALTER TABLE notifications ADD COLUMN extracted_code TEXT;
+            "),
         };
 
         public static void Apply(SqliteConnection con)

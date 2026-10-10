@@ -13,8 +13,16 @@
 
     <!-- Embed assemblies in APK (Fast Deployment staging is flaky on x86_64 emulators) -->
     <AndroidFastDeploymentType>None</AndroidFastDeploymentType>
+    <!-- Store native libs + assemblies UNCOMPRESSED: monodroid requires lib/ entries
+         STORED (Deflate-compressed libmonodroid.so triggers "No assemblies found" abort) -->
+    <AndroidEnableAssemblyCompression>false</AndroidEnableAssemblyCompression>
+    <!-- Let Android extract native libs at install (compressed lib/ entries otherwise
+         trigger monodroid "ALL entries MUST be STORED" abort on API 30 emulators) -->
+    <AndroidExtractNativeLibs>true</AndroidExtractNativeLibs>
     <!-- Self-contained runtime: no shared Mono runtime dependency (emulator lacks it) -->
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <!-- Embed managed assemblies INTO the APK (Debug default is false = fast deploy thin APK) -->
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <!-- Include x86_64 for the API 30 emulator alongside arm64 for physical devices -->
     <RuntimeIdentifiers>android-arm64;android-x64</RuntimeIdentifiers>
 

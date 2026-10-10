@@ -1,4 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
   <rect width="1024" height="1024" rx="224" fill="#1E88E5"/>
-  <text x="512" y="640" font-family="Vazirmatn, sans-serif" font-size="500" font-weight="700" fill="white" text-anchor="middle" dominant-baseline="middle">A</text>
+  <!-- Letter A as path (no text element: avoids HarfBuzzSharp in Resizetizer) -->
+  <path d="M512 240l210 560H612l-34-96H446l-34 96H302z M512 420l-42 128h84z"
+        fill="#FFFFFF" fill-rule="evenodd"/>
 </svg>

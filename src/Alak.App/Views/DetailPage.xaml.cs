@@ -5,9 +5,10 @@ namespace Alak.App.Views;
 
 public partial class DetailPage : ContentPage
 {
-    public DetailPage()
+    public DetailPage(DetailViewModel viewModel)
     {
         InitializeComponent();
+        BindingContext = viewModel;
     }
 
     protected override async void OnAppearing()

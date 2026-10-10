@@ -6,11 +6,6 @@
              x:DataType="vm:SettingsViewModel"
              BackgroundColor="{StaticResource PageBackground}"
              Title="Settings">
-
-    <ContentPage.BindingContext>
-        <vm:SettingsViewModel />
-    </ContentPage.BindingContext>
-
     <ScrollView>
         <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="24" Margin="16,16,16,24">
             <!-- General -->

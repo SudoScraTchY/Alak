@@ -7,11 +7,6 @@
              x:Class="Alak.App.Views.InboxPage"
              x:DataType="vm:InboxViewModel"
              BackgroundColor="{StaticResource PageBackground}">
-
-    <ContentPage.BindingContext>
-        <vm:InboxViewModel />
-    </ContentPage.BindingContext>
-
     <Grid RowDefinitions="Auto,Auto,*,Auto">
         <!-- ===== SEARCH BAR ===== -->
         <SearchBar Grid.Row="0"

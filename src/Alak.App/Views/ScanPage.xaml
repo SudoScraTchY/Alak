@@ -6,11 +6,6 @@
              x:DataType="vm:ScanViewModel"
              BackgroundColor="{StaticResource PageBackground}"
              Title="Scan QR Code">
-
-    <ContentPage.BindingContext>
-        <vm:ScanViewModel />
-    </ContentPage.BindingContext>
-
     <Grid RowDefinitions="*,Auto,Auto" RowSpacing="24" Margin="24,24,24,32">
         <!-- Camera preview area -->
         <Frame Grid.Row="0" Style="{StaticResource Frame.Card}" 

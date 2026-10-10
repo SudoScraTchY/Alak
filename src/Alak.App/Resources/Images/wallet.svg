@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <!-- wallet / codes icon -->
+  <path d="M4 6h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"
+        fill="none" stroke="#37474F" stroke-width="1.8"/>
+  <path d="M16 6V5a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v1" fill="none" stroke="#37474F" stroke-width="1.8"/>
+  <circle cx="16" cy="12" r="1.6" fill="#37474F"/>
+</svg>

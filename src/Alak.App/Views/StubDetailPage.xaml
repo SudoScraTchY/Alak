@@ -6,11 +6,6 @@
              x:DataType="vm:StubDetailViewModel"
              BackgroundColor="{StaticResource PageBackground}"
              Title="Detail">
-
-    <ContentPage.BindingContext>
-        <vm:StubDetailViewModel />
-    </ContentPage.BindingContext>
-
     <ScrollView>
         <!-- Stub card - ticket shape per §12.7 -->
         <Frame Style="{StaticResource Frame.Stub}" 

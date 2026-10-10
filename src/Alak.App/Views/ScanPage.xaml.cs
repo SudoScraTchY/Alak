@@ -5,9 +5,10 @@ namespace Alak.App.Views;
 
 public partial class ScanPage : ContentPage
 {
-    public ScanPage()
+    public ScanPage(ScanViewModel viewModel)
     {
         InitializeComponent();
+        BindingContext = viewModel;
     }
 
     protected override void OnAppearing()

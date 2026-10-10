@@ -7,9 +7,10 @@ namespace Alak.App.Views;
 
 public partial class InboxPage : ContentPage
 {
-    public InboxPage()
+    public InboxPage(InboxViewModel viewModel)
     {
         InitializeComponent();
+        BindingContext = viewModel;
     }
 
     protected override async void OnAppearing()

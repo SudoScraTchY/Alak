@@ -5,11 +5,6 @@
              x:Class="Alak.App.Views.OnboardingPage"
              x:DataType="vm:OnboardingViewModel"
              BackgroundColor="{StaticResource PageBackground}">
-
-    <ContentPage.BindingContext>
-        <vm:OnboardingViewModel />
-    </ContentPage.BindingContext>
-
     <Grid RowDefinitions="Auto,*,Auto" RowSpacing="24" Margin="24,48,24,24">
         <!-- Progress indicator -->
         <Grid Grid.Row="0" ColumnDefinitions="*,*,*,*,*" ColumnSpacing="8">

@@ -5,9 +5,10 @@ namespace Alak.App.Views;
 
 public partial class StubDetailPage : ContentPage
 {
-    public StubDetailPage()
+    public StubDetailPage(StubDetailViewModel viewModel)
     {
         InitializeComponent();
+        BindingContext = viewModel;
     }
 
     protected override async void OnAppearing()

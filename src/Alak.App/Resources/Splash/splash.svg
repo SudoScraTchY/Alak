@@ -1,4 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
   <rect width="200" height="200" fill="#1E88E5"/>
-  <text x="100" y="120" font-family="Vazirmatn, sans-serif" font-size="80" font-weight="600" fill="white" text-anchor="middle" dominant-baseline="middle">A</text>
+  <path d="M100 46l41 110h-22l-7-19H88l-7 19H59z M100 82l-8 25h16z"
+        fill="#FFFFFF" fill-rule="evenodd"/>
 </svg>

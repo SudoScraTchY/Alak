@@ -7,11 +7,6 @@
              x:DataType="vm:SourcesViewModel"
              BackgroundColor="{StaticResource PageBackground}"
              Title="Sources">
-
-    <ContentPage.BindingContext>
-        <vm:SourcesViewModel />
-    </ContentPage.BindingContext>
-
     <ContentPage.Resources>
         <ResourceDictionary>
             <conv:BoolToFontWeightConverter x:Key="BoolToFontWeightConverter" />
