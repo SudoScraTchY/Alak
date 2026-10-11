@@ -267,6 +267,27 @@ public sealed class StorageConnection : IDisposable
                 CREATE INDEX IF NOT EXISTS idx_promo_codes_status ON promo_codes(status);
                 CREATE INDEX IF NOT EXISTS idx_promo_codes_valid_until ON promo_codes(valid_until);
             "),
+
+            // Migration 6: global_settings from migration 3 used a key/value draft schema;
+            // UserRulesRepository expects the §11.4 single-row schema. Recreate normatively.
+            (6L, @"
+                DROP TABLE IF EXISTS global_settings;
+                CREATE TABLE global_settings (
+                  id INTEGER PRIMARY KEY CHECK (id = 1),
+                  theme TEXT NOT NULL DEFAULT 'system',
+                  ui_language TEXT NOT NULL DEFAULT 'system',
+                  calendar TEXT NOT NULL DEFAULT 'auto',
+                  digits TEXT NOT NULL DEFAULT 'auto',
+                  retention_overrides_json TEXT,
+                  global_size_cap INTEGER,
+                  tier2_enabled INTEGER NOT NULL DEFAULT 1,
+                  slm_performance_profile TEXT NOT NULL DEFAULT 'balanced',
+                  app_lock_enabled INTEGER NOT NULL DEFAULT 0,
+                  hide_amounts_in_lists INTEGER NOT NULL DEFAULT 0,
+                  notification_reminders_enabled INTEGER NOT NULL DEFAULT 1
+                );
+                INSERT INTO global_settings (id) VALUES (1);
+            "),
         };
 
         public static void Apply(SqliteConnection con)

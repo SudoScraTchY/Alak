@@ -22,7 +22,7 @@
                 <VerticalStackLayout Spacing="0">
                     <!-- Summary bar -->
                     <Border BackgroundColor="{StaticResource CardBackground}"
-                            Stroke="{StaticResource Hairline}"
+                            Stroke="{StaticResource Divider}"
                             StrokeThickness="1"
                             Margin="16,16,16,8"
                             Padding="16,12"
@@ -207,7 +207,7 @@
                                 <Grid Margin="16,8" RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto">
                                     <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
                                             BackgroundColor="{StaticResource CardBackground}"
-                                            Stroke="{StaticResource Hairline}"
+                                            Stroke="{StaticResource Divider}"
                                             StrokeThickness="1"
                                             StrokeShape="RoundRectangle 12"
                                             Padding="16,12">
@@ -334,7 +334,7 @@
                             <DataTemplate x:DataType="vm:PromoCodeItem">
                                 <Border Margin="16,8"
                                         BackgroundColor="{StaticResource CardBackground}"
-                                        Stroke="{StaticResource Hairline}"
+                                        Stroke="{StaticResource Divider}"
                                         StrokeThickness="1"
                                         StrokeShape="RoundRectangle 12"
                                         Padding="16,12"
@@ -381,7 +381,7 @@
                             <DataTemplate x:DataType="vm:PromoCodeItem">
                                 <Border Margin="16,8"
                                         BackgroundColor="{StaticResource CardBackground}"
-                                        Stroke="{StaticResource Hairline}"
+                                        Stroke="{StaticResource Divider}"
                                         StrokeThickness="1"
                                         StrokeShape="RoundRectangle 12"
                                         Padding="16,12"
@@ -429,7 +429,7 @@
                     <!-- Expired Codes Section (collapsible) -->
                     <Border Margin="16,8,16,16"
                             BackgroundColor="{StaticResource CardBackground}"
-                            Stroke="{StaticResource Hairline}"
+                            Stroke="{StaticResource Divider}"
                             StrokeThickness="1"
                             StrokeShape="RoundRectangle 12"
                             IsVisible="{Binding ShowExpiredSection}">
@@ -451,7 +451,7 @@
                                     <DataTemplate x:DataType="vm:PromoCodeItem">
                                         <Border Margin="16,4,16,8"
                                                 BackgroundColor="{StaticResource Surface}"
-                                                Stroke="{StaticResource Hairline}"
+                                                Stroke="{StaticResource Divider}"
                                                 StrokeThickness="1"
                                                 StrokeShape="RoundRectangle 8"
                                                 Padding="12,8"

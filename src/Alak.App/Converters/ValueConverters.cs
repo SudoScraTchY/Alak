@@ -4,6 +4,26 @@ using Microsoft.Maui.Controls;
 
 namespace Alak.App.Converters;
 
+/// <summary>Converts an int count (or bool) to visibility: visible when > 0 (or true), unless parameter="invert".</summary>
+public class BoolToVisibilityConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        var visible = value switch
+        {
+            int i => i > 0,
+            bool b => b,
+            _ => false
+        };
+        if (string.Equals(parameter as string, "invert", StringComparison.OrdinalIgnoreCase))
+            visible = !visible;
+        return visible;
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotImplementedException();
+}
+
 public class BoolToFontWeightConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
