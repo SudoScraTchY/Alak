@@ -123,4 +123,14 @@
         <Setter Property="Margin" Value="0,0,0,16" />
     </Style>
 
+    <!-- Aliases used by pages (M8 audit: styles referenced but previously undefined) -->
+    <Style x:Key="Label.Title" TargetType="Label" BasedOn="{StaticResource Text.Title}" />
+    <Style x:Key="Label.Body" TargetType="Label" BasedOn="{StaticResource Text.Body}" />
+    <Style x:Key="Label.Caption" TargetType="Label" BasedOn="{StaticResource Text.Caption}" />
+    <Style x:Key="Label.Overline" TargetType="Label" BasedOn="{StaticResource Text.Label}" />
+    <Style x:Key="Button.Ghost" TargetType="Button" BasedOn="{StaticResource Button.TextOnly}">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="BorderColor" Value="Transparent" />
+    </Style>
+
 </ResourceDictionary>

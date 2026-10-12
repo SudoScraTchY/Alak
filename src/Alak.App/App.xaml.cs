@@ -11,8 +11,9 @@ public partial class App : Application
     {
         InitializeComponent();
 
-        // Apply theme (light by default; user preference from Settings in M6)
-        UserAppTheme = AppTheme.Light;
+        // Follow the OS theme; Maui resolves AppThemeBindings from the platform.
+        // (Forcing UserAppTheme here broke theme-bound colors on Android ≤ API 30 —
+        //  content painted black.)
 
         // Shell-based navigation requires MainPage to be the AppShell
         MainPage = new AppShell();

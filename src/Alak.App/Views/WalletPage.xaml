@@ -12,6 +12,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <conv:BoolToVisibilityConverter x:Key="BoolToVisibility" />
+            <conv:CategoryToColorConverter x:Key="CategoryToColor" />
             <toolkit:InvertedBoolConverter x:Key="InvertedBool" />
         </ResourceDictionary>
     </ContentPage.Resources>

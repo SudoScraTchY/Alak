@@ -56,65 +56,36 @@
     <Color x:Key="Mark.Updates">#546E7A</Color>
     <Color x:Key="Mark.Other">#616161</Color>
 
-    <!-- ===== SEMANTIC TOKENS (theme-aware via AppThemeBinding) ===== -->
-    <Color x:Key="PageBackground">
-        <Color.AppThemeBinding Light="{StaticResource Light.Salt}" Dark="{StaticResource Dark.Night}" />
-    </Color>
-    <Color x:Key="CardBackground">
-        <Color.AppThemeBinding Light="{StaticResource Light.Paper}" Dark="{StaticResource Dark.Raised}" />
-    </Color>
-    <Color x:Key="SurfaceBackground">
-        <Color.AppThemeBinding Light="{StaticResource Light.Paper}" Dark="{StaticResource Dark.Surface}" />
-    </Color>
-    <Color x:Key="PrimaryText">
-        <Color.AppThemeBinding Light="{StaticResource Light.Ink}" Dark="{StaticResource Dark.Txt}" />
-    </Color>
-    <Color x:Key="SecondaryText">
-        <Color.AppThemeBinding Light="{StaticResource Light.Ink2}" Dark="{StaticResource Dark.Txt2}" />
-    </Color>
-    <Color x:Key="TertiaryText">
-        <Color.AppThemeBinding Light="{StaticResource Light.Ink3}" Dark="{StaticResource Dark.Txt3}" />
-    </Color>
-    <Color x:Key="Divider">
-        <Color.AppThemeBinding Light="{StaticResource Light.Hairline}" Dark="{StaticResource Dark.Hairline}" />
-    </Color>
-    <Color x:Key="PrimaryButtonBackground">
-        <Color.AppThemeBinding Light="{StaticResource Light.AccentInk}" Dark="{StaticResource Dark.Txt}" />
-    </Color>
-    <Color x:Key="PrimaryButtonText">
-        <Color.AppThemeBinding Light="White" Dark="{StaticResource Dark.Night}" />
-    </Color>
-    <Color x:Key="ErrorColor">
-        <Color.AppThemeBinding Light="{StaticResource Light.Error}" Dark="{StaticResource Dark.Error}" />
-    </Color>
+    <!-- ===== SEMANTIC TOKENS (plain light values; dark overrides in Colors.Dark.xaml) ===== -->
+    <Color x:Key="PageBackground">#F3F5F6</Color>
+    <Color x:Key="CardBackground">#FFFFFF</Color>
+    <Color x:Key="SurfaceBackground">#FFFFFF</Color>
+    <Color x:Key="PrimaryText">#1B3147</Color>
+    <Color x:Key="SecondaryText">#5A6B7A</Color>
+    <Color x:Key="TertiaryText">#8B98A3</Color>
+    <Color x:Key="Divider">#DCE2E5</Color>
+    <Color x:Key="PrimaryButtonBackground">#12252B</Color>
+    <Color x:Key="PrimaryButtonText">#FFFFFF</Color>
+    <Color x:Key="ErrorColor">#B3261E</Color>
 
     <!-- Category tint (semantic) -->
-    <Color x:Key="Category.Promo.Tint">
-        <Color.AppThemeBinding Light="{StaticResource Light.PromoTint}" Dark="{StaticResource Dark.PromoTint}" />
-    </Color>
-    <Color x:Key="Category.Work.Tint">
-        <Color.AppThemeBinding Light="{StaticResource Light.WorkTint}" Dark="{StaticResource Dark.WorkTint}" />
-    </Color>
-    <Color x:Key="Category.People.Tint">
-        <Color.AppThemeBinding Light="{StaticResource Light.PeopleTint}" Dark="{StaticResource Dark.PeopleTint}" />
-    </Color>
-    <Color x:Key="Category.Money.Tint">
-        <Color.AppThemeBinding Light="{StaticResource Light.MoneyTint}" Dark="{StaticResource Dark.MoneyTint}" />
-    </Color>
-    <Color x:Key="Category.Orders.Tint">
-        <Color.AppThemeBinding Light="{StaticResource Light.OrdersTint}" Dark="{StaticResource Dark.OrdersTint}" />
-    </Color>
-    <Color x:Key="Category.Security.Tint">
-        <Color.AppThemeBinding Light="{StaticResource Light.SecurityTint}" Dark="{StaticResource Dark.SecurityTint}" />
-    </Color>
-    <Color x:Key="Category.Social.Tint">
-        <Color.AppThemeBinding Light="{StaticResource Light.SocialTint}" Dark="{StaticResource Dark.SocialTint}" />
-    </Color>
-    <Color x:Key="Category.Updates.Tint">
-        <Color.AppThemeBinding Light="{StaticResource Light.UpdatesTint}" Dark="{StaticResource Dark.UpdatesTint}" />
-    </Color>
-    <Color x:Key="Category.Other.Tint">
-        <Color.AppThemeBinding Light="{StaticResource Light.OtherTint}" Dark="{StaticResource Dark.OtherTint}" />
-    </Color>
+    <Color x:Key="Category.Promo.Tint">#E8F4FD</Color>
+    <Color x:Key="Category.Work.Tint">#E8F5E9</Color>
+    <Color x:Key="Category.People.Tint">#FFF3E0</Color>
+    <Color x:Key="Category.Money.Tint">#E0F2F1</Color>
+    <Color x:Key="Category.Orders.Tint">#F3E5F5</Color>
+    <Color x:Key="Category.Security.Tint">#FFEBEE</Color>
+    <Color x:Key="Category.Social.Tint">#E8EAF6</Color>
+    <Color x:Key="Category.Updates.Tint">#ECEFF1</Color>
+    <Color x:Key="Category.Other.Tint">#F5F5F5</Color>
+
+    <!-- Semantic aliases used by pages (M8 audit: tokens referenced but previously undefined) -->
+    <Color x:Key="Mark.Danger">#B3261E</Color>
+    <Color x:Key="Mark.Success">#2E7D32</Color>
+    <Color x:Key="OnAccent">#FFFFFF</Color>
+    <Color x:Key="OnSurface">#12252B</Color>
+    <Color x:Key="OnSurfaceVariant">#4A5D64</Color>
+    <Color x:Key="Surface">#FFFFFF</Color>
+    <Color x:Key="TextSecondary">#4A5D64</Color>
 
 </ResourceDictionary>

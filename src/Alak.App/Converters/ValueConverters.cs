@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using Alak.Core.Model;
 using Microsoft.Maui.Controls;
 
 namespace Alak.App.Converters;
@@ -19,6 +20,16 @@ public class BoolToVisibilityConverter : IValueConverter
             visible = !visible;
         return visible;
     }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotImplementedException();
+}
+
+/// <summary>Maps a package name to an app icon resource; unknown packages yield null (Image shows placeholder).</summary>
+public class PackageToIconConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => value is string pkg && !string.IsNullOrWhiteSpace(pkg) ? $"app://{pkg}" : null;
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         => throw new NotImplementedException();
@@ -128,6 +139,35 @@ public class InverseBoolConverter : IValueConverter
         if (value is bool b) return !b;
         return true;
     }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotImplementedException();
+}
+
+/// <summary>Maps a PromoCodeKind (or category name) to a solid color for code-kind chips.</summary>
+public class CategoryToColorConverter : IValueConverter
+{
+    private static readonly Color Promo = Color.FromArgb("#1E88E5");
+    private static readonly Color Gift = Color.FromArgb("#00897B");
+    private static readonly Color Referral = Color.FromArgb("#7B1FA2");
+    private static readonly Color Voucher = Color.FromArgb("#EF6C00");
+    private static readonly Color Unknown = Color.FromArgb("#616161");
+
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => value switch
+        {
+            PromoCodeKind kind => kind switch
+            {
+                PromoCodeKind.Promo => Promo,
+                PromoCodeKind.Gift => Gift,
+                PromoCodeKind.Referral => Referral,
+                PromoCodeKind.Voucher => Voucher,
+                _ => Unknown
+            },
+            string s when Enum.TryParse<PromoCodeKind>(s, true, out var k) => Convert(k, targetType, parameter, culture),
+            int i when Enum.IsDefined(typeof(PromoCodeKind), i) => Convert((PromoCodeKind)i, targetType, parameter, culture),
+            _ => Unknown
+        };
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         => throw new NotImplementedException();

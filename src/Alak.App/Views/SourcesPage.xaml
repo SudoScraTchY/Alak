@@ -11,6 +11,7 @@
         <ResourceDictionary>
             <conv:BoolToFontWeightConverter x:Key="BoolToFontWeightConverter" />
             <conv:InverseBoolConverter x:Key="InverseBoolConverter" />
+            <conv:PackageToIconConverter x:Key="PackageToIconConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
 

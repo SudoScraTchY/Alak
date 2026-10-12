@@ -8,7 +8,7 @@ namespace Alak.App;
     Label = "Alak",
     MainLauncher = true,
     Exported = true,
-    Theme = "@style/Maui.SplashTheme",
+    Theme = "@style/AppTheme",
     LaunchMode = LaunchMode.SingleTop,
     ConfigurationChanges =
         ConfigChanges.Orientation |

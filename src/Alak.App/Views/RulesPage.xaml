@@ -27,7 +27,7 @@
 
                 <HorizontalStackLayout Spacing="12">
                     <Picker Title="Category"
-                            ItemsSource="{Binding Source={x:Static viewmodels:RulesViewModel.NotificationCategoryValues}}"
+                            ItemsSource="{Binding Source={x:Static viewmodels:RulesViewModel.CategoryValues}}"
                             SelectedItem="{Binding NewRuleCategory}"
                             Style="{StaticResource Picker.Standard}"
                             WidthRequest="140" />
