@@ -1,136 +1,264 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                    xmlns:design="clr-namespace:Alak.App.Design"
-                    xmlns:sys="clr-namespace:System;assembly=netstandard">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!--
+        Typography â€” SPEC Â§12.3.
+        Vazirmatn carries both Persian and Latin (one voice, two scripts).
+        JetBrains Mono appears ONLY where exactness matters (codes, amounts, hashes).
+
+        IMPORTANT (M8 rendering bug): MAUI's Label.LineHeight is a MULTIPLIER of the
+        natural line height, not CSS pixels. Values like "36" produced 36Ã— spacing and
+        blew layouts apart. All values below are multipliers (1.2â€“1.65).
+        Spec px scale â†’ multiplier: 36/28â†’1.25 Â· 28/20â†’1.3 Â· 24/16â†’1.5 Â· 26/16â†’1.65
+                                    22/14â†’1.5 Â· 20/14â†’1.35 Â· 24/18â†’1.3 Â· 18/12â†’1.4
+    -->
 
     <!-- ===== FONT FAMILIES (registered in MauiProgram) ===== -->
     <x:String x:Key="Font.Primary">Vazirmatn</x:String>
+    <x:String x:Key="Font.Medium">VazirmatnMedium</x:String>
+    <x:String x:Key="Font.SemiBold">VazirmatnSemiBold</x:String>
+    <x:String x:Key="Font.Bold">VazirmatnBold</x:String>
     <x:String x:Key="Font.Mono">JetBrainsMono</x:String>
 
-    <!-- ===== FONT WEIGHTS ===== -->
-    <sys:Double x:Key="FontWeight.Regular">400</sys:Double>
-    <sys:Double x:Key="FontWeight.Medium">500</sys:Double>
-    <sys:Double x:Key="FontWeight.SemiBold">600</sys:Double>
+    <!-- ===== TEXT STYLES ===== -->
 
-    <!-- ===== TYPOGRAPHY STYLES (spec §12.3) ===== -->
-    <!-- Display (empty states, onboarding headline): 28/36, Medium -->
+    <!-- Display (empty states, onboarding headline): 28px, Medium -->
     <Style x:Key="Text.Display" TargetType="Label">
-        <Setter Property="FontFamily" Value="{StaticResource Font.Primary}" />
+        <Setter Property="FontFamily" Value="{StaticResource Font.Medium}" />
         <Setter Property="FontSize" Value="28" />
-        <Setter Property="LineHeight" Value="36" />
-        <Setter Property="FontAttributes" Value="Bold" />
-        <Setter Property="TextColor" Value="{StaticResource PrimaryText}" />
-        <Setter Property="MaxLines" Value="1" />
+        <Setter Property="LineHeight" Value="1.05" />
+        <Setter Property="TextColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Ink}" Dark="{StaticResource Txt}" />
+            </Setter.Value>
+        </Setter>
     </Style>
 
-    <!-- Title (screen header, section header): 20/28, Medium -->
+    <!-- Title (screen header, section header): 20px, Medium -->
     <Style x:Key="Text.Title" TargetType="Label">
-        <Setter Property="FontFamily" Value="{StaticResource Font.Primary}" />
+        <Setter Property="FontFamily" Value="{StaticResource Font.Medium}" />
         <Setter Property="FontSize" Value="20" />
-        <Setter Property="LineHeight" Value="28" />
-        <Setter Property="FontAttributes" Value="Bold" />
-        <Setter Property="TextColor" Value="{StaticResource PrimaryText}" />
+        <Setter Property="LineHeight" Value="1.1" />
+        <Setter Property="TextColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Ink}" Dark="{StaticResource Txt}" />
+            </Setter.Value>
+        </Setter>
     </Style>
 
-    <!-- Body: 16/24 (Latin), 16/26 (Persian - handled via FlowDirection in View) -->
+    <!-- Body: 16px, Regular -->
     <Style x:Key="Text.Body" TargetType="Label">
         <Setter Property="FontFamily" Value="{StaticResource Font.Primary}" />
         <Setter Property="FontSize" Value="16" />
-        <Setter Property="LineHeight" Value="24" />
-        <Setter Property="TextColor" Value="{StaticResource PrimaryText}" />
+        <Setter Property="LineHeight" Value="1.1" />
+        <Setter Property="TextColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Ink}" Dark="{StaticResource Txt}" />
+            </Setter.Value>
+        </Setter>
     </Style>
 
+    <!-- Persian body wants a touch more leading (spec: 16/26) -->
     <Style x:Key="Text.BodyPersian" TargetType="Label" BasedOn="{StaticResource Text.Body}">
-        <Setter Property="LineHeight" Value="26" />
+        <Setter Property="LineHeight" Value="1.3" />
     </Style>
 
-    <!-- Body secondary: 14/22 -->
+    <!-- Body secondary: 14px, Regular -->
     <Style x:Key="Text.BodySecondary" TargetType="Label">
         <Setter Property="FontFamily" Value="{StaticResource Font.Primary}" />
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="LineHeight" Value="22" />
-        <Setter Property="TextColor" Value="{StaticResource SecondaryText}" />
+        <Setter Property="LineHeight" Value="1.1" />
+        <Setter Property="TextColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Ink2}" Dark="{StaticResource Txt2}" />
+            </Setter.Value>
+        </Setter>
     </Style>
 
-    <!-- Label (button, tab, chip): 14/20, SemiBold, Sentence case -->
+    <!-- Label (button, tab, chip): 14px, SemiBold, sentence case -->
     <Style x:Key="Text.Label" TargetType="Label">
-        <Setter Property="FontFamily" Value="{StaticResource Font.Primary}" />
+        <Setter Property="FontFamily" Value="{StaticResource Font.SemiBold}" />
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="LineHeight" Value="20" />
-        <Setter Property="FontAttributes" Value="Bold" />
-        <Setter Property="TextColor" Value="{StaticResource PrimaryText}" />
+        <Setter Property="LineHeight" Value="1.05" />
+        <Setter Property="TextColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Ink}" Dark="{StaticResource Txt}" />
+            </Setter.Value>
+        </Setter>
     </Style>
 
-    <!-- Code / mono: 18/24, letter-spacing +0.5px, Medium -->
+    <!-- Code / mono: 18px, Medium â€” the ONLY place JetBrains Mono appears -->
     <Style x:Key="Text.Code" TargetType="Label">
         <Setter Property="FontFamily" Value="{StaticResource Font.Mono}" />
         <Setter Property="FontSize" Value="18" />
-        <Setter Property="LineHeight" Value="24" />
-        <Setter Property="TextColor" Value="{StaticResource PrimaryText}" />
-        <Setter Property="CharacterSpacing" Value="0.5" />
+        <Setter Property="LineHeight" Value="1.1" />
+        <Setter Property="CharacterSpacing" Value="1.5" />
+        <Setter Property="TextColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Ink}" Dark="{StaticResource Txt}" />
+            </Setter.Value>
+        </Setter>
     </Style>
 
-    <!-- Caption: 12/18 -->
+    <!-- Caption (evidence trace, fine print): 12px â€” minimum size in the app -->
     <Style x:Key="Text.Caption" TargetType="Label">
         <Setter Property="FontFamily" Value="{StaticResource Font.Primary}" />
         <Setter Property="FontSize" Value="12" />
-        <Setter Property="LineHeight" Value="18" />
-        <Setter Property="TextColor" Value="{StaticResource TertiaryText}" />
+        <Setter Property="LineHeight" Value="1.0" />
+        <Setter Property="TextColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Ink3}" Dark="{StaticResource Txt3}" />
+            </Setter.Value>
+        </Setter>
     </Style>
 
-    <!-- ===== BUTTON STYLES ===== -->
+    <!-- Overline-style section label (12px, SemiBold, ink-2) -->
+    <Style x:Key="Text.Section" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource Font.SemiBold}" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="LineHeight" Value="1.05" />
+        <Setter Property="TextColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Ink2}" Dark="{StaticResource Txt2}" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ===== BUTTONS ===== -->
+
     <Style x:Key="Button.Primary" TargetType="Button">
-        <Setter Property="FontFamily" Value="{StaticResource Font.Primary}" />
+        <Setter Property="FontFamily" Value="{StaticResource Font.SemiBold}" />
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="FontAttributes" Value="Bold" />
-        <Setter Property="TextColor" Value="{StaticResource PrimaryButtonText}" />
-        <Setter Property="BackgroundColor" Value="{StaticResource PrimaryButtonBackground}" />
-        <Setter Property="CornerRadius" Value="{StaticResource Radius.MD}" />
+        <Setter Property="TextColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Paper}" Dark="{StaticResource Night}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BackgroundColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Ink}" Dark="{StaticResource Txt}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="CornerRadius" Value="{StaticResource Radius.SM}" />
         <Setter Property="HeightRequest" Value="48" />
         <Setter Property="Padding" Value="24,0" />
     </Style>
 
     <Style x:Key="Button.Secondary" TargetType="Button">
-        <Setter Property="FontFamily" Value="{StaticResource Font.Primary}" />
+        <Setter Property="FontFamily" Value="{StaticResource Font.SemiBold}" />
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="FontAttributes" Value="Bold" />
-        <Setter Property="TextColor" Value="{StaticResource PrimaryText}" />
+        <Setter Property="TextColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Ink}" Dark="{StaticResource Txt}" />
+            </Setter.Value>
+        </Setter>
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="BorderColor" Value="{StaticResource Divider}" />
-        <Setter Property="CornerRadius" Value="{StaticResource Radius.MD}" />
+        <Setter Property="BorderColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Hairline}" Dark="{StaticResource HairlineD}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="CornerRadius" Value="{StaticResource Radius.SM}" />
         <Setter Property="HeightRequest" Value="48" />
         <Setter Property="Padding" Value="24,0" />
     </Style>
 
     <Style x:Key="Button.TextOnly" TargetType="Button">
-        <Setter Property="FontFamily" Value="{StaticResource Font.Primary}" />
+        <Setter Property="FontFamily" Value="{StaticResource Font.SemiBold}" />
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="FontAttributes" Value="Bold" />
-        <Setter Property="TextColor" Value="{StaticResource Mark.Promo}" />
+        <Setter Property="TextColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Mark.Work}" Dark="{StaticResource Mark.Work.Dark}" />
+            </Setter.Value>
+        </Setter>
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="Padding" Value="12,8" />
+        <Setter Property="MinimumHeightRequest" Value="44" />
     </Style>
 
-    <!-- ===== ENTRY STYLES ===== -->
-    <Style x:Key="Entry.Standard" TargetType="Entry">
-        <Setter Property="FontFamily" Value="{StaticResource Font.Primary}" />
-        <Setter Property="FontSize" Value="16" />
-        <Setter Property="TextColor" Value="{StaticResource PrimaryText}" />
-        <Setter Property="PlaceholderColor" Value="{StaticResource TertiaryText}" />
-        <Setter Property="BackgroundColor" Value="{StaticResource CardBackground}" />
-        <Setter Property="HeightRequest" Value="56" />
-        <Setter Property="Margin" Value="0,0,0,16" />
-    </Style>
-
-    <!-- Aliases used by pages (M8 audit: styles referenced but previously undefined) -->
-    <Style x:Key="Label.Title" TargetType="Label" BasedOn="{StaticResource Text.Title}" />
-    <Style x:Key="Label.Body" TargetType="Label" BasedOn="{StaticResource Text.Body}" />
-    <Style x:Key="Label.Caption" TargetType="Label" BasedOn="{StaticResource Text.Caption}" />
-    <Style x:Key="Label.Overline" TargetType="Label" BasedOn="{StaticResource Text.Label}" />
     <Style x:Key="Button.Ghost" TargetType="Button" BasedOn="{StaticResource Button.TextOnly}">
-        <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="BorderColor" Value="Transparent" />
     </Style>
 
+    <!-- ===== INPUTS ===== -->
+
+    <Style x:Key="Entry.Standard" TargetType="Entry">
+        <Setter Property="FontFamily" Value="{StaticResource Font.Primary}" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="TextColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Ink}" Dark="{StaticResource Txt}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="PlaceholderColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Ink3}" Dark="{StaticResource Txt3}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="HeightRequest" Value="48" />
+    </Style>
+
+    <Style x:Key="Picker.Standard" TargetType="Picker">
+        <Setter Property="FontFamily" Value="{StaticResource Font.Primary}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="TextColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Ink}" Dark="{StaticResource Txt}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="TitleColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Ink3}" Dark="{StaticResource Txt3}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="HeightRequest" Value="44" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <Style x:Key="Switch.Standard" TargetType="Switch">
+        <Setter Property="OnColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Mark.People}" Dark="{StaticResource Mark.People.Dark}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="HorizontalOptions" Value="End" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <Style x:Key="SearchBar.Standard" TargetType="SearchBar">
+        <Setter Property="FontFamily" Value="{StaticResource Font.Primary}" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="TextColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Ink}" Dark="{StaticResource Txt}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="PlaceholderColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Ink3}" Dark="{StaticResource Txt3}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BackgroundColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Paper}" Dark="{StaticResource Raised}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="CancelButtonColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Ink2}" Dark="{StaticResource Txt2}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="HeightRequest" Value="44" />
+    </Style>
+
+    <!-- ===== LEGACY ALIASES (pages not yet migrated) ===== -->
+    <Style x:Key="Label.Title" TargetType="Label" BasedOn="{StaticResource Text.Title}" />
+    <Style x:Key="Label.Body" TargetType="Label" BasedOn="{StaticResource Text.Body}" />
+    <Style x:Key="Label.Caption" TargetType="Label" BasedOn="{StaticResource Text.Caption}" />
+    <Style x:Key="Label.Overline" TargetType="Label" BasedOn="{StaticResource Text.Section}" />
+
 </ResourceDictionary>
+

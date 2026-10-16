@@ -2,153 +2,182 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Alak.App.ViewModels"
-             xmlns:views="clr-namespace:Alak.App.Views"
-             xmlns:controls="clr-namespace:Alak.App.Resources.Styles.Controls"
              x:Class="Alak.App.Views.InboxPage"
              x:DataType="vm:InboxViewModel"
-             BackgroundColor="{StaticResource PageBackground}">
-    <Grid RowDefinitions="Auto,Auto,*,Auto">
-        <!-- ===== SEARCH BAR ===== -->
-        <SearchBar Grid.Row="0"
-                   Style="{StaticResource SearchBar.Standard}"
-                   Text="{Binding SearchQuery, Mode=TwoWay}"
-                   Placeholder="Search notifications..."
-                   SearchCommand="{Binding RefreshCommand}" />
+             Title="Inbox"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Salt}, Dark={StaticResource Night}}">
 
-        <!-- ===== CATEGORY TABS ===== -->
-        <ScrollView Grid.Row="1" Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
-            <StackLayout Orientation="Horizontal" Spacing="8" Margin="16,8,16,0" BindableLayout.ItemsSource="{Binding CategoryFilters}">
+    <Grid RowDefinitions="Auto,Auto,Auto,*"
+          Padding="0,8,0,0"
+          RowSpacing="4">
+
+        <!-- ===== HEADER ===== -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="16,4">
+            <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                <Label Text="Inbox" Style="{StaticResource Text.Title}" />
+                <Label Text="{Binding UnreadCount, StringFormat='· {0} unread', FallbackValue=''}"
+                       Style="{StaticResource Text.Caption}"
+                       VerticalOptions="Center" />
+            </HorizontalStackLayout>
+        </Grid>
+
+        <!-- ===== SEARCH ===== -->
+        <Border Grid.Row="1" Style="{StaticResource Card.Row}" Margin="16,4" Padding="6,2">
+            <SearchBar Style="{StaticResource SearchBar.Standard}"
+                       Text="{Binding SearchQuery, Mode=TwoWay}"
+                       Placeholder="Search notifications"
+                       SearchCommand="{Binding RefreshCommand}" />
+        </Border>
+
+        <!-- ===== CATEGORY FILTER PILLS ===== -->
+        <ScrollView Grid.Row="2" Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+            <HorizontalStackLayout Spacing="8" Padding="16,8,16,4"
+                                   BindableLayout.ItemsSource="{Binding CategoryFilters}">
                 <BindableLayout.ItemTemplate>
                     <DataTemplate x:DataType="vm:CategoryFilter">
-                        <Button Text="{Binding Label}"
-                                Style="{StaticResource Button.TextOnly}"
-                                TextColor="{Binding MarkColor}"
-                                FontAttributes="Bold"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:InboxViewModel}}, Path=CategoryFilterChangedCommand}"
-                                CommandParameter="{Binding}" />
+                        <Border Style="{StaticResource Chip.Filter}">
+                            <HorizontalStackLayout Spacing="6">
+                                <BoxView WidthRequest="8" HeightRequest="8" CornerRadius="4"
+                                         VerticalOptions="Center"
+                                         Color="{Binding MarkColor}" />
+                                <Label Text="{Binding Label}" Style="{StaticResource Text.Label}" FontSize="13" />
+                                <Label Text="{Binding Count, StringFormat='{0}'}" Style="{StaticResource Text.Caption}"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:InboxViewModel}}, Path=CategoryFilterChangedCommand}"
+                                                      CommandParameter="{Binding}" />
+                            </Border.GestureRecognizers>
+                        </Border>
                     </DataTemplate>
                 </BindableLayout.ItemTemplate>
-            </StackLayout>
+            </HorizontalStackLayout>
         </ScrollView>
 
-        <!-- ===== NOTIFICATION LIST ===== -->
-        <RefreshView Grid.Row="2" 
+        <!-- ===== LIST ===== -->
+        <RefreshView Grid.Row="3"
                      Style="{StaticResource RefreshView.Standard}"
                      IsRefreshing="{Binding IsRefreshing}"
                      Command="{Binding RefreshCommand}">
             <CollectionView Style="{StaticResource CollectionView.Inbox}"
-                            ItemsSource="{Binding Notifications}"
-                            SelectionMode="None">
+                            ItemsSource="{Binding Notifications}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="vm:NotificationViewModel">
-                        <Grid ColumnDefinitions="4,*" RowDefinitions="Auto,Auto,Auto" Margin="0" Padding="0">
-                            <!-- Category spine -->
-                            <BoxView Grid.Row="0" Grid.RowSpan="3" Grid.Column="0"
-                                     Style="{StaticResource BoxView.CategorySpine}"
-                                     Color="{Binding CategoryMarkColor}" />
+                        <Border Style="{StaticResource Card.Row}">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                <!-- Category spine -->
+                                <BoxView Grid.Column="0"
+                                         Style="{StaticResource BoxView.CategorySpine}"
+                                         Color="{Binding CategoryMarkColor}" />
 
-                            <!-- Main card -->
-                            <Frame Grid.Row="0" Grid.RowSpan="3" Grid.Column="1"
-                                   Style="{StaticResource Frame.ListItem}"
-                                   Margin="16,8,16,8">
-                                <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
-                                    <!-- Row 0: Title + Time -->
-                                    <Label Grid.Row="0" Grid.Column="0"
-                                           Text="{Binding Title}"
-                                           Style="{StaticResource Text.Title}"
-                                           FontAttributes="{Binding IsRead, Converter={StaticResource BoolToFontWeightConverter}, ConverterParameter=false}"
-                                           MaxLines="1"
-                                           LineBreakMode="TailTruncation" />
-                                    <Label Grid.Row="0" Grid.Column="1"
-                                           Text="{Binding Timestamp, Converter={StaticResource RelativeTimeConverter}}"
-                                           Style="{StaticResource Text.Caption}"
-                                           HorizontalOptions="End"
-                                           VerticalOptions="Center" />
+                                <Grid Grid.Column="1" RowDefinitions="Auto,Auto,Auto" RowSpacing="4">
+                                    <!-- Title + time -->
+                                    <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                        <Label Grid.Column="0"
+                                               Text="{Binding Title}"
+                                               Style="{StaticResource Text.Body}"
+                                               FontAttributes="{Binding IsRead, Converter={StaticResource BoolToFontWeightConverter}, ConverterParameter=false}"
+                                               MaxLines="1"
+                                               LineBreakMode="TailTruncation" />
+                                        <Label Grid.Column="1"
+                                               Text="{Binding Timestamp, Converter={StaticResource RelativeTimeConverter}}"
+                                               Style="{StaticResource Text.Caption}"
+                                               VerticalOptions="Center" />
+                                    </Grid>
 
-                                    <!-- Row 1: Text preview -->
-                                    <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                    <!-- Preview -->
+                                    <Label Grid.Row="1"
                                            Text="{Binding Text}"
                                            Style="{StaticResource Text.BodySecondary}"
                                            MaxLines="2"
-                                           LineBreakMode="TailTruncation"
-                                           Margin="0,8,0,0" />
+                                           LineBreakMode="TailTruncation" />
 
-                                    <!-- Row 2: Channel + Category chip + Actions -->
-                                    <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-                                          ColumnDefinitions="Auto,*,Auto,Auto"
-                                          Margin="0,12,0,0">
+                                    <!-- Channel · chip · code -->
+                                    <Grid Grid.Row="2" ColumnDefinitions="Auto,Auto,*,Auto,Auto" ColumnSpacing="8" Margin="0,4,0,0">
                                         <Label Grid.Column="0"
                                                Text="{Binding ChannelName}"
                                                Style="{StaticResource Text.Caption}"
-                                               TextColor="{Binding CategoryTintColor}" />
-                                        
-                                        <Frame Grid.Column="1"
-                                               Style="{StaticResource Frame.Chip}"
-                                               BackgroundColor="{Binding CategoryTintColor}"
-                                               HorizontalOptions="Start"
-                                               Margin="12,0,0,0"
-                                               IsVisible="{Binding Category, Converter={StaticResource StringNotEmptyConverter}}">
+                                               VerticalOptions="Center"
+                                               MaxLines="1"
+                                               LineBreakMode="TailTruncation" />
+
+                                        <Border Grid.Column="1"
+                                                Style="{StaticResource Chip.Category}"
+                                                BackgroundColor="{Binding CategoryTintColor}"
+                                                IsVisible="{Binding Category, Converter={StaticResource StringNotEmptyConverter}}">
                                             <Label Text="{Binding Category, Converter={StaticResource CategoryLabelConverter}}"
-                                                   Style="{StaticResource Text.Caption}"
-                                                   TextColor="{Binding CategoryMarkColor}"
-                                                   FontAttributes="Bold" />
-                                        </Frame>
+                                                   FontFamily="{StaticResource Font.SemiBold}"
+                                                   FontSize="11"
+                                                   LineHeight="1.3"
+                                                   TextColor="{Binding CategoryMarkColor}" />
+                                        </Border>
 
-                                        <!-- Copy code button (if has code) -->
-                                        <Button Grid.Column="2"
-                                                Text="Copy"
-                                                Style="{StaticResource Button.TextOnly}"
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:InboxViewModel}}, Path=CopyCodeCommand}"
-                                                CommandParameter="{Binding}"
+                                        <!-- Extracted code, mono -->
+                                        <Border Grid.Column="2"
+                                                Style="{StaticResource Chip.Category}"
+                                                BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Wallet}, Dark={StaticResource Tint.Wallet.Dark}}"
                                                 IsVisible="{Binding HasCode}"
-                                                ToolTipProperties.Text="Copy code" />
+                                                HorizontalOptions="Start">
+                                            <HorizontalStackLayout Spacing="8">
+                                                <Label Text="{Binding ExtractedCode}"
+                                                       FontFamily="{StaticResource Font.Mono}"
+                                                       FontSize="13"
+                                                       LineHeight="1.3"
+                                                       TextColor="{AppThemeBinding Light={StaticResource Mark.Wallet}, Dark={StaticResource Mark.Wallet.Dark}}" />
+                                                <Label Text="Copy"
+                                                       FontFamily="{StaticResource Font.SemiBold}"
+                                                       FontSize="11"
+                                                       TextColor="{AppThemeBinding Light={StaticResource Mark.Wallet}, Dark={StaticResource Mark.Wallet.Dark}}"
+                                                       VerticalOptions="Center">
+                                                    <Label.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:InboxViewModel}}, Path=CopyCodeCommand}"
+                                                                              CommandParameter="{Binding}" />
+                                                    </Label.GestureRecognizers>
+                                                </Label>
+                                            </HorizontalStackLayout>
+                                        </Border>
 
-                                        <!-- Dismiss button -->
-                                        <Button Grid.Column="3"
-                                                Text="✕"
-                                                Style="{StaticResource Button.TextOnly}"
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:InboxViewModel}}, Path=DismissCommand}"
-                                                CommandParameter="{Binding}"
-                                                FontSize="18"
-                                                ToolTipProperties.Text="Dismiss" />
+                                        <Label Grid.Column="4"
+                                               Text="Mark read"
+                                               Style="{StaticResource Text.Caption}"
+                                               VerticalOptions="Center"
+                                               IsVisible="{Binding IsRead, Converter={StaticResource InverseBoolConverter}}">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:InboxViewModel}}, Path=DismissCommand}"
+                                                                      CommandParameter="{Binding}" />
+                                            </Label.GestureRecognizers>
+                                        </Label>
                                     </Grid>
                                 </Grid>
-                            </Frame>
-                        </Grid>
+
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:InboxViewModel}}, Path=OpenDetailCommand}"
+                                                          CommandParameter="{Binding}" />
+                                </Border.GestureRecognizers>
+                            </Grid>
+                        </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
 
+                <!-- Typographic empty state — the sieve wordmark, no emoji -->
                 <CollectionView.EmptyView>
-                    <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="16" VerticalOptions="Center" Margin="32">
-                        <Label Grid.Row="0"
-                               Text="📭"
-                               FontSize="64"
-                               HorizontalOptions="Center" />
-                        <Label Grid.Row="1"
-                               Text="No notifications yet"
-                               Style="{StaticResource Text.Display}"
+                    <VerticalStackLayout Spacing="12" Padding="32" VerticalOptions="Center">
+                        <Label Text="الک"
+                               FontFamily="{StaticResource Font.Medium}"
+                               FontSize="72"
                                HorizontalOptions="Center"
-                               HorizontalTextAlignment="Center" />
-                        <Label Grid.Row="2"
-                               Text="Pull to refresh or scan a QR code to get started"
+                               TextColor="{AppThemeBinding Light={StaticResource Ink3}, Dark={StaticResource Txt3}}"
+                               Opacity="0.45" />
+                        <Label Text="Nothing here yet"
+                               Style="{StaticResource Text.Title}"
+                               HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+                        <Label Text="Notifications you allow Alak to read will appear here — sorted, sifted, and private."
                                Style="{StaticResource Text.BodySecondary}"
-                               HorizontalOptions="Center"
-                               HorizontalTextAlignment="Center" />
-                    </Grid>
+                               HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
                 </CollectionView.EmptyView>
             </CollectionView>
         </RefreshView>
-
-        <!-- ===== UNREAD BADGE / FAB ===== -->
-        <Grid Grid.Row="3" Margin="16,0,16,24">
-            <HorizontalStackLayout HorizontalOptions="Center" Spacing="16">
-                <Button Text="Scan QR"
-                        Style="{StaticResource Button.Primary}"
-                        Command="{Binding Source={RelativeSource AncestorType={x:Type views:InboxPage}}, Path=ScanCommand}" />
-                <Button Text="Settings"
-                        Style="{StaticResource Button.Secondary}"
-                        Command="{Binding Source={RelativeSource AncestorType={x:Type views:InboxPage}}, Path=SettingsCommand}" />
-            </HorizontalStackLayout>
-        </Grid>
     </Grid>
 </ContentPage>

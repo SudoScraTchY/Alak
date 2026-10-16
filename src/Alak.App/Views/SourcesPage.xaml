@@ -5,7 +5,7 @@
              xmlns:conv="clr-namespace:Alak.App.Converters"
              x:Class="Alak.App.Views.SourcesPage"
              x:DataType="vm:SourcesViewModel"
-             BackgroundColor="{StaticResource PageBackground}"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Salt}, Dark={StaticResource Night}}"
              Title="Sources">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -43,12 +43,11 @@
                                        Aspect="AspectFit" />
                                 <StackLayout Grid.Column="1" Spacing="2">
                                     <Label Text="{Binding DisplayName}" Style="{StaticResource Text.Body}" FontAttributes="Bold" />
-                                    <Label Text="{Binding SourceKey}" Style="{StaticResource Text.Caption}" TextColor="{StaticResource TextSecondary}" />
+                                    <Label Text="{Binding SourceKey}" Style="{StaticResource Text.Caption}" />
                                 </StackLayout>
                                 <Label Grid.Column="2"
                                        Text="{Binding Count, StringFormat='{0} notifications'}"
                                        Style="{StaticResource Text.Caption}"
-                                       TextColor="{StaticResource TextSecondary}"
                                        VerticalOptions="Center" />
                             </Grid>
 
@@ -63,7 +62,6 @@
                                 <Label Grid.Column="2"
                                        Text="{Binding CurrentDefaultCategory, StringFormat='Current: {0}', FallbackValue='Current: Auto'}"
                                        Style="{StaticResource Text.Caption}"
-                                       TextColor="{StaticResource TextSecondary}"
                                        VerticalOptions="Center" />
                             </Grid>
 
@@ -78,7 +76,6 @@
                                 <Label Grid.Column="2"
                                        Text="{Binding CurrentCaptureDepth, StringFormat='Current: {0}', FallbackValue='Current: Default'}"
                                        Style="{StaticResource Text.Caption}"
-                                       TextColor="{StaticResource TextSecondary}"
                                        VerticalOptions="Center" />
                             </Grid>
 
@@ -115,18 +112,21 @@
             </CollectionView.ItemTemplate>
 
             <CollectionView.EmptyView>
-                <Grid VerticalOptions="Center" HorizontalOptions="Center" Margin="24">
-                    <StackLayout Spacing="16" HorizontalOptions="Center">
-                        <Label Text="📭" FontSize="48" HorizontalOptions="Center" />
-                        <Label Text="No sources yet" Style="{StaticResource Text.Title}" HorizontalOptions="Center" />
-                        <Label Text="Sources appear after notifications arrive. Pull to refresh or wait for new notifications." 
-                               Style="{StaticResource Text.Body}" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center" />
-                        <Button Text="Refresh Now"
-                                Command="{Binding LoadSourcesCommand}"
-                                Style="{StaticResource Button.Primary}"
-                                WidthRequest="200" />
-                    </StackLayout>
-                </Grid>
+                <VerticalStackLayout Spacing="12" Padding="32" VerticalOptions="Center">
+                    <Label Text="الک"
+                           FontFamily="{StaticResource Font.Medium}"
+                           FontSize="72"
+                           HorizontalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource Ink3}, Dark={StaticResource Txt3}}"
+                           Opacity="0.45" />
+                    <Label Text="No sources yet" Style="{StaticResource Text.Title}" HorizontalOptions="Center" />
+                    <Label Text="Sources appear after notifications arrive. Pull to refresh or wait for new notifications." 
+                           Style="{StaticResource Text.BodySecondary}" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+                    <Button Text="Refresh now"
+                            Command="{Binding LoadSourcesCommand}"
+                            Style="{StaticResource Button.Primary}"
+                            WidthRequest="200" />
+                </VerticalStackLayout>
             </CollectionView.EmptyView>
         </CollectionView>
 

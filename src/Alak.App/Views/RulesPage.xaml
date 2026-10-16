@@ -73,7 +73,7 @@
                     <Label Text="Your Rules"
                            Style="{StaticResource Label.Title}"
                            VerticalOptions="Center" />
-                    <Label Text="{Binding Rules.Count, StringFormat='({0})'}"
+                    <Label Text="{Binding Rules.Count, StringFormat=' ({0})'}"
                            Style="{StaticResource Label.Caption}"
                            VerticalOptions="Center"
                            TextColor="{StaticResource OnSurfaceVariant}" />
@@ -106,7 +106,7 @@
                                        VerticalOptions="Center">
                                     <Label Text="{Binding Category}"
                                            Style="{StaticResource Label.Caption}"
-                                           TextColor="{StaticResource OnSurface}"
+                                           TextColor="{AppThemeBinding Light={StaticResource Ink}, Dark={StaticResource Txt}}"
                                            FontSize="10" />
                                 </Frame>
 
@@ -119,29 +119,28 @@
                                        VerticalOptions="Center">
                                     <Label Text="{Binding Action}"
                                            Style="{StaticResource Label.Caption}"
-                                           TextColor="{StaticResource OnSurface}"
+                                           TextColor="{AppThemeBinding Light={StaticResource Ink}, Dark={StaticResource Txt}}"
                                            FontSize="10" />
                                 </Frame>
 
                                 <!-- Match Mode + Priority -->
                                 <VerticalStackLayout Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" Spacing="2" HorizontalOptions="End">
                                     <Label Text="{Binding MatchMode}"
-                                           Style="{StaticResource Label.Overline}"
-                                           TextColor="{StaticResource OnSurfaceVariant}" />
+                                           Style="{StaticResource Label.Overline}" />
                                     <Label Text="{Binding Priority, StringFormat='Pri: {0}'}"
-                                           Style="{StaticResource Label.Overline}"
-                                           TextColor="{StaticResource OnSurfaceVariant}" />
+                                           Style="{StaticResource Label.Overline}" />
                                 </VerticalStackLayout>
 
                                 <!-- Delete Button -->
                                 <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="4"
-                                        Text="🗑"
+                                        Text="Delete"
+                                        FontSize="12"
+                                        TextColor="{AppThemeBinding Light={StaticResource Mark.Danger}, Dark={StaticResource ErrorDark}}"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:RulesViewModel}}, Path=DeleteRuleCommand}"
                                         CommandParameter="{Binding .}"
                                         Style="{StaticResource Button.Ghost}"
                                         Padding="8"
                                         BackgroundColor="Transparent"
-                                        BorderColor="Transparent"
                                         VerticalOptions="Center" />
                             </Grid>
                         </DataTemplate>
@@ -149,12 +148,17 @@
 
                     <CollectionView.EmptyView>
                         <VerticalStackLayout Spacing="12" HorizontalOptions="Center" VerticalOptions="Center" Padding="32">
-                            <Label Text="📋" FontSize="48" />
+                            <Label Text="الک"
+                                   FontFamily="{StaticResource Font.Medium}"
+                                   FontSize="64"
+                                   HorizontalOptions="Center"
+                                   TextColor="{AppThemeBinding Light={StaticResource Ink3}, Dark={StaticResource Txt3}}"
+                                   Opacity="0.45" />
                             <Label Text="No rules yet"
-                                   Style="{StaticResource Label.Title}" />
-                            <Label Text="Add a rule above to filter notifications before AI classification"
+                                   Style="{StaticResource Label.Title}"
+                                   HorizontalOptions="Center" />
+                            <Label Text="Add a rule above to override how Alak sorts matching notifications."
                                    Style="{StaticResource Label.Body}"
-                                   TextColor="{StaticResource OnSurfaceVariant}"
                                    HorizontalTextAlignment="Center" />
                         </VerticalStackLayout>
                     </CollectionView.EmptyView>

@@ -10,12 +10,12 @@ public partial class AppShell : Shell
     {
         InitializeComponent();
 
-        // Register detail routes for navigation
+        // Register MODAL routes only — tab routes (inbox/scan/wallet/rules/settings)
+        // are owned by the TabBar. Registering them again here (plus the stray
+        // top-level ShellContents in XAML) caused route conflicts that collapsed
+        // the tab bar to a single visible tab.
         Routing.RegisterRoute("detail", typeof(DetailPage));
         Routing.RegisterRoute("onboarding", typeof(OnboardingPage));
-        Routing.RegisterRoute("scan", typeof(ScanPage));
-        Routing.RegisterRoute("settings", typeof(SettingsPage));
-        Routing.RegisterRoute("rules", typeof(RulesPage));
         Routing.RegisterRoute("stub-detail", typeof(StubDetailPage));
     }
 

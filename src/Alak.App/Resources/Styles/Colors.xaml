@@ -1,9 +1,118 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                    xmlns:design="clr-namespace:Alak.App.Design">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
-    <!-- ===== LIGHT THEME ===== -->
+    <!--
+        Alak design tokens — SPEC §12.2.
+        Paper-and-ink identity: light = sorted paper on a desk, dark = desk lamp at night.
+
+        All colors are PLAIN values (never Color.AppThemeBinding — that construct is invalid
+        inside a Color resource and renders black on Android). Theming works via AppThemeBinding
+        at the point of use (style setters or attributes) + Application.UserAppTheme.
+
+        Naming: primitives (Ink, Salt, Night…) + semantic keys kept for backward compatibility.
+    -->
+
+    <!-- ===== PRIMITIVES — LIGHT ("sorted paper") ===== -->
+    <Color x:Key="Salt">#F3F5F6</Color>
+    <Color x:Key="Paper">#FFFFFF</Color>
+    <Color x:Key="Ink">#12252B</Color>
+    <Color x:Key="Ink2">#4A5D64</Color>
+    <Color x:Key="Ink3">#5B6B72</Color>
+    <Color x:Key="Hairline">#DCE2E5</Color>
+    <Color x:Key="ErrorLight">#B3261E</Color>
+
+    <!-- ===== PRIMITIVES — DARK ("desk lamp at night") ===== -->
+    <Color x:Key="Night">#0C1417</Color>
+    <Color x:Key="SurfaceDark">#131E22</Color>
+    <Color x:Key="Raised">#1B2A2F</Color>
+    <Color x:Key="Txt">#E7EEF0</Color>
+    <Color x:Key="Txt2">#A3B5BB</Color>
+    <Color x:Key="Txt3">#81959B</Color>
+    <Color x:Key="HairlineD">#243339</Color>
+    <Color x:Key="ErrorDark">#FF8A80</Color>
+
+    <!-- ===== CATEGORY MARKS + TINTS — LIGHT (spec §12.2; ink-on-tint ≥ 7.4:1) ===== -->
+    <Color x:Key="Mark.Offers">#8248D6</Color>
+    <Color x:Key="Mark.Work">#2F5BE0</Color>
+    <Color x:Key="Mark.People">#12895B</Color>
+    <Color x:Key="Mark.Money">#0C8397</Color>
+    <Color x:Key="Mark.Orders">#C4581A</Color>
+    <Color x:Key="Mark.Security">#D0325D</Color>
+    <Color x:Key="Mark.Social">#6B8E00</Color>
+    <Color x:Key="Mark.Updates">#5F6F76</Color>
+    <Color x:Key="Mark.Other">#6B7280</Color>
+    <Color x:Key="Mark.Wallet">#B77900</Color>
+
+    <Color x:Key="Tint.Offers">#F0E7FC</Color>
+    <Color x:Key="Tint.Work">#E3EAFD</Color>
+    <Color x:Key="Tint.People">#DBF3E8</Color>
+    <Color x:Key="Tint.Money">#D8F0F4</Color>
+    <Color x:Key="Tint.Orders">#FDE8D6</Color>
+    <Color x:Key="Tint.Security">#FBDFE6</Color>
+    <Color x:Key="Tint.Social">#EBF4CC</Color>
+    <Color x:Key="Tint.Updates">#E7ECEE</Color>
+    <Color x:Key="Tint.Other">#ECEFF1</Color>
+    <Color x:Key="Tint.Wallet">#FFEDB5</Color>
+
+    <!-- ===== CATEGORY MARKS + TINTS — DARK (spec §12.2; tone-on-tint ≥ 6.8:1) ===== -->
+    <Color x:Key="Mark.Offers.Dark">#B98CFF</Color>
+    <Color x:Key="Mark.Work.Dark">#7C9CFF</Color>
+    <Color x:Key="Mark.People.Dark">#3ED598</Color>
+    <Color x:Key="Mark.Money.Dark">#3CC8DD</Color>
+    <Color x:Key="Mark.Orders.Dark">#FF9A57</Color>
+    <Color x:Key="Mark.Security.Dark">#FF7A9C</Color>
+    <Color x:Key="Mark.Social.Dark">#B4DC3B</Color>
+    <Color x:Key="Mark.Updates.Dark">#98AAB1</Color>
+    <Color x:Key="Mark.Other.Dark">#9AA5AA</Color>
+    <Color x:Key="Mark.Wallet.Dark">#FFC93C</Color>
+
+    <Color x:Key="Tint.Offers.Dark">#31324A</Color>
+    <Color x:Key="Tint.Work.Dark">#26354A</Color>
+    <Color x:Key="Tint.People.Dark">#1B3F37</Color>
+    <Color x:Key="Tint.Money.Dark">#1A3D44</Color>
+    <Color x:Key="Tint.Orders.Dark">#3D342C</Color>
+    <Color x:Key="Tint.Security.Dark">#3D2F38</Color>
+    <Color x:Key="Tint.Social.Dark">#304026</Color>
+    <Color x:Key="Tint.Updates.Dark">#2B373C</Color>
+    <Color x:Key="Tint.Other.Dark">#242D31</Color>
+    <Color x:Key="Tint.Wallet.Dark">#3D3D27</Color>
+
+    <!-- ===== LEGACY CATEGORY KEY ALIASES =====
+         The app's kebab ids predate the spec palette: "promo" here means the spec's "Offers". -->
+    <Color x:Key="Mark.Promo">#8248D6</Color>
+    <Color x:Key="Mark.Promo.Dark">#B98CFF</Color>
+    <Color x:Key="Category.Promo.Tint">#F0E7FC</Color>
+    <Color x:Key="Category.Work.Tint">#E3EAFD</Color>
+    <Color x:Key="Category.People.Tint">#DBF3E8</Color>
+    <Color x:Key="Category.Money.Tint">#D8F0F4</Color>
+    <Color x:Key="Category.Orders.Tint">#FDE8D6</Color>
+    <Color x:Key="Category.Security.Tint">#FBDFE6</Color>
+    <Color x:Key="Category.Social.Tint">#EBF4CC</Color>
+    <Color x:Key="Category.Updates.Tint">#E7ECEE</Color>
+    <Color x:Key="Category.Other.Tint">#ECEFF1</Color>
+
+    <!-- ===== SEMANTIC KEYS (light defaults; kept so any un-migrated StaticResource still resolves) ===== -->
+    <Color x:Key="PageBackground">#F3F5F6</Color>
+    <Color x:Key="CardBackground">#FFFFFF</Color>
+    <Color x:Key="SurfaceBackground">#FFFFFF</Color>
+    <Color x:Key="PrimaryText">#12252B</Color>
+    <Color x:Key="SecondaryText">#4A5D64</Color>
+    <Color x:Key="TertiaryText">#5B6B72</Color>
+    <Color x:Key="Divider">#DCE2E5</Color>
+    <Color x:Key="PrimaryButtonBackground">#12252B</Color>
+    <Color x:Key="PrimaryButtonText">#FFFFFF</Color>
+    <Color x:Key="ErrorColor">#B3261E</Color>
+    <Color x:Key="Mark.Danger">#B3261E</Color>
+    <Color x:Key="Mark.Success">#12895B</Color>
+    <Color x:Key="OnAccent">#FFFFFF</Color>
+    <Color x:Key="OnSurface">#12252B</Color>
+    <Color x:Key="OnSurfaceVariant">#4A5D64</Color>
+    <Color x:Key="Surface">#FFFFFF</Color>
+    <Color x:Key="TextSecondary">#4A5D64</Color>
+    <Color x:Key="WalletAccent">#B77900</Color>
+
+    <!-- Older alias block (some pages still reference these names) -->
     <Color x:Key="Light.Salt">#F3F5F6</Color>
     <Color x:Key="Light.Paper">#FFFFFF</Color>
     <Color x:Key="Light.Ink">#12252B</Color>
@@ -12,19 +121,6 @@
     <Color x:Key="Light.Hairline">#DCE2E5</Color>
     <Color x:Key="Light.AccentInk">#12252B</Color>
     <Color x:Key="Light.Error">#B3261E</Color>
-
-    <!-- Category tints (light) - ink-on-tint ≥ 7.4:1 -->
-    <Color x:Key="Light.PromoTint">#E8F4FD</Color>
-    <Color x:Key="Light.WorkTint">#E8F5E9</Color>
-    <Color x:Key="Light.PeopleTint">#FFF3E0</Color>
-    <Color x:Key="Light.MoneyTint">#E0F2F1</Color>
-    <Color x:Key="Light.OrdersTint">#F3E5F5</Color>
-    <Color x:Key="Light.SecurityTint">#FFEBEE</Color>
-    <Color x:Key="Light.SocialTint">#E8EAF6</Color>
-    <Color x:Key="Light.UpdatesTint">#ECEFF1</Color>
-    <Color x:Key="Light.OtherTint">#F5F5F5</Color>
-
-    <!-- ===== DARK THEME ===== -->
     <Color x:Key="Dark.Night">#0C1417</Color>
     <Color x:Key="Dark.Surface">#131E22</Color>
     <Color x:Key="Dark.Raised">#1B2A2F</Color>
@@ -33,59 +129,5 @@
     <Color x:Key="Dark.Txt3">#81959B</Color>
     <Color x:Key="Dark.Hairline">#243339</Color>
     <Color x:Key="Dark.Error">#FF8A80</Color>
-
-    <!-- Category tints (dark) -->
-    <Color x:Key="Dark.PromoTint">#152A3A</Color>
-    <Color x:Key="Dark.WorkTint">#152A20</Color>
-    <Color x:Key="Dark.PeopleTint">#332815</Color>
-    <Color x:Key="Dark.MoneyTint">#152A27</Color>
-    <Color x:Key="Dark.OrdersTint">#2A152A</Color>
-    <Color x:Key="Dark.SecurityTint">#3A1518</Color>
-    <Color x:Key="Dark.SocialTint">#1A1A2E</Color>
-    <Color x:Key="Dark.UpdatesTint">#1A2228</Color>
-    <Color x:Key="Dark.OtherTint">#242424</Color>
-
-    <!-- ===== CATEGORY MARK COLORS ===== -->
-    <Color x:Key="Mark.Promo">#1E88E5</Color>
-    <Color x:Key="Mark.Work">#2E7D32</Color>
-    <Color x:Key="Mark.People">#EF6C00</Color>
-    <Color x:Key="Mark.Money">#00897B</Color>
-    <Color x:Key="Mark.Orders">#7B1FA2</Color>
-    <Color x:Key="Mark.Security">#C62828</Color>
-    <Color x:Key="Mark.Social">#3949AB</Color>
-    <Color x:Key="Mark.Updates">#546E7A</Color>
-    <Color x:Key="Mark.Other">#616161</Color>
-
-    <!-- ===== SEMANTIC TOKENS (plain light values; dark overrides in Colors.Dark.xaml) ===== -->
-    <Color x:Key="PageBackground">#F3F5F6</Color>
-    <Color x:Key="CardBackground">#FFFFFF</Color>
-    <Color x:Key="SurfaceBackground">#FFFFFF</Color>
-    <Color x:Key="PrimaryText">#1B3147</Color>
-    <Color x:Key="SecondaryText">#5A6B7A</Color>
-    <Color x:Key="TertiaryText">#8B98A3</Color>
-    <Color x:Key="Divider">#DCE2E5</Color>
-    <Color x:Key="PrimaryButtonBackground">#12252B</Color>
-    <Color x:Key="PrimaryButtonText">#FFFFFF</Color>
-    <Color x:Key="ErrorColor">#B3261E</Color>
-
-    <!-- Category tint (semantic) -->
-    <Color x:Key="Category.Promo.Tint">#E8F4FD</Color>
-    <Color x:Key="Category.Work.Tint">#E8F5E9</Color>
-    <Color x:Key="Category.People.Tint">#FFF3E0</Color>
-    <Color x:Key="Category.Money.Tint">#E0F2F1</Color>
-    <Color x:Key="Category.Orders.Tint">#F3E5F5</Color>
-    <Color x:Key="Category.Security.Tint">#FFEBEE</Color>
-    <Color x:Key="Category.Social.Tint">#E8EAF6</Color>
-    <Color x:Key="Category.Updates.Tint">#ECEFF1</Color>
-    <Color x:Key="Category.Other.Tint">#F5F5F5</Color>
-
-    <!-- Semantic aliases used by pages (M8 audit: tokens referenced but previously undefined) -->
-    <Color x:Key="Mark.Danger">#B3261E</Color>
-    <Color x:Key="Mark.Success">#2E7D32</Color>
-    <Color x:Key="OnAccent">#FFFFFF</Color>
-    <Color x:Key="OnSurface">#12252B</Color>
-    <Color x:Key="OnSurfaceVariant">#4A5D64</Color>
-    <Color x:Key="Surface">#FFFFFF</Color>
-    <Color x:Key="TextSecondary">#4A5D64</Color>
 
 </ResourceDictionary>

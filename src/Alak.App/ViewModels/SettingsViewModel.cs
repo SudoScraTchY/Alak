@@ -153,46 +153,60 @@ public partial class SettingsViewModel : ObservableObject
     partial void OnSelectedLanguageChanged(string value)
     {
         Preferences.Set("selected_language", value);
+        _ = SaveGlobalSettingsAsync();
     }
 
     partial void OnSelectedCalendarChanged(string value)
     {
         Preferences.Set("selected_calendar", value);
+        _ = SaveGlobalSettingsAsync();
     }
 
     partial void OnSelectedDigitsChanged(string value)
     {
         Preferences.Set("selected_digits", value);
+        _ = SaveGlobalSettingsAsync();
     }
 
     partial void OnSelectedThemeChanged(string value)
     {
-        Preferences.Set("selected_theme", value);
-        var app = Application.Current;
-        if (app != null)
-        {
-            app.UserAppTheme = value switch
-            {
-                "dark" => AppTheme.Dark,
-                "light" => AppTheme.Light,
-                _ => AppTheme.Unspecified
-            };
-        }
-    }
-
-    partial void OnDarkModeEnabledChanged(bool value)
-    {
-        Preferences.Set("dark_mode_enabled", value);
-        var app = Application.Current;
-        if (app != null)
-        {
-            app.UserAppTheme = value ? AppTheme.Dark : AppTheme.Light;
-        }
+        ThemeManager.Apply(value);
+        _ = SaveGlobalSettingsAsync(); // auto-persist (§11.4)
     }
 
     partial void OnRtlLayoutEnabledChanged(bool value)
     {
         Preferences.Set("rtl_layout_enabled", value);
+    }
+
+    partial void OnSelectedPerformanceProfileChanged(string value)
+    {
+        _ = SaveGlobalSettingsAsync();
+    }
+
+    partial void OnTier2EnabledChanged(bool value)
+    {
+        _ = SaveGlobalSettingsAsync();
+    }
+
+    partial void OnAppLockEnabledChanged(bool value)
+    {
+        _ = SaveGlobalSettingsAsync();
+    }
+
+    partial void OnHideAmountsInListsChanged(bool value)
+    {
+        _ = SaveGlobalSettingsAsync();
+    }
+
+    partial void OnNotificationRemindersEnabledChanged(bool value)
+    {
+        _ = SaveGlobalSettingsAsync();
+    }
+
+    partial void OnGlobalSizeCapMbChanged(int value)
+    {
+        _ = SaveGlobalSettingsAsync();
     }
 
     private async Task SaveGlobalSettingsAsync()

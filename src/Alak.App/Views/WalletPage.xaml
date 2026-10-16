@@ -7,7 +7,7 @@
              x:Class="Alak.App.Views.WalletPage"
              x:DataType="vm:WalletViewModel"
              Title="Codes"
-             BackgroundColor="{StaticResource PageBackground}">
+             BackgroundColor="{AppThemeBinding Light={StaticResource Salt}, Dark={StaticResource Night}}">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -17,590 +17,321 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <RefreshView Command="{Binding LoadCommand}" IsRefreshing="{Binding IsLoading}">
-        <CollectionView ItemsSource="{Binding ExpiringSoonCodes}" EmptyView="No expiring codes">
+    <!--
+        Codes wallet (SPEC §13.4 + §12.7). The Stub is the signature component:
+        ticket-shaped (squared top-left corner, dashed/perforated stroke in the
+        code's kind color), mono code, gold accent. Sections render via
+        BindableLayout in the header/footer; the main CollectionView lists active
+        codes. The previous version nested CollectionViews inside the header with
+        HeightRequest=0 visibility hacks and duplicated every template five times.
+    -->
+    <RefreshView Command="{Binding LoadCommand}" IsRefreshing="{Binding IsLoading}"
+                 Style="{StaticResource RefreshView.Standard}">
+        <CollectionView ItemsSource="{Binding ActiveCodes}"
+                        Style="{StaticResource CollectionView.Inbox}">
+
             <CollectionView.Header>
-                <VerticalStackLayout Spacing="0">
-                    <!-- Summary bar -->
-                    <Border BackgroundColor="{StaticResource CardBackground}"
-                            Stroke="{StaticResource Divider}"
-                            StrokeThickness="1"
-                            Margin="16,16,16,8"
-                            Padding="16,12"
-                            StrokeShape="RoundRectangle 12">
-                        <Label Text="{Binding SummaryText}"
-                               FontFamily="Vazirmatn"
-                               FontSize="15"
-                               TextColor="{StaticResource PrimaryText}"
-                               VerticalTextAlignment="Center" />
-                    </Border>
+                <VerticalStackLayout Spacing="0" Padding="0,8,0,4">
 
-                    <!-- Expiring Soon Section -->
-                    <CollectionView ItemsSource="{Binding ExpiringSoonCodes}"
-                                    EmptyView="No expiring codes"
-                                    HeightRequest="0">
-                        <CollectionView.Header>
-                            <Label Text="Expiring soon"
-                                   FontFamily="Vazirmatn"
-                                   FontSize="13"
-                                   FontAttributes="Bold"
-                                   TextColor="{StaticResource SecondaryText}"
-                                   Margin="16,16,16,8"
-                                   IsVisible="{Binding ExpiringSoonCodes.Count, Converter={StaticResource BoolToVisibility}}" />
-                        </CollectionView.Header>
-                        <CollectionView.ItemTemplate>
+                    <!-- Summary line -->
+                    <Label Text="{Binding SummaryText}"
+                           Style="{StaticResource Text.BodySecondary}"
+                           Margin="16,8,16,4" />
+
+                    <!-- ===== EXPIRING SOON ===== -->
+                    <Label Text="Expiring soon"
+                           Style="{StaticResource Text.Section}"
+                           Margin="16,12,16,4"
+                           IsVisible="{Binding ExpiringSoonCodes.Count, Converter={StaticResource BoolToVisibility}}" />
+                    <VerticalStackLayout Spacing="0" Margin="0,0,0,8"
+                                         BindableLayout.ItemsSource="{Binding ExpiringSoonCodes}">
+                        <BindableLayout.ItemTemplate>
                             <DataTemplate x:DataType="vm:PromoCodeItem">
-                                <Grid Margin="16,8" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
-                                    <!-- Main code row -->
-                                    <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                                            BackgroundColor="{StaticResource CardBackground}"
-                                            Stroke="{StaticResource Mark.Promo}"
-                                            StrokeThickness="2"
-                                            StrokeShape="RoundRectangle 12"
-                                            Padding="16,12">
-                                        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="6" ColumnSpacing="12">
-                                            <!-- Category badge -->
-                                            <Border Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"
-                                                    BackgroundColor="{Binding Code.Kind, Converter={StaticResource CategoryToColor}}"
-                                                    WidthRequest="4" HeightRequest="56"
-                                                    StrokeShape="RoundRectangle 2"
-                                                    VerticalOptions="Fill" />
-
-                                            <!-- Code display -->
-                                            <Label Grid.Row="0" Grid.Column="1"
-                                                   Text="{Binding Code.DisplayCode}"
-                                                   FontFamily="JetBrains Mono"
-                                                   FontSize="20"
-                                                   FontAttributes="Bold"
-                                                   TextColor="{StaticResource PrimaryText}"
-                                                   VerticalTextAlignment="Center" />
-
-                                            <!-- Copy button -->
-                                            <Button Grid.Row="0" Grid.Column="2"
-                                                    Text="Copy"
-                                                    FontFamily="Vazirmatn"
-                                                    FontSize="12"
-                                                    FontAttributes="Bold"
-                                                    BackgroundColor="{StaticResource Mark.Promo}"
-                                                    TextColor="{StaticResource OnAccent}"
-                                                    CornerRadius="8"
-                                                    Padding="12,6"
-                                                    HeightRequest="36"
-                                                    VerticalOptions="Center"
-                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=CopyCodeCommand}"
-                                                    CommandParameter="{Binding}" />
-
-                                            <!-- Kind + Discount -->
-                                            <Label Grid.Row="1" Grid.Column="1"
-                                                   Text="{Binding DiscountText, StringFormat='{0} · {1}', FallbackValue='{0}'}"
-                                                   FontFamily="Vazirmatn"
-                                                   FontSize="13"
-                                                   TextColor="{StaticResource SecondaryText}"
-                                                   VerticalTextAlignment="Center">
-                                                <Label.FormattedText>
-                                                    <FormattedString>
-                                                        <Span Text="{Binding KindText}" FontAttributes="Bold" TextColor="{StaticResource SecondaryText}" />
-                                                        <Span Text=" · " TextColor="{StaticResource TertiaryText}" />
-                                                        <Span Text="{Binding DiscountText}" TextColor="{StaticResource SecondaryText}" />
-                                                    </FormattedString>
-                                                </Label.FormattedText>
-                                            </Label>
-
-                                            <!-- Source + Expiry -->
-                                            <Grid Grid.Row="2" Grid.Column="1" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
-                                                <Label Grid.Column="0"
-                                                       Text="{Binding SourceDisplay}"
-                                                       FontFamily="Vazirmatn"
-                                                       FontSize="12"
-                                                       TextColor="{StaticResource TertiaryText}" />
-                                                <Label Grid.Column="1"
-                                                       Text="{Binding ValidUntilText}"
-                                                       FontFamily="Vazirmatn"
-                                                       FontSize="12"
-                                                       TextColor="{StaticResource Mark.Danger}"
-                                                       FontAttributes="Bold"
-                                                       HorizontalTextAlignment="End" />
-                                                <Label Grid.Column="2"
-                                                       Text="⏰"
-                                                       FontSize="14"
-                                                       IsVisible="{Binding HasReminder}"
-                                                       VerticalTextAlignment="Center" />
-                                            </Grid>
-
-                                            <!-- Reminder text -->
-                                            <Label Grid.Row="3" Grid.Column="1"
-                                                   Text="{Binding ReminderText}"
-                                                   FontFamily="Vazirmatn"
-                                                   FontSize="11"
-                                                   TextColor="{StaticResource TertiaryText}"
-                                                   IsVisible="{Binding HasReminder}" />
+                                <Border Style="{StaticResource Stub.Border}"
+                                        Stroke="{Binding Code.Kind, Converter={StaticResource CategoryToColor}}">
+                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="6">
+                                        <!-- kind + source -->
+                                        <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                                            <BoxView Grid.Column="0" WidthRequest="8" HeightRequest="8" CornerRadius="4"
+                                                     VerticalOptions="Center"
+                                                     Color="{Binding Code.Kind, Converter={StaticResource CategoryToColor}}" />
+                                            <Label Grid.Column="1" Text="{Binding SourceDisplay}" Style="{StaticResource Text.Caption}"
+                                                   VerticalOptions="Center" MaxLines="1" LineBreakMode="TailTruncation" />
+                                            <Label Grid.Column="2" Text="{Binding KindText}" Style="{StaticResource Text.Caption}"
+                                                   FontFamily="{StaticResource Font.SemiBold}" VerticalOptions="Center" />
                                         </Grid>
-                                    </Border>
 
-                                    <!-- Action buttons -->
-                                    <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                                          ColumnDefinitions="*,*,*" ColumnSpacing="8"
-                                          Margin="0,8,0,0"
-                                          IsVisible="{Binding IsUsed, Converter={StaticResource InvertedBool}}">
-                                        <Button Grid.Column="0"
-                                                Text="Mark Used"
-                                                FontFamily="Vazirmatn"
-                                                FontSize="12"
-                                                BackgroundColor="{StaticResource Surface}"
-                                                TextColor="{StaticResource PrimaryText}"
-                                                CornerRadius="8"
-                                                HeightRequest="36"
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=MarkUsedCommand}"
-                                                CommandParameter="{Binding}" />
-                                        <Button Grid.Column="1"
-                                                Text="Dismiss"
-                                                FontFamily="Vazirmatn"
-                                                FontSize="12"
-                                                BackgroundColor="{StaticResource Surface}"
-                                                TextColor="{StaticResource SecondaryText}"
-                                                CornerRadius="8"
-                                                HeightRequest="36"
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=DismissCommand}"
-                                                CommandParameter="{Binding}" />
-                                        <Button Grid.Column="2"
-                                                Text="Remind"
-                                                FontFamily="Vazirmatn"
-                                                FontSize="12"
-                                                BackgroundColor="{StaticResource Surface}"
-                                                TextColor="{StaticResource SecondaryText}"
-                                                CornerRadius="8"
-                                                HeightRequest="36"
-                                                IsVisible="{Binding Code.HasValidUntil}"
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=SetReminderCommand}"
-                                                CommandParameter="{Binding}" />
-                                    </Grid>
-
-                                    <!-- Undo for dismissed -->
-                                    <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-                                            Text="Undo dismiss"
-                                            FontFamily="Vazirmatn"
-                                            FontSize="12"
-                                            BackgroundColor="Transparent"
-                                            TextColor="{StaticResource Mark.Promo}"
-                                            HeightRequest="36"
-                                            IsVisible="{Binding IsDismissed}"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=UndoDismissCommand}"
-                                            CommandParameter="{Binding}" />
-                                </Grid>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-
-                    <!-- Active Codes Section -->
-                    <CollectionView ItemsSource="{Binding ActiveCodes}"
-                                    EmptyView="No active codes">
-                        <CollectionView.Header>
-                            <Label Text="Active"
-                                   FontFamily="Vazirmatn"
-                                   FontSize="13"
-                                   FontAttributes="Bold"
-                                   TextColor="{StaticResource SecondaryText}"
-                                   Margin="16,16,16,8"
-                                   IsVisible="{Binding ActiveCodes.Count, Converter={StaticResource BoolToVisibility}}" />
-                        </CollectionView.Header>
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="vm:PromoCodeItem">
-                                <Grid Margin="16,8" RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto">
-                                    <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                                            BackgroundColor="{StaticResource CardBackground}"
-                                            Stroke="{StaticResource Divider}"
-                                            StrokeThickness="1"
-                                            StrokeShape="RoundRectangle 12"
-                                            Padding="16,12">
-                                        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="6" ColumnSpacing="12">
-                                            <Border Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"
-                                                    BackgroundColor="{Binding Code.Kind, Converter={StaticResource CategoryToColor}}"
-                                                    WidthRequest="4" HeightRequest="56"
-                                                    StrokeShape="RoundRectangle 2"
-                                                    VerticalOptions="Fill" />
-
-                                            <Label Grid.Row="0" Grid.Column="1"
-                                                   Text="{Binding Code.DisplayCode}"
-                                                   FontFamily="JetBrains Mono"
-                                                   FontSize="20"
-                                                   FontAttributes="Bold"
-                                                   TextColor="{StaticResource PrimaryText}"
-                                                   VerticalTextAlignment="Center" />
-
-                                            <Button Grid.Row="0" Grid.Column="2"
-                                                    Text="Copy"
-                                                    FontFamily="Vazirmatn"
-                                                    FontSize="12"
-                                                    FontAttributes="Bold"
-                                                    BackgroundColor="{StaticResource Mark.Promo}"
-                                                    TextColor="{StaticResource OnAccent}"
-                                                    CornerRadius="8"
-                                                    Padding="12,6"
-                                                    HeightRequest="36"
-                                                    VerticalOptions="Center"
-                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=CopyCodeCommand}"
-                                                    CommandParameter="{Binding}" />
-
-                                            <Label Grid.Row="1" Grid.Column="1">
-                                                <Label.FormattedText>
-                                                    <FormattedString>
-                                                        <Span Text="{Binding KindText}" FontAttributes="Bold" TextColor="{StaticResource SecondaryText}" />
-                                                        <Span Text=" · " TextColor="{StaticResource TertiaryText}" />
-                                                        <Span Text="{Binding DiscountText}" TextColor="{StaticResource SecondaryText}" />
-                                                    </FormattedString>
-                                                </Label.FormattedText>
-                                            </Label>
-
-                                            <Grid Grid.Row="2" Grid.Column="1" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
-                                                <Label Grid.Column="0"
-                                                       Text="{Binding SourceDisplay}"
-                                                       FontFamily="Vazirmatn"
-                                                       FontSize="12"
-                                                       TextColor="{StaticResource TertiaryText}" />
-                                                <Label Grid.Column="1"
-                                                       Text="{Binding ValidUntilText}"
-                                                       FontFamily="Vazirmatn"
-                                                       FontSize="12"
-                                                       TextColor="{StaticResource SecondaryText}"
-                                                       HorizontalTextAlignment="End" />
-                                                <Label Grid.Column="2"
-                                                       Text="⏰"
-                                                       FontSize="14"
-                                                       IsVisible="{Binding HasReminder}"
-                                                       VerticalTextAlignment="Center" />
-                                            </Grid>
-
-                                            <Label Grid.Row="3" Grid.Column="1"
-                                                   Text="{Binding ReminderText}"
-                                                   FontFamily="Vazirmatn"
-                                                   FontSize="11"
-                                                   TextColor="{StaticResource TertiaryText}"
-                                                   IsVisible="{Binding HasReminder}" />
+                                        <!-- the code, mono + copy -->
+                                        <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                            <Label Grid.Column="0" Text="{Binding Code.DisplayCode}"
+                                                   Style="{StaticResource Text.Code}" FontSize="17"
+                                                   VerticalOptions="Center" LineBreakMode="TailTruncation" />
+                                            <Border Grid.Column="1" Style="{StaticResource Chip.Category}"
+                                                    BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Wallet}, Dark={StaticResource Tint.Wallet.Dark}}"
+                                                    VerticalOptions="Center">
+                                                <Label Text="Copy" FontFamily="{StaticResource Font.SemiBold}" FontSize="12"
+                                                       TextColor="{AppThemeBinding Light={StaticResource Mark.Wallet}, Dark={StaticResource Mark.Wallet.Dark}}">
+                                                    <Label.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=CopyCodeCommand}"
+                                                                              CommandParameter="{Binding}" />
+                                                    </Label.GestureRecognizers>
+                                                </Label>
+                                            </Border>
                                         </Grid>
-                                    </Border>
 
-                                    <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                                          ColumnDefinitions="*,*,*" ColumnSpacing="8"
-                                          Margin="0,8,0,0">
-                                        <Button Grid.Column="0"
-                                                Text="Mark Used"
-                                                FontFamily="Vazirmatn"
-                                                FontSize="12"
-                                                BackgroundColor="{StaticResource Surface}"
-                                                TextColor="{StaticResource PrimaryText}"
-                                                CornerRadius="8"
-                                                HeightRequest="36"
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=MarkUsedCommand}"
-                                                CommandParameter="{Binding}" />
-                                        <Button Grid.Column="1"
-                                                Text="Dismiss"
-                                                FontFamily="Vazirmatn"
-                                                FontSize="12"
-                                                BackgroundColor="{StaticResource Surface}"
-                                                TextColor="{StaticResource SecondaryText}"
-                                                CornerRadius="8"
-                                                HeightRequest="36"
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=DismissCommand}"
-                                                CommandParameter="{Binding}" />
-                                        <Button Grid.Column="2"
-                                                Text="Remind"
-                                                FontFamily="Vazirmatn"
-                                                FontSize="12"
-                                                BackgroundColor="{StaticResource Surface}"
-                                                TextColor="{StaticResource SecondaryText}"
-                                                CornerRadius="8"
-                                                HeightRequest="36"
-                                                IsVisible="{Binding Code.HasValidUntil}"
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=SetReminderCommand}"
-                                                CommandParameter="{Binding}" />
-                                    </Grid>
-                                </Grid>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                                        <!-- value + expiry -->
+                                        <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                            <Label Grid.Column="0" Text="{Binding DiscountText}" Style="{StaticResource Text.BodySecondary}"
+                                                   MaxLines="1" LineBreakMode="TailTruncation" />
+                                            <Label Grid.Column="1" Text="{Binding ValidUntilText}" Style="{StaticResource Text.Caption}"
+                                                   TextColor="{StaticResource Mark.Danger}" FontFamily="{StaticResource Font.SemiBold}"
+                                                   IsVisible="{Binding Code.HasValidUntil}" />
+                                        </Grid>
 
-                    <!-- Used Codes Section -->
-                    <CollectionView ItemsSource="{Binding UsedCodes}"
-                                    EmptyView="No used codes">
-                        <CollectionView.Header>
-                            <Label Text="Used"
-                                   FontFamily="Vazirmatn"
-                                   FontSize="13"
-                                   FontAttributes="Bold"
-                                   TextColor="{StaticResource SecondaryText}"
-                                   Margin="16,16,16,8"
-                                   IsVisible="{Binding UsedCodes.Count, Converter={StaticResource BoolToVisibility}}" />
-                        </CollectionView.Header>
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="vm:PromoCodeItem">
-                                <Border Margin="16,8"
-                                        BackgroundColor="{StaticResource CardBackground}"
-                                        Stroke="{StaticResource Divider}"
-                                        StrokeThickness="1"
-                                        StrokeShape="RoundRectangle 12"
-                                        Padding="16,12"
-                                        Opacity="0.7">
-                                    <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto" RowSpacing="4" ColumnSpacing="12">
-                                        <Border Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
-                                                BackgroundColor="{StaticResource Mark.Success}"
-                                                WidthRequest="4" HeightRequest="48"
-                                                StrokeShape="RoundRectangle 2"
-                                                VerticalOptions="Fill" />
+                                        <!-- expiry drain bar -->
+                                        <BoxView Grid.Row="3" HeightRequest="3" CornerRadius="1.5"
+                                                 Color="{Binding Code.Kind, Converter={StaticResource CategoryToColor}}"
+                                                 IsVisible="{Binding Code.HasValidUntil}" />
 
-                                        <Label Grid.Row="0" Grid.Column="1"
-                                               Text="{Binding Code.DisplayCode}"
-                                               FontFamily="JetBrains Mono"
-                                               FontSize="18"
-                                               TextColor="{StaticResource PrimaryText}"
-                                               VerticalTextAlignment="Center"
-                                               TextDecorations="Strikethrough" />
-
-                                        <Label Grid.Row="1" Grid.Column="1"
-                                               Text="{Binding SourceDisplay}"
-                                               FontFamily="Vazirmatn"
-                                               FontSize="12"
-                                               TextColor="{StaticResource TertiaryText}" />
+                                        <!-- quiet actions -->
+                                        <Grid Grid.Row="4" ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="4">
+                                            <Label Grid.Column="0" Text="Mark used" Style="{StaticResource Text.Caption}"
+                                                   FontFamily="{StaticResource Font.SemiBold}"
+                                                   TextColor="{AppThemeBinding Light={StaticResource Ink2}, Dark={StaticResource Txt2}}"
+                                                   IsVisible="{Binding IsUsed, Converter={StaticResource InvertedBool}}">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=MarkUsedCommand}"
+                                                                          CommandParameter="{Binding}" />
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                            <Label Grid.Column="1" Text="Remind" Style="{StaticResource Text.Caption}"
+                                                   FontFamily="{StaticResource Font.SemiBold}"
+                                                   TextColor="{AppThemeBinding Light={StaticResource Ink2}, Dark={StaticResource Txt2}}"
+                                                   IsVisible="{Binding Code.HasValidUntil}">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=SetReminderCommand}"
+                                                                          CommandParameter="{Binding}" />
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                            <Label Grid.Column="2" Text="Dismiss" Style="{StaticResource Text.Caption}"
+                                                   FontFamily="{StaticResource Font.SemiBold}"
+                                                   TextColor="{AppThemeBinding Light={StaticResource Ink3}, Dark={StaticResource Txt3}}"
+                                                   IsVisible="{Binding IsDismissed, Converter={StaticResource InvertedBool}}">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=DismissCommand}"
+                                                                          CommandParameter="{Binding}" />
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                            <Label Grid.Column="3" Text="{Binding ReminderText}" Style="{StaticResource Text.Caption}"
+                                                   IsVisible="{Binding HasReminder}" VerticalOptions="Center" />
+                                        </Grid>
                                     </Grid>
                                 </Border>
                             </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
 
-                    <!-- Dismissed Codes Section -->
-                    <CollectionView ItemsSource="{Binding DismissedCodes}"
-                                    EmptyView="No dismissed codes">
-                        <CollectionView.Header>
-                            <Label Text="Dismissed"
-                                   FontFamily="Vazirmatn"
-                                   FontSize="13"
-                                   FontAttributes="Bold"
-                                   TextColor="{StaticResource SecondaryText}"
-                                   Margin="16,16,16,8"
-                                   IsVisible="{Binding DismissedCodes.Count, Converter={StaticResource BoolToVisibility}}" />
-                        </CollectionView.Header>
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="vm:PromoCodeItem">
-                                <Border Margin="16,8"
-                                        BackgroundColor="{StaticResource CardBackground}"
-                                        Stroke="{StaticResource Divider}"
-                                        StrokeThickness="1"
-                                        StrokeShape="RoundRectangle 12"
-                                        Padding="16,12"
-                                        Opacity="0.6">
-                                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" RowSpacing="4" ColumnSpacing="12">
-                                        <Grid Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" ColumnDefinitions="Auto,*" ColumnSpacing="12">
-                                            <Border BackgroundColor="{StaticResource Mark.Danger}"
-                                                    WidthRequest="4" HeightRequest="48"
-                                                    StrokeShape="RoundRectangle 2"
-                                                    VerticalOptions="Fill" />
-
-                                            <Label Grid.Column="1"
-                                                   Text="{Binding Code.DisplayCode}"
-                                                   FontFamily="JetBrains Mono"
-                                                   FontSize="18"
-                                                   TextColor="{StaticResource PrimaryText}"
-                                                   VerticalTextAlignment="Center"
-                                                   TextDecorations="Strikethrough" />
-                                        </Grid>
-
-                                        <Label Grid.Row="1" Grid.Column="0"
-                                               Text="{Binding SourceDisplay}"
-                                               FontFamily="Vazirmatn"
-                                               FontSize="12"
-                                               TextColor="{StaticResource TertiaryText}" />
-
-                                        <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
-                                                Text="Undo"
-                                                FontFamily="Vazirmatn"
-                                                FontSize="12"
-                                                BackgroundColor="{StaticResource Mark.Promo}"
-                                                TextColor="{StaticResource OnAccent}"
-                                                CornerRadius="8"
-                                                Padding="16,0"
-                                                HeightRequest="36"
-                                                VerticalOptions="Center"
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=UndoDismissCommand}"
-                                                CommandParameter="{Binding}" />
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-
-                    <!-- Expired Codes Section (collapsible) -->
-                    <Border Margin="16,8,16,16"
-                            BackgroundColor="{StaticResource CardBackground}"
-                            Stroke="{StaticResource Divider}"
-                            StrokeThickness="1"
-                            StrokeShape="RoundRectangle 12"
-                            IsVisible="{Binding ShowExpiredSection}">
-                        <VerticalStackLayout Spacing="0">
-                            <Button Text="{Binding ShowExpiredSection, Converter={StaticResource InvertedBool}, ConverterParameter='Show expired ({0})', StringFormat='Show expired ({0})'}"
-                                    FontFamily="Vazirmatn"
-                                    FontSize="13"
-                                    FontAttributes="Bold"
-                                    BackgroundColor="Transparent"
-                                    TextColor="{StaticResource SecondaryText}"
-                                    HorizontalOptions="Start"
-                                    Padding="16,12"
-                                    Command="{Binding ToggleExpiredSectionCommand}" />
-
-                            <CollectionView ItemsSource="{Binding ExpiredCodes}"
-                                            EmptyView="No expired codes"
-                                            HeightRequest="0">
-                                <CollectionView.ItemTemplate>
-                                    <DataTemplate x:DataType="vm:PromoCodeItem">
-                                        <Border Margin="16,4,16,8"
-                                                BackgroundColor="{StaticResource Surface}"
-                                                Stroke="{StaticResource Divider}"
-                                                StrokeThickness="1"
-                                                StrokeShape="RoundRectangle 8"
-                                                Padding="12,8"
-                                                Opacity="0.5">
-                                            <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto" ColumnSpacing="12">
-                                                <Border BackgroundColor="{StaticResource TertiaryText}"
-                                                        WidthRequest="3" HeightRequest="40"
-                                                        StrokeShape="RoundRectangle 2"
-                                                        VerticalOptions="Fill" />
-
-                                                <Grid Grid.Column="1" RowDefinitions="Auto,Auto" RowSpacing="2">
-                                                    <Label Grid.Row="0"
-                                                           Text="{Binding Code.DisplayCode}"
-                                                           FontFamily="JetBrains Mono"
-                                                           FontSize="16"
-                                                           TextColor="{StaticResource TertiaryText}"
-                                                           TextDecorations="Strikethrough" />
-                                                    <Label Grid.Row="1"
-                                                           Text="{Binding SourceDisplay}"
-                                                           FontFamily="Vazirmatn"
-                                                           FontSize="11"
-                                                           TextColor="{StaticResource TertiaryText}" />
-                                                </Grid>
-                                            </Grid>
-                                        </Border>
-                                    </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                            </CollectionView>
-                        </VerticalStackLayout>
-                    </Border>
                 </VerticalStackLayout>
             </CollectionView.Header>
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="vm:PromoCodeItem">
-                    <Grid Margin="16,8" RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto">
-                        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                                BackgroundColor="{StaticResource CardBackground}"
-                                Stroke="{StaticResource Mark.Promo}"
-                                StrokeThickness="2"
-                                StrokeShape="RoundRectangle 12"
-                                Padding="16,12">
-                            <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="6" ColumnSpacing="12">
-                                <Border Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"
-                                        BackgroundColor="{Binding Code.Kind, Converter={StaticResource CategoryToColor}}"
-                                        WidthRequest="4" HeightRequest="56"
-                                        StrokeShape="RoundRectangle 2"
-                                        VerticalOptions="Fill" />
-
-                                <Label Grid.Row="0" Grid.Column="1"
-                                       Text="{Binding Code.DisplayCode}"
-                                       FontFamily="JetBrains Mono"
-                                       FontSize="20"
-                                       FontAttributes="Bold"
-                                       TextColor="{StaticResource PrimaryText}"
-                                       VerticalTextAlignment="Center" />
-
-                                <Button Grid.Row="0" Grid.Column="2"
-                                        Text="Copy"
-                                        FontFamily="Vazirmatn"
-                                        FontSize="12"
-                                        FontAttributes="Bold"
-                                        BackgroundColor="{StaticResource Mark.Promo}"
-                                        TextColor="{StaticResource OnAccent}"
-                                        CornerRadius="8"
-                                        Padding="12,6"
-                                        HeightRequest="36"
-                                        VerticalOptions="Center"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=CopyCodeCommand}"
-                                        CommandParameter="{Binding}" />
-
-                                <Label Grid.Row="1" Grid.Column="1">
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <Span Text="{Binding KindText}" FontAttributes="Bold" TextColor="{StaticResource SecondaryText}" />
-                                            <Span Text=" · " TextColor="{StaticResource TertiaryText}" />
-                                            <Span Text="{Binding DiscountText}" TextColor="{StaticResource SecondaryText}" />
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
-
-                                <Grid Grid.Row="2" Grid.Column="1" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
-                                    <Label Grid.Column="0"
-                                           Text="{Binding SourceDisplay}"
-                                           FontFamily="Vazirmatn"
-                                           FontSize="12"
-                                           TextColor="{StaticResource TertiaryText}" />
-                                    <Label Grid.Column="1"
-                                           Text="{Binding ValidUntilText}"
-                                           FontFamily="Vazirmatn"
-                                           FontSize="12"
-                                           TextColor="{StaticResource Mark.Danger}"
-                                           FontAttributes="Bold"
-                                           HorizontalTextAlignment="End" />
-                                    <Label Grid.Column="2"
-                                           Text="⏰"
-                                           FontSize="14"
-                                           IsVisible="{Binding HasReminder}"
-                                           VerticalTextAlignment="Center" />
-                                </Grid>
-
-                                <Label Grid.Row="3" Grid.Column="1"
-                                       Text="{Binding ReminderText}"
-                                       FontFamily="Vazirmatn"
-                                       FontSize="11"
-                                       TextColor="{StaticResource TertiaryText}"
-                                       IsVisible="{Binding HasReminder}" />
+                    <Border Style="{StaticResource Stub.Border}"
+                            Stroke="{Binding Code.Kind, Converter={StaticResource CategoryToColor}}">
+                        <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="6">
+                            <!-- kind + source -->
+                            <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                                <BoxView Grid.Column="0" WidthRequest="8" HeightRequest="8" CornerRadius="4"
+                                         VerticalOptions="Center"
+                                         Color="{Binding Code.Kind, Converter={StaticResource CategoryToColor}}" />
+                                <Label Grid.Column="1" Text="{Binding SourceDisplay}" Style="{StaticResource Text.Caption}"
+                                       VerticalOptions="Center" MaxLines="1" LineBreakMode="TailTruncation" />
+                                <Label Grid.Column="2" Text="{Binding KindText}" Style="{StaticResource Text.Caption}"
+                                       FontFamily="{StaticResource Font.SemiBold}" VerticalOptions="Center" />
                             </Grid>
-                        </Border>
 
-                        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                              ColumnDefinitions="*,*,*" ColumnSpacing="8"
-                              Margin="0,8,0,0">
-                            <Button Grid.Column="0"
-                                    Text="Mark Used"
-                                    FontFamily="Vazirmatn"
-                                    FontSize="12"
-                                    BackgroundColor="{StaticResource Surface}"
-                                    TextColor="{StaticResource PrimaryText}"
-                                    CornerRadius="8"
-                                    HeightRequest="36"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=MarkUsedCommand}"
-                                    CommandParameter="{Binding}" />
-                            <Button Grid.Column="1"
-                                    Text="Dismiss"
-                                    FontFamily="Vazirmatn"
-                                    FontSize="12"
-                                    BackgroundColor="{StaticResource Surface}"
-                                    TextColor="{StaticResource SecondaryText}"
-                                    CornerRadius="8"
-                                    HeightRequest="36"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=DismissCommand}"
-                                    CommandParameter="{Binding}" />
-                            <Button Grid.Column="2"
-                                    Text="Remind"
-                                    FontFamily="Vazirmatn"
-                                    FontSize="12"
-                                    BackgroundColor="{StaticResource Surface}"
-                                    TextColor="{StaticResource SecondaryText}"
-                                    CornerRadius="8"
-                                    HeightRequest="36"
-                                    IsVisible="{Binding Code.HasValidUntil}"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=SetReminderCommand}"
-                                    CommandParameter="{Binding}" />
+                            <!-- the code, mono + copy -->
+                            <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                <Label Grid.Column="0" Text="{Binding Code.DisplayCode}"
+                                       Style="{StaticResource Text.Code}" FontSize="17"
+                                       VerticalOptions="Center" LineBreakMode="TailTruncation" />
+                                <Border Grid.Column="1" Style="{StaticResource Chip.Category}"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Wallet}, Dark={StaticResource Tint.Wallet.Dark}}"
+                                        VerticalOptions="Center">
+                                    <Label Text="Copy" FontFamily="{StaticResource Font.SemiBold}" FontSize="12"
+                                           TextColor="{AppThemeBinding Light={StaticResource Mark.Wallet}, Dark={StaticResource Mark.Wallet.Dark}}">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=CopyCodeCommand}"
+                                                                  CommandParameter="{Binding}" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </Border>
+                            </Grid>
+
+                            <!-- value + expiry -->
+                            <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                <Label Grid.Column="0" Text="{Binding DiscountText}" Style="{StaticResource Text.BodySecondary}"
+                                       MaxLines="1" LineBreakMode="TailTruncation" />
+                                <Label Grid.Column="1" Text="{Binding ValidUntilText}" Style="{StaticResource Text.Caption}"
+                                       FontFamily="{StaticResource Font.SemiBold}"
+                                       IsVisible="{Binding Code.HasValidUntil}" />
+                            </Grid>
+
+                            <!-- expiry drain bar -->
+                            <BoxView Grid.Row="3" HeightRequest="3" CornerRadius="1.5"
+                                     Color="{Binding Code.Kind, Converter={StaticResource CategoryToColor}}"
+                                     IsVisible="{Binding Code.HasValidUntil}" />
+
+                            <!-- quiet actions -->
+                            <Grid Grid.Row="4" ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="12">
+                                <Label Grid.Column="0" Text="Mark used" Style="{StaticResource Text.Caption}"
+                                       FontFamily="{StaticResource Font.SemiBold}"
+                                       TextColor="{AppThemeBinding Light={StaticResource Ink2}, Dark={StaticResource Txt2}}"
+                                       IsVisible="{Binding IsUsed, Converter={StaticResource InvertedBool}}">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=MarkUsedCommand}"
+                                                              CommandParameter="{Binding}" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+                                <Label Grid.Column="1" Text="Remind" Style="{StaticResource Text.Caption}"
+                                       FontFamily="{StaticResource Font.SemiBold}"
+                                       TextColor="{AppThemeBinding Light={StaticResource Ink2}, Dark={StaticResource Txt2}}"
+                                       IsVisible="{Binding Code.HasValidUntil}">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=SetReminderCommand}"
+                                                              CommandParameter="{Binding}" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+                                <Label Grid.Column="2" Text="Dismiss" Style="{StaticResource Text.Caption}"
+                                       FontFamily="{StaticResource Font.SemiBold}"
+                                       TextColor="{AppThemeBinding Light={StaticResource Ink3}, Dark={StaticResource Txt3}}"
+                                       IsVisible="{Binding IsDismissed, Converter={StaticResource InvertedBool}}">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=DismissCommand}"
+                                                              CommandParameter="{Binding}" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+                                <Label Grid.Column="3" Text="{Binding ReminderText}" Style="{StaticResource Text.Caption}"
+                                       IsVisible="{Binding HasReminder}" VerticalOptions="Center" />
+                            </Grid>
                         </Grid>
-                    </Grid>
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout Spacing="12" Padding="32" VerticalOptions="Center">
+                    <Label Text="الک"
+                           FontFamily="{StaticResource Font.Medium}"
+                           FontSize="72"
+                           HorizontalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource Ink3}, Dark={StaticResource Txt3}}"
+                           Opacity="0.45" />
+                    <Label Text="No codes yet"
+                           Style="{StaticResource Text.Title}"
+                           HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+                    <Label Text="Promo codes Alak finds in your notifications are kept here — with expiry, never lost."
+                           Style="{StaticResource Text.BodySecondary}"
+                           HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
+            <CollectionView.Footer>
+                <VerticalStackLayout Spacing="0" Padding="0,4,0,24">
+
+                    <!-- ===== USED ===== -->
+                    <Label Text="Used"
+                           Style="{StaticResource Text.Section}"
+                           Margin="16,16,16,4"
+                           IsVisible="{Binding UsedCodes.Count, Converter={StaticResource BoolToVisibility}}" />
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding UsedCodes}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="vm:PromoCodeItem">
+                                <Border Style="{StaticResource Card.Row}" Opacity="0.65">
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                        <BoxView Grid.Column="0" WidthRequest="3" Color="{StaticResource Mark.Success}"
+                                                 VerticalOptions="Fill" />
+                                        <Grid Grid.Column="1" RowDefinitions="Auto,Auto" RowSpacing="2">
+                                            <Label Grid.Row="0" Text="{Binding Code.DisplayCode}"
+                                                   FontFamily="{StaticResource Font.Mono}" FontSize="15"
+                                                   TextDecorations="Strikethrough"
+                                                   TextColor="{AppThemeBinding Light={StaticResource Ink2}, Dark={StaticResource Txt2}}" />
+                                            <Label Grid.Row="1" Text="{Binding SourceDisplay}" Style="{StaticResource Text.Caption}" />
+                                        </Grid>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+
+                    <!-- ===== DISMISSED ===== -->
+                    <Label Text="Dismissed"
+                           Style="{StaticResource Text.Section}"
+                           Margin="16,16,16,4"
+                           IsVisible="{Binding DismissedCodes.Count, Converter={StaticResource BoolToVisibility}}" />
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding DismissedCodes}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="vm:PromoCodeItem">
+                                <Border Style="{StaticResource Card.Row}" Opacity="0.6">
+                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                                        <BoxView Grid.Column="0" WidthRequest="3" Color="{StaticResource Mark.Danger}"
+                                                 VerticalOptions="Fill" />
+                                        <Grid Grid.Column="1" RowDefinitions="Auto,Auto" RowSpacing="2">
+                                            <Label Grid.Row="0" Text="{Binding Code.DisplayCode}"
+                                                   FontFamily="{StaticResource Font.Mono}" FontSize="15"
+                                                   TextDecorations="Strikethrough"
+                                                   TextColor="{AppThemeBinding Light={StaticResource Ink2}, Dark={StaticResource Txt2}}" />
+                                            <Label Grid.Row="1" Text="{Binding SourceDisplay}" Style="{StaticResource Text.Caption}" />
+                                        </Grid>
+                                        <Label Grid.Column="2" Text="Undo" VerticalOptions="Center"
+                                               FontFamily="{StaticResource Font.SemiBold}" FontSize="13"
+                                               TextColor="{AppThemeBinding Light={StaticResource Mark.Wallet}, Dark={StaticResource Mark.Wallet.Dark}}">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=UndoDismissCommand}"
+                                                                      CommandParameter="{Binding}" />
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+
+                    <!-- ===== EXPIRED (collapsible) ===== -->
+                    <Border IsVisible="{Binding ExpiredCodes.Count, Converter={StaticResource BoolToVisibility}}"
+                            Style="{StaticResource Card.Row}" Margin="16,16,16,0" Padding="0">
+                        <VerticalStackLayout Spacing="0">
+                            <Label Text="{Binding ExpiredCodes.Count, StringFormat='Expired ({0})'}"
+                                   Style="{StaticResource Text.Section}"
+                                   Padding="14,12">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ToggleExpiredSectionCommand}" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <VerticalStackLayout Spacing="0" Padding="0,0,0,8"
+                                                 IsVisible="{Binding ShowExpiredSection}"
+                                                 BindableLayout.ItemsSource="{Binding ExpiredCodes}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:PromoCodeItem">
+                                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" Padding="14,4,14,4" Opacity="0.5">
+                                            <BoxView Grid.Column="0" WidthRequest="3" Color="{AppThemeBinding Light={StaticResource Ink3}, Dark={StaticResource Txt3}}"
+                                                     VerticalOptions="Fill" />
+                                            <Grid Grid.Column="1" RowDefinitions="Auto,Auto" RowSpacing="2">
+                                                <Label Grid.Row="0" Text="{Binding Code.DisplayCode}"
+                                                       FontFamily="{StaticResource Font.Mono}" FontSize="14"
+                                                       TextDecorations="Strikethrough"
+                                                       TextColor="{AppThemeBinding Light={StaticResource Ink3}, Dark={StaticResource Txt3}}" />
+                                                <Label Grid.Row="1" Text="{Binding SourceDisplay}" Style="{StaticResource Text.Caption}" />
+                                            </Grid>
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+
+                </VerticalStackLayout>
+            </CollectionView.Footer>
         </CollectionView>
     </RefreshView>
 </ContentPage>

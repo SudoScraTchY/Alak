@@ -2,49 +2,43 @@
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
         xmlns:views="clr-namespace:Alak.App.Views"
-        xmlns:local="clr-namespace:Alak.App"
         x:Class="Alak.App.AppShell"
-        Shell.BackgroundColor="{StaticResource PageBackground}"
-        Shell.TitleColor="{StaticResource PrimaryText}"
-        Shell.TabBarBackgroundColor="{StaticResource CardBackground}"
-        Shell.TabBarForegroundColor="{StaticResource TertiaryText}"
-        Shell.FlyoutBehavior="Disabled">
+        Shell.FlyoutBehavior="Disabled"
+        Shell.NavBarHasShadow="False"
+        Shell.BackgroundColor="{AppThemeBinding Light={StaticResource Salt}, Dark={StaticResource Night}}"
+        Shell.ForegroundColor="{AppThemeBinding Light={StaticResource Ink}, Dark={StaticResource Txt}}"
+        Shell.TitleColor="{AppThemeBinding Light={StaticResource Ink}, Dark={StaticResource Txt}}"
+        Shell.TabBarBackgroundColor="{AppThemeBinding Light={StaticResource Paper}, Dark={StaticResource SurfaceDark}}"
+        Shell.TabBarForegroundColor="{AppThemeBinding Light={StaticResource Ink}, Dark={StaticResource Txt}}"
+        Shell.TabBarTitleColor="{AppThemeBinding Light={StaticResource Ink}, Dark={StaticResource Txt}}"
+        Shell.TabBarUnselectedColor="{AppThemeBinding Light={StaticResource Ink3}, Dark={StaticResource Txt3}}">
 
-    <!-- ===== MAIN NAVIGATION (Bottom tabs per §13) ===== -->
+    <!--
+        Bottom tabs (SPEC §13). Exactly one TabBar, nothing else at the root level:
+        stray top-level ShellContent items here previously broke the tab bar down to
+        a single visible tab. Modal pages (detail, onboarding, stub-detail) are
+        registered via Routing.RegisterRoute in code-behind instead.
+    -->
     <TabBar>
-        <!-- Inbox Tab -->
         <Tab Title="Inbox" Icon="inbox.svg" Route="inbox">
-            <ShellContent ContentTemplate="{DataTemplate views:InboxPage}" Route="inbox" />
+            <ShellContent ContentTemplate="{DataTemplate views:InboxPage}" />
         </Tab>
 
-        <!-- Scan/Compose Tab (center FAB-style) -->
         <Tab Title="Scan" Icon="scan.svg" Route="scan">
-            <ShellContent ContentTemplate="{DataTemplate views:ScanPage}" Route="scan" />
+            <ShellContent ContentTemplate="{DataTemplate views:ScanPage}" />
         </Tab>
 
-        <!-- Settings Tab -->
+        <Tab Title="Codes" Icon="wallet.svg" Route="wallet">
+            <ShellContent ContentTemplate="{DataTemplate views:WalletPage}" />
+        </Tab>
+
+        <Tab Title="Rules" Icon="rules.svg" Route="rules">
+            <ShellContent ContentTemplate="{DataTemplate views:RulesPage}" />
+        </Tab>
+
         <Tab Title="Settings" Icon="settings.svg" Route="settings">
-            <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" Route="settings" />
-        </Tab>
-
-        <!-- Wallet/Codes Tab -->
-        <Tab Title="Codes" Icon="inbox.svg" Route="wallet">
-            <ShellContent ContentTemplate="{DataTemplate views:WalletPage}" Route="wallet" />
-        </Tab>
-
-        <!-- Rules Tab -->
-        <Tab Title="Rules" Icon="settings.svg" Route="rules">
-            <ShellContent ContentTemplate="{DataTemplate views:RulesPage}" Route="rules" />
+            <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" />
         </Tab>
     </TabBar>
-
-    <!-- ===== MODAL ROUTES (push via GoToAsync) ===== -->
-    <ShellContent Route="detail" ContentTemplate="{DataTemplate views:DetailPage}" />
-    <ShellContent Route="onboarding" ContentTemplate="{DataTemplate views:OnboardingPage}" />
-    <ShellContent Route="scan" ContentTemplate="{DataTemplate views:ScanPage}" />
-    <ShellContent Route="settings" ContentTemplate="{DataTemplate views:SettingsPage}" />
-    <ShellContent Route="rules" ContentTemplate="{DataTemplate views:RulesPage}" />
-    <ShellContent Route="stub-detail" ContentTemplate="{DataTemplate views:StubDetailPage}" />
-    <ShellContent Route="wallet" ContentTemplate="{DataTemplate views:WalletPage}" />
 
 </Shell>

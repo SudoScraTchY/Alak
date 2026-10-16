@@ -254,28 +254,31 @@ public class NotificationViewModel : INotifyPropertyChanged
 
     private static string GetMarkColor(string category) => category switch
     {
-        "money" => "#10B981",
-        "security" => "#EF4444",
-        "people" => "#3B82F6",
-        "work" => "#F59E0B",
-        "orders" => "#8B5CF6",
-        "offers" => "#EC4899",
-        "updates" => "#06B6D4",
-        "social" => "#D946EF",
+        // SPEC §12.2 category marks (light). Applied to spines/dots/chips ≥ 3px, never small body text.
+        "money" => "#0C8397",
+        "security" => "#D0325D",
+        "people" => "#12895B",
+        "work" => "#2F5BE0",
+        "orders" => "#C4581A",
+        "promo" or "offers" => "#8248D6",
+        "updates" => "#5F6F76",
+        "social" => "#6B8E00",
         _ => "#6B7280"
     };
 
     private static string GetTintColor(string category) => category switch
     {
-        "money" => "#ECFDF5",
-        "security" => "#FEF2F2",
-        "people" => "#EFF6FF",
-        "work" => "#FFFBEB",
-        "orders" => "#F5F3FF",
-        "offers" => "#FDF2F8",
-        "updates" => "#ECFEFF",
-        "social" => "#FAF5FF",
-        _ => "#F3F4F6"
+        // Alpha washes of the mark (~14%) instead of opaque pastels: read correctly
+        // on BOTH light (Salt/Paper) and dark (Night/Raised) surfaces.
+        "money" => "#240C8397",
+        "security" => "#24D0325D",
+        "people" => "#2412895B",
+        "work" => "#242F5BE0",
+        "orders" => "#24C4581A",
+        "promo" or "offers" => "#248248D6",
+        "updates" => "#245F6F76",
+        "social" => "#246B8E00",
+        _ => "#246B7280"
     };
 
     public event PropertyChangedEventHandler? PropertyChanged;

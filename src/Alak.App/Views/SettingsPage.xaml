@@ -4,7 +4,7 @@
              xmlns:vm="clr-namespace:Alak.App.ViewModels"
              x:Class="Alak.App.Views.SettingsPage"
              x:DataType="vm:SettingsViewModel"
-             BackgroundColor="{StaticResource PageBackground}"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Salt}, Dark={StaticResource Night}}"
              Title="Settings">
     <ScrollView>
         <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="24" Margin="16,16,16,24">
@@ -34,16 +34,6 @@
                     </Grid>
 
                     <Grid Grid.Row="3" ColumnDefinitions="*,Auto" ColumnSpacing="16">
-                        <StackLayout>
-                            <Label Text="Dark Mode" Style="{StaticResource Text.Body}" />
-                            <Label Text="Use dark theme" Style="{StaticResource Text.Caption}" />
-                        </StackLayout>
-                        <Switch Grid.Column="1" 
-                                IsToggled="{Binding DarkModeEnabled}"
-                                Style="{StaticResource Switch.Standard}" />
-                    </Grid>
-
-                    <Grid Grid.Row="4" ColumnDefinitions="*,Auto" ColumnSpacing="16">
                         <StackLayout>
                             <Label Text="RTL Layout" Style="{StaticResource Text.Body}" />
                             <Label Text="Right-to-left for Persian" Style="{StaticResource Text.Caption}" />
@@ -200,18 +190,12 @@
                     </Grid>
 
                     <Button Grid.Row="2"
-                            Text="Save Global Settings"
-                            Style="{StaticResource Button.Primary}"
-                            Command="{Binding SaveGlobalSettingsCommand}"
-                            HorizontalOptions="Fill" />
-
-                    <Button Grid.Row="3"
                             Text="Export Data (JSON)"
                             Style="{StaticResource Button.Secondary}"
                             Command="{Binding ExportDataCommand}"
                             HorizontalOptions="Fill" />
 
-                    <Button Grid.Row="4"
+                    <Button Grid.Row="3"
                             Text="Clear All Data"
                             Style="{StaticResource Button.Secondary}"
                             Command="{Binding ClearDataCommand}"

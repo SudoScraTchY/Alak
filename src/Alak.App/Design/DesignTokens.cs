@@ -54,18 +54,20 @@ public sealed class DesignTokens
         public const string OtherTint = "#242424";
     }
 
-    // ===== CATEGORY MARK COLORS (spec §12.2 "mark" row) =====
+    // ===== CATEGORY MARK COLORS (spec §12.2 "mark" row, light theme) =====
+    // Applied to spines/dots/chips — never small body text on the plain background.
     public static class CategoryMark
     {
-        public const string Promo = "#1E88E5";       // Blue
-        public const string Work = "#2E7D32";        // Green
-        public const string People = "#EF6C00";      // Orange
-        public const string Money = "#00897B";       // Teal
-        public const string Orders = "#7B1FA2";      // Purple
-        public const string Security = "#C62828";    // Red
-        public const string Social = "#3949AB";      // Indigo
-        public const string Updates = "#546E7A";     // Blue-grey
-        public const string Other = "#616161";       // Grey
+        public const string Promo = "#8248D6";       // Offers — violet
+        public const string Work = "#2F5BE0";        // Work — blue
+        public const string People = "#12895B";      // People — green
+        public const string Money = "#0C8397";       // Money — teal
+        public const string Orders = "#C4581A";      // Orders & trips — orange
+        public const string Security = "#D0325D";    // Security — pink
+        public const string Social = "#6B8E00";      // Social & media — olive
+        public const string Updates = "#5F6F76";     // Updates — slate
+        public const string Other = "#6B7280";       // Other — grey
+        public const string Wallet = "#B77900";      // Codes wallet — gold (the one loud accent)
     }
 
     // ===== TYPOGRAPHY TOKENS (spec §12.3) =====

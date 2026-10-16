@@ -4,7 +4,7 @@
              xmlns:vm="clr-namespace:Alak.App.ViewModels"
              x:Class="Alak.App.Views.StubDetailPage"
              x:DataType="vm:StubDetailViewModel"
-             BackgroundColor="{StaticResource PageBackground}"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Salt}, Dark={StaticResource Night}}"
              Title="Detail">
     <ScrollView>
         <!-- Stub card - ticket shape per §12.7 -->

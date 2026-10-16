@@ -4,7 +4,7 @@
              xmlns:vm="clr-namespace:Alak.App.ViewModels"
              x:Class="Alak.App.Views.DetailPage"
              x:DataType="vm:DetailViewModel"
-             BackgroundColor="{StaticResource PageBackground}">
+             BackgroundColor="{AppThemeBinding Light={StaticResource Salt}, Dark={StaticResource Night}}">
     <ScrollView>
         <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,*" RowSpacing="16" Margin="16,16,16,24">
             <!-- Category spine + chip -->

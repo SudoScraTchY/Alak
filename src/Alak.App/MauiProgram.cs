@@ -22,9 +22,20 @@ public static class MauiProgram
         builder
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
+            .ConfigureMauiHandlers(handlers =>
+            {
+                // ZXing.Net.MAUI 0.10.x has no Use-extension; register handlers manually.
+                handlers.AddHandler(
+                    typeof(ZXing.Net.Maui.Controls.CameraBarcodeReaderView),
+                    typeof(ZXing.Net.Maui.CameraBarcodeReaderViewHandler));
+                handlers.AddHandler(
+                    typeof(ZXing.Net.Maui.Controls.BarcodeGeneratorView),
+                    typeof(ZXing.Net.Maui.BarcodeGeneratorViewHandler));
+            })
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("Vazirmatn-Regular.ttf", "Vazirmatn");
+                fonts.AddFont("Vazirmatn-Bold.ttf", "VazirmatnBold");
                 fonts.AddFont("Vazirmatn-Medium.ttf", "VazirmatnMedium");
                 fonts.AddFont("Vazirmatn-SemiBold.ttf", "VazirmatnSemiBold");
                 fonts.AddFont("JetBrainsMono-Medium.ttf", "JetBrainsMono");

@@ -1,97 +1,146 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                    xmlns:design="clr-namespace:Alak.App.Design"
                     xmlns:sys="clr-namespace:System;assembly=netstandard">
 
-    <!-- ===== SPACING (spec §12.5) ===== -->
+    <!--
+        Spacing, radius, elevation — SPEC §12.5.
+        Elevation rule: ordinary surfaces use a 1px hairline border, NOT shadows.
+        Only true overlays (sheets, dialogs) get the single deliberate shadow.
+        Dark theme distinguishes surfaces by lightness steps, not shadow.
+    -->
+
+    <!-- ===== SPACING (4px base) ===== -->
     <sys:Double x:Key="Spacing.XS">4</sys:Double>
     <sys:Double x:Key="Spacing.SM">8</sys:Double>
-    <sys:Double x:Key="Spacing.MD">16</sys:Double>
-    <sys:Double x:Key="Spacing.LG">24</sys:Double>
-    <sys:Double x:Key="Spacing.XL">32</sys:Double>
-    <sys:Double x:Key="Spacing.XXL">48</sys:Double>
+    <sys:Double x:Key="Spacing.MD">12</sys:Double>
+    <sys:Double x:Key="Spacing.LG">16</sys:Double>
+    <sys:Double x:Key="Spacing.XL">24</sys:Double>
+    <sys:Double x:Key="Spacing.XXL">32</sys:Double>
+    <sys:Double x:Key="Spacing.Huge">48</sys:Double>
 
-    <!-- ===== RADIUS (spec §12.5) ===== -->
-    <sys:Double x:Key="Radius.SM">8</sys:Double>
-    <sys:Double x:Key="Radius.MD">12</sys:Double>
-    <sys:Double x:Key="Radius.LG">16</sys:Double>
-    <sys:Double x:Key="Radius.Full">999</sys:Double>
+    <!-- ===== RADIUS — two values used with intent ===== -->
+    <sys:Double x:Key="Radius.SM">8</sys:Double>      <!-- chips, buttons, inputs -->
+    <sys:Double x:Key="Radius.MD">12</sys:Double>     <!-- legacy alias -->
+    <sys:Double x:Key="Radius.Card">14</sys:Double>   <!-- list rows, cards, sheets -->
+    <sys:Double x:Key="Radius.LG">16</sys:Double>     <!-- legacy alias -->
+    <sys:Double x:Key="Radius.Full">999</sys:Double>  <!-- pills -->
 
-    <!-- ===== ELEVATION / SHADOWS (spec §12.5) ===== -->
-    <sys:Double x:Key="Elevation.Level1">1</sys:Double>
-    <sys:Double x:Key="Elevation.Level2">2</sys:Double>
-    <sys:Double x:Key="Elevation.Level3">3</sys:Double>
-    <sys:Double x:Key="Elevation.Level4">4</sys:Double>
+    <!-- ===== THE ONE OVERLAY SHADOW (spec §12.5: 0 8px 24px rgba(18,37,43,.16)) ===== -->
+    <Shadow x:Key="Shadow.Overlay" Offset="0,8" Radius="24" Opacity="0.16" Brush="#12252B" />
 
-    <!-- Card shadow (Level 2) -->
-    <Shadow x:Key="Shadow.Card" 
-            Offset="0,2" 
-            Radius="8" 
-            Opacity="0.08"
-            Brush="{StaticResource PrimaryText}" />
-
-    <!-- Stub shadow (Level 2) -->
-    <Shadow x:Key="Shadow.Stub" 
-            Offset="0,4" 
-            Radius="12" 
-            Opacity="0.12"
-            Brush="{StaticResource PrimaryText}" />
-
-    <!-- Modal shadow (Level 4) -->
-    <Shadow x:Key="Shadow.Modal" 
-            Offset="0,8" 
-            Radius="24" 
-            Opacity="0.16"
-            Brush="{StaticResource PrimaryText}" />
-
-    <!-- ===== STUB SHAPE (spec §12.7) ===== -->
-    <!-- Ticket-shaped component with torn edge effect -->
-    <Style x:Key="Frame.Stub" TargetType="Frame">
-        <Setter Property="BackgroundColor" Value="{StaticResource CardBackground}" />
-        <Setter Property="CornerRadius" Value="{StaticResource Radius.MD}" />
-        <Setter Property="HasShadow" Value="True" />
-        <Setter Property="Shadow" Value="{StaticResource Shadow.Stub}" />
-        <Setter Property="Padding" Value="{StaticResource Spacing.MD}" />
-        <Setter Property="MinimumWidthRequest" Value="280" />
-        <Setter Property="MaximumWidthRequest" Value="420" />
-        <Setter Property="HeightRequest" Value="140" />
-        <Setter Property="BorderColor" Value="{StaticResource Divider}" />
+    <!-- ===== CARD (Border-based — modern MAUI; Frame is legacy) ===== -->
+    <Style x:Key="Card.Surface" TargetType="Border">
+        <Setter Property="BackgroundColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Paper}" Dark="{StaticResource Raised}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Stroke">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Hairline}" Dark="{StaticResource HairlineD}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape">
+            <Setter.Value>
+                <RoundRectangle CornerRadius="14" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Padding" Value="16" />
+        <Setter Property="Margin" Value="16,6" />
     </Style>
 
-    <!-- Card shape -->
+    <!-- Quiet list row: hairline only, no shadow, separates by spacing -->
+    <Style x:Key="Card.Row" TargetType="Border" BasedOn="{StaticResource Card.Surface}">
+        <Setter Property="Margin" Value="16,4" />
+        <Setter Property="Padding" Value="14,12" />
+    </Style>
+
+    <!-- Sheet / modal overlay -->
+    <Style x:Key="Card.Sheet" TargetType="Border">
+        <Setter Property="BackgroundColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Paper}" Dark="{StaticResource Raised}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Stroke" Value="Transparent" />
+        <Setter Property="StrokeShape">
+            <Setter.Value>
+                <RoundRectangle CornerRadius="16" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Padding" Value="24" />
+        <Setter Property="Shadow" Value="{StaticResource Shadow.Overlay}" />
+    </Style>
+
+    <!-- ===== THE STUB — the one signature shape (spec §12.7) =====
+         Ticket outline: squared top-left corner, rounded elsewhere, perforated
+         (dashed) stroke in the category mark at reduced strength. -->
+    <Style x:Key="Stub.Border" TargetType="Border">
+        <Setter Property="BackgroundColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Paper}" Dark="{StaticResource Raised}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape">
+            <Setter.Value>
+                <RoundRectangle CornerRadius="2,14,14,14" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Padding" Value="14,12" />
+        <Setter Property="StrokeDashArray" Value="3,2" />
+    </Style>
+
+    <!-- ===== LEGACY FRAME STYLES (pages still using Frame) ===== -->
     <Style x:Key="Frame.Card" TargetType="Frame">
-        <Setter Property="BackgroundColor" Value="{StaticResource CardBackground}" />
-        <Setter Property="CornerRadius" Value="{StaticResource Radius.MD}" />
-        <Setter Property="HasShadow" Value="True" />
-        <Setter Property="Shadow" Value="{StaticResource Shadow.Card}" />
-        <Setter Property="Padding" Value="{StaticResource Spacing.MD}" />
-        <Setter Property="BorderColor" Value="{StaticResource Divider}" />
-    </Style>
-
-    <!-- Sheet / Modal shape -->
-    <Style x:Key="Frame.Sheet" TargetType="Frame">
-        <Setter Property="BackgroundColor" Value="{StaticResource CardBackground}" />
-        <Setter Property="CornerRadius" Value="{StaticResource Radius.LG}" />
-        <Setter Property="HasShadow" Value="True" />
-        <Setter Property="Shadow" Value="{StaticResource Shadow.Modal}" />
-        <Setter Property="Padding" Value="{StaticResource Spacing.LG}" />
-    </Style>
-
-    <!-- Category chip -->
-    <Style x:Key="Frame.Chip" TargetType="Frame">
-        <Setter Property="BackgroundColor" Value="{StaticResource Category.Promo.Tint}" />
-        <Setter Property="CornerRadius" Value="{StaticResource Radius.Full}" />
-        <Setter Property="Padding" Value="12,6" />
+        <Setter Property="BackgroundColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Paper}" Dark="{StaticResource Raised}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="CornerRadius" Value="14" />
         <Setter Property="HasShadow" Value="False" />
-        <Setter Property="BorderColor" Value="{StaticResource Divider}" />
+        <Setter Property="Padding" Value="16" />
+        <Setter Property="Margin" Value="16,6" />
+        <Setter Property="BorderColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Hairline}" Dark="{StaticResource HairlineD}" />
+            </Setter.Value>
+        </Setter>
     </Style>
 
-    <!-- Divider -->
+    <Style x:Key="Frame.ListItem" TargetType="Frame" BasedOn="{StaticResource Frame.Card}">
+        <Setter Property="Margin" Value="16,4" />
+        <Setter Property="Padding" Value="14,12" />
+    </Style>
+
+    <Style x:Key="Frame.Stub" TargetType="Frame">
+        <Setter Property="BackgroundColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Paper}" Dark="{StaticResource Raised}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="CornerRadius" Value="14" />
+        <Setter Property="HasShadow" Value="False" />
+        <Setter Property="Padding" Value="14,12" />
+        <Setter Property="BorderColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Mark.Wallet}" Dark="{StaticResource Mark.Wallet.Dark}" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ===== DIVIDER ===== -->
     <Style x:Key="BoxView.Divider" TargetType="BoxView">
-        <Setter Property="HeightRequest" Value="0.5" />
-        <Setter Property="Color" Value="{StaticResource Divider}" />
-        <Setter Property="Margin" Value="0,8,0,8" />
+        <Setter Property="HeightRequest" Value="1" />
+        <Setter Property="Color">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Hairline}" Dark="{StaticResource HairlineD}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Margin" Value="16,8" />
     </Style>
 
 </ResourceDictionary>

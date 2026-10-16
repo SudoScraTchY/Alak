@@ -1,27 +1,43 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?> 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Alak.App.ViewModels"
              x:Class="Alak.App.Views.OnboardingPage"
              x:DataType="vm:OnboardingViewModel"
-             BackgroundColor="{StaticResource PageBackground}">
-    <Grid RowDefinitions="Auto,*,Auto" RowSpacing="24" Margin="24,48,24,24">
-        <!-- Progress indicator -->
-        <Grid Grid.Row="0" ColumnDefinitions="*,*,*,*,*" ColumnSpacing="8">
-            <BoxView Grid.Column="0" HeightRequest="4" CornerRadius="2"
+             Shell.TabBarIsVisible="False"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Salt}, Dark={StaticResource Night}}">
+
+    <!--
+        Onboarding (SPEC §13.1) — full-screen: no tab bar, no nav bar.
+        Rows: progress → centered content → pinned actions. The previous version
+        rendered its content behind the nav bar and over the buttons.
+    -->
+    <Grid RowDefinitions="Auto,*,Auto"
+          ColumnDefinitions="0.9*,0.1*"
+          Padding="24,24,24,24"
+          RowSpacing="32">
+
+        <!-- Progress: five thin segments, filled up to CurrentStep -->
+        <Grid Grid.Row="0" Grid.ColumnSpan="2"
+              ColumnDefinitions="*,*,*,*,*" ColumnSpacing="8">
+            <BoxView Grid.Column="0" HeightRequest="3" CornerRadius="1.5"
                      Color="{Binding CurrentStep, Converter={StaticResource StepToColorConverter}, ConverterParameter=0}" />
-            <BoxView Grid.Column="1" HeightRequest="4" CornerRadius="2"
+            <BoxView Grid.Column="1" HeightRequest="3" CornerRadius="1.5"
                      Color="{Binding CurrentStep, Converter={StaticResource StepToColorConverter}, ConverterParameter=1}" />
-            <BoxView Grid.Column="2" HeightRequest="4" CornerRadius="2"
+            <BoxView Grid.Column="2" HeightRequest="3" CornerRadius="1.5"
                      Color="{Binding CurrentStep, Converter={StaticResource StepToColorConverter}, ConverterParameter=2}" />
-            <BoxView Grid.Column="3" HeightRequest="4" CornerRadius="2"
+            <BoxView Grid.Column="3" HeightRequest="3" CornerRadius="1.5"
                      Color="{Binding CurrentStep, Converter={StaticResource StepToColorConverter}, ConverterParameter=3}" />
-            <BoxView Grid.Column="4" HeightRequest="4" CornerRadius="2"
+            <BoxView Grid.Column="4" HeightRequest="3" CornerRadius="1.5"
                      Color="{Binding CurrentStep, Converter={StaticResource StepToColorConverter}, ConverterParameter=4}" />
         </Grid>
 
-        <!-- Content -->
-        <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto" RowSpacing="24" VerticalOptions="Center">
+        <!-- Centered step content -->
+        <Grid Grid.Row="1" Grid.ColumnSpan="2"
+              RowDefinitions="Auto,Auto,Auto" RowSpacing="24"
+              VerticalOptions="Center">
+
             <Label Grid.Row="0"
                    Text="{Binding StepTitle}"
                    Style="{StaticResource Text.Display}"
@@ -33,71 +49,61 @@
                    Style="{StaticResource Text.Body}"
                    HorizontalOptions="Center"
                    HorizontalTextAlignment="Center"
-                   MaxLines="3"
                    LineBreakMode="WordWrap" />
 
-            <!-- Step-specific content -->
-            <Grid Grid.Row="2" IsVisible="{Binding CurrentStep, Converter={StaticResource StepEqualsConverter}, ConverterParameter=1}">
-                <!-- Language selection -->
-                <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="16">
-                    <Label Text="Display Language" Style="{StaticResource Text.Label}" HorizontalOptions="Center" />
-                    <Picker SelectedItem="{Binding SelectedLanguage}"
-                            WidthRequest="280"
-                            HorizontalOptions="Center">
+            <!-- Step 1: language -->
+            <Grid Grid.Row="2" RowDefinitions="Auto,Auto" RowSpacing="12"
+                  IsVisible="{Binding CurrentStep, Converter={StaticResource StepEqualsConverter}, ConverterParameter=1}">
+                <Label Grid.Row="0" Text="Display language" Style="{StaticResource Text.Section}" HorizontalOptions="Center" />
+                <Border Grid.Row="1" Style="{StaticResource Card.Row}" HorizontalOptions="Center" WidthRequest="280" Padding="12,4" Margin="0">
+                    <Picker SelectedItem="{Binding SelectedLanguage}" Style="{StaticResource Picker.Standard}">
                         <Picker.Items>
-                            <x:String>fa (Persian)</x:String>
-                            <x:String>fa-latn (Finglish)</x:String>
                             <x:String>en (English)</x:String>
+                            <x:String>fa (فارسی)</x:String>
+                            <x:String>fa-latn (Finglish)</x:String>
                         </Picker.Items>
                     </Picker>
-                </Grid>
+                </Border>
             </Grid>
 
-            <Grid Grid.Row="2" IsVisible="{Binding CurrentStep, Converter={StaticResource StepEqualsConverter}, ConverterParameter=2}">
-                <!-- Calendar selection -->
-                <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="16">
-                    <Label Text="Calendar System" Style="{StaticResource Text.Label}" HorizontalOptions="Center" />
-                    <Picker SelectedItem="{Binding SelectedCalendar}"
-                            WidthRequest="280"
-                            HorizontalOptions="Center">
+            <!-- Step 2: calendar -->
+            <Grid Grid.Row="2" RowDefinitions="Auto,Auto" RowSpacing="12"
+                  IsVisible="{Binding CurrentStep, Converter={StaticResource StepEqualsConverter}, ConverterParameter=2}">
+                <Label Grid.Row="0" Text="Calendar system" Style="{StaticResource Text.Section}" HorizontalOptions="Center" />
+                <Border Grid.Row="1" Style="{StaticResource Card.Row}" HorizontalOptions="Center" WidthRequest="280" Padding="12,4" Margin="0">
+                    <Picker SelectedItem="{Binding SelectedCalendar}" Style="{StaticResource Picker.Standard}">
                         <Picker.Items>
-                            <x:String>jalali (Solar Hijri)</x:String>
+                            <x:String>jalali (شمسی)</x:String>
                             <x:String>gregorian</x:String>
                         </Picker.Items>
                     </Picker>
-                </Grid>
+                </Border>
             </Grid>
 
-            <Grid Grid.Row="2" IsVisible="{Binding CurrentStep, Converter={StaticResource StepEqualsConverter}, ConverterParameter=3}">
-                <!-- Permissions -->
-                <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="16">
-                    <Label Text="Notification Access Required" Style="{StaticResource Text.Label}" HorizontalOptions="Center" />
-                    <Label Text="Alak needs permission to read your notifications to classify them." 
-                           Style="{StaticResource Text.BodySecondary}"
-                           HorizontalOptions="Center"
-                           HorizontalTextAlignment="Center" />
-                    <Button Text="Grant Permission"
-                            Style="{StaticResource Button.Primary}"
-                            WidthRequest="200"
-                            HorizontalOptions="Center"
-                            Command="{Binding NextCommand}" />
-                </Grid>
+            <!-- Step 3: notification access -->
+            <Grid Grid.Row="2" RowDefinitions="Auto" 
+                  IsVisible="{Binding CurrentStep, Converter={StaticResource StepEqualsConverter}, ConverterParameter=3}">
+                <Button Text="Grant notification access"
+                        Style="{StaticResource Button.Primary}"
+                        WidthRequest="280"
+                        HorizontalOptions="Center"
+                        Command="{Binding NextCommand}" />
             </Grid>
         </Grid>
 
-        <!-- Navigation buttons -->
-        <Grid Grid.Row="2" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
+        <!-- Pinned navigation -->
+        <Grid Grid.Row="2" Grid.ColumnSpan="2"
+              ColumnDefinitions="*,*,Auto" ColumnSpacing="12">
             <Button Grid.Column="1"
                     Text="Back"
                     Style="{StaticResource Button.Secondary}"
                     Command="{Binding BackCommand}"
-                    IsVisible="{Binding CurrentStep, Converter={StaticResource StepGreaterThanConverter}, ConverterParameter=0}"
-                    WidthRequest="100" />
+                    IsVisible="{Binding CurrentStep, Converter={StaticResource StepGreaterThanConverter}, ConverterParameter=0}" />
             <Button Grid.Column="2"
                     Text="{Binding NextButtonText}"
                     Style="{StaticResource Button.Primary}"
-                    Command="{Binding NextCommand}"
-                    WidthRequest="120" />
+                    WidthRequest="140"
+                    Command="{Binding NextCommand}" />
         </Grid>
     </Grid>
 </ContentPage>

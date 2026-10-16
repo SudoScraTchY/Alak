@@ -90,17 +90,18 @@ public class CategoryLabelConverter : IValueConverter
     {
         if (value is string cat)
         {
+            // Sentence case always (spec §12.3: "Mark as used", never "MARK AS USED").
             return cat switch
             {
-                "promo" => "PROMO",
-                "work" => "WORK",
-                "people" => "PEOPLE",
-                "money" => "MONEY",
-                "orders" => "ORDERS",
-                "security" => "SECURITY",
-                "social" => "SOCIAL",
-                "updates" => "UPDATES",
-                _ => cat.ToUpperInvariant()
+                "promo" => "Promo",
+                "work" => "Work",
+                "people" => "People",
+                "money" => "Money",
+                "orders" => "Orders",
+                "security" => "Security",
+                "social" => "Social",
+                "updates" => "Updates",
+                _ => char.ToUpperInvariant(cat[0]) + cat[1..]
             };
         }
         return string.Empty;
@@ -144,14 +145,15 @@ public class InverseBoolConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-/// <summary>Maps a PromoCodeKind (or category name) to a solid color for code-kind chips.</summary>
+/// <summary>Maps a PromoCodeKind (or category name) to a solid color for code-kind chips.
+/// Spec §12.2 palette; the wallet speaks in the gold accent family.</summary>
 public class CategoryToColorConverter : IValueConverter
 {
-    private static readonly Color Promo = Color.FromArgb("#1E88E5");
-    private static readonly Color Gift = Color.FromArgb("#00897B");
-    private static readonly Color Referral = Color.FromArgb("#7B1FA2");
-    private static readonly Color Voucher = Color.FromArgb("#EF6C00");
-    private static readonly Color Unknown = Color.FromArgb("#616161");
+    private static readonly Color Promo = Color.FromArgb("#B77900");   // wallet gold
+    private static readonly Color Gift = Color.FromArgb("#12895B");    // people green
+    private static readonly Color Referral = Color.FromArgb("#8248D6");// offers violet
+    private static readonly Color Voucher = Color.FromArgb("#C4581A");// orders orange
+    private static readonly Color Unknown = Color.FromArgb("#6B7280");
 
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         => value switch
@@ -179,11 +181,12 @@ public class StepToColorConverter : IValueConverter
     {
         if (value is int currentStep && parameter is string stepParam && int.TryParse(stepParam, out int stepIndex))
         {
+            // Completed/active step = People green (spec §12.2), inactive = hairline.
             if (stepIndex <= currentStep)
-                return Colors.Green; // Completed/active step color - using Mark.Promo
-            return Colors.Gray; // Inactive step
+                return Color.FromArgb("#12895B");
+            return Color.FromArgb("#DCE2E5");
         }
-        return Colors.Gray;
+        return Color.FromArgb("#DCE2E5");
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

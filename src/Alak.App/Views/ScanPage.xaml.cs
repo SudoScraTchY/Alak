@@ -1,41 +1,35 @@
 using Alak.App.ViewModels;
 using Microsoft.Maui.Controls;
+using ZXing.Net.Maui;
 
 namespace Alak.App.Views;
 
 public partial class ScanPage : ContentPage
 {
+    private readonly ScanViewModel _vm;
+
     public ScanPage(ScanViewModel viewModel)
     {
         InitializeComponent();
+        _vm = viewModel;
         BindingContext = viewModel;
     }
 
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
-        
-        // Start scan animation
-        AnimateScanLine();
+        await _vm.CheckCameraPermissionAsync();
     }
 
-    protected override void OnDisappearing()
+    private void OnBarcodeDetected(object? sender, BarcodeDetectionEventArgs e)
     {
-        base.OnDisappearing();
-        this.AbortAnimation("ScanLineAnimation");
-    }
+        // ZXing fires this repeatedly; stop once we have a result.
+        if (_vm.HasResult) return;
 
-    private void AnimateScanLine()
-    {
-        if (ScanLine == null) return;
-
-        var animation = new Animation(
-            callback: v => ScanLine.TranslationY = v,
-            start: 0,
-            end: 220,
-            easing: Easing.Linear
-        );
-
-        animation.Commit(this, "ScanLineAnimation", length: 2000, repeat: () => true);
+        var result = e.Results?.FirstOrDefault();
+        if (result?.Value is string value && !string.IsNullOrWhiteSpace(value))
+        {
+            _vm.OnBarcodeDetected(value);
+        }
     }
 }

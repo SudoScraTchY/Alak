@@ -11,11 +11,26 @@ public partial class App : Application
     {
         InitializeComponent();
 
-        // Follow the OS theme; Maui resolves AppThemeBindings from the platform.
-        // (Forcing UserAppTheme here broke theme-bound colors on Android ≤ API 30 —
-        //  content painted black.)
+        // Apply persisted theme choice ("light" | "dark" | "system").
+        // ThemeManager rewrites semantic color tokens; UserAppTheme drives any
+        // point-of-use AppThemeBindings.
+        Alak.App.ThemeManager.Apply(Alak.App.ThemeManager.Current);
 
         // Shell-based navigation requires MainPage to be the AppShell
         MainPage = new AppShell();
+
+        // First run: launch onboarding (spec §13.1) once.
+        // Route to a ShellContent ("//inbox") first so the shell has a valid
+        // current page before we push "onboarding" on top; GoToAsync from
+        // within the App constructor runs before the shell is loaded and
+        // silently no-ops.
+        if (!Preferences.Get("onboarding_completed", false))
+        {
+            _ = MainPage.Dispatcher.DispatchAsync(async () =>
+            {
+                await Shell.Current.GoToAsync("//inbox");
+                await Shell.Current.GoToAsync("onboarding");
+            });
+        }
     }
 }

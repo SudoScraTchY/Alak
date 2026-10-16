@@ -20,6 +20,17 @@ public partial class OnboardingViewModel : ObservableObject
     private readonly IUserRulesRepository _userRulesRepo;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(StepTitle))]
+    [NotifyPropertyChangedFor(nameof(StepDescription))]
+    [NotifyPropertyChangedFor(nameof(NextButtonText))]
+    [NotifyPropertyChangedFor(nameof(IsWelcomeStep))]
+    [NotifyPropertyChangedFor(nameof(IsLanguageStep))]
+    [NotifyPropertyChangedFor(nameof(IsNotificationStep))]
+    [NotifyPropertyChangedFor(nameof(IsOemBatteryStep))]
+    [NotifyPropertyChangedFor(nameof(IsCaptureDepthStep))]
+    [NotifyPropertyChangedFor(nameof(IsLastStep))]
+    [NotifyPropertyChangedFor(nameof(ProgressText))]
+    [NotifyPropertyChangedFor(nameof(ProgressValue))]
     private int _currentStep = 0;
 
     [ObservableProperty]
@@ -47,6 +58,21 @@ public partial class OnboardingViewModel : ObservableObject
     public string ProgressText => $"{CurrentStep + 1} of {TotalSteps}";
     public double ProgressValue => (double)(CurrentStep + 1) / TotalSteps;
 
+    // Per-step copy shown by OnboardingPage.xaml (step 0..4).
+    private static readonly (string Title, string Description)[] StepCopy =
+    [
+        ("Welcome to Alak", "Alak reads your notifications, classifies them, and shows everything organized in one private inbox — all on-device."),
+        ("Language", "Choose the display language for the app. You can change it later in Settings."),
+        ("Calendar", "Pick your preferred calendar system for dates shown throughout the app."),
+        ("Notification Access", "Alak needs permission to read your notifications to classify them. Nothing ever leaves your device."),
+        ("Capture Depth", "Choose how much of each app's notification content Alak should capture. You can fine-tune this later in Rules."),
+    ];
+
+    public string StepTitle => StepCopy[CurrentStep].Title;
+    public string StepDescription => StepCopy[CurrentStep].Description;
+    public string NextButtonText => IsLastStep ? "Get Started" : "Next";
+    public IRelayCommand BackCommand { get; }
+
     public bool IsWelcomeStep => CurrentStep == 0;
     public bool IsLanguageStep => CurrentStep == 1;
     public bool IsNotificationStep => CurrentStep == 2;
@@ -71,6 +97,7 @@ public partial class OnboardingViewModel : ObservableObject
 
         NextCommand = new RelayCommand(NextStep);
         PreviousCommand = new RelayCommand(PreviousStep);
+        BackCommand = new RelayCommand(PreviousStep);
         SkipCommand = new RelayCommand(SkipOnboarding);
         OpenNotificationSettingsCommand = new RelayCommand(OpenNotificationSettings);
         OpenAppInfoSettingsCommand = new RelayCommand(OpenAppInfoSettings);
