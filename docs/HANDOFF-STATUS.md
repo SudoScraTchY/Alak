@@ -2,7 +2,7 @@
 
 **Audience:** AI agent (read together with `docs/spec/SPEC.md`). Not prose for humans — this is a machine-oriented state dump of what exists, what is verified, and what is next.
 **Repo:** `M:/Hermes/Alak` (Windows). .NET 10, C#, xUnit. Solution: `Alak.sln`.
-**Report date:** 2026-09-27. **HEAD:** `19eb24f` ("feat(corpus): M3 close-out — EN corpus 330 cases, QLT-003 gates all PASS").
+**Report date:** 2026-10-17 (milestone section refreshed; M1–M3 details below are original). **HEAD:** `6b5619e` ("feat(m8): redesign UI on the SPEC §12 design system; fix rendering defects"), pushed to origin/main. Current delta + delegation prompt live in `docs/AGENT-HANDOFF.md`.
 
 ---
 
@@ -79,25 +79,15 @@ Engine details worth knowing before touching it (learned via the 300-case run):
 - `Alak.Text` RTL handling exists (Normalization/ScriptLanguage) but Jalali↔Gregorian conversion (DAT-002, PF-09 golden table 1400–1420) is NOT implemented.
 - Corpus tests load REAL packs (`packs/en|fa/lexicon.json`), not inline BuildEn seed. Don't regress to BuildEn in tests.
 
-### 3.4 M4 (Persian + Finglish) — ⏳ NEXT UP
-Scope (§16): `fa` pack completion (§8.9.2), Jalali dates (DAT-002 + PF-09 golden table for 1400–1420), RTL in Alak.Text, `fa-latn` extension pack (§8.9.3, experimental, dependsOn en, activation rule: only when ≥1 Finglish-only term hits — MUST NOT reduce English precision).
-Exit: §8.10 FA worked examples pass; **FA corpus ≥300 cases**; PF-09 golden-table test green for 1400–1420.
-Gaps inventory (verified against code, 2026-09-27):
-1. FA pack: 4 missing concepts (`promo.claim`, `promo.event`, `money.tax`, `work.review`) + term coverage of all 53 §8.9.2 rows needs an audit vs the 69 present concepts (some may be sparse).
-2. FA corpus: 8 cases → need ≥300 (mirroring the EN approach: §8.10 examples + synthetic templated generator; write `tests/corpus/gen_fa_corpus.py` analogous to `gen_en_corpus.py`, same scrub rules QLT-002).
-3. Jalali conversion: missing entirely (DAT-002, PF-09). Implement algorithm (do not trust `PersianCalendar` blindly — spec explicitly warns), golden-table test for Jalali years 1400–1420.
-4. RTL: partially in Normalization (RTL marks, Arabic presentation forms) — audit DAT/RUL entries on RTL (e.g. RLM/LRM stripping NRM-009) and expand per spec §8.2/8.4.
-5. fa-latn pack: pack.json exists; lexicon.json missing. Seeds from §8.9.3 list.
-6. FA run of CorpusEval at the end: gates QLT-003 FA thresholds macro-F1 ≥0.90 (EN gate is 0.92; FA gate is 0.90), promo P≥0.98 R≥0.0.92, OTP R≥0.995.
+### 3.4 M4 (Persian + Finglish) — ✅ DONE, verified (2026-10; commits `253de83`, `00a4a62`, see `docs/progress.md`)
+All five kickoff items completed: fa pack completed (§8.9.2 concepts), FA corpus grown past the ≥300 gate, Jalali↔Gregorian (DAT-002) with PF-09 golden table 1400–1420, RTL normalization audit, `fa-latn` lexicon + activation rule. FA QLT-003 gates met. Suite counts as of `6b5619e`: Rules.Tests 704, Text.Tests 137 (grew from 350/17 with the M4 corpus work).
 
-### 3.5 M5–M11 — 🔲 not started
-- M5: MAUI shell + design system (§12.2 theming, §12.3 typography/fonts licenses, §12.7 Stub, Inbox + Detail screens §13.2–13.3, RTL layouts).
-- M6: Onboarding, Sources, Rules, Settings (§13.4–13.7).
-- M7: Codes wallet (§13.8) + Tier-2 adaptive retraining (§8.11).
-- M8: on-device AI runtime spike + ADR-0002 (§9, RUL-012+).
-- M9: Tier-3 SLM (§9.4, RUL-013).
-- M10: corpus 600/600 + ≥150 hard negatives + ≥100 adversarial (QLT-001), calibration tool (RUL-019, weights.json), a11y pass (§12.9), OSS hygiene (§15), privacy audit.
-- M11: release packaging (GitHub/F-Droid/Cafe Bazaar/Myket, D-06), §14 re-measure, final ADR.
+### 3.5 M5–M11 — status as of 2026-10-17
+- **M5 (MAUI shell + design system)** ✅ DONE — app shell per §12–§13, 5-tab nav, screens, DI wired.
+- **M6 (Onboarding, Sources, Rules, Settings)** ✅ DONE — §13.1/§13.6/§13.7/§13.9 + UserRulesEngine §11.1–11.3 + GlobalSettings store.
+- **M7 (Codes wallet §13.8 + Tier-2 adaptive §8.11)** ✅ mostly done — Backup/Restore §11.5 NOT started.
+- **M8 (on-device app bring-up + UI)** ⏳ IN PROGRESS — app boots/renders (emulator, 2026-10-10, `d3c6ba4`); UI redesigned on SPEC §12 and verified on the physical device (Redmi Note 11 `5a8c869e`, 2026-10-16, `6b5619e`): Inbox/Codes/Rules/Settings/Onboarding in light+dark, 893/893 tests green. PENDING: Scan-tab fix (`BarcodesDetected`) needs on-device re-verification; NotificationListenerService capture side not started. Full list in `docs/AGENT-HANDOFF.md` §6.
+- **M9–M11** 🔲 not started (Tier-3 SLM, corpus hardening + a11y + privacy audit, release packaging).
 
 ## 4. Conventions (binding on all agents working this repo)
 
@@ -110,15 +100,13 @@ Gaps inventory (verified against code, 2026-09-27):
 7. **Windows/git-bash:** pass native paths to native tools (`C:/...`), MSYS paths for shell builtins.
 8. **Recover from incidents by checking git first:** a file was once found wiped mid-session (2026-09-26); `git status`/`git diff` before debugging mystery breakage.
 
-## 5. Immediate next actions (M4 kickoff)
+## 5. Immediate next actions (M8 remainder — see `docs/AGENT-HANDOFF.md` §6 for the full list)
 
-1. Add the 4 missing FA concepts + audit the 53-row §8.9.2 table term-by-term → `packs/fa/lexicon.json`.
-2. Write `tests/corpus/gen_fa_corpus.py` → grow FA corpus 8 → ≥300 cases (mirroring EN balance: offers/work/people/money/orders/security/social/updates/other).
-3. Implement Jalali↔Gregorian (DAT-002) in `Alak.Text` with PF-09 golden table 1400–1420 (find a trusted conversion table; vendor it as test data).
-4. RTL audit of Normalization (NRM rows in §8.2) — RLM/LRM isolation marks, Arabic presentation forms, digit variants (۰-۹ vs ٠-٩).
-5. fa-latn lexicon (§8.9.3 seed list) + activation rule test (Finglish-only term gating).
-6. Run corpus eval for FA; target QLT-003 FA gates: macro-F1 ≥0.90, promo P≥0.98/R≥0.92, OTP R≥0.995.
-7. Commit M4; append `docs/progress.md` + `docs/verification.md`.
+1. Verify the Scan-tab fix on the physical device (`BarcodesDetected`, committed `6b5619e`, unverified — phone was unplugged).
+2. Walk pushed routes on device (`detail?id=`, `stub-detail?id=`, Sources) and fix what breaks.
+3. Onboarding end-to-end on MIUI: notification-access grant (incl. the "Restricted setting" path §13.1) and OEM battery step.
+4. NotificationListenerService platform implementation (capture side) — not started.
+5. Inbox day-group headers (§13.2) — needs a grouped collection on `InboxViewModel`; agree scope first (logic integration deliberately deferred per user, 2026-10-15).
 
 ## 6. Known caveats (do not regress)
 

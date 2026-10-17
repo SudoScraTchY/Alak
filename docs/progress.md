@@ -55,3 +55,13 @@ Each completed milestone gets a commit and updated rows below.
 - Engine fixes found by the 300-case run: people.direct_message/photo/reaction routing, channel.orders/money arms, E-01 weak-anchor guard (no_code suppression §8.10 #13 + offer-context requirement + sentence-punct trim), promo-code dedupe.
 - Full suite: Text 17, Rules 350, Core 20, Storage 10, InfAbs 21, Adaptive 1 — all green.
 - M3 exit criteria met (§8.10 EN worked examples + QLT-003 EN + RUL-002). Remaining in M3 scope per §16: none. Next: M4 (FA pack + Jalali PF-09).
+
+
+## 2026-10-16 — M8 UI redesign on the SPEC §12 design system (this session; commit `6b5619e`)
+- Root-caused the "buggy / styles not applied" state: (1) `Label.LineHeight` is a MULTIPLIER in MAUI — styles carried CSS-style px values (18–36) → 18–36× spacing broke every layout; retuned to 1.0–1.3 for Vazirmatn metrics. (2) Stray top-level ShellContents + duplicate route registrations collapsed the TabBar to one tab. (3) ScanPage used non-existent ZXing 0.10.4 API (`IsDetectingState`, event is `BarcodesDetected`) → app exited on tab tap. (4) Dark mode was structural-broken (runtime resource rewrites can't affect StaticResource; promised Colors.Dark.xaml never existed).
+- Redesign: spec §12.2 palette (category marks/tints incl. gold wallet) replaced four divergent color sources; AppThemeBinding in style setters + ThemeManager→UserAppTheme only; paper-card Inbox rows with category spines + tap-to-detail; Codes wallet rebuilt around the Stub component (BindableLayout sections, no nested CollectionView hacks); full-screen onboarding; الک typographic empty states; emoji removed; Vazirmatn (4 weights) + JetBrains Mono TTFs added and registered.
+- Verified on Redmi Note 11 `5a8c869e` (arm64): Inbox/Codes/Rules/Settings/Onboarding, light+dark. Tests 893/893 green (Core 20, Rules 704, Text 137, Storage 10, Adaptive 1, InfAbs 21). Pushed `f6bf485..6b5619e`.
+- PENDING: Scan-tab fix not re-verified on device (phone dropped off USB before the check).
+
+## 2026-10-17 — handoff refresh (this session)
+- Rewrote `docs/AGENT-HANDOFF.md` (current state, sandbox environment cheatsheet, debugging history items 11–15, remaining work, fresh delegation prompt for a new agent instance); refreshed milestone state in `docs/HANDOFF-STATUS.md` (M4–M8 status + new next actions).
