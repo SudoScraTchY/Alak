@@ -17,6 +17,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("detail", typeof(DetailPage));
         Routing.RegisterRoute("onboarding", typeof(OnboardingPage));
         Routing.RegisterRoute("stub-detail", typeof(StubDetailPage));
+        Routing.RegisterRoute("sources", typeof(SourcesPage));
     }
 
     protected override void OnNavigated(ShellNavigatedEventArgs args)

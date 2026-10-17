@@ -67,6 +67,7 @@ public partial class SettingsViewModel : ObservableObject
     public ICommand ClearDataCommand { get; }
     public ICommand ExportDataCommand { get; }
     public ICommand OpenOnboardingCommand { get; }
+    public ICommand OpenSourcesCommand { get; }
     public ICommand SaveGlobalSettingsCommand { get; }
     public ICommand LoadGlobalSettingsCommand { get; }
 
@@ -78,6 +79,7 @@ public partial class SettingsViewModel : ObservableObject
         ClearDataCommand = new AsyncRelayCommand(ClearDataAsync);
         ExportDataCommand = new AsyncRelayCommand(ExportDataAsync);
         OpenOnboardingCommand = new AsyncRelayCommand(OpenOnboardingAsync);
+        OpenSourcesCommand = new AsyncRelayCommand(OpenSourcesAsync);
         SaveGlobalSettingsCommand = new AsyncRelayCommand(SaveGlobalSettingsAsync);
         LoadGlobalSettingsCommand = new AsyncRelayCommand(LoadGlobalSettingsAsync);
 
@@ -271,6 +273,8 @@ public partial class SettingsViewModel : ObservableObject
             File = new ShareFile(filePath)
         });
     }
+
+    private async Task OpenSourcesAsync() => await Shell.Current.GoToAsync("sources");
 
     private async Task OpenOnboardingAsync()
     {

@@ -80,13 +80,13 @@
                             </Grid>
 
                             <!-- Mute / Auto-archive toggles -->
-                            <Grid Grid.Row="3" Grid.ColumnSpan="2" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="16">
+                            <Grid Grid.Row="3" Grid.ColumnSpan="2" ColumnDefinitions="*,Auto,*,Auto" ColumnSpacing="16">
                                 <Label Grid.Column="0" Text="Mute (skip inbox)" Style="{StaticResource Text.Label}" VerticalOptions="Center" />
                                 <Switch Grid.Column="1"
                                         IsToggled="{Binding Mute, Mode=TwoWay}"
                                         Style="{StaticResource Switch.Standard}" />
                                 <Label Grid.Column="2" Text="Auto-archive" Style="{StaticResource Text.Label}" VerticalOptions="Center" />
-                                <Switch Grid.Column="2"
+                                <Switch Grid.Column="3"
                                         IsToggled="{Binding AutoArchive, Mode=TwoWay}"
                                         Style="{StaticResource Switch.Standard}" />
                             </Grid>
@@ -94,13 +94,13 @@
                             <!-- Action buttons -->
                             <Grid Grid.Row="4" Grid.ColumnSpan="2" ColumnDefinitions="*,*,Auto" ColumnSpacing="12">
                                 <Button Grid.Column="0"
-                                        Text="Save Settings"
+                                        Text="Save settings"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SourcesViewModel}}, Path=SaveSourceSettingsCommand}"
                                         CommandParameter="{Binding .}"
                                         Style="{StaticResource Button.Primary}"
                                         IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type vm:SourcesViewModel}}, Path=IsLoading, Converter={StaticResource InverseBoolConverter}}" />
                                 <Button Grid.Column="1"
-                                        Text="Apply to Existing"
+                                        Text="Apply to existing"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SourcesViewModel}}, Path=ApplyToExistingCommand}"
                                         CommandParameter="{Binding .}"
                                         Style="{StaticResource Button.Secondary}"

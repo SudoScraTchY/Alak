@@ -63,6 +63,7 @@ public static class MauiProgram
         builder.Services.AddTransient<WalletViewModel>();
         builder.Services.AddTransient<ScanViewModel>();
         builder.Services.AddTransient<SourcesViewModel>();
+        builder.Services.AddTransient<SourcesPage>();
 
         // Storage
         var dbPath = Path.Combine(FileSystem.AppDataDirectory, "alak.db");

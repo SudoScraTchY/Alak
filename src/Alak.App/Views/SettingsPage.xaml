@@ -190,12 +190,18 @@
                     </Grid>
 
                     <Button Grid.Row="2"
+                            Text="Manage Sources"
+                            Style="{StaticResource Button.Secondary}"
+                            Command="{Binding OpenSourcesCommand}"
+                            HorizontalOptions="Fill" />
+
+                    <Button Grid.Row="3"
                             Text="Export Data (JSON)"
                             Style="{StaticResource Button.Secondary}"
                             Command="{Binding ExportDataCommand}"
                             HorizontalOptions="Fill" />
 
-                    <Button Grid.Row="3"
+                    <Button Grid.Row="4"
                             Text="Clear All Data"
                             Style="{StaticResource Button.Secondary}"
                             Command="{Binding ClearDataCommand}"
