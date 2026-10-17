@@ -15,11 +15,11 @@
             <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="12">
                 <!-- Top tear edge -->
                 <BoxView Grid.Row="0" HeightRequest="8" 
-                         Color="{StaticResource Divider}"
+                         Color="{AppThemeBinding Light={StaticResource Divider}, Dark={StaticResource HairlineD}}"
                          HorizontalOptions="Fill" />
 
                 <!-- Category + Code -->
-                <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                <Grid Grid.Row="1" ColumnDefinitions="Auto,*" ColumnSpacing="12">
                     <!-- Category mark -->
                     <Frame Grid.Column="0" Style="{StaticResource Frame.Chip}"
                            BackgroundColor="{Binding Notification.CategoryTintColor}"
@@ -37,13 +37,10 @@
                            VerticalOptions="Center"
                            MaxLines="2"
                            LineBreakMode="TailTruncation" />
-
-                    <!-- Channel icon -->
-                    <Label Grid.Column="2" Text="📱" FontSize="24" VerticalOptions="Center" />
                 </Grid>
 
                 <!-- Divider -->
-                <BoxView Grid.Row="2" HeightRequest="0.5" Color="{StaticResource Divider}" />
+                <BoxView Grid.Row="2" HeightRequest="0.5" Color="{AppThemeBinding Light={StaticResource Divider}, Dark={StaticResource HairlineD}}" />
 
                 <!-- Main content: Code or Text -->
                 <Grid Grid.Row="3" ColumnDefinitions="*,Auto" ColumnSpacing="12">

@@ -88,7 +88,7 @@ public class CategoryLabelConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is string cat)
+        if (value is string cat && !string.IsNullOrEmpty(cat))
         {
             // Sentence case always (spec §12.3: "Mark as used", never "MARK AS USED").
             return cat switch

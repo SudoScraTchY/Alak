@@ -37,9 +37,8 @@
 
             <!-- Channel info -->
             <Frame Grid.Row="1" Style="{StaticResource Frame.Card}" Margin="0">
-                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
-                    <Label Text="📱" FontSize="24" VerticalOptions="Center" />
-                    <StackLayout Grid.Column="1" Spacing="2">
+                <Grid ColumnDefinitions="*" ColumnSpacing="12">
+                    <StackLayout Spacing="2">
                         <Label Text="{Binding Notification.ChannelName}"
                                Style="{StaticResource Text.Body}"
                                FontAttributes="Bold" />
@@ -60,7 +59,7 @@
             <Frame Grid.Row="3" Style="{StaticResource Frame.Card}" Margin="0"
                    IsVisible="{Binding Notification.HasCode}">
                 <Grid RowDefinitions="Auto,Auto" RowSpacing="12">
-                    <Label Text="Extracted Code"
+                    <Label Text="Extracted code"
                            Style="{StaticResource Text.Label}" />
                     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
                         <Label Grid.Column="0"
@@ -81,7 +80,7 @@
             <!-- Actions -->
             <Grid Grid.Row="4" ColumnDefinitions="*,*,*" ColumnSpacing="12">
                 <Button Grid.Column="0"
-                        Text="Mark Read"
+                        Text="Mark read"
                         Style="{StaticResource Button.Secondary}"
                         Command="{Binding MarkReadCommand}"
                         IsVisible="{Binding Notification.IsRead, Converter={StaticResource InverseBoolConverter}}" />

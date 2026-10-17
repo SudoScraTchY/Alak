@@ -24,5 +24,27 @@ public class MainActivity : MauiAppCompatActivity
     protected override void OnCreate(Android.OS.Bundle? savedInstanceState)
     {
         base.OnCreate(savedInstanceState);
+        HandleIntent(Intent);
+    }
+
+    protected override void OnNewIntent(Android.Content.Intent? intent)
+    {
+        base.OnNewIntent(intent);
+        HandleIntent(intent);
+    }
+
+    private void HandleIntent(Android.Content.Intent? intent)
+    {
+        var route = intent?.GetStringExtra("route");
+        if (!string.IsNullOrEmpty(route))
+        {
+            Microsoft.Maui.Controls.Application.Current?.Dispatcher.Dispatch(async () =>
+            {
+                if (Microsoft.Maui.Controls.Shell.Current != null)
+                {
+                    await Microsoft.Maui.Controls.Shell.Current.GoToAsync(route);
+                }
+            });
+        }
     }
 }
