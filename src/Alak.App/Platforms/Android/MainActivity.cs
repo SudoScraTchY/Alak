@@ -24,6 +24,15 @@ public class MainActivity : MauiAppCompatActivity
     protected override void OnCreate(Android.OS.Bundle? savedInstanceState)
     {
         base.OnCreate(savedInstanceState);
+        try
+        {
+            var component = new Android.Content.ComponentName(this, "com.alak.app.NotificationCaptureService");
+            Android.Service.Notification.NotificationListenerService.RequestRebind(component);
+        }
+        catch (System.Exception ex)
+        {
+            Android.Util.Log.Warn("AlakMainActivity", $"RequestRebind failed: {ex.Message}");
+        }
         HandleIntent(Intent);
     }
 

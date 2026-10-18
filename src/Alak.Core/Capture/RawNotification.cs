@@ -82,5 +82,6 @@ public static class DefaultIgnoreFilter
         || n.IsForegroundService
         || n.IsGroupSummary
         || (n.AndroidCategory is not null && s_categories.Contains(n.AndroidCategory))
-        || n.Package.StartsWith("dev.alak.", StringComparison.Ordinal); // own package (D-01 namespace)
+        || n.Package.StartsWith("dev.alak.", StringComparison.Ordinal)
+        || n.Package.StartsWith("com.alak.", StringComparison.Ordinal); // own package (D-01 namespace)
 }

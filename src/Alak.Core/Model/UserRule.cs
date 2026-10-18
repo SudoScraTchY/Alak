@@ -48,8 +48,17 @@ public sealed record UserRule(
         }
     }
 
-    public RuleMatchMode MatchMode { get; init; } = RuleMatchMode.Contains;
-    public bool CaseSensitive { get; init; }
+    public RuleMatchMode MatchMode
+    {
+        get => Match.MatchMode;
+        init => Match = Match with { MatchMode = value };
+    }
+
+    public bool CaseSensitive
+    {
+        get => Match.CaseSensitive;
+        init => Match = Match with { CaseSensitive = value };
+    }
 }
 
 /// <summary>Match conditions — all must hold (AND).</summary>
@@ -59,7 +68,12 @@ public sealed record UserRuleMatch(
     string? TextContains = null,
     string? SenderContains = null,
     string? ChannelId = null,
-    string? AccountEmail = null);
+    string? AccountEmail = null,
+    RuleMatchMode MatchMode = RuleMatchMode.Contains,
+    bool CaseSensitive = false,
+    string? TitleRegex = null,
+    string? TextRegex = null,
+    string? SenderRegex = null);
 
 /// <summary>Action to take when match succeeds.</summary>
 public sealed record UserRuleAction(

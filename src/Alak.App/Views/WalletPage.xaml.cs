@@ -9,4 +9,13 @@ public partial class WalletPage : ContentPage
         InitializeComponent();
         BindingContext = viewModel;
     }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        if (BindingContext is WalletViewModel vm)
+        {
+            await vm.LoadCodes();
+        }
+    }
 }

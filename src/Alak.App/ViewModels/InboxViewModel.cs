@@ -19,6 +19,7 @@ public partial class InboxViewModel : ObservableObject
     private readonly IRuleCompiler _ruleCompiler;
     private readonly IPackLoader _packLoader;
     private readonly IAdaptiveEngine _adaptiveEngine;
+    private readonly Alak.App.Services.INotificationIngestionService _ingestionService;
 
     public ObservableCollection<NotificationViewModel> Notifications { get; } = new();
     public ObservableCollection<CategoryFilter> CategoryFilters { get; } = new();
@@ -50,12 +51,15 @@ public partial class InboxViewModel : ObservableObject
         INotificationRepository repository,
         IRuleCompiler ruleCompiler,
         IPackLoader packLoader,
-        IAdaptiveEngine adaptiveEngine)
+        IAdaptiveEngine adaptiveEngine,
+        Alak.App.Services.INotificationIngestionService ingestionService)
     {
         _repository = repository;
         _ruleCompiler = ruleCompiler;
         _packLoader = packLoader;
         _adaptiveEngine = adaptiveEngine;
+        _ingestionService = ingestionService;
+        _ingestionService.NotificationIngested += OnNotificationIngested;
 
         RefreshCommand = new AsyncRelayCommand(RefreshAsync);
         LoadMoreCommand = new AsyncRelayCommand(LoadMoreAsync);
@@ -66,6 +70,14 @@ public partial class InboxViewModel : ObservableObject
         CategoryFilterChangedCommand = new AsyncRelayCommand(OnCategoryFilterChangedAsync);
 
         InitializeCategoryFilters();
+    }
+
+    private void OnNotificationIngested(Notification notification)
+    {
+        MainThread.BeginInvokeOnMainThread(async () =>
+        {
+            await RefreshAsync();
+        });
     }
 
     private void InitializeCategoryFilters()

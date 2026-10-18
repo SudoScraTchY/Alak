@@ -2,6 +2,7 @@ using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Hosting;
 using CommunityToolkit.Maui;
 using Alak.App.Design;
+using Alak.App.Services;
 using Alak.App.ViewModels;
 using Alak.App.Views;
 using Alak.Rules;
@@ -13,6 +14,27 @@ using System.IO;
 using Microsoft.Maui.Storage;
 
 namespace Alak.App;
+
+public static class AppServices
+{
+    private static IServiceProvider? s_services;
+
+    public static IServiceProvider? Current
+    {
+        get
+        {
+            if (s_services != null) return s_services;
+            if (IPlatformApplication.Current?.Services != null)
+                return s_services = IPlatformApplication.Current.Services;
+#if ANDROID
+            if (MauiApplication.Current?.Services != null)
+                return s_services = MauiApplication.Current.Services;
+#endif
+            return null;
+        }
+        set => s_services = value;
+    }
+}
 
 public static class MauiProgram
 {
@@ -49,6 +71,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<IRuleCompiler, RuleCompiler>();
         builder.Services.AddSingleton<INotificationRepository, NotificationRepository>();
         builder.Services.AddSingleton<IUserRulesRepository, UserRulesRepository>();
+        builder.Services.AddSingleton<UserRulesEngine>();
+        builder.Services.AddSingleton<INotificationIngestionService, NotificationIngestionService>();
         builder.Services.AddSingleton<IAdaptiveEngine, AdaptiveEngine>();
         builder.Services.AddSingleton<IInferenceEngine, InferenceEngineStub>(); // M8 will swap
         builder.Services.AddSingleton<IPromoCodeRepository, PromoCodeRepository>();
@@ -69,6 +93,8 @@ public static class MauiProgram
         var dbPath = Path.Combine(FileSystem.AppDataDirectory, "alak.db");
         builder.Services.AddSingleton(new StorageConnection($"Data Source={dbPath};Mode=ReadWriteCreate;Password=alak_secure_key_2024"));
 
-        return builder.Build();
+        var app = builder.Build();
+        AppServices.Current = app.Services;
+        return app;
     }
 }

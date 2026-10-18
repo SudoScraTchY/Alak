@@ -34,10 +34,10 @@ public sealed class NotificationRepository : INotificationRepository
             results.Add(new Notification(
                 Id: reader.GetString(0),
                 Package: reader.GetString(1),
-                ChannelName: reader.GetString(2),
-                Title: reader.GetString(3),
-                Text: reader.GetString(4),
-                Category: reader.GetString(5),
+                ChannelName: reader.IsDBNull(2) ? "" : reader.GetString(2),
+                Title: reader.IsDBNull(3) ? "" : reader.GetString(3),
+                Text: reader.IsDBNull(4) ? "" : reader.GetString(4),
+                Category: reader.IsDBNull(5) ? "other" : reader.GetString(5),
                 Timestamp: DateTimeOffset.FromUnixTimeMilliseconds(reader.GetInt64(6)),
                 IsRead: reader.GetBoolean(7),
                 IsPersian: reader.GetBoolean(8),
@@ -63,10 +63,10 @@ public sealed class NotificationRepository : INotificationRepository
             return new Notification(
                 Id: reader.GetString(0),
                 Package: reader.GetString(1),
-                ChannelName: reader.GetString(2),
-                Title: reader.GetString(3),
-                Text: reader.GetString(4),
-                Category: reader.GetString(5),
+                ChannelName: reader.IsDBNull(2) ? "" : reader.GetString(2),
+                Title: reader.IsDBNull(3) ? "" : reader.GetString(3),
+                Text: reader.IsDBNull(4) ? "" : reader.GetString(4),
+                Category: reader.IsDBNull(5) ? "other" : reader.GetString(5),
                 Timestamp: DateTimeOffset.FromUnixTimeMilliseconds(reader.GetInt64(6)),
                 IsRead: reader.GetBoolean(7),
                 IsPersian: reader.GetBoolean(8),
@@ -79,20 +79,51 @@ public sealed class NotificationRepository : INotificationRepository
 
     public async Task AddAsync(Notification notification)
     {
+        var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+        // 1. Ensure the referenced app row exists
+        _db.Execute(
+            "INSERT OR IGNORE INTO apps(package, first_seen_at) VALUES ($p, $t)",
+            ("$p", notification.Package), ("$t", now));
+
+        var contentHash = Convert.ToHexString(
+            System.Security.Cryptography.SHA256.HashData(
+                System.Text.Encoding.UTF8.GetBytes((notification.Title ?? "") + "|" + (notification.Text ?? ""))));
+
         using var cmd = _db.CreateCommand();
         cmd.CommandText = @"
-            INSERT INTO notifications (uid, package, channel_name, title, text, category, posted_at, is_read, is_persian, extracted_code)
-            VALUES (@uid, @package, @channel_name, @title, @text, @category, @posted_at, @is_read, @is_persian, @extracted_code)";
+            INSERT INTO notifications (
+                uid, sbn_key, package, channel_name, title, text, category,
+                posted_at, captured_at, updated_at, tz_offset_min, content_hash,
+                is_read, is_persian, extracted_code
+            )
+            VALUES (
+                @uid, @sbn_key, @package, @channel_name, @title, @text, @category,
+                @posted_at, @captured_at, @updated_at, 0, @content_hash,
+                @is_read, @is_persian, @extracted_code
+            )
+            ON CONFLICT(uid) DO UPDATE SET
+                title = excluded.title,
+                text = excluded.text,
+                category = excluded.category,
+                is_read = excluded.is_read,
+                is_persian = excluded.is_persian,
+                extracted_code = excluded.extracted_code,
+                updated_at = excluded.updated_at";
         
         cmd.Parameters.AddWithValue("@uid", notification.Id);
+        cmd.Parameters.AddWithValue("@sbn_key", notification.Id);
         cmd.Parameters.AddWithValue("@package", notification.Package);
-        cmd.Parameters.AddWithValue("@channel_name", notification.ChannelName);
-        cmd.Parameters.AddWithValue("@title", notification.Title);
-        cmd.Parameters.AddWithValue("@text", notification.Text);
+        cmd.Parameters.AddWithValue("@channel_name", (object?)notification.ChannelName ?? DBNull.Value);
+        cmd.Parameters.AddWithValue("@title", (object?)notification.Title ?? DBNull.Value);
+        cmd.Parameters.AddWithValue("@text", (object?)notification.Text ?? DBNull.Value);
         cmd.Parameters.AddWithValue("@category", notification.Category);
         cmd.Parameters.AddWithValue("@posted_at", notification.Timestamp.ToUnixTimeMilliseconds());
-        cmd.Parameters.AddWithValue("@is_read", notification.IsRead);
-        cmd.Parameters.AddWithValue("@is_persian", notification.IsPersian);
+        cmd.Parameters.AddWithValue("@captured_at", now);
+        cmd.Parameters.AddWithValue("@updated_at", now);
+        cmd.Parameters.AddWithValue("@content_hash", contentHash);
+        cmd.Parameters.AddWithValue("@is_read", notification.IsRead ? 1 : 0);
+        cmd.Parameters.AddWithValue("@is_persian", notification.IsPersian ? 1 : 0);
         cmd.Parameters.AddWithValue("@extracted_code", notification.ExtractedCode ?? (object)DBNull.Value);
 
         await cmd.ExecuteNonQueryAsync();

@@ -288,6 +288,23 @@ public sealed class StorageConnection : IDisposable
                 );
                 INSERT INTO global_settings (id) VALUES (1);
             "),
+
+            // Migration 7: reconcile user_rules schema with UserRulesRepository expectations (§11.1)
+            (7L, @"
+                DROP TABLE IF EXISTS user_rules;
+                CREATE TABLE user_rules (
+                  id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  priority INTEGER NOT NULL,
+                  match_json TEXT NOT NULL,
+                  action_json TEXT NOT NULL,
+                  label TEXT,
+                  enabled INTEGER NOT NULL DEFAULT 1,
+                  created_at INTEGER NOT NULL,
+                  updated_at INTEGER
+                );
+                CREATE INDEX IF NOT EXISTS idx_user_rules_priority ON user_rules(priority, id);
+                CREATE INDEX IF NOT EXISTS idx_user_rules_enabled ON user_rules(enabled);
+            "),
         };
 
         public static void Apply(SqliteConnection con)
