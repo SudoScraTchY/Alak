@@ -28,8 +28,7 @@ public sealed class PackLoader : IPackLoader
 {
     public async Task<IReadOnlyList<LanguagePack>> LoadAsync()
     {
-        // Return built-in English pack for now
-        return new[] { PackSet.BuiltInEn.Packs.FirstOrDefault()! };
+        return PackSet.BuiltInDefault.Packs;
     }
 }
 
@@ -40,8 +39,6 @@ public sealed class RuleCompiler : IRuleCompiler
 {
     public async Task<PackSet> CompileAsync(IReadOnlyList<LanguagePack> packs)
     {
-        // For now, return the built-in pack set
-        // TODO: Actually compile the packs into a ConceptMatcher
-        return PackSet.BuiltInEn;
+        return PackSet.Compile(packs);
     }
 }

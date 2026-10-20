@@ -134,7 +134,7 @@ public partial class InboxViewModel : ObservableObject
         var selectedFilter = SelectedCategoryFilter;
         if (selectedFilter?.Key is { } key && key != "all")
         {
-            filtered = filtered.Where(n => n.Category == key);
+            filtered = filtered.Where(n => MatchesCategory(n.Category, key));
         }
 
         // Search query
@@ -164,11 +164,20 @@ public partial class InboxViewModel : ObservableObject
         // Update category counts
         foreach (var cat in CategoryFilters.Where(c => c.Key != "all"))
         {
-            cat.Count = notifications.Count(n => n.Category == cat.Key);
+            cat.Count = notifications.Count(n => MatchesCategory(n.Category, cat.Key));
         }
         CategoryFilters[0].Count = notifications.Count();
 
         OnPropertyChanged(nameof(Notifications));
+    }
+
+    private static bool MatchesCategory(string? notifCategory, string filterKey)
+    {
+        if (string.IsNullOrEmpty(notifCategory)) return filterKey == "other";
+        if (filterKey is "promo" or "offers")
+            return notifCategory.Equals("promo", StringComparison.OrdinalIgnoreCase) ||
+                   notifCategory.Equals("offers", StringComparison.OrdinalIgnoreCase);
+        return notifCategory.Equals(filterKey, StringComparison.OrdinalIgnoreCase);
     }
 
     private async Task OnCategoryFilterChangedAsync()

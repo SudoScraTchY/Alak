@@ -15,6 +15,8 @@ public partial class WalletViewModel : ObservableObject
 {
     private readonly IPromoCodeRepository _promoCodeRepo;
     private readonly IUserRulesRepository _userRulesRepo;
+    private readonly INotificationRepository _notifRepo;
+    private readonly Alak.App.Services.INotificationIngestionService _ingestionService;
 
     [ObservableProperty]
     private ObservableCollection<PromoCodeItem> _expiringSoonCodes = [];
@@ -41,6 +43,7 @@ public partial class WalletViewModel : ObservableObject
     private string _summaryText = "";
 
     public IRelayCommand<PromoCodeItem> CopyCodeCommand { get; }
+    public IRelayCommand<PromoCodeItem> ViewDetailsCommand { get; }
     public IRelayCommand<PromoCodeItem> MarkUsedCommand { get; }
     public IRelayCommand<PromoCodeItem> DismissCommand { get; }
     public IRelayCommand<PromoCodeItem> UndoDismissCommand { get; }
@@ -49,12 +52,23 @@ public partial class WalletViewModel : ObservableObject
     public IRelayCommand LoadCommand { get; }
     public IRelayCommand ToggleExpiredSectionCommand { get; }
 
-    public WalletViewModel(IPromoCodeRepository promoCodeRepo, IUserRulesRepository userRulesRepo)
+    public WalletViewModel(
+        IPromoCodeRepository promoCodeRepo,
+        IUserRulesRepository userRulesRepo,
+        INotificationRepository notifRepo,
+        Alak.App.Services.INotificationIngestionService ingestionService)
     {
         _promoCodeRepo = promoCodeRepo;
         _userRulesRepo = userRulesRepo;
+        _notifRepo = notifRepo;
+        _ingestionService = ingestionService;
+        _ingestionService.NotificationIngested += _ =>
+        {
+            MainThread.BeginInvokeOnMainThread(async () => await LoadCodes());
+        };
 
         CopyCodeCommand = new RelayCommand<PromoCodeItem>(CopyCode);
+        ViewDetailsCommand = new RelayCommand<PromoCodeItem>(ViewDetails);
         MarkUsedCommand = new RelayCommand<PromoCodeItem>(MarkUsed);
         DismissCommand = new RelayCommand<PromoCodeItem>(Dismiss);
         UndoDismissCommand = new RelayCommand<PromoCodeItem>(UndoDismiss);
@@ -149,6 +163,36 @@ public partial class WalletViewModel : ObservableObject
 
         await Clipboard.SetTextAsync(item.Code.RawCode);
         await Shell.Current.DisplayAlertAsync("Copied", $"Code \"{item.Code.RawCode}\" copied to clipboard", "OK");
+    }
+
+    private async void ViewDetails(PromoCodeItem? item)
+    {
+        if (item == null) return;
+        try
+        {
+            var all = await _notifRepo.GetAllAsync();
+            var notif = all.FirstOrDefault(n =>
+                (!string.IsNullOrEmpty(item.Code.RawCode) && n.ExtractedCode == item.Code.RawCode) ||
+                (!string.IsNullOrEmpty(item.Code.RawCode) && (n.Text.Contains(item.Code.RawCode, StringComparison.OrdinalIgnoreCase) || n.Title.Contains(item.Code.RawCode, StringComparison.OrdinalIgnoreCase))) ||
+                (n.Package == item.Code.Package));
+
+            if (notif != null)
+            {
+                await Shell.Current.GoToAsync($"detail?id={notif.Id}");
+                return;
+            }
+
+            var page = Shell.Current?.CurrentPage ?? Application.Current?.Windows[0]?.Page;
+            if (page != null)
+            {
+                await page.DisplayAlertAsync("Promo details",
+                    $"Code: {item.Code.RawCode}\nPackage: {item.Code.Package}\nDiscount: {item.DiscountText}\nExpiry: {item.ValidUntilText}", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[Wallet] ViewDetails error: {ex.Message}");
+        }
     }
 
     private async void MarkUsed(PromoCodeItem? item)
@@ -271,20 +315,40 @@ public partial class PromoCodeItem : ObservableObject
     {
         get
         {
+            var parts = new List<string>();
             if (Code.DiscountValue.HasValue && Code.DiscountType.HasValue)
             {
-                return Code.DiscountType.Value switch
+                var discountStr = Code.DiscountType.Value switch
                 {
                     DiscountType.Percent => $"{Code.DiscountValue.Value}% off",
-                    DiscountType.Amount => $"{Code.Currency ?? ""}{Code.DiscountValue.Value}",
+                    DiscountType.Amount => Code.Currency == "IRT"
+                        ? $"{Code.DiscountValue.Value:N0} تومان"
+                        : $"{Code.Currency ?? ""} {Code.DiscountValue.Value:N0}".Trim(),
                     DiscountType.FreeShipping => "Free shipping",
                     DiscountType.Bogo => "Buy one get one",
-                    DiscountType.Cashback => $"Cashback {Code.Currency ?? ""}{Code.DiscountValue.Value}",
-                    DiscountType.Credit => $"Credit {Code.Currency ?? ""}{Code.DiscountValue.Value}",
+                    DiscountType.Cashback => Code.Currency == "IRT"
+                        ? $"Cashback {Code.DiscountValue.Value:N0} تومان"
+                        : $"Cashback {Code.Currency ?? ""} {Code.DiscountValue.Value:N0}".Trim(),
+                    DiscountType.Credit => Code.Currency == "IRT"
+                        ? $"Credit {Code.DiscountValue.Value:N0} تومان"
+                        : $"Credit {Code.Currency ?? ""} {Code.DiscountValue.Value:N0}".Trim(),
                     _ => ""
                 };
+                if (!string.IsNullOrEmpty(discountStr))
+                    parts.Add(discountStr);
             }
-            return "";
+            if (Code.MinSpend.HasValue && Code.MinSpend.Value > 0)
+            {
+                if (Code.Currency == "IRT")
+                    parts.Add($"کف خرید {Code.MinSpend.Value:N0} تومان");
+                else
+                    parts.Add($"Min spend {Code.Currency ?? ""} {Code.MinSpend.Value:N0}".Trim());
+            }
+            if (!string.IsNullOrEmpty(Code.StoreHint))
+            {
+                parts.Add(Code.StoreHint);
+            }
+            return parts.Count > 0 ? string.Join(" · ", parts) : "";
         }
     }
 

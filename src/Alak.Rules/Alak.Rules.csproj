@@ -1,10 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
       <ProjectReference Include="..\Alak.Text\Alak.Text.csproj" />
       <ProjectReference Include="..\Alak.Core\Alak.Core.csproj" />
       <ProjectReference Include="..\Alak.Storage\Alak.Storage.csproj" />
     </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\packs\fa\lexicon.json" LogicalName="packs.fa.lexicon.json" />
+  </ItemGroup>
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>

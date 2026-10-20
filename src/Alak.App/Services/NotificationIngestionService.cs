@@ -66,7 +66,7 @@ public sealed class NotificationIngestionService : INotificationIngestionService
             }
 
             // 4. Tier 1 classification
-            var classification = RulesEngine.Classify(raw, PackSet.BuiltInEn);
+            var classification = RulesEngine.Classify(raw, PackSet.BuiltInDefault);
             
             var category = userAction?.SetCategory
                 ?? appSettings?.DefaultCategoryOverride

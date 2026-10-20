@@ -44,8 +44,17 @@ internal static class Tokens
 
     internal static bool IsStopwordCap(string t) => s_caps.Contains(t);
 
+    internal static bool IsPersianStopword(string t) => s_persianStopwords.Contains(t);
+
     private static readonly IReadOnlySet<string> s_caps = new HashSet<string>(new[]
     { "SALE", "OFF", "FREE", "NEW", "TODAY", "NOW", "CODE", "APP", "SHOP" }, StringComparer.Ordinal);
+
+    private static readonly IReadOnlySet<string> s_persianStopwords = new HashSet<string>(new[]
+    {
+        "خرید", "سفارش", "تومان", "تومن", "ریال", "هزار", "میلیون", "میلیارد",
+        "کف", "سقف", "برای", "روی", "تا", "با", "از", "در", "به", "شد", "است",
+        "تخفیف", "حراج", "فروش", "ویژه", "ارسال", "رایگان", "امشب", "امروز", "فردا"
+    }, StringComparer.Ordinal);
 }
 
 /// <summary>
@@ -59,21 +68,25 @@ public static class PromoCodeExtractor
     public static IEnumerable<PromoCodeEntity> Extract(
         NormalizedText n,
         IReadOnlyList<ConceptHit> hits,
-        bool otpPresent)
+        bool otpPresent,
+        IReadOnlyList<ConceptHit>? globalHits = null,
+        string field = "text")
     {
         var tokens = Tokens.Tokenize(n);
-        var negatives = hits.Where(h => h.ConceptId == "promo.code.negative").ToList();
-        var offerContext = hits.Any(h => h.ConceptId is "promo.discount.word" or "promo.apply"
+        var allHits = globalHits ?? hits;
+        var negatives = allHits.Where(h => h.ConceptId == "promo.code.negative").ToList();
+        var offerContext = allHits.Any(h => h.ConceptId is "promo.discount.word" or "promo.apply"
                                             or "promo.free_shipping" or "promo.cashback");
 
         foreach (var anchor in hits.Where(h => s_strong.Contains(h.ConceptId) || h.ConceptId == "promo.code.trigger.weak"))
         {
             var strong = s_strong.Contains(anchor.ConceptId);
+            var isPersianAnchor = anchor.Term.Any(c => c is >= '\u0600' and <= '\u06FF');
             if (!strong)
             {
                 // §8.10 #13: 'no code needed' suppresses weak-anchor extraction entirely;
                 // weak anchors also require offer context (§8.6 E-01)
-                var noCode = hits.Any(h => h.ConceptId == "promo.no_code");
+                var noCode = allHits.Any(h => h.ConceptId == "promo.no_code");
                 if (noCode || !offerContext) continue;
             }
             var (aStart, aEnd) = anchor.Span;
@@ -88,11 +101,16 @@ public static class PromoCodeExtractor
 
                 var candidate = tok.Value.Trim().Trim(':', '"', '\'', '«', '»', '`', '[', ']', '*', '·', ',', '.', '(', ')', '!', '?', ';');
                 var trimmed = candidate;
-                if (trimmed.Length is < 4 or > 24) continue;
+                var minLen = isPersianAnchor ? 3 : 4;
+                if (trimmed.Length < minLen || trimmed.Length > 24) continue;
+
+                var hasLatin = trimmed.Any(c => (c is >= 'a' and <= 'z') || (c is >= 'A' and <= 'Z'));
+                var hasDigits = trimmed.Any(char.IsDigit);
+                var hasLetters = trimmed.Any(char.IsLetter);
+
+                if (isPersianAnchor && !hasLatin && !hasDigits) continue;
 
                 var shape = 0f;
-                var hasLetters = trimmed.Any(char.IsLetter);
-                var hasDigits = trimmed.Any(char.IsDigit);
                 if (hasLetters && hasDigits) shape += 1.5f;
                 else if (hasDigits && !hasLetters)
                 {
@@ -100,11 +118,22 @@ public static class PromoCodeExtractor
                     if (!strong || !offerContext || otpPresent) continue;
                     shape += 0.5f;
                 }
-                else if (trimmed.All(char.IsLetter) && trimmed.ToLowerInvariant() == trimmed) continue; // lowercase word
+                else if (trimmed.All(char.IsLetter) && trimmed.ToLowerInvariant() == trimmed)
+                {
+                    if (isPersianAnchor && hasLatin)
+                    {
+                        // Latin lowercase word like 'xyz' following a Persian anchor (e.g. 'کد xyz')
+                        shape += 0.8f;
+                    }
+                    else
+                    {
+                        continue; // lowercase word in English
+                    }
+                }
                 else shape += 0.4f;
 
                 if (trimmed.All(char.IsUpper) && hasLetters) shape += 0.6f;
-                var isStop = Tokens.IsStopwordCap(trimmed);
+                var isStop = Tokens.IsStopwordCap(trimmed) || (isPersianAnchor && Tokens.IsPersianStopword(trimmed));
                 if (isStop) continue;
                 if (Tokens.LooksLikeUrl(trimmed)) continue;
 
@@ -118,14 +147,14 @@ public static class PromoCodeExtractor
                     var (os, oe) = n.OriginalSpan(ts, te);
                     yield return new PromoCodeEntity(
                         Code: trimmed,
-                        Kind: KindFor(hits),
+                        Kind: KindFor(allHits),
                         Discount: null,
                         MinSpend: null, Cap: null, Scope: null,
-                        FirstOrder: hits.Any(h => h.ConceptId == "promo.first_order"),
-                        SingleUse: hits.Any(h => h.ConceptId == "promo.single_use"),
+                        FirstOrder: allHits.Any(h => h.ConceptId == "promo.first_order"),
+                        SingleUse: allHits.Any(h => h.ConceptId == "promo.single_use"),
                         ValidFrom: null, ValidUntil: null,
                         StoreHint: null,
-                        Field: "text",
+                        Field: field,
                         Span: (os, oe),
                         Confidence: conf,
                         RuleId: "E-01");
@@ -185,19 +214,45 @@ public static class OtpExtractor
 /// <summary>E-02: percent/amount discounts, free shipping, BOGO, cashback, credit.</summary>
 public static class DiscountExtractor
 {
-    public static IEnumerable<DiscountEntity> Extract(NormalizedText n)
+    private static readonly Regex s_persianAmountDiscount = new(
+        @"(?:(?<prefix>تخفیف|حراج|کسر|آف|off)\s+)?(?<num>\d+(?:[.,]\d+)?)\s*(?<scale>هزار|میلیون|میلیارد|k|m)?\s*(?<curr>تومان|تومن|تومانی|ریال|ریالی)(?:\s+(?<suffix>تخفیف|تخفیفی|کسر|آف|off))?",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+    private static readonly Regex s_persianCap = new(
+        @"(?:تا\s+سقف|سقف|تا\s+حداکثر|حداکثر)\s*:?\s*(?<num>\d+(?:[.,]\d+)?)\s*(?<scale>هزار|میلیون|میلیارد|k|m)?(?:\s*(?<curr>تومان|تومن|تومانی|ریال|ریالی))?",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+    public static IEnumerable<DiscountEntity> Extract(NormalizedText n, string field = "text")
     {
-        // percent: "25%", "25 percent", "50 percent"
         var folded = n.Folded;
+
+        // check cap for percent discounts
+        decimal? cap = null;
+        var capMatch = s_persianCap.Match(folded);
+        if (capMatch.Success)
+        {
+            var cNumStr = capMatch.Groups["num"].Value.Replace(",", "");
+            if (decimal.TryParse(cNumStr, System.Globalization.CultureInfo.InvariantCulture, out var cNum))
+            {
+                var cScale = 1m;
+                var cs = capMatch.Groups["scale"].Value.ToLowerInvariant();
+                if (cs is "هزار" or "k") cScale = 1_000m;
+                else if (cs is "میلیون" or "m") cScale = 1_000_000m;
+                else if (cs is "میلیارد" or "b") cScale = 1_000_000_000m;
+                cap = cNum * cScale;
+            }
+        }
+
+        // percent: "25%", "25 percent", "50 percent"
         for (var i = 0; i < folded.Length; i++)
         {
             if (folded[i] != '%') continue;
             var start = i;
             while (start > 0 && (char.IsDigit(folded[start - 1]) || folded[start - 1] == '.')) start--;
-            if (i > start && decimal.TryParse(folded[start..i], out var pct))
+            if (i > start && decimal.TryParse(folded[start..i], System.Globalization.CultureInfo.InvariantCulture, out var pct))
             {
                 var (os, oe) = n.OriginalSpan(start, i + 1);
-                yield return new DiscountEntity(DiscountType.Percent, pct, null, null, "text", (os, oe), 0.95f, "E-02");
+                yield return new DiscountEntity(DiscountType.Percent, pct, null, cap, field, (os, oe), 0.95f, "E-02");
             }
         }
         // "50 percent off" / "۳۰ درصد تخفیف": number + percent-word (E-02)
@@ -211,30 +266,70 @@ public static class DiscountExtractor
                 if (wEnd < folded.Length && char.IsLetterOrDigit(folded[wEnd])) { idx = wEnd; continue; }
                 var start = idx;
                 while (start > 0 && (char.IsDigit(folded[start - 1]) || folded[start - 1] == '.')) start--;
-                if (start < idx && decimal.TryParse(folded[start..idx], out var pct) && pct is > 0 and <= 100)
+                if (start < idx && decimal.TryParse(folded[start..idx], System.Globalization.CultureInfo.InvariantCulture, out var pct) && pct is > 0 and <= 100)
                 {
                     var (os, oe) = n.OriginalSpan(start, wEnd);
-                    yield return new DiscountEntity(DiscountType.Percent, pct, null, null, "text", (os, oe), 0.9f, "E-02");
+                    yield return new DiscountEntity(DiscountType.Percent, pct, null, cap, field, (os, oe), 0.9f, "E-02");
                 }
                 idx = wEnd;
             }
         }
+
+        // Amount discounts in Persian (e.g. "150 هزار تومن تخفیف", "150,000 تومان تخفیف")
+        foreach (Match m in s_persianAmountDiscount.Matches(folded))
+        {
+            var hasPrefix = m.Groups["prefix"].Success;
+            var hasSuffix = m.Groups["suffix"].Success;
+            if (!hasPrefix && !hasSuffix) continue;
+
+            var before = folded[..m.Index];
+            if (before.EndsWith("تا سقف ", StringComparison.Ordinal) ||
+                before.EndsWith("تا حداکثر ", StringComparison.Ordinal) ||
+                before.EndsWith("سقف ", StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            var numStr = m.Groups["num"].Value.Replace(",", "");
+            if (!decimal.TryParse(numStr, System.Globalization.CultureInfo.InvariantCulture, out var num))
+                continue;
+
+            var scale = 1m;
+            var scaleStr = m.Groups["scale"].Value.ToLowerInvariant();
+            if (scaleStr is "هزار" or "k") scale = 1_000m;
+            else if (scaleStr is "میلیون" or "m") scale = 1_000_000m;
+            else if (scaleStr is "میلیارد" or "b") scale = 1_000_000_000m;
+
+            var curr = m.Groups["curr"].Value;
+            var currCode = curr.Contains("ریال") ? "IRR" : "IRT";
+            var amount = num * scale;
+
+            var (os, oe) = n.OriginalSpan(m.Index, m.Index + m.Length);
+            yield return new DiscountEntity(DiscountType.Amount, amount, currCode, null, field, (os, oe), 0.95f, "E-02");
+        }
+
         // free shipping
-        if (folded.Contains("free shipping") || folded.Contains("free delivery"))
+        if (folded.Contains("free shipping") || folded.Contains("free delivery") || folded.Contains("ارسال رایگان") || folded.Contains("پست رایگان"))
         {
             var fs = folded.IndexOf("free shipping", StringComparison.Ordinal);
             if (fs < 0) fs = folded.IndexOf("free delivery", StringComparison.Ordinal);
-            var (os, oe) = n.OriginalSpan(fs, fs + 13);
-            yield return new DiscountEntity(DiscountType.FreeShipping, null, null, null, "text", (os, oe), 0.95f, "E-02");
+            if (fs < 0) fs = folded.IndexOf("ارسال رایگان", StringComparison.Ordinal);
+            if (fs < 0) fs = folded.IndexOf("پست رایگان", StringComparison.Ordinal);
+            var len = fs >= 0 && (folded.Substring(fs).StartsWith("ارسال رایگان") || folded.Substring(fs).StartsWith("پست رایگان")) ? 11 : 13;
+            var (os, oe) = n.OriginalSpan(fs, fs + len);
+            yield return new DiscountEntity(DiscountType.FreeShipping, null, null, null, field, (os, oe), 0.95f, "E-02");
         }
-        if (folded.Contains("cashback") || folded.Contains("cash back"))
+        if (folded.Contains("cashback") || folded.Contains("cash back") || folded.Contains("بازگشت وجه") || folded.Contains("کش بک"))
         {
             var cb = folded.IndexOf("cash", StringComparison.Ordinal);
-            var (os, oe) = n.OriginalSpan(cb, cb + 8);
-            yield return new DiscountEntity(DiscountType.Cashback, null, null, null, "text", (os, oe), 0.9f, "E-02");
+            if (cb < 0) cb = folded.IndexOf("بازگشت وجه", StringComparison.Ordinal);
+            if (cb < 0) cb = folded.IndexOf("کش بک", StringComparison.Ordinal);
+            var len = cb >= 0 && folded.Substring(cb).StartsWith("بازگشت وجه") ? 10 : 8;
+            var (os, oe) = n.OriginalSpan(cb, cb + len);
+            yield return new DiscountEntity(DiscountType.Cashback, null, null, null, field, (os, oe), 0.9f, "E-02");
         }
-        if (folded.Contains("bogo") || folded.Contains("buy one get one"))
-            yield return new DiscountEntity(DiscountType.Bogo, null, null, null, "text", default, 0.9f, "E-02");
+        if (folded.Contains("bogo") || folded.Contains("buy one get one") || folded.Contains("یکی بخر یکی ببر") || folded.Contains("1+1"))
+            yield return new DiscountEntity(DiscountType.Bogo, null, null, null, field, default, 0.9f, "E-02");
     }
 }
 

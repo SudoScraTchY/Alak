@@ -21,6 +21,15 @@ public sealed class PackSet
     /// <summary>English seed pack (§8.9.1 subset sufficient for worked examples).</summary>
     public static PackSet BuiltInEn { get; } = BuildEn();
 
+    /// <summary>Built-in Persian pack loaded from compiled packs/fa/lexicon.json.</summary>
+    public static LanguagePack BuiltInFaPack { get; } = LoadBuiltInFaPack();
+
+    /// <summary>Persian pack set.</summary>
+    public static PackSet BuiltInFa { get; } = Compile(new[] { BuiltInFaPack });
+
+    /// <summary>Combined default pack set (EN + FA) used by RulesEngine.</summary>
+    public static PackSet BuiltInDefault { get; } = Compile(new[] { BuiltInEn.Packs[0], BuiltInFaPack });
+
     private static PackSet BuildEn()
     {
         var concepts = new Dictionary<string, IReadOnlyList<(string, float)>>
@@ -90,6 +99,64 @@ public sealed class PackSet
                     terms.Add((conceptId, weight, term));
         return new PackSet { Packs = packs, Matcher = new ConceptMatcher(terms) };
     }
+
+    private static LanguagePack LoadBuiltInFaPack()
+    {
+        var asm = typeof(PackSet).Assembly;
+        using var stream = asm.GetManifestResourceStream("packs.fa.lexicon.json")
+                        ?? asm.GetManifestResourceStream("Alak.Rules.packs.fa.lexicon.json");
+        if (stream is not null)
+        {
+            return LoadPackFromStream(stream, "fa");
+        }
+
+        var candidates = new[]
+        {
+            Path.Combine(AppContext.BaseDirectory, "packs", "fa", "lexicon.json"),
+            Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "packs", "fa", "lexicon.json"),
+            Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "packs", "fa", "lexicon.json"),
+            Path.Combine(Directory.GetCurrentDirectory(), "packs", "fa", "lexicon.json"),
+        };
+        foreach (var p in candidates)
+        {
+            try
+            {
+                var full = Path.GetFullPath(p);
+                if (File.Exists(full))
+                {
+                    using var fs = File.OpenRead(full);
+                    return LoadPackFromStream(fs, "fa");
+                }
+            }
+            catch { }
+        }
+        throw new InvalidOperationException("Could not load packs/fa/lexicon.json from embedded resource or disk.");
+    }
+
+    internal static LanguagePack LoadPackFromStream(Stream stream, string id)
+    {
+        using var doc = JsonDocument.Parse(stream);
+        var dict = new Dictionary<string, IReadOnlyList<(string, float)>>();
+        foreach (var concept in doc.RootElement.GetProperty("concepts").EnumerateObject())
+        {
+            var weight = concept.Value.TryGetProperty("weight", out var w) ? (float)w.GetDouble() : 0.9f;
+            var terms = new List<(string, float)>();
+            foreach (var t in concept.Value.GetProperty("terms").EnumerateArray())
+            {
+                if (t.ValueKind == JsonValueKind.String)
+                {
+                    terms.Add((t.GetString()!, weight));
+                }
+                else
+                {
+                    terms.Add((t.GetProperty("t").GetString()!,
+                        t.TryGetProperty("w", out var tw) ? (float)tw.GetDouble() : weight));
+                }
+            }
+            dict[concept.Name] = terms;
+        }
+        return new LanguagePack(id, dict);
+    }
 }
 
 /// <summary>
@@ -103,6 +170,12 @@ public static class RulesEngine
     /// <summary>Per-category counts from this app's ingestion history (RUL-011).
     /// Null = no history yet (fresh app) ⇒ prior contributes nothing.</summary>
     public sealed record AppPrior(int[] Counts, int Total);
+
+    public static ClassificationResult Classify(RawNotification n) =>
+        Classify(n, PackSet.BuiltInDefault, null);
+
+    public static ClassificationResult Classify(RawNotification n, AppPrior? prior) =>
+        Classify(n, PackSet.BuiltInDefault, prior);
 
     public static ClassificationResult Classify(RawNotification n, PackSet packs) =>
         Classify(n, packs, null);
@@ -120,47 +193,97 @@ public static class RulesEngine
         var text = Normalizer.Normalize(n.Text ?? "");
         var bigText = Normalizer.Normalize(n.BigText ?? "");
 
+        var hasPersian = title.Folded.Any(c => c is >= '\u0600' and <= '\u06FF') ||
+                         text.Folded.Any(c => c is >= '\u0600' and <= '\u06FF') ||
+                         bigText.Folded.Any(c => c is >= '\u0600' and <= '\u06FF');
+        var effectivePacks = packs;
+        if (hasPersian && !packs.Packs.Any(p => p.Id == "fa"))
+        {
+            effectivePacks = PackSet.BuiltInDefault;
+        }
+
         // ---- 2. concept matching (RUL-003) ----
-        var hits = new List<ConceptHit>();
-        foreach (var h in packs.Matcher.Scan(title.Folded)) hits.Add(h);
-        foreach (var h in packs.Matcher.Scan(text.Folded)) hits.Add(h);
-        foreach (var h in packs.Matcher.Scan(bigText.Folded)) hits.Add(h);
+        var titleHits = effectivePacks.Matcher.Scan(title.Folded).ToList();
+        var textHits = effectivePacks.Matcher.Scan(text.Folded).ToList();
+        var bigTextHits = effectivePacks.Matcher.Scan(bigText.Folded).ToList();
+
+        var hits = new List<ConceptHit>(titleHits.Count + textHits.Count + bigTextHits.Count);
+        hits.AddRange(titleHits);
+        hits.AddRange(textHits);
+        hits.AddRange(bigTextHits);
 
         var channelText = Normalizer.Normalize((n.ChannelName ?? n.ChannelId ?? ""));
-        var channelHits = packs.Matcher.Scan(channelText.Folded).ToList();
+        var channelHits = effectivePacks.Matcher.Scan(channelText.Folded).ToList();
 
         // ---- 3. extraction (§8.7) ----
-        var otp = OtpExtractor.Extract(text, hits);
+        var otp = OtpExtractor.Extract(text, textHits) ?? (!string.IsNullOrWhiteSpace(title.Text) ? OtpExtractor.Extract(title, titleHits) : null);
         var entities = new List<Entity>();
         if (otp is not null) entities.Add(otp);
-        entities.AddRange(DiscountExtractor.Extract(text));
+
+        entities.AddRange(DiscountExtractor.Extract(text, "text"));
+        if (!string.IsNullOrWhiteSpace(title.Text))
+            entities.AddRange(DiscountExtractor.Extract(title, "title"));
+
         entities.AddRange(OrderRefExtractor.Extract(text));
         if (otp is null)
         {
-            // dedupe by code value (multiple anchors may fire on the same candidate): keep best
-            var codes = PromoCodeExtractor.Extract(text, hits, otpPresent: false)
+            var rawCodes = PromoCodeExtractor.Extract(text, textHits, otpPresent: false, globalHits: hits, field: "text");
+            if (!string.IsNullOrWhiteSpace(title.Text))
+            {
+                rawCodes = rawCodes.Concat(PromoCodeExtractor.Extract(title, titleHits, otpPresent: false, globalHits: hits, field: "title"));
+            }
+            var codes = rawCodes
                 .GroupBy(c => c.Code, StringComparer.Ordinal)
                 .Select(g => g.OrderByDescending(c => c.Confidence).First());
             entities.AddRange(codes);
         }
-        // E-01 step 6: attach nearest discount to each promo code (percent/amount/cashback).
+
+        entities.AddRange(MoneyExtractor.Extract(text, textHits, "text"));
+        if (!string.IsNullOrWhiteSpace(title.Text))
+            entities.AddRange(MoneyExtractor.Extract(title, titleHits, "title"));
+
+        entities.AddRange(DatetimeExtractor.Extract(text, n.PostedAtUtcMs, n.TzOffsetMin, "text"));
+        if (!string.IsNullOrWhiteSpace(title.Text))
+            entities.AddRange(DatetimeExtractor.Extract(title, n.PostedAtUtcMs, n.TzOffsetMin, "title"));
+
+        var minSpend = MinSpendExtractor.Extract(text) ?? (!string.IsNullOrWhiteSpace(title.Text) ? MinSpendExtractor.Extract(title) : null);
+        var storeHint = StoreExtractor.DetectStore(n, title, text);
+
+        // E-01 step 6: attach nearest discount, minSpend, storeHint, validUntil to each promo code
         var discounts = entities.OfType<DiscountEntity>().ToList();
-        var promoCodes = entities.OfType<PromoCodeEntity>().ToList();
+        var expiries = entities.OfType<DatetimeEntity>().Where(d => d.Role == DatetimeRole.Expiry).ToList();
+
         entities = entities.Select((Entity e) =>
         {
-            if (e is PromoCodeEntity pc && pc.Discount is null && discounts.Count > 0)
+            if (e is PromoCodeEntity pc)
             {
-                // nearest discount by span distance
-                var pcMid = (pc.Span.Start + pc.Span.End) / 2;
-                var best = discounts.OrderBy(d =>
-                        Math.Abs(((d.Span.Start + d.Span.End) / 2) - pcMid)).First();
-                return pc with { Discount = best };
+                var updated = pc;
+                if (updated.Discount is null && discounts.Count > 0)
+                {
+                    var sameField = discounts.Where(d => d.Field == pc.Field).ToList();
+                    var cand = sameField.Count > 0 ? sameField : discounts;
+                    var pcMid = (pc.Span.Start + pc.Span.End) / 2;
+                    var best = cand.OrderBy(d => Math.Abs(((d.Span.Start + d.Span.End) / 2) - pcMid)).First();
+                    updated = updated with { Discount = best };
+                }
+                if (updated.MinSpend is null && minSpend is not null)
+                {
+                    updated = updated with { MinSpend = minSpend };
+                }
+                if (updated.StoreHint is null && storeHint is not null)
+                {
+                    updated = updated with { StoreHint = storeHint };
+                }
+                if (updated.ValidUntil is null && expiries.Count > 0)
+                {
+                    var sameField = expiries.Where(d => d.Field == pc.Field).ToList();
+                    var cand = sameField.Count > 0 ? sameField : expiries;
+                    updated = updated with { ValidUntil = cand.First().Instant };
+                }
+                return updated;
             }
             return e;
         }).ToList();
-
-        entities.AddRange(MoneyExtractor.Extract(text, hits));
-        entities.AddRange(DatetimeExtractor.Extract(text, n.PostedAtUtcMs, n.TzOffsetMin));
 
         // ---- 4. log-odds scoring (§8.8) ----
         var scores = new float[9];
@@ -251,7 +374,7 @@ public static class RulesEngine
             switch (e)
             {
                 case PromoCodeEntity pc when pc.Confidence >= 0.6f: Add(Category.Offers, 2.4f); break;
-                case DiscountEntity { Type: DiscountType.Percent or DiscountType.Amount }: Add(Category.Offers, 1.2f); break;
+                case DiscountEntity: Add(Category.Offers, 1.2f); break;
                 case OtpEntity: Add(Category.Security, 6.0f); break;
                 case OrderRefEntity: Add(Category.Orders, 1.4f); break;
                 case MoneyEntity: Add(Category.Money, 2.0f); break;

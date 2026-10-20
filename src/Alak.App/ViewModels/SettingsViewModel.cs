@@ -227,12 +227,6 @@ public partial class SettingsViewModel : ObservableObject
                 NotificationRemindersEnabled: NotificationRemindersEnabled);
 
         await _rulesRepo.UpdateGlobalSettingsAsync(settings);
-
-        var page = Shell.Current?.CurrentPage ?? Application.Current?.Windows[0]?.Page;
-        if (page != null)
-        {
-            await page.DisplayAlertAsync("Saved", "Global settings saved", "OK");
-        }
     }
 
     private async Task ClearDataAsync()

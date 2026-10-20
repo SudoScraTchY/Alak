@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Alak.App.ViewModels"
+             xmlns:controls="clr-namespace:Alak.App.Controls"
              x:Class="Alak.App.Views.SettingsPage"
              x:DataType="vm:SettingsViewModel"
              BackgroundColor="{AppThemeBinding Light={StaticResource Salt}, Dark={StaticResource Night}}"
@@ -50,70 +51,35 @@
                 <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="16">
                     <Label Grid.Row="0" Text="Global Settings" Style="{StaticResource Text.Label}" />
 
-                    <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="16">
-                        <Label Text="Theme" Style="{StaticResource Text.Body}" VerticalOptions="Center" />
-                        <Picker Grid.Column="1" Style="{StaticResource Picker.Standard}"
-                                SelectedItem="{Binding SelectedTheme}"
-                                WidthRequest="150">
-                            <Picker.Items>
-                                <x:String>system</x:String>
-                                <x:String>light</x:String>
-                                <x:String>dark</x:String>
-                            </Picker.Items>
-                        </Picker>
-                    </Grid>
+                    <controls:OptionComboBox Grid.Row="1"
+                                             Title="Theme"
+                                             Options="system,light,dark"
+                                             OptionLabels="System,Light,Dark"
+                                             SelectedItem="{Binding SelectedTheme, Mode=TwoWay}" />
 
-                    <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="16">
-                        <Label Text="UI Language" Style="{StaticResource Text.Body}" VerticalOptions="Center" />
-                        <Picker Grid.Column="1" Style="{StaticResource Picker.Standard}"
-                                SelectedItem="{Binding SelectedLanguage}"
-                                WidthRequest="150">
-                            <Picker.Items>
-                                <x:String>system</x:String>
-                                <x:String>en</x:String>
-                                <x:String>fa</x:String>
-                            </Picker.Items>
-                        </Picker>
-                    </Grid>
+                    <controls:OptionComboBox Grid.Row="2"
+                                             Title="UI Language"
+                                             Options="system,en,fa"
+                                             OptionLabels="System,English,فارسی"
+                                             SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" />
 
-                    <Grid Grid.Row="3" ColumnDefinitions="*,Auto" ColumnSpacing="16">
-                        <Label Text="Calendar" Style="{StaticResource Text.Body}" VerticalOptions="Center" />
-                        <Picker Grid.Column="1" Style="{StaticResource Picker.Standard}"
-                                SelectedItem="{Binding SelectedCalendar}"
-                                WidthRequest="150">
-                            <Picker.Items>
-                                <x:String>auto</x:String>
-                                <x:String>gregorian</x:String>
-                                <x:String>jalali</x:String>
-                            </Picker.Items>
-                        </Picker>
-                    </Grid>
+                    <controls:OptionComboBox Grid.Row="3"
+                                             Title="Calendar"
+                                             Options="auto,gregorian,jalali"
+                                             OptionLabels="Auto,Gregorian,Jalali"
+                                             SelectedItem="{Binding SelectedCalendar, Mode=TwoWay}" />
 
-                    <Grid Grid.Row="4" ColumnDefinitions="*,Auto" ColumnSpacing="16">
-                        <Label Text="Digits" Style="{StaticResource Text.Body}" VerticalOptions="Center" />
-                        <Picker Grid.Column="1" Style="{StaticResource Picker.Standard}"
-                                SelectedItem="{Binding SelectedDigits}"
-                                WidthRequest="150">
-                            <Picker.Items>
-                                <x:String>auto</x:String>
-                                <x:String>latin</x:String>
-                                <x:String>persian</x:String>
-                            </Picker.Items>
-                        </Picker>
-                    </Grid>
+                    <controls:OptionComboBox Grid.Row="4"
+                                             Title="Digits"
+                                             Options="auto,latin,persian"
+                                             OptionLabels="Auto,Latin,Persian"
+                                             SelectedItem="{Binding SelectedDigits, Mode=TwoWay}" />
 
-                    <Grid Grid.Row="5" ColumnDefinitions="*,Auto" ColumnSpacing="16">
-                        <Label Text="SLM Performance Profile" Style="{StaticResource Text.Body}" VerticalOptions="Center" />
-                        <Picker Grid.Column="1" Style="{StaticResource Picker.Standard}"
-                                SelectedItem="{Binding SelectedPerformanceProfile}"
-                                WidthRequest="150">
-                            <Picker.Items>
-                                <x:String>battery</x:String>
-                                <x:String>balanced</x:String>
-                                <x:String>quality</x:String>
-                            </Picker.Items>
-                        </Picker>
-                    </Grid>
+                    <controls:OptionComboBox Grid.Row="5"
+                                             Title="SLM Performance Profile"
+                                             Options="battery,balanced,quality"
+                                             OptionLabels="Battery,Balanced,Quality"
+                                             SelectedItem="{Binding SelectedPerformanceProfile, Mode=TwoWay}" />
 
                     <Grid Grid.Row="6" ColumnDefinitions="*,Auto" ColumnSpacing="16">
                         <StackLayout>

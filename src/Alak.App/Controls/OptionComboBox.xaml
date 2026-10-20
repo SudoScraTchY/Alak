@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Alak.App.Controls"
+             x:Class="Alak.App.Controls.OptionComboBox">
+    <VerticalStackLayout Spacing="6">
+        <!-- Header row: Title & optional description on left, styled trigger on right -->
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnTriggerTapped" />
+            </Grid.GestureRecognizers>
+
+            <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="2" InputTransparent="True">
+                <Label x:Name="TitleLabel"
+                       InputTransparent="True"
+                       Style="{StaticResource Text.Body}" />
+                <Label x:Name="DescriptionLabel"
+                       InputTransparent="True"
+                       Style="{StaticResource Text.Caption}" />
+            </VerticalStackLayout>
+
+            <Border Grid.Column="1"
+                    Stroke="{AppThemeBinding Light={StaticResource Hairline}, Dark={StaticResource HairlineD}}"
+                    StrokeThickness="1"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Salt}, Dark={StaticResource SurfaceDark}}"
+                    Padding="14,8"
+                    InputTransparent="False"
+                    VerticalOptions="Center">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnTriggerTapped" />
+                </Border.GestureRecognizers>
+                <HorizontalStackLayout Spacing="8" VerticalOptions="Center" InputTransparent="True">
+                    <Label x:Name="SelectedLabelView"
+                           InputTransparent="True"
+                           FontFamily="{StaticResource Font.Primary}"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource Ink}, Dark={StaticResource Txt}}"
+                           VerticalOptions="Center" />
+                    <Label x:Name="ArrowLabel"
+                           InputTransparent="True"
+                           Text="▾"
+                           FontSize="12"
+                           TextColor="{AppThemeBinding Light={StaticResource Ink3}, Dark={StaticResource Txt3}}"
+                           VerticalOptions="Center" />
+                </HorizontalStackLayout>
+            </Border>
+        </Grid>
+
+        <!-- Dropdown panel -->
+        <Border x:Name="DropdownBorder"
+                IsVisible="False"
+                Stroke="{AppThemeBinding Light={StaticResource Hairline}, Dark={StaticResource HairlineD}}"
+                StrokeThickness="1"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Paper}, Dark={StaticResource Raised}}"
+                Padding="6"
+                Margin="0,2,0,4">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="10" />
+            </Border.StrokeShape>
+            <VerticalStackLayout x:Name="DropdownStack" Spacing="2">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="local:OptionItem">
+                        <Border StrokeThickness="0"
+                                Padding="12,10"
+                                BackgroundColor="Transparent"
+                                InputTransparent="False">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="6" />
+                            </Border.StrokeShape>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnOptionTapped" />
+                            </Border.GestureRecognizers>
+                            <Grid ColumnDefinitions="*,Auto" InputTransparent="True">
+                                <Label Grid.Column="0"
+                                       InputTransparent="True"
+                                       Text="{Binding Label}"
+                                       FontFamily="{StaticResource Font.Primary}"
+                                       FontSize="14"
+                                       TextColor="{AppThemeBinding Light={StaticResource Ink}, Dark={StaticResource Txt}}"
+                                       VerticalOptions="Center" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+        </Border>
+    </VerticalStackLayout>
+</ContentView>
