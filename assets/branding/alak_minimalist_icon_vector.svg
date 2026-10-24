@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="100%" height="100%">
+  <!-- Background Squircle: Deep Midnight Ink -->
+  <rect width="1024" height="1024" rx="224" fill="#0C1417"/>
+  
+  <!-- Subtle inner gradient shadow -->
+  <radialGradient id="bgGlow" cx="50%" cy="45%" r="50%">
+    <stop offset="0%" stop-color="#1B2A2F" stop-opacity="0.8"/>
+    <stop offset="100%" stop-color="#0C1417" stop-opacity="0"/>
+  </radialGradient>
+  <rect width="1024" height="1024" rx="224" fill="url(#bgGlow)"/>
+
+  <!-- ==================== 1. INCOMING NOISE TOKENS (TOP) ==================== -->
+  <g id="incoming-tokens">
+    <!-- Purple Token -->
+    <circle cx="410" cy="240" r="32" fill="#B98CFF"/>
+    <!-- Gold Token -->
+    <circle cx="512" cy="180" r="38" fill="#FFC93C"/>
+    <!-- Teal Token -->
+    <circle cx="614" cy="240" r="32" fill="#3CC8DD"/>
+  </g>
+
+  <!-- ==================== 2. THE BOLD MINIMALIST SIEVE HOOP (CENTER) ==================== -->
+  <g id="sieve-hoop">
+    <!-- Outer Sieve Ellipse (Chunky 3D Bezel) -->
+    <ellipse cx="512" cy="420" rx="340" ry="110" fill="#12252B" stroke="#243339" stroke-width="24"/>
+    <ellipse cx="512" cy="420" rx="315" ry="95" fill="#0C1417" stroke="#FFC93C" stroke-width="20"/>
+
+    <!-- Bold Minimalist Cross Grid (Only 3 horizontal + 5 vertical lines for zero clutter) -->
+    <g stroke="#FFC93C" stroke-width="12" stroke-linecap="round" opacity="0.85">
+      <!-- Horizontal Sieve Lines -->
+      <line x1="230" y1="420" x2="794" y2="420" stroke-width="16"/>
+      <line x1="280" y1="380" x2="744" y2="380"/>
+      <line x1="280" y1="460" x2="744" y2="460"/>
+
+      <!-- Vertical Sieve Lines -->
+      <line x1="360" y1="365" x2="360" y2="475"/>
+      <line x1="435" y1="340" x2="435" y2="500"/>
+      <line x1="512" y1="330" x2="512" y2="510" stroke-width="18"/>
+      <line x1="589" y1="340" x2="589" y2="500"/>
+      <line x1="664" y1="365" x2="664" y2="475"/>
+    </g>
+  </g>
+
+  <!-- ==================== 3. THREE ORGANIZED CHUNKS / STUBS (BOTTOM) ==================== -->
+  <g id="output-chunks">
+    <!-- Slab 3 (Bottom-most: Teal Spine) -->
+    <g transform="translate(232, 730)">
+      <rect x="0" y="0" width="560" height="90" rx="24" fill="#FFFFFF" stroke="#DCE2E5" stroke-width="6"/>
+      <rect x="0" y="0" width="24" height="90" rx="12" fill="#0C8397"/>
+      <!-- Content representation blocks -->
+      <rect x="55" y="32" width="160" height="26" rx="13" fill="#12252B"/>
+      <circle cx="490" cy="45" r="20" fill="#D8F0F4"/>
+    </g>
+
+    <!-- Slab 2 (Middle: Purple Spine) -->
+    <g transform="translate(212, 630)">
+      <rect x="0" y="0" width="600" height="90" rx="24" fill="#FFFFFF" stroke="#DCE2E5" stroke-width="6"/>
+      <rect x="0" y="0" width="24" height="90" rx="12" fill="#8248D6"/>
+      <rect x="55" y="32" width="200" height="26" rx="13" fill="#12252B"/>
+      <circle cx="530" cy="45" r="20" fill="#F0E7FC"/>
+    </g>
+
+    <!-- Slab 1 (Top / Front: Gold Wallet Spine with Ticket Notch) -->
+    <g transform="translate(192, 530)">
+      <path d="M 0,0 L 640,0 
+               A 16,16 0 0,1 640,32 L 640,58 A 16,16 0 0,1 640,90 L 0,90 
+               A 16,16 0 0,1 0,58 L 0,32 A 16,16 0 0,1 0,0 Z" 
+            fill="#FFFFFF" stroke="#DCE2E5" stroke-width="6"/>
+      <rect x="0" y="0" width="26" height="90" rx="13" fill="#FFC93C"/>
+      <!-- Perforation line -->
+      <line x1="490" y1="0" x2="490" y2="90" stroke="#A3B5BB" stroke-width="8" stroke-dasharray="12 12"/>
+      <rect x="60" y="30" width="240" height="30" rx="15" fill="#12252B"/>
+      <circle cx="565" cy="45" r="24" fill="#FFEDB5"/>
+      <circle cx="565" cy="45" r="12" fill="#B77900"/>
+    </g>
+  </g>
+</svg>

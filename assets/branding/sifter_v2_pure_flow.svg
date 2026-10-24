@@ -1,0 +1,368 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="sieveRimGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#243339"/>
+      <stop offset="50%" stop-color="#12252B"/>
+      <stop offset="100%" stop-color="#091316"/>
+    </linearGradient>
+
+    <linearGradient id="flowBeam" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFC93C" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#FFC93C" stop-opacity="0"/>
+    </linearGradient>
+
+    <filter id="shadowFilter" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+
+    <filter id="laserGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+
+    <style>
+      /* --- 1. CHAOTIC NOISE DESCENT --- */
+      .drop-1 { animation: dropNoise 2.2s cubic-bezier(0.5, 0, 0.4, 1) infinite; }
+      .drop-2 { animation: dropNoise 2.2s cubic-bezier(0.5, 0, 0.4, 1) infinite 0.35s; }
+      .drop-3 { animation: dropNoise 2.2s cubic-bezier(0.5, 0, 0.4, 1) infinite 0.7s; }
+      .drop-4 { animation: dropNoise 2.2s cubic-bezier(0.5, 0, 0.4, 1) infinite 1.05s; }
+      .drop-5 { animation: dropNoise 2.2s cubic-bezier(0.5, 0, 0.4, 1) infinite 1.4s; }
+
+      @keyframes dropNoise {
+        0% { transform: translateY(-70px) scale(0.6); opacity: 0; }
+        25% { opacity: 0.9; }
+        60% { transform: translateY(0px) scale(1); opacity: 1; }
+        80% { transform: translateY(35px) scale(0.5); opacity: 0.7; }
+        100% { transform: translateY(50px) scale(0); opacity: 0; }
+      }
+
+      /* --- 2. THE SIEVE VIBRATION & SHIMMER --- */
+      .sieve-chamber {
+        transform-origin: 200px 175px;
+        animation: sieveVibe 0.16s ease-in-out infinite alternate;
+      }
+      @keyframes sieveVibe {
+        0% { transform: translate(-1px, -0.5px) rotate(-0.25deg); }
+        100% { transform: translate(1px, 0.5px) rotate(0.25deg); }
+      }
+
+      .wire-shimmer {
+        animation: wireDash 2.2s linear infinite;
+      }
+      @keyframes wireDash {
+        0% { stroke-dashoffset: 0; }
+        100% { stroke-dashoffset: 24; }
+      }
+
+      .radial-pulse {
+        animation: ringPulse 2.2s ease-out infinite;
+        transform-origin: 200px 175px;
+      }
+      @keyframes ringPulse {
+        0% { r: 50px; opacity: 0.8; stroke-width: 2.5; }
+        80% { r: 95px; opacity: 0; stroke-width: 0.5; }
+        100% { r: 95px; opacity: 0; }
+      }
+
+      /* --- 3. OUTPUT CHUNKS REVEAL --- */
+      .chunk-1 { animation: chunkSlide 2.2s cubic-bezier(0.2, 0.8, 0.3, 1) infinite; }
+      .chunk-2 { animation: chunkSlide 2.2s cubic-bezier(0.2, 0.8, 0.3, 1) infinite 0.35s; }
+      .chunk-3 { animation: chunkSlide 2.2s cubic-bezier(0.2, 0.8, 0.3, 1) infinite 0.7s; }
+
+      @keyframes chunkSlide {
+        0% { transform: translateY(-50px) scale(0.9); opacity: 0; }
+        35% { transform: translateY(0px) scale(1); opacity: 1; }
+        85% { transform: translateY(0px) scale(1); opacity: 1; }
+        100% { transform: translateY(10px) scale(0.98); opacity: 0.8; }
+      }
+    </style>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="100%" height="100%" rx="36" fill="#0C1417"/>
+
+  <!-- Subtle Funnel Gradient Rays -->
+  <polygon points="70,30 330,30 270,175 130,175" fill="#131E22" opacity="0.4"/>
+  <polygon points="140,175 260,175 300,380 100,380" fill="url(#flowBeam)" opacity="0.25"/>
+
+  <!-- ==================== 1. INCOMING NOISE PARTICLES (TOP) ==================== -->
+  <g id="incoming-noise">
+    <!-- Offers (Purple) -->
+    <g class="drop-1" transform="translate(155, 110)">
+      <rect x="-14" y="-7" width="28" height="14" rx="4" fill="#B98CFF"/>
+      <circle cx="7" cy="0" r="2" fill="#FFFFFF"/>
+    </g>
+
+    <!-- Work (Blue) -->
+    <g class="drop-2" transform="translate(245, 105)">
+      <rect x="-16" y="-7" width="32" height="14" rx="4" fill="#7C9CFF"/>
+      <line x1="-10" y1="0" x2="6" y2="0" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+    </g>
+
+    <!-- Orders (Orange) -->
+    <g class="drop-3" transform="translate(195, 80)">
+      <polygon points="0,-9 8,6 -8,6" fill="#FF9A57"/>
+    </g>
+
+    <!-- Money (Teal) -->
+    <g class="drop-4" transform="translate(130, 95)">
+      <circle cx="0" cy="0" r="7" fill="#3CC8DD"/>
+      <rect x="-3" y="-3" width="6" height="6" rx="1.5" fill="#FFFFFF"/>
+    </g>
+
+    <!-- Security (Ruby) -->
+    <g class="drop-5" transform="translate(265, 90)">
+      <circle cx="0" cy="0" r="7.5" fill="#FF7A9C"/>
+    </g>
+  </g>
+
+  <!-- ==================== 2. THE SIEVE "الک" APERTURE (CENTER) ==================== -->
+  <!-- Expanding signal ring -->
+  <circle class="radial-pulse" cx="200" cy="175" r="50" fill="none" stroke="#FFC93C" opacity="0.6"/>
+
+  <g class="sieve-chamber">
+    <!-- Outer Bezel -->
+    <ellipse cx="200" cy="175" rx="88" ry="22" fill="url(#sieveRimGrad)" stroke="#243339" stroke-width="3.5"/>
+    <ellipse cx="200" cy="175" rx="84" ry="20" fill="#12252B" stroke="#FFC93C" stroke-width="2" filter="url(#laserGlow)"/>
+
+    <!-- Wire Mesh Lattice -->
+    <g stroke="#FFC93C" stroke-width="1.3" opacity="0.85" class="wire-shimmer" stroke-dasharray="8 4">
+      <!-- Horizontal lines -->
+      <line x1="125" y1="175" x2="275" y2="175" stroke-width="1.8"/>
+      <line x1="135" y1="167" x2="265" y2="167"/>
+      <line x1="135" y1="183" x2="265" y2="183"/>
+
+      <!-- Vertical lines -->
+      <line x1="150" y1="168" x2="150" y2="182"/>
+      <line x1="170" y1="163" x2="170" y2="187"/>
+      <line x1="185" y1="160" x2="185" y2="190"/>
+      <line x1="200" y1="158" x2="200" y2="192" stroke-width="2"/>
+      <line x1="215" y1="160" x2="215" y2="190"/>
+      <line x1="230" y1="163" x2="230" y2="187"/>
+      <line x1="250" y1="168" x2="250" y2="182"/>
+    </g>
+
+    <!-- Center Laser Core -->
+    <circle cx="200" cy="175" r="5" fill="#FFFFFF" filter="url(#laserGlow)"/>
+    <circle cx="180" cy="175" r="3" fill="#FFDE6A"/>
+    <circle cx="220" cy="175" r="3" fill="#FFDE6A"/>
+  </g>
+
+  <!-- ==================== 3. STRUCTURED ORGANIZED CHUNKS (BOTTOM) ==================== -->
+  <g transform="translate(80, 220)">
+    <!-- Chunk 1: Wallet / Code (Gold Spine) -->
+    <g class="chunk-1" filter="url(#shadowFilter)" transform="translate(0, 0)">
+      <path d="M 0,0 L 240,0 
+               A 6,6 0 0,1 240,12 L 240,28 A 6,6 0 0,1 240,40 L 0,40 
+               A 6,6 0 0,1 0,28 L 0,12 A 6,6 0 0,1 0,0 Z" 
+            fill="#FFFFFF" stroke="#DCE2E5" stroke-width="1.4"/>
+      <rect x="0" y="0" width="6" height="40" fill="#FFC93C"/>
+      <line x1="175" y1="0" x2="175" y2="40" stroke="#A3B5BB" stroke-width="1.5" stroke-dasharray="3 3"/>
+      <!-- Content blocks -->
+      <rect x="18" y="12" width="65" height="6" rx="3" fill="#12252B"/>
+      <rect x="18" y="22" width="40" height="4" rx="2" fill="#A3B5BB"/>
+      <rect x="188" y="10" width="42" height="20" rx="5" fill="#FFEDB5"/>
+      <circle cx="209" cy="20" r="5" fill="#B77900"/>
+    </g>
+
+    <!-- Chunk 2: Offers (Purple Spine) -->
+    <g class="chunk-2" filter="url(#shadowFilter)" transform="translate(0, 52)">
+      <path d="M 0,0 L 240,0 
+               A 6,6 0 0,1 240,12 L 240,28 A 6,6 0 0,1 240,40 L 0,40 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="sieveRimGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#243339"/>
+      <stop offset="50%" stop-color="#12252B"/>
+      <stop offset="100%" stop-color="#091316"/>
+    </linearGradient>
+
+    <linearGradient id="flowBeam" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFC93C" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#FFC93C" stop-opacity="0"/>
+    </linearGradient>
+
+    <filter id="shadowFilter" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+
+    <filter id="laserGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+
+    <style><![CDATA[
+      /* --- 1. CHAOTIC NOISE DESCENT --- */
+      .drop-1 { animation: dropNoise 2.2s cubic-bezier(0.5, 0, 0.4, 1) infinite; }
+      .drop-2 { animation: dropNoise 2.2s cubic-bezier(0.5, 0, 0.4, 1) infinite 0.35s; }
+      .drop-3 { animation: dropNoise 2.2s cubic-bezier(0.5, 0, 0.4, 1) infinite 0.7s; }
+      .drop-4 { animation: dropNoise 2.2s cubic-bezier(0.5, 0, 0.4, 1) infinite 1.05s; }
+      .drop-5 { animation: dropNoise 2.2s cubic-bezier(0.5, 0, 0.4, 1) infinite 1.4s; }
+
+      @keyframes dropNoise {
+        0% { transform: translateY(-70px) scale(0.6); opacity: 0; }
+        25% { opacity: 0.9; }
+        60% { transform: translateY(0px) scale(1); opacity: 1; }
+        80% { transform: translateY(35px) scale(0.5); opacity: 0.7; }
+        100% { transform: translateY(50px) scale(0); opacity: 0; }
+      }
+
+      /* --- 2. THE SIEVE VIBRATION & SHIMMER --- */
+      .sieve-chamber {
+        transform-origin: 200px 175px;
+        animation: sieveVibe 0.16s ease-in-out infinite alternate;
+      }
+      @keyframes sieveVibe {
+        0% { transform: translate(-1px, -0.5px) rotate(-0.25deg); }
+        100% { transform: translate(1px, 0.5px) rotate(0.25deg); }
+      }
+
+      .wire-shimmer {
+        animation: wireDash 2.2s linear infinite;
+      }
+      @keyframes wireDash {
+        0% { stroke-dashoffset: 0; }
+        100% { stroke-dashoffset: 24; }
+      }
+
+      .radial-pulse {
+        animation: ringPulse 2.2s ease-out infinite;
+        transform-box: fill-box;
+        transform-origin: center;
+      }
+      @keyframes ringPulse {
+        0% { transform: scale(1); opacity: 0.8; stroke-width: 2.5; }
+        80% { transform: scale(1.9); opacity: 0; stroke-width: 0.5; }
+        100% { transform: scale(1.9); opacity: 0; }
+      }
+
+      /* --- 3. OUTPUT CHUNKS REVEAL --- */
+      .chunk-1 { animation: chunkSlide 2.2s cubic-bezier(0.2, 0.8, 0.3, 1) infinite; }
+      .chunk-2 { animation: chunkSlide 2.2s cubic-bezier(0.2, 0.8, 0.3, 1) infinite 0.35s; }
+      .chunk-3 { animation: chunkSlide 2.2s cubic-bezier(0.2, 0.8, 0.3, 1) infinite 0.7s; }
+
+      @keyframes chunkSlide {
+        0% { transform: translateY(-50px) scale(0.9); opacity: 0; }
+        35% { transform: translateY(0px) scale(1); opacity: 1; }
+        85% { transform: translateY(0px) scale(1); opacity: 1; }
+        100% { transform: translateY(10px) scale(0.98); opacity: 0.8; }
+      }
+    ]]></style>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="100%" height="100%" rx="36" fill="#0C1417"/>
+
+  <!-- Subtle Funnel Gradient Rays -->
+  <polygon points="70,30 330,30 270,175 130,175" fill="#131E22" opacity="0.4"/>
+  <polygon points="140,175 260,175 300,380 100,380" fill="url(#flowBeam)" opacity="0.25"/>
+
+  <!-- ==================== 1. INCOMING NOISE PARTICLES (TOP) ==================== -->
+  <g id="incoming-noise">
+    <!-- Offers (Purple) -->
+    <g class="drop-1" transform="translate(155, 110)">
+      <rect x="-14" y="-7" width="28" height="14" rx="4" fill="#B98CFF"/>
+      <circle cx="7" cy="0" r="2" fill="#FFFFFF"/>
+    </g>
+
+    <!-- Work (Blue) -->
+    <g class="drop-2" transform="translate(245, 105)">
+      <rect x="-16" y="-7" width="32" height="14" rx="4" fill="#7C9CFF"/>
+      <line x1="-10" y1="0" x2="6" y2="0" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+    </g>
+
+    <!-- Orders (Orange) -->
+    <g class="drop-3" transform="translate(195, 80)">
+      <polygon points="0,-9 8,6 -8,6" fill="#FF9A57"/>
+    </g>
+
+    <!-- Money (Teal) -->
+    <g class="drop-4" transform="translate(130, 95)">
+      <circle cx="0" cy="0" r="7" fill="#3CC8DD"/>
+      <rect x="-3" y="-3" width="6" height="6" rx="1.5" fill="#FFFFFF"/>
+    </g>
+
+    <!-- Security (Ruby) -->
+    <g class="drop-5" transform="translate(265, 90)">
+      <circle cx="0" cy="0" r="7.5" fill="#FF7A9C"/>
+    </g>
+  </g>
+
+  <!-- ==================== 2. THE SIEVE APERTURE (CENTER) ==================== -->
+  <!-- Expanding signal ring -->
+  <circle class="radial-pulse" cx="200" cy="175" r="50" fill="none" stroke="#FFC93C" opacity="0.6"/>
+
+  <g class="sieve-chamber">
+    <!-- Outer Bezel -->
+    <ellipse cx="200" cy="175" rx="88" ry="22" fill="url(#sieveRimGrad)" stroke="#243339" stroke-width="3.5"/>
+    <ellipse cx="200" cy="175" rx="84" ry="20" fill="#12252B" stroke="#FFC93C" stroke-width="2" filter="url(#laserGlow)"/>
+
+    <!-- Wire Mesh Lattice -->
+    <g stroke="#FFC93C" stroke-width="1.3" opacity="0.85" class="wire-shimmer" stroke-dasharray="8 4">
+      <!-- Horizontal lines -->
+      <line x1="125" y1="175" x2="275" y2="175" stroke-width="1.8"/>
+      <line x1="135" y1="167" x2="265" y2="167"/>
+      <line x1="135" y1="183" x2="265" y2="183"/>
+
+      <!-- Vertical lines -->
+      <line x1="150" y1="168" x2="150" y2="182"/>
+      <line x1="170" y1="163" x2="170" y2="187"/>
+      <line x1="185" y1="160" x2="185" y2="190"/>
+      <line x1="200" y1="158" x2="200" y2="192" stroke-width="2"/>
+      <line x1="215" y1="160" x2="215" y2="190"/>
+      <line x1="230" y1="163" x2="230" y2="187"/>
+      <line x1="250" y1="168" x2="250" y2="182"/>
+    </g>
+
+    <!-- Center Laser Core -->
+    <circle cx="200" cy="175" r="5" fill="#FFFFFF" filter="url(#laserGlow)"/>
+    <circle cx="180" cy="175" r="3" fill="#FFDE6A"/>
+    <circle cx="220" cy="175" r="3" fill="#FFDE6A"/>
+  </g>
+
+  <!-- ==================== 3. STRUCTURED ORGANIZED CHUNKS (BOTTOM) ==================== -->
+  <g transform="translate(80, 220)">
+    <!-- Chunk 1: Wallet / Code (Gold Spine) -->
+    <g class="chunk-1" filter="url(#shadowFilter)" transform="translate(0, 0)">
+      <path d="M 0,0 L 240,0 
+               A 6,6 0 0,1 240,12 L 240,28 A 6,6 0 0,1 240,40 L 0,40 
+               A 6,6 0 0,1 0,28 L 0,12 A 6,6 0 0,1 0,0 Z" 
+            fill="#FFFFFF" stroke="#DCE2E5" stroke-width="1.4"/>
+      <rect x="0" y="0" width="6" height="40" fill="#FFC93C"/>
+      <line x1="175" y1="0" x2="175" y2="40" stroke="#A3B5BB" stroke-width="1.5" stroke-dasharray="3 3"/>
+      <rect x="18" y="12" width="65" height="6" rx="3" fill="#12252B"/>
+      <rect x="18" y="22" width="40" height="4" rx="2" fill="#A3B5BB"/>
+      <rect x="188" y="10" width="42" height="20" rx="5" fill="#FFEDB5"/>
+      <circle cx="209" cy="20" r="5" fill="#B77900"/>
+    </g>
+
+    <!-- Chunk 2: Offers (Purple Spine) -->
+    <g class="chunk-2" filter="url(#shadowFilter)" transform="translate(0, 52)">
+      <path d="M 0,0 L 240,0 
+               A 6,6 0 0,1 240,12 L 240,28 A 6,6 0 0,1 240,40 L 0,40 
+               A 6,6 0 0,1 0,28 L 0,12 A 6,6 0 0,1 0,0 Z" 
+            fill="#FFFFFF" stroke="#DCE2E5" stroke-width="1.4"/>
+      <rect x="0" y="0" width="6" height="40" fill="#8248D6"/>
+      <line x1="175" y1="0" x2="175" y2="40" stroke="#A3B5BB" stroke-width="1.5" stroke-dasharray="3 3"/>
+      <rect x="18" y="12" width="80" height="6" rx="3" fill="#12252B"/>
+      <rect x="18" y="22" width="50" height="4" rx="2" fill="#A3B5BB"/>
+      <rect x="188" y="10" width="42" height="20" rx="5" fill="#F0E7FC"/>
+      <circle cx="209" cy="20" r="5" fill="#8248D6"/>
+    </g>
+
+    <!-- Chunk 3: Money (Teal Spine) -->
+    <g class="chunk-3" filter="url(#shadowFilter)" transform="translate(0, 104)">
+      <path d="M 0,0 L 240,0 
+               A 6,6 0 0,1 240,12 L 240,28 A 6,6 0 0,1 240,40 L 0,40 
+               A 6,6 0 0,1 0,28 L 0,12 A 6,6 0 0,1 0,0 Z" 
+            fill="#FFFFFF" stroke="#DCE2E5" stroke-width="1.4"/>
+      <rect x="0" y="0" width="6" height="40" fill="#0C8397"/>
+      <line x1="175" y1="0" x2="175" y2="40" stroke="#A3B5BB" stroke-width="1.5" stroke-dasharray="3 3"/>
+      <rect x="18" y="12" width="70" height="6" rx="3" fill="#12252B"/>
+      <rect x="18" y="22" width="45" height="4" rx="2" fill="#A3B5BB"/>
+      <rect x="188" y="10" width="42" height="20" rx="5" fill="#D8F0F4"/>
+      <circle cx="209" cy="20" r="5" fill="#0C8397"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alak · الک — Sift the noise</title>
+  
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="Alak · الک — Sift the noise">
+  <meta name="description" content="Offline, on-device notification organizer for Android. Captures pushes, extracts promo codes & discounts, redacts OTPs, and never requests the internet permission.">
+  <meta name="keywords" content="Alak, Android, Notification Organizer, Offline, Privacy, Promo Codes, .NET 10, MAUI, Jalali Calendar, Farsi, Persian, SQLCipher, llama.cpp">
+  <meta name="author" content="SudoScraTchY">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sudoscratchy.github.io/Alak/">
+  <meta property="og:title" content="Alak · الک — Sift the noise">
+  <meta property="og:description" content="Offline, on-device notification organizer for Android. Captures pushes, extracts promo codes & discounts into physical Ticket Stubs, 100% offline.">
+  <meta property="og:image" content="assets/branding/alak_minimalist_icon_vector.svg">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://sudoscratchy.github.io/Alak/">
+  <meta property="twitter:title" content="Alak · الک — Sift the noise">
+  <meta property="twitter:description" content="Offline, on-device notification organizer for Android. Captures pushes, extracts promo codes & discounts into physical Ticket Stubs, 100% offline.">
+  <meta property="twitter:image" content="assets/branding/alak_minimalist_icon_vector.svg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/branding/alak_minimalist_icon_vector.svg">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==================== SITE HEADER ==================== -->
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <!-- Brand -->
+      <a href="#" class="brand-group">
+        <div class="brand-logo">
+          <img src="assets/branding/alak_minimalist_icon_vector.svg" alt="Alak Sieve Emblem">
+        </div>
+        <div class="brand-titles">
+          <span class="brand-name">
+            Alak · الک
+            <span class="brand-badge">v0.8 Alpha</span>
+          </span>
+          <span class="brand-tagline" data-i18n="brand.tagline">Sift the noise · On-device notification sieve</span>
+        </div>
+      </a>
+
+      <!-- Navigation Links -->
+      <ul class="nav-links">
+        <li><a href="#simulator" class="nav-link" data-i18n="nav.simulator">Live Simulator</a></li>
+        <li><a href="#ticket-stub" class="nav-link" data-i18n="nav.wallet">Ticket Stub</a></li>
+        <li><a href="#architecture" class="nav-link" data-i18n="nav.architecture">3-Tier AI</a></li>
+        <li><a href="#privacy" class="nav-link" data-i18n="nav.privacy">Privacy Audit</a></li>
+        <li><a href="#gallery" class="nav-link" data-i18n="nav.gallery">Screenshots</a></li>
+        <li><a href="#download" class="nav-link" data-i18n="nav.download">Download APK</a></li>
+      </ul>
+
+      <!-- Action Controls -->
+      <div class="nav-actions">
+        <!-- Language Switcher -->
+        <button id="lang-toggle" class="control-btn" title="Toggle Persian / English">
+          <span>🇮🇷 فارسی</span>
+        </button>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="control-btn" title="Toggle Light / Dark Mode">
+          <span>🌙 Dark</span>
+        </button>
+
+        <!-- GitHub Link -->
+        <a href="https://github.com/SudoScraTchY/Alak" target="_blank" rel="noopener noreferrer" class="control-btn btn-github">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          <span>GitHub</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <section class="hero-section">
+    <div class="container hero-grid">
+      <!-- Left Hero Column -->
+      <div class="hero-content">
+        <div class="hero-pill">
+          <span class="dot"></span>
+          <span data-i18n="hero.pill">100% Offline · Zero Internet Permission · .NET 10 MAUI</span>
+        </div>
+
+        <h1 class="hero-title">
+          <span data-i18n="hero.title_pre">Sift the noise.</span>
+          <br>
+          <span class="gradient-text" data-i18n="hero.title_post">Keep what matters.</span>
+        </h1>
+
+        <p class="hero-desc" data-i18n="hero.desc">
+          Your notification shade is volatile chaos. Alak is a private, on-device clerk that captures notifications, extracts promo codes & discounts into a physical Ticket Stub, safely redacts OTPs, and never sends a single byte to any cloud.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="#download" class="btn-primary">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span data-i18n="hero.cta_download">Download APK (v0.8 Alpha)</span>
+          </a>
+
+          <a href="https://github.com/SudoScraTchY/Alak" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            <span data-i18n="hero.cta_github">View on GitHub</span>
+          </a>
+
+          <a href="#simulator" class="btn-secondary">
+            <span data-i18n="hero.cta_simulator">Try Live Simulator ↓</span>
+          </a>
+        </div>
+
+        <div class="hero-meta-strip">
+          <div class="meta-item">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+            <span data-i18n="hero.meta_offline">Zero Network Permission</span>
+          </div>
+          <div class="meta-item">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+            <span data-i18n="hero.meta_crypto">SQLCipher 256-bit AES</span>
+          </div>
+          <div class="meta-item">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+            <span data-i18n="hero.meta_speed">&lt; 1.5ms Rule Match</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Hero Column: Animated Sieve & Ticket Stub Showcase -->
+      <div class="hero-visual">
+        <div class="sieve-interactive-stage">
+          <div class="sieve-animation-wrap">
+            <img src="assets/branding/sifter_v2_pure_flow.svg" alt="Animated Alak Sieve Flow">
+          </div>
+          <p class="sieve-caption" data-i18n="stage.caption">
+            Real-time on-device classification pipeline: noise falls through, valuable stubs settle.
+          </p>
+
+          <!-- Floating Ticket Stub Sample -->
+          <div class="hero-floating-stub">
+            <div class="ticket-stub" style="border-left-color: var(--cat-offers); border-right-color: var(--cat-offers);">
+              <div class="stub-header">
+                <div class="stub-brand-info">
+                  <span>🎟️ SnappFood · اسنپ‌فود</span>
+                </div>
+                <span class="stub-category-tag" style="background-color: var(--cat-offers-tint); color: var(--cat-offers);">Offers</span>
+              </div>
+              <div class="stub-body">
+                <div class="stub-code-block">
+                  <span class="stub-code-text font-mono">SNAPP30</span>
+                  <button class="stub-copy-btn" onclick="copyStubCode('SNAPP30', this)" title="Copy Code">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  </button>
+                </div>
+                <span class="stub-discount-chip" style="color: var(--cat-offers);">30% OFF</span>
+              </div>
+              <div class="stub-expiry-track">
+                <div class="stub-expiry-fill urgent"></div>
+              </div>
+              <div class="stub-footer">
+                <span>⏰ Ends tonight at midnight</span>
+                <span>✓ Ready to copy</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== INTERACTIVE SIMULATOR SECTION ==================== -->
+  <section id="simulator" class="section-block">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-pill" data-i18n="sim.pill">Interactive Sandbox</span>
+        <h2 class="section-title" data-i18n="sim.title">Experience the Sieve Live</h2>
+        <p class="section-subtitle" data-i18n="sim.subtitle">
+          Select a sample notification below or type your own to test Alak's Tier-1 rule matching, entity extraction, and zero-storage privacy guarantees.
+        </p>
+      </div>
+
+      <div class="simulator-box">
+        <!-- Preset Toolbar -->
+        <div class="simulator-toolbar">
+          <div class="sim-label">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span data-i18n="sim.preset_label">Try presets:</span>
+          </div>
+          <div class="presets-list">
+            <button class="preset-chip active" data-preset="snap" data-i18n="sim.preset_snap">🍕 SnapFood 30% Promo</button>
+            <button class="preset-chip" data-preset="bank" data-i18n="sim.preset_bank">💳 Bank Mellat Debit</button>
+            <button class="preset-chip" data-preset="otp" data-i18n="sim.preset_otp">🔐 Bank OTP (Zero-Stored)</button>
+            <button class="preset-chip" data-preset="ride" data-i18n="sim.preset_ride">🚗 Snapp Driver PIN</button>
+            <button class="preset-chip" data-preset="dominos" data-i18n="sim.preset_dominos">🏷️ Domino's 25% Deal</button>
+            <button class="preset-chip" data-preset="slack" data-i18n="sim.preset_slack">💼 Slack Team Mention</button>
+          </div>
+        </div>
+
+        <!-- Simulator Grid -->
+        <div class="simulator-grid">
+          <!-- Input Pane -->
+          <div class="sim-input-pane">
+            <div class="sim-field">
+              <label for="sim-input-title" data-i18n="sim.field_title">Notification Title / Sender</label>
+              <input type="text" id="sim-input-title" placeholder="e.g. SnapFood, Bank, Slack..." data-i18n-ph="sim.field_title_ph" value="هدیه اولین سفارش">
+            </div>
+
+            <div class="sim-field" style="flex: 1;">
+              <label for="sim-input-body" data-i18n="sim.field_body">Notification Body</label>
+              <textarea id="sim-input-body" rows="4" placeholder="Paste or type notification content here..." data-i18n-ph="sim.field_body_ph">کد تخفیف ۳۰٪ اولین سفارش شما: SNAPP30 — تا پایان امشب فرصت دارید</textarea>
+            </div>
+
+            <button id="sim-btn-sift" class="sim-btn-sift">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              <span data-i18n="sim.btn_sift">Sift Notification ⚡</span>
+            </button>
+          </div>
+
+          <!-- Output Pane -->
+          <div class="sim-output-pane">
+            <div class="sim-result-header">
+              <div id="sim-cat-badge" class="sim-category-badge" style="background-color: var(--cat-offers-tint); color: var(--cat-offers);">
+                Offers
+              </div>
+              <div class="sim-match-stats">
+                <span data-i18n="sim.latency_label">Classification Latency:</span>
+                <strong id="sim-latency-val" class="font-mono">0.38 ms</strong>
+              </div>
+            </div>
+
+            <!-- Redacted OTP Alert (Hidden by default) -->
+            <div id="sim-otp-alert" class="otp-safety-card" style="display: none;">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              <div>
+                <strong data-i18n="sim.otp_warning_title">ZERO-TOLERANCE PRIVACY GUARD ACTIVATED</strong>
+                <span data-i18n="sim.otp_warning_desc">OTP / 2FA secret detected. Strictly transient: notification body is immediately purged from memory and NEVER stored to the encrypted database.</span>
+              </div>
+            </div>
+
+            <!-- Extracted Facts Matrix -->
+            <div>
+              <div style="font-size: 13px; font-weight: 700; color: var(--text-secondary); margin-bottom: 8px;" data-i18n="sim.facts_title">Extracted Facts & Entities</div>
+              <div id="sim-facts-matrix" class="facts-matrix">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+
+            <!-- Dynamic Ticket Stub Area -->
+            <div id="sim-stub-area">
+              <!-- Dynamically populated -->
+            </div>
+
+            <!-- Decision Evidence Trace -->
+            <div id="sim-evidence-receipt" class="evidence-receipt">
+              <div class="evidence-title">Tier-1 Evidence Trace (Explainability):</div>
+              <div>→ Matched promo.code, discount.percent; log-odds score 4.82</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SIGNATURE COMPONENT: THE TICKET STUB ==================== -->
+  <section id="ticket-stub" class="section-block">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-pill" data-i18n="stub.pill">Signature Component</span>
+        <h2 class="section-title" data-i18n="stub.title">The Ticket Stub</h2>
+        <p class="section-subtitle" data-i18n="stub.subtitle">
+          Why settle for generic rounded cards? Alak treats promo codes like physical coupon stubs: torn edges, monospaced clarity, and visual expiry tracking.
+        </p>
+      </div>
+
+      <div class="bilingual-showcase">
+        <div class="bilingual-grid">
+          <div>
+            <h3 style="font-size: 22px; font-weight: 800; margin-bottom: 16px;">Physical Paper, Settled on Your Desk</h3>
+            <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px;">
+              Most apps drown notifications in a wall of homogenous rounded cards. Alak borrows directly from the tactile shape of a physical ticket:
+            </p>
+            <ul class="bidi-feature-list">
+              <li class="bidi-item">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span><strong>Die-Cut Perforation:</strong> A perforated tear notch evoking a ticket stub torn from a dispenser.</span>
+              </li>
+              <li class="bidi-item">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span><strong>JetBrains Mono Code:</strong> Zero character confusion between <code>0</code> and <code>O</code>, <code>1</code> and <code>l</code>.</span>
+              </li>
+              <li class="bidi-item">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span><strong>Draining Expiry Bar:</strong> A thin 3px bar visually draining towards midnight so you never miss a flash discount.</span>
+              </li>
+              <li class="bidi-item">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span><strong>One-Tap Copy & Feedback:</strong> Copies clean text with haptic confirmation.</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Interactive Ticket Stub Showcase -->
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="ticket-stub" style="border-left-color: var(--cat-offers); border-right-color: var(--cat-offers);">
+              <div class="stub-header">
+                <div class="stub-brand-info">
+                  <span>🎟️ Digikala · دیجی‌کالا</span>
+                </div>
+                <span class="stub-category-tag" style="background-color: var(--cat-offers-tint); color: var(--cat-offers);" data-i18n="stub.active">Active</span>
+              </div>
+              <div class="stub-body">
+                <div class="stub-code-block">
+                  <span class="stub-code-text font-mono">DIGI200</span>
+                  <button class="stub-copy-btn" onclick="copyStubCode('DIGI200', this)" title="Copy Code">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  </button>
+                </div>
+                <span class="stub-discount-chip" style="color: var(--cat-offers);">200,000 Toman</span>
+              </div>
+              <div class="stub-expiry-track">
+                <div class="stub-expiry-fill" style="width: 85%;"></div>
+              </div>
+              <div class="stub-footer">
+                <span>⏰ Valid until tomorrow evening</span>
+                <span>Min spend: 800,000 Toman</span>
+              </div>
+            </div>
+
+            <div class="ticket-stub" style="border-left-color: var(--cat-codes); border-right-color: var(--cat-codes);">
+              <div class="stub-header">
+                <div class="stub-brand-info">
+                  <span>🎟️ Takhfifan · تخفیفان</span>
+                </div>
+                <span class="stub-category-tag" style="background-color: var(--cat-codes-tint); color: var(--cat-codes);" data-i18n="stub.expiring">Expiring Tonight</span>
+              </div>
+              <div class="stub-body">
+                <div class="stub-code-block">
+                  <span class="stub-code-text font-mono">SPECIAL50</span>
+                  <button class="stub-copy-btn" onclick="copyStubCode('SPECIAL50', this)" title="Copy Code">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  </button>
+                </div>
+                <span class="stub-discount-chip" style="color: var(--cat-codes);">50% OFF</span>
+              </div>
+              <div class="stub-expiry-track">
+                <div class="stub-expiry-fill urgent" style="width: 25%;"></div>
+              </div>
+              <div class="stub-footer">
+                <span style="color: var(--cat-security); font-weight: 700;">⚠️ Expires in 2 hours</span>
+                <span>Flash coupon</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 3-TIER ARCHITECTURE SECTION ==================== -->
+  <section id="architecture" class="section-block">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-pill" data-i18n="arch.pill">Technical Architecture</span>
+        <h2 class="section-title" data-i18n="arch.title">The 3-Tier Classification Pipeline</h2>
+        <p class="section-subtitle" data-i18n="arch.subtitle">
+          Engineered for instant speed and zero cloud dependency. 99% of work finishes in under a millisecond with 0 battery waste.
+        </p>
+      </div>
+
+      <div class="tiers-grid">
+        <!-- Tier 1 -->
+        <div class="tier-card">
+          <div class="tier-num" data-i18n="arch.t1_num">Tier 1 · Instant Rule Engine</div>
+          <h3 class="tier-title" data-i18n="arch.t1_title">Deterministic Rules</h3>
+          <div class="tier-badge-strip">
+            <span class="tier-tag" data-i18n="arch.t1_tag1">Sub-millisecond</span>
+            <span class="tier-tag" data-i18n="arch.t1_tag2">Aho-Corasick</span>
+          </div>
+          <p class="tier-desc" data-i18n="arch.t1_desc">
+            Evaluates incoming notifications with log-odds concept scoring and multilingual extractors. Resolves categories safety-first (Security &gt; Money &gt; Work &gt; Orders &gt; Offers).
+          </p>
+          <ul class="tier-stats-list">
+            <li class="tier-stat-item">
+              <span class="stat-k" data-i18n="arch.t1_stat1_k">Average Latency</span>
+              <span class="stat-v" data-i18n="arch.t1_stat1_v">&lt; 0.5 ms</span>
+            </li>
+            <li class="tier-stat-item">
+              <span class="stat-k" data-i18n="arch.t1_stat2_k">RAM Footprint</span>
+              <span class="stat-v" data-i18n="arch.t1_stat2_v">Negligible</span>
+            </li>
+            <li class="tier-stat-item">
+              <span class="stat-k" data-i18n="arch.t1_stat3_k">Network Calls</span>
+              <span class="stat-v" data-i18n="arch.t1_stat3_v">0 (Always)</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Tier 2 -->
+        <div class="tier-card">
+          <div class="tier-num" data-i18n="arch.t2_num" style="color: var(--cat-offers);">Tier 2 · Adaptive Classifier</div>
+          <h3 class="tier-title" data-i18n="arch.t2_title">On-Device Learning</h3>
+          <div class="tier-badge-strip">
+            <span class="tier-tag" data-i18n="arch.t2_tag1">Online AdaGrad</span>
+            <span class="tier-tag" data-i18n="arch.t2_tag2">Hashed Features</span>
+          </div>
+          <p class="tier-desc" data-i18n="arch.t2_desc">
+            Learns from your corrections on-device. Feature hashing guarantees that no raw personal text is ever stored for training weights.
+          </p>
+          <ul class="tier-stats-list">
+            <li class="tier-stat-item">
+              <span class="stat-k" data-i18n="arch.t2_stat1_k">Weight File</span>
+              <span class="stat-v" data-i18n="arch.t2_stat1_v">2.4 MB (Private)</span>
+            </li>
+            <li class="tier-stat-item">
+              <span class="stat-k" data-i18n="arch.t2_stat2_k">Update Speed</span>
+              <span class="stat-v" data-i18n="arch.t2_stat2_v">&lt; 3 ms</span>
+            </li>
+            <li class="tier-stat-item">
+              <span class="stat-k" data-i18n="arch.t2_stat3_k">Adaptation</span>
+              <span class="stat-v" data-i18n="arch.t2_stat3_v">Instant</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Tier 3 -->
+        <div class="tier-card">
+          <div class="tier-num" data-i18n="arch.t3_num" style="color: var(--cat-codes);">Tier 3 · Small Language Model</div>
+          <h3 class="tier-title" data-i18n="arch.t3_title">User-Triggered SLM</h3>
+          <div class="tier-badge-strip">
+            <span class="tier-tag" data-i18n="arch.t3_tag1">Tap-Only</span>
+            <span class="tier-tag" data-i18n="arch.t3_tag2">BYO Model</span>
+          </div>
+          <p class="tier-desc" data-i18n="arch.t3_desc">
+            Optional local AI: runs strictly when you tap 'Explain' or 'Summarize'. Uses GGUF / LiteRT models imported by you. Never runs in background.
+          </p>
+          <ul class="tier-stats-list">
+            <li class="tier-stat-item">
+              <span class="stat-k" data-i18n="arch.t3_stat1_k">Execution Mode</span>
+              <span class="stat-v" data-i18n="arch.t3_stat1_v">Manual Tap Only</span>
+            </li>
+            <li class="tier-stat-item">
+              <span class="stat-k" data-i18n="arch.t3_stat2_k">Constraint</span>
+              <span class="stat-v" data-i18n="arch.t3_stat2_v">GBNF Grammars</span>
+            </li>
+            <li class="tier-stat-item">
+              <span class="stat-k" data-i18n="arch.t3_stat3_k">Cloud Leak</span>
+              <span class="stat-v" data-i18n="arch.t3_stat3_v">Impossible</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PRIVACY BY CONSTRUCTION ==================== -->
+  <section id="privacy" class="section-block">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-pill" data-i18n="priv.pill">Privacy by Construction</span>
+        <h2 class="section-title" data-i18n="priv.title">Verifiable, Not Promised</h2>
+        <p class="section-subtitle" data-i18n="priv.subtitle">
+          We don't ask you to trust a privacy policy. Privacy is hardcoded into the architecture and verified automatically in CI.
+        </p>
+      </div>
+
+      <div class="privacy-grid">
+        <!-- Rules Stack -->
+        <div class="rules-stack">
+          <div class="rule-item">
+            <div class="rule-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path><path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
+            </div>
+            <div class="rule-content">
+              <h4 data-i18n="priv.r1_title">Zero Network Capability</h4>
+              <p data-i18n="priv.r1_desc">Neither android.permission.INTERNET nor ACCESS_NETWORK_STATE is declared. CI privacy-guard halts builds if any network API is detected.</p>
+            </div>
+          </div>
+
+          <div class="rule-item">
+            <div class="rule-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            </div>
+            <div class="rule-content">
+              <h4 data-i18n="priv.r2_title">No Analytics, Ads, or Crash SDKs</h4>
+              <p data-i18n="priv.r2_desc">No Firebase, Facebook, Sentry, AppCenter, or telemetry SDKs exist anywhere in the dependency graph.</p>
+            </div>
+          </div>
+
+          <div class="rule-item">
+            <div class="rule-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            </div>
+            <div class="rule-content">
+              <h4 data-i18n="priv.r3_title">SQLCipher 256-bit AES Encryption</h4>
+              <p data-i18n="priv.r3_desc">All stored notifications and extracted entities reside in an encrypted database with full-text search.</p>
+            </div>
+          </div>
+
+          <div class="rule-item">
+            <div class="rule-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </div>
+            <div class="rule-content">
+              <h4 data-i18n="priv.r4_title">Zero OTP / 2FA Persistence</h4>
+              <p data-i18n="priv.r4_desc">Verification codes, banking passwords, and 2FA tokens are classified as security and immediately discarded from persistent storage.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- CI Terminal Inspection Card -->
+        <div class="ci-terminal-box">
+          <div class="ci-header">
+            <div class="ci-dots">
+              <span class="ci-dot dot-red"></span>
+              <span class="ci-dot dot-yellow"></span>
+              <span class="ci-dot dot-green"></span>
+            </div>
+            <span>.github/workflows/ci.yml · privacy-guard</span>
+          </div>
+          <div><span class="ci-comment"># Enforced on every single pull request:</span></div>
+          <div><span class="ci-code">if grep -rInE 'android\.permission\.(INTERNET|ACCESS_NETWORK_STATE)' src/; then</span></div>
+          <div>&nbsp;&nbsp;echo "::error::R2 violation: banned Android permission found"; exit 1</div>
+          <div><span class="ci-code">fi</span></div>
+          <br>
+          <div><span class="ci-comment"># Enforce zero analytics or tracking SDKs:</span></div>
+          <div><span class="ci-code">if grep -rInEi '(firebase|crashlytics|admob|adjust|segment)' src/; then</span></div>
+          <div>&nbsp;&nbsp;echo "::error::R2 violation: tracker detected"; exit 1</div>
+          <div><span class="ci-code">fi</span></div>
+          <br>
+          <div><span class="ci-success">✓ Privacy Guard Status: PASSING (Zero permissions declared)</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TWO SCRIPTS, ONE PRODUCT ==================== -->
+  <section class="section-block">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-pill" data-i18n="bidi.pill">Two Scripts, One Product</span>
+        <h2 class="section-title" data-i18n="bidi.title">Persian & English as Equals</h2>
+        <p class="section-subtitle" data-i18n="bidi.subtitle">
+          Persian is not an afterthought translated from English. Both scripts receive native typographic treatment and dedicated language features.
+        </p>
+      </div>
+
+      <div class="bilingual-showcase">
+        <div class="bilingual-grid">
+          <ul class="bidi-feature-list">
+            <li class="bidi-item">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span data-i18n="bidi.item1">Native Jalali (شمسی) calendar engine with golden-table tests (1400–1420).</span>
+            </li>
+            <li class="bidi-item">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span data-i18n="bidi.item2">Full Arabic/Persian character normalization (ی/ي, ک/ك, and ZWNJ نیم‌فاصله).</span>
+            </li>
+            <li class="bidi-item">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span data-i18n="bidi.item3">Persian scale words (هزار, میلیون) and currency conversions (ریال / تومان).</span>
+            </li>
+            <li class="bidi-item">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span data-i18n="bidi.item4">Experimental Finglish (fa-latn) extension pack with precision guard rails.</span>
+            </li>
+          </ul>
+
+          <div class="calendar-card">
+            <div class="calendar-header">
+              <span style="font-weight: 800; font-size: 16px;" data-i18n="bidi.cal_title">Jalali Solar Calendar</span>
+              <span class="calendar-badge">Alak.Text</span>
+            </div>
+            <div class="cal-date-preview font-mono" data-i18n="bidi.cal_date">۳ آبان ۱۴۰۵</div>
+            <p class="cal-subtext" data-i18n="bidi.cal_desc">
+              Automatic extraction of Persian expiry dates ('تا پایان امشب', 'جمعه آینده').
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SCREENSHOTS GALLERY ==================== -->
+  <section id="gallery" class="section-block">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-pill" data-i18n="gal.pill">App Showcase</span>
+        <h2 class="section-title" data-i18n="gal.title">Crafted for Daily Calm</h2>
+        <p class="section-subtitle" data-i18n="gal.subtitle">
+          Explore the official Android UI. Paper textures, clear colored spines, and zero clutter.
+        </p>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="gallery-filter">
+        <button class="filter-btn active" data-filter="all" data-i18n="gal.tab_all">All Screens</button>
+        <button class="filter-btn" data-filter="inbox" data-i18n="gal.tab_inbox">Inbox & Triage</button>
+        <button class="filter-btn" data-filter="wallet" data-i18n="gal.tab_wallet">Codes Wallet</button>
+        <button class="filter-btn" data-filter="detail" data-i18n="gal.tab_detail">Detail & Evidence</button>
+        <button class="filter-btn" data-filter="dark" data-i18n="gal.tab_dark">Dark Mode</button>
+      </div>
+
+      <!-- Gallery Grid -->
+      <div class="gallery-grid">
+        <!-- Item 1: Inbox -->
+        <div class="gallery-item" data-category="inbox" data-full-img="assets/screenshots/inbox_promo.png">
+          <div class="gallery-thumb-wrap">
+            <img src="assets/screenshots/inbox_promo.png" alt="Alak Inbox View" loading="lazy">
+          </div>
+          <div class="gallery-info">
+            <h4 class="gallery-title" data-i18n="gal.card1_title">Triage Inbox</h4>
+            <p class="gallery-subtitle" data-i18n="gal.card1_sub">Categorized notification stack with colored spines.</p>
+          </div>
+        </div>
+
+        <!-- Item 2: Codes Wallet -->
+        <div class="gallery-item" data-category="wallet" data-full-img="assets/screenshots/codes_tab2.png">
+          <div class="gallery-thumb-wrap">
+            <img src="assets/screenshots/codes_tab2.png" alt="Alak Codes Wallet" loading="lazy">
+          </div>
+          <div class="gallery-info">
+            <h4 class="gallery-title" data-i18n="gal.card2_title">Codes Wallet</h4>
+            <p class="gallery-subtitle" data-i18n="gal.card2_sub">Saved promo codes with one-tap copy and expiry tracker.</p>
+          </div>
+        </div>
+
+        <!-- Item 3: Notification Detail Light -->
+        <div class="gallery-item" data-category="detail" data-full-img="assets/screenshots/detail_light.png">
+          <div class="gallery-thumb-wrap">
+            <img src="assets/screenshots/detail_light.png" alt="Notification Detail View" loading="lazy">
+          </div>
+          <div class="gallery-info">
+            <h4 class="gallery-title" data-i18n="gal.card3_title">Notification Detail</h4>
+            <p class="gallery-subtitle" data-i18n="gal.card3_sub">Full Ticket Stub with transparent evidence trace.</p>
+          </div>
+        </div>
+
+        <!-- Item 4: Dark Mode Detail -->
+        <div class="gallery-item" data-category="dark" data-full-img="assets/screenshots/detail_dark.png">
+          <div class="gallery-thumb-wrap">
+            <img src="assets/screenshots/detail_dark.png" alt="Dark Mode Detail View" loading="lazy">
+          </div>
+          <div class="gallery-info">
+            <h4 class="gallery-title" data-i18n="gal.card4_title">Dark Mode Detail</h4>
+            <p class="gallery-subtitle" data-i18n="gal.card4_sub">Calm, low-contrast night palette.</p>
+          </div>
+        </div>
+
+        <!-- Item 5: Settings -->
+        <div class="gallery-item" data-category="inbox" data-full-img="assets/screenshots/settings_page2.png">
+          <div class="gallery-thumb-wrap">
+            <img src="assets/screenshots/settings_page2.png" alt="Settings & Privacy Controls" loading="lazy">
+          </div>
+          <div class="gallery-info">
+            <h4 class="gallery-title" data-i18n="gal.card5_title">Settings & Controls</h4>
+            <p class="gallery-subtitle" data-i18n="gal.card5_sub">Granular capture settings per application.</p>
+          </div>
+        </div>
+
+        <!-- Item 6: Sources Dark -->
+        <div class="gallery-item" data-category="dark" data-full-img="assets/screenshots/sources_dark.png">
+          <div class="gallery-thumb-wrap">
+            <img src="assets/screenshots/sources_dark.png" alt="Sources Screen Dark" loading="lazy">
+          </div>
+          <div class="gallery-info">
+            <h4 class="gallery-title" data-i18n="gal.card6_title">Sources Configuration</h4>
+            <p class="gallery-subtitle" data-i18n="gal.card6_sub">Full control over which apps are captured.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SPECS & DOWNLOAD ==================== -->
+  <section id="download" class="section-block">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-pill" data-i18n="specs.pill">Specifications</span>
+        <h2 class="section-title" data-i18n="specs.title">Built with Modern Open Source</h2>
+      </div>
+
+      <!-- Specs Table -->
+      <div class="specs-table-card">
+        <table class="specs-table">
+          <tbody>
+            <tr>
+              <td data-i18n="specs.platform">Target Platform</td>
+              <td data-i18n="specs.platform_v">Android 7.0+ (API 24 to API 36)</td>
+            </tr>
+            <tr>
+              <td data-i18n="specs.framework">Framework</td>
+              <td data-i18n="specs.framework_v">.NET 10 MAUI (net10.0-android36.0)</td>
+            </tr>
+            <tr>
+              <td data-i18n="specs.storage">Database Storage</td>
+              <td data-i18n="specs.storage_v">SQLCipher SQLite + FTS5 (256-bit AES)</td>
+            </tr>
+            <tr>
+              <td data-i18n="specs.perf">Classification Latency</td>
+              <td data-i18n="specs.perf_v">&lt; 1.8 ms on low-end ARM64</td>
+            </tr>
+            <tr>
+              <td data-i18n="specs.license">License</td>
+              <td data-i18n="specs.license_v">GPL-3.0 (Code) / CC0-1.0 (Data &amp; Packs)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Download CTA Card -->
+      <div class="download-card">
+        <h3 class="download-title" data-i18n="down.title">Get Alak for Android</h3>
+        <p class="download-desc" data-i18n="down.desc">
+          Download the official signed release APK directly from GitHub or build from source using the .NET 10 SDK.
+        </p>
+
+        <div class="download-actions">
+          <a href="https://github.com/SudoScraTchY/Alak/releases/download/v0.8.0-alpha/Alak-v0.8.0-alpha-arm64.apk" class="btn-primary" download>
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span data-i18n="down.btn_apk">Download Alak APK (arm64)</span>
+          </a>
+
+          <a href="https://github.com/SudoScraTchY/Alak" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            <span data-i18n="down.btn_source">Source Code on GitHub</span>
+          </a>
+        </div>
+
+        <div class="hash-notice">
+          <span data-i18n="down.sha_label">SHA-256 Checksum:</span>
+          <code>dd50cfb6855e7b9a188b678a6724c61ac3a0ecc3a9e7c4c0cb79111d174c107d</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>Alak · الک</h3>
+          <p data-i18n="footer.desc">
+            Alak (الک) is Persian for sieve — the fine mesh that keeps what matters and lets the rest fall through. Free, open-source, and private forever.
+          </p>
+        </div>
+
+        <div class="footer-links">
+          <h4 data-i18n="footer.links_title">Repository</h4>
+          <ul>
+            <li><a href="https://github.com/SudoScraTchY/Alak" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/SudoScraTchY/Alak/releases" target="_blank" rel="noopener noreferrer">Releases</a></li>
+            <li><a href="https://github.com/SudoScraTchY/Alak/issues" target="_blank" rel="noopener noreferrer">Issue Tracker</a></li>
+            <li><a href="https://github.com/SudoScraTchY/Alak/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">GPL-3.0 License</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h4 data-i18n="footer.docs_title">Documentation</h4>
+          <ul>
+            <li><a href="https://github.com/SudoScraTchY/Alak/blob/main/docs/ARCHITECTURE.md" target="_blank" rel="noopener noreferrer">Architecture</a></li>
+            <li><a href="https://github.com/SudoScraTchY/Alak/blob/main/docs/PRIVACY.md" target="_blank" rel="noopener noreferrer">Privacy Threat Model</a></li>
+            <li><a href="https://github.com/SudoScraTchY/Alak/blob/main/docs/BUILD.md" target="_blank" rel="noopener noreferrer">Build Instructions</a></li>
+            <li><a href="https://github.com/SudoScraTchY/Alak/blob/main/docs/spec/SPEC.md" target="_blank" rel="noopener noreferrer">Engineering Spec</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span data-i18n="footer.copy">© 2026 Alak Project · Licensed under GPL-3.0</span>
+        <a href="#" style="color: var(--text-secondary);">Back to top ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== LIGHTBOX MODAL ==================== -->
+  <div id="lightbox-modal" class="modal-overlay">
+    <div class="modal-content">
+      <button id="lightbox-close" class="modal-close-btn">&times;</button>
+      <img id="lightbox-img" src="" alt="Screenshot Full View">
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
+</body>
+</html>
