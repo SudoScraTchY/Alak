@@ -18,6 +18,7 @@ public interface IPromoCodeRepository
     Task DeleteAsync(long id);
     Task<int> GetActiveCountAsync();
     Task<PromoCode?> GetSoonestExpiringAsync();
+    Task<List<PromoCode>> GetActiveCodesForPackageAsync(string package, string? storeHint = null);
 }
 
 /// <summary>
@@ -62,7 +63,8 @@ public sealed record PromoCode(
     int TimesSeen,
     long? Reminder24hAt = null,
     long? ReminderMorningAt = null,
-    long? ReminderCustomAt = null)
+    long? ReminderCustomAt = null,
+    string? NotificationId = null)
 {
     public bool HasValidUntil => ValidUntil.HasValue;
     public bool IsExpiringSoon => ValidUntil.HasValue && ValidUntil.Value <= DateTimeOffset.UtcNow.AddHours(48);
@@ -115,6 +117,7 @@ public sealed class PromoCodeRepository : IPromoCodeRepository
                 reminder_24h_at INTEGER,
                 reminder_morning_at INTEGER,
                 reminder_custom_at INTEGER,
+                notification_id TEXT,
                 UNIQUE(code_norm, package)
             );
             
@@ -122,196 +125,272 @@ public sealed class PromoCodeRepository : IPromoCodeRepository
             CREATE INDEX IF NOT EXISTS idx_promo_codes_status ON promo_codes(status);
             CREATE INDEX IF NOT EXISTS idx_promo_codes_valid_until ON promo_codes(valid_until);
         ");
-    }
 
-    public async Task<List<PromoCode>> GetAllAsync()
-    {
-        var list = new List<PromoCode>();
-        using var cmd = _db.CreateCommand();
-        cmd.CommandText = @"
-            SELECT id, code_norm, raw_code, package, account_email, channel_id, status, confidence,
-                   kind, discount_value, discount_type, currency, min_spend, cap, scope,
-                   first_order, single_use, valid_from, valid_until, store_hint,
-                   first_seen_at, last_seen_at, times_seen,
-                   reminder_24h_at, reminder_morning_at, reminder_custom_at
-            FROM promo_codes
-            ORDER BY 
-                CASE status WHEN 1 THEN 0 WHEN 0 THEN 1 WHEN 2 THEN 2 WHEN 3 THEN 3 WHEN 4 THEN 4 ELSE 5 END,
-                last_seen_at DESC";
-        
-        using var r = await cmd.ExecuteReaderAsync();
-        while (await r.ReadAsync())
+        try
         {
-            list.Add(ReadPromoCode(r));
+            _db.Execute("ALTER TABLE promo_codes ADD COLUMN notification_id TEXT;");
         }
-        return list;
-    }
-
-    public async Task<List<PromoCode>> GetByStatusAsync(PromoCodeStatus status)
-    {
-        var list = new List<PromoCode>();
-        using var cmd = _db.CreateCommand();
-        cmd.CommandText = @"
-            SELECT id, code_norm, raw_code, package, account_email, channel_id, status, confidence,
-                   kind, discount_value, discount_type, currency, min_spend, cap, scope,
-                   first_order, single_use, valid_from, valid_until, store_hint,
-                   first_seen_at, last_seen_at, times_seen,
-                   reminder_24h_at, reminder_morning_at, reminder_custom_at
-            FROM promo_codes
-            WHERE status = @status
-            ORDER BY last_seen_at DESC";
-        cmd.Parameters.AddWithValue("@status", (int)status);
-        
-        using var r = await cmd.ExecuteReaderAsync();
-        while (await r.ReadAsync())
+        catch
         {
-            list.Add(ReadPromoCode(r));
+            // Ignore if column already exists
         }
-        return list;
     }
 
-    public async Task<PromoCode?> GetByCodeNormAsync(string codeNorm, string package)
+    public Task<List<PromoCode>> GetAllAsync()
     {
-        using var cmd = _db.CreateCommand();
-        cmd.CommandText = @"
-            SELECT id, code_norm, raw_code, package, account_email, channel_id, status, confidence,
-                   kind, discount_value, discount_type, currency, min_spend, cap, scope,
-                   first_order, single_use, valid_from, valid_until, store_hint,
-                   first_seen_at, last_seen_at, times_seen,
-                   reminder_24h_at, reminder_morning_at, reminder_custom_at
-            FROM promo_codes
-            WHERE code_norm = @code_norm AND package = @package";
-        cmd.Parameters.AddWithValue("@code_norm", codeNorm);
-        cmd.Parameters.AddWithValue("@package", package);
-        
-        using var r = await cmd.ExecuteReaderAsync();
-        if (await r.ReadAsync())
+        lock (_db.SyncRoot)
         {
-            return ReadPromoCode(r);
-        }
-        return null;
-    }
-
-    public async Task<long> UpsertAsync(PromoCode code)
-    {
-        using var cmd = _db.CreateCommand();
-        cmd.CommandText = @"
-            INSERT INTO promo_codes (
-                code_norm, raw_code, package, account_email, channel_id, status, confidence,
-                kind, discount_value, discount_type, currency, min_spend, cap, scope,
-                first_order, single_use, valid_from, valid_until, store_hint,
-                first_seen_at, last_seen_at, times_seen,
-                reminder_24h_at, reminder_morning_at, reminder_custom_at
-            ) VALUES (
-                @code_norm, @raw_code, @package, @account_email, @channel_id, @status, @confidence,
-                @kind, @discount_value, @discount_type, @currency, @min_spend, @cap, @scope,
-                @first_order, @single_use, @valid_from, @valid_until, @store_hint,
-                @first_seen_at, @last_seen_at, @times_seen,
-                @reminder_24h_at, @reminder_morning_at, @reminder_custom_at
-            )
-            ON CONFLICT(code_norm, package) DO UPDATE SET
-                raw_code = @raw_code,
-                account_email = @account_email,
-                channel_id = @channel_id,
-                status = @status,
-                confidence = @confidence,
-                kind = @kind,
-                discount_value = @discount_value,
-                discount_type = @discount_type,
-                currency = @currency,
-                min_spend = @min_spend,
-                cap = @cap,
-                scope = @scope,
-                first_order = @first_order,
-                single_use = @single_use,
-                valid_from = @valid_from,
-                valid_until = @valid_until,
-                store_hint = @store_hint,
-                last_seen_at = @last_seen_at,
-                times_seen = @times_seen,
-                reminder_24h_at = @reminder_24h_at,
-                reminder_morning_at = @reminder_morning_at,
-                reminder_custom_at = @reminder_custom_at;
+            var list = new List<PromoCode>();
+            using var cmd = _db.CreateCommand();
+            cmd.CommandText = @"
+                SELECT id, code_norm, raw_code, package, account_email, channel_id, status, confidence,
+                       kind, discount_value, discount_type, currency, min_spend, cap, scope,
+                       first_order, single_use, valid_from, valid_until, store_hint,
+                       first_seen_at, last_seen_at, times_seen,
+                       reminder_24h_at, reminder_morning_at, reminder_custom_at, notification_id
+                FROM promo_codes
+                ORDER BY 
+                    CASE status WHEN 1 THEN 0 WHEN 0 THEN 1 WHEN 2 THEN 2 WHEN 3 THEN 3 WHEN 4 THEN 4 ELSE 5 END,
+                    last_seen_at DESC";
             
-            SELECT last_insert_rowid();";
-
-        AddParameters(cmd, code);
-        
-        var result = await cmd.ExecuteScalarAsync();
-        return Convert.ToInt64(result);
-    }
-
-    public async Task UpdateAsync(PromoCode code)
-    {
-        using var cmd = _db.CreateCommand();
-        cmd.CommandText = @"
-            UPDATE promo_codes SET
-                raw_code = @raw_code,
-                account_email = @account_email,
-                channel_id = @channel_id,
-                status = @status,
-                confidence = @confidence,
-                kind = @kind,
-                discount_value = @discount_value,
-                discount_type = @discount_type,
-                currency = @currency,
-                min_spend = @min_spend,
-                cap = @cap,
-                scope = @scope,
-                first_order = @first_order,
-                single_use = @single_use,
-                valid_from = @valid_from,
-                valid_until = @valid_until,
-                store_hint = @store_hint,
-                last_seen_at = @last_seen_at,
-                times_seen = @times_seen,
-                reminder_24h_at = @reminder_24h_at,
-                reminder_morning_at = @reminder_morning_at,
-                reminder_custom_at = @reminder_custom_at
-            WHERE id = @id";
-
-        AddParameters(cmd, code);
-        cmd.Parameters.AddWithValue("@id", code.Id);
-        
-        await cmd.ExecuteNonQueryAsync();
-    }
-
-    public async Task DeleteAsync(long id)
-    {
-        using var cmd = _db.CreateCommand();
-        cmd.CommandText = "DELETE FROM promo_codes WHERE id = @id";
-        cmd.Parameters.AddWithValue("@id", id);
-        await cmd.ExecuteNonQueryAsync();
-    }
-
-    public async Task<int> GetActiveCountAsync()
-    {
-        using var cmd = _db.CreateCommand();
-        cmd.CommandText = "SELECT COUNT(*) FROM promo_codes WHERE status IN (0, 1)";
-        var result = await cmd.ExecuteScalarAsync();
-        return Convert.ToInt32(result);
-    }
-
-    public async Task<PromoCode?> GetSoonestExpiringAsync()
-    {
-        using var cmd = _db.CreateCommand();
-        cmd.CommandText = @"
-            SELECT id, code_norm, raw_code, package, account_email, channel_id, status, confidence,
-                   kind, discount_value, discount_type, currency, min_spend, cap, scope,
-                   first_order, single_use, valid_from, valid_until, store_hint,
-                   first_seen_at, last_seen_at, times_seen,
-                   reminder_24h_at, reminder_morning_at, reminder_custom_at
-            FROM promo_codes
-            WHERE status IN (0, 1) AND valid_until IS NOT NULL
-            ORDER BY valid_until ASC
-            LIMIT 1";
-        
-        using var r = await cmd.ExecuteReaderAsync();
-        if (await r.ReadAsync())
-        {
-            return ReadPromoCode(r);
+            using var r = cmd.ExecuteReader();
+            while (r.Read())
+            {
+                list.Add(ReadPromoCode(r));
+            }
+            return Task.FromResult(list);
         }
-        return null;
+    }
+
+    public Task<List<PromoCode>> GetByStatusAsync(PromoCodeStatus status)
+    {
+        lock (_db.SyncRoot)
+        {
+            var list = new List<PromoCode>();
+            using var cmd = _db.CreateCommand();
+            cmd.CommandText = @"
+                SELECT id, code_norm, raw_code, package, account_email, channel_id, status, confidence,
+                       kind, discount_value, discount_type, currency, min_spend, cap, scope,
+                       first_order, single_use, valid_from, valid_until, store_hint,
+                       first_seen_at, last_seen_at, times_seen,
+                       reminder_24h_at, reminder_morning_at, reminder_custom_at, notification_id
+                FROM promo_codes
+                WHERE status = @status
+                ORDER BY last_seen_at DESC";
+            cmd.Parameters.AddWithValue("@status", (int)status);
+            
+            using var r = cmd.ExecuteReader();
+            while (r.Read())
+            {
+                list.Add(ReadPromoCode(r));
+            }
+            return Task.FromResult(list);
+        }
+    }
+
+    public Task<List<PromoCode>> GetActiveCodesForPackageAsync(string package, string? storeHint = null)
+    {
+        lock (_db.SyncRoot)
+        {
+            var list = new List<PromoCode>();
+            using var cmd = _db.CreateCommand();
+            cmd.CommandText = @"
+                SELECT id, code_norm, raw_code, package, account_email, channel_id, status, confidence,
+                       kind, discount_value, discount_type, currency, min_spend, cap, scope,
+                       first_order, single_use, valid_from, valid_until, store_hint,
+                       first_seen_at, last_seen_at, times_seen,
+                       reminder_24h_at, reminder_morning_at, reminder_custom_at, notification_id
+                FROM promo_codes
+                WHERE (
+                        package = @package 
+                        OR package LIKE @packageWildcard 
+                        OR (@storeHint IS NOT NULL AND store_hint = @storeHint)
+                        OR (store_hint IS NOT NULL AND (store_hint LIKE @packageWildcard OR @package LIKE '%' || store_hint || '%'))
+                      )
+                  AND status IN (0, 1)
+                ORDER BY last_seen_at DESC";
+            cmd.Parameters.AddWithValue("@package", package);
+            cmd.Parameters.AddWithValue("@packageWildcard", $"%{package}%");
+            cmd.Parameters.AddWithValue("@storeHint", (object?)storeHint ?? DBNull.Value);
+            
+            using var r = cmd.ExecuteReader();
+            var now = DateTimeOffset.UtcNow;
+            while (r.Read())
+            {
+                var code = ReadPromoCode(r);
+                if (!code.ValidUntil.HasValue || code.ValidUntil.Value > now)
+                {
+                    list.Add(code);
+                }
+            }
+            return Task.FromResult(list);
+        }
+    }
+
+    public Task<PromoCode?> GetByCodeNormAsync(string codeNorm, string package)
+    {
+        lock (_db.SyncRoot)
+        {
+            using var cmd = _db.CreateCommand();
+            cmd.CommandText = @"
+                SELECT id, code_norm, raw_code, package, account_email, channel_id, status, confidence,
+                       kind, discount_value, discount_type, currency, min_spend, cap, scope,
+                       first_order, single_use, valid_from, valid_until, store_hint,
+                       first_seen_at, last_seen_at, times_seen,
+                       reminder_24h_at, reminder_morning_at, reminder_custom_at, notification_id
+                FROM promo_codes
+                WHERE code_norm = @code_norm AND package = @package";
+            cmd.Parameters.AddWithValue("@code_norm", codeNorm);
+            cmd.Parameters.AddWithValue("@package", package);
+            
+            using var r = cmd.ExecuteReader();
+            if (r.Read())
+            {
+                return Task.FromResult<PromoCode?>(ReadPromoCode(r));
+            }
+            return Task.FromResult<PromoCode?>(null);
+        }
+    }
+
+    public Task<long> UpsertAsync(PromoCode code)
+    {
+        lock (_db.SyncRoot)
+        {
+            using var cmd = _db.CreateCommand();
+            cmd.CommandText = @"
+                INSERT INTO promo_codes (
+                    code_norm, raw_code, package, account_email, channel_id, status, confidence,
+                    kind, discount_value, discount_type, currency, min_spend, cap, scope,
+                    first_order, single_use, valid_from, valid_until, store_hint,
+                    first_seen_at, last_seen_at, times_seen,
+                    reminder_24h_at, reminder_morning_at, reminder_custom_at, notification_id
+                ) VALUES (
+                    @code_norm, @raw_code, @package, @account_email, @channel_id, @status, @confidence,
+                    @kind, @discount_value, @discount_type, @currency, @min_spend, @cap, @scope,
+                    @first_order, @single_use, @valid_from, @valid_until, @store_hint,
+                    @first_seen_at, @last_seen_at, @times_seen,
+                    @reminder_24h_at, @reminder_morning_at, @reminder_custom_at, @notification_id
+                )
+                ON CONFLICT(code_norm, package) DO UPDATE SET
+                    raw_code = @raw_code,
+                    account_email = @account_email,
+                    channel_id = @channel_id,
+                    status = @status,
+                    confidence = @confidence,
+                    kind = @kind,
+                    discount_value = @discount_value,
+                    discount_type = @discount_type,
+                    currency = @currency,
+                    min_spend = @min_spend,
+                    cap = @cap,
+                    scope = @scope,
+                    first_order = @first_order,
+                    single_use = @single_use,
+                    valid_from = @valid_from,
+                    valid_until = @valid_until,
+                    store_hint = @store_hint,
+                    last_seen_at = @last_seen_at,
+                    times_seen = @times_seen,
+                    reminder_24h_at = @reminder_24h_at,
+                    reminder_morning_at = @reminder_morning_at,
+                    reminder_custom_at = @reminder_custom_at,
+                    notification_id = COALESCE(@notification_id, promo_codes.notification_id);
+                
+                SELECT last_insert_rowid();";
+
+            AddParameters(cmd, code);
+            
+            var result = cmd.ExecuteScalar();
+            return Task.FromResult(Convert.ToInt64(result));
+        }
+    }
+
+    public Task UpdateAsync(PromoCode code)
+    {
+        lock (_db.SyncRoot)
+        {
+            using var cmd = _db.CreateCommand();
+            cmd.CommandText = @"
+                UPDATE promo_codes SET
+                    raw_code = @raw_code,
+                    account_email = @account_email,
+                    channel_id = @channel_id,
+                    status = @status,
+                    confidence = @confidence,
+                    kind = @kind,
+                    discount_value = @discount_value,
+                    discount_type = @discount_type,
+                    currency = @currency,
+                    min_spend = @min_spend,
+                    cap = @cap,
+                    scope = @scope,
+                    first_order = @first_order,
+                    single_use = @single_use,
+                    valid_from = @valid_from,
+                    valid_until = @valid_until,
+                    store_hint = @store_hint,
+                    last_seen_at = @last_seen_at,
+                    times_seen = @times_seen,
+                    reminder_24h_at = @reminder_24h_at,
+                    reminder_morning_at = @reminder_morning_at,
+                    reminder_custom_at = @reminder_custom_at,
+                    notification_id = @notification_id
+                WHERE id = @id";
+
+            AddParameters(cmd, code);
+            cmd.Parameters.AddWithValue("@id", code.Id);
+            
+            cmd.ExecuteNonQuery();
+            return Task.CompletedTask;
+        }
+    }
+
+    public Task DeleteAsync(long id)
+    {
+        lock (_db.SyncRoot)
+        {
+            using var cmd = _db.CreateCommand();
+            cmd.CommandText = "DELETE FROM promo_codes WHERE id = @id";
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.ExecuteNonQuery();
+            return Task.CompletedTask;
+        }
+    }
+
+    public Task<int> GetActiveCountAsync()
+    {
+        lock (_db.SyncRoot)
+        {
+            using var cmd = _db.CreateCommand();
+            cmd.CommandText = "SELECT COUNT(*) FROM promo_codes WHERE status IN (0, 1)";
+            var result = cmd.ExecuteScalar();
+            return Task.FromResult(Convert.ToInt32(result));
+        }
+    }
+
+    public Task<PromoCode?> GetSoonestExpiringAsync()
+    {
+        lock (_db.SyncRoot)
+        {
+            using var cmd = _db.CreateCommand();
+            cmd.CommandText = @"
+                SELECT id, code_norm, raw_code, package, account_email, channel_id, status, confidence,
+                       kind, discount_value, discount_type, currency, min_spend, cap, scope,
+                       first_order, single_use, valid_from, valid_until, store_hint,
+                       first_seen_at, last_seen_at, times_seen,
+                       reminder_24h_at, reminder_morning_at, reminder_custom_at, notification_id
+                FROM promo_codes
+                WHERE status IN (0, 1) AND valid_until IS NOT NULL
+                ORDER BY valid_until ASC
+                LIMIT 1";
+            
+            using var r = cmd.ExecuteReader();
+            if (r.Read())
+            {
+                return Task.FromResult<PromoCode?>(ReadPromoCode(r));
+            }
+            return Task.FromResult<PromoCode?>(null);
+        }
     }
 
     private static PromoCode ReadPromoCode(SqliteDataReader r)
@@ -342,7 +421,8 @@ public sealed class PromoCodeRepository : IPromoCodeRepository
             TimesSeen: r.GetInt32(22),
             Reminder24hAt: r.IsDBNull(23) ? null : r.GetInt64(23),
             ReminderMorningAt: r.IsDBNull(24) ? null : r.GetInt64(24),
-            ReminderCustomAt: r.IsDBNull(25) ? null : r.GetInt64(25)
+            ReminderCustomAt: r.IsDBNull(25) ? null : r.GetInt64(25),
+            NotificationId: r.FieldCount > 26 && !r.IsDBNull(26) ? r.GetString(26) : null
         );
     }
 
@@ -373,5 +453,6 @@ public sealed class PromoCodeRepository : IPromoCodeRepository
         cmd.Parameters.AddWithValue("@reminder_24h_at", code.Reminder24hAt.HasValue ? code.Reminder24hAt.Value : (object)DBNull.Value);
         cmd.Parameters.AddWithValue("@reminder_morning_at", code.ReminderMorningAt.HasValue ? code.ReminderMorningAt.Value : (object)DBNull.Value);
         cmd.Parameters.AddWithValue("@reminder_custom_at", code.ReminderCustomAt.HasValue ? code.ReminderCustomAt.Value : (object)DBNull.Value);
+        cmd.Parameters.AddWithValue("@notification_id", (object?)code.NotificationId ?? DBNull.Value);
     }
 }

@@ -164,8 +164,8 @@ def gen_cases():
     cases = []
     i = 0
 
-    # offers: 60
-    for k in range(60):
+    # offers: 110
+    for k in range(110):
         t, fmt, _ = OFFERS[k % len(OFFERS)]
         pct = PCT[(k // len(OFFERS)) % len(PCT)]
         code = CODES[k % len(CODES)]
@@ -175,19 +175,19 @@ def gen_cases():
         cases.append(_mk(i, "offers", f"test.shop{k % 7}", t, txt,
                          channel="تخفیف‌ها"))
         i += 1
-    # work: 40
-    for k in range(40):
+    # work: 75
+    for k in range(75):
         t, fmt, _ = WORK[k % len(WORK)]
         txt = fmt.format(time=TIMES[k % len(TIMES)])
         cases.append(_mk(i, "work", f"test.work{k % 6}", t, txt, channel="کار"))
         i += 1
-    # people: 40
-    for k in range(40):
+    # people: 75
+    for k in range(75):
         t, fmt, _ = PEOPLE[k % len(PEOPLE)]
         cases.append(_mk(i, "people", f"test.msg{k % 5}", t, fmt, channel="پیام"))
         i += 1
-    # money: 40
-    for k in range(40):
+    # money: 75
+    for k in range(75):
         t, fmt, _ = MONEY[k % len(MONEY)]
         txt = fmt.format(
             amt=AMTS[k % len(AMTS)],
@@ -197,32 +197,32 @@ def gen_cases():
         c = _mk(i, "money", f"test.bank{k % 4}", t, txt, channel="بانک")
         cases.append(c)
         i += 1
-    # orders: 40
-    for k in range(40):
+    # orders: 75
+    for k in range(75):
         t, fmt, _ = ORDERS[k % len(ORDERS)]
         ref = f"{100000 + (k * 13) % 899999}"
         txt = fmt.format(ref=ref)
         cases.append(_mk(i, "orders", f"test.shop{k % 7}", t, txt, channel="فروشگاه"))
         i += 1
-    # security: 30
-    for k in range(30):
+    # security: 60
+    for k in range(60):
         t, fmt, _ = SECURITY[k % len(SECURITY)]
         digits = f"{100000 + (k * 137) % 899999}"
         txt = fmt.format(digits6=digits)
         cases.append(_mk(i, "security", f"test.auth{k % 3}", t, txt, channel="احراز هویت"))
         i += 1
-    # social: 30
-    for k in range(30):
+    # social: 60
+    for k in range(60):
         t, fmt, _ = SOCIAL[k % len(SOCIAL)]
         cases.append(_mk(i, "social", f"test.soc{k % 4}", t, fmt, channel="اجتماعی"))
         i += 1
-    # updates: 20
-    for k in range(20):
+    # updates: 31
+    for k in range(31):
         t, fmt, _ = UPDATES[k % len(UPDATES)]
         cases.append(_mk(i, "updates", f"test.os{k % 3}", t, fmt, channel="سیستم"))
         i += 1
-    # other: 20
-    for k in range(20):
+    # other: 31
+    for k in range(31):
         t, fmt, _ = OTHER[k % len(OTHER)]
         cases.append(_mk(i, "other", f"test.misc{k % 5}", t, fmt, channel="متفرقه"))
         i += 1
@@ -231,23 +231,24 @@ def gen_cases():
     for c in cases:
         if c["expect"]["category"] != "offers":
             continue
-        m = re.search(r"([A-Z0-9]{4,})", c["text"] or "")
+        m = re.search(r"([A-Z0-9]{3,})", c["text"] or "")
         if m:
             c["expect"].setdefault("entities", []).append(
                 {"type": "promo_code", "code": m.group(1)})
     return cases
 
 def main():
-    # merge with existing hand-written cases (worked examples etc.)
+    # keep existing hand-written cases (worked examples etc.)
     with open(OUT, encoding="utf-8") as f:
         existing = json.load(f)
-    existing_ids = {c["id"] for c in existing}
-    gen = [c for c in gen_cases() if c["id"] not in existing_ids]
-    merged = existing + gen
+    hand_written = [c for c in existing if not c["id"].startswith("fa-gen-")]
+    gen = gen_cases()
+    merged = hand_written + gen
     merged.sort(key=lambda c: c["id"])
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(merged, f, ensure_ascii=False, indent=2)
-    print(f"Wrote {len(gen)} generated + {len(existing) - len(gen)} existing = {len(merged)} total")
+    print(f"Wrote {len(gen)} generated + {len(hand_written)} hand-written = {len(merged)} total")
 
 if __name__ == "__main__":
     main()
+

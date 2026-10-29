@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Globalization;
 
 namespace Alak.Text;
@@ -11,8 +12,8 @@ public sealed record LanguageGuess(LanguageFa Language, float Probability);
 /// <summary>Script runs and language/direction detection (spec §8.3).</summary>
 public static class ScriptLanguage
 {
-    // Persian-only letters (LNG-002): پ چ ژ گ — plus ی/ک in their Persian codepoints
-    private static readonly IReadOnlySet<char> s_persianOnly = new HashSet<char>("پچژگ");
+    // Persian-only letters (LNG-002): پ چ ژ گ — plus ی/ک in their Persian codepoints (SIMD SearchValues)
+    private static readonly SearchValues<char> s_persianOnly = SearchValues.Create("پچژگ");
 
     // Persian function words (normalized forms)
     private static readonly IReadOnlySet<string> s_faWords = new HashSet<string>(new[]
@@ -78,7 +79,7 @@ public static class ScriptLanguage
         if (arChars >= latnChars)
         {
             // LNG-002: Persian vs Arabic decision on the Arabic-script content
-            var hasPersianOnly = folded.IndexOfAny(new[] { 'پ', 'چ', 'ژ', 'گ' }) >= 0;
+            var hasPersianOnly = folded.AsSpan().ContainsAny(s_persianOnly);
             var words = folded.Split(' ', '\n', '.', ',', '!', '?', ';', ':');
             var faHits = words.Count(w => s_faWords.Contains(w));
             var arHits = words.Count(w => s_arWords.Contains(w));

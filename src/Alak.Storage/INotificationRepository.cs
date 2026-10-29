@@ -21,4 +21,29 @@ public interface INotificationRepository
     /// Used by the Sources screen (§13.6, PER-010).
     /// </summary>
     Task<List<SourceItem>> GetSourcesAsync(int days);
+
+    /// <summary>
+    /// Update category for a single notification.
+    /// </summary>
+    Task UpdateCategoryAsync(string id, string category);
+
+    /// <summary>
+    /// Batch update category for existing notifications of a package.
+    /// </summary>
+    Task<int> UpdateCategoryForPackageAsync(string package, string category);
+
+    /// <summary>
+    /// Keyset pagination ordered by posted_at DESC (STO-004 / WBP-01).
+    /// </summary>
+    Task<IReadOnlyList<Notification>> GetPageAsync(long? beforeUtcMs, int limit, string? category = null, CancellationToken ct = default);
+
+    /// <summary>
+    /// Full-text search querying notification_fts (PF-10 / WBP-01).
+    /// </summary>
+    Task<IReadOnlyList<Notification>> SearchFtsAsync(string query, int limit, CancellationToken ct = default);
+
+    /// <summary>
+    /// Prune non-pinned notifications older than maxAge (STO-001 / WBP-01).
+    /// </summary>
+    Task<int> PruneExpiredAsync(TimeSpan maxAge, CancellationToken ct = default);
 }

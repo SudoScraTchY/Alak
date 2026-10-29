@@ -16,7 +16,7 @@ public interface IAdaptiveEngine
     /// <summary>
     /// Learn from a user correction (weight ×8 per ADP-004).
     /// </summary>
-    Task LearnFromCorrectionAsync(string package, string channel, string foldedText, IReadOnlyList<ConceptHit> conceptHits, IReadOnlyList<Entity> entities, Category correctedCategory, string? androidCategory = null);
+    Task LearnFromCorrectionAsync(string package, string channel, string foldedText, IReadOnlyList<ConceptHit> conceptHits, IReadOnlyList<Entity> entities, Category correctedCategory, string? androidCategory = null, bool autoSave = false);
 
     /// <summary>
     /// Learn from a high-confidence Tier 1 result (confidence ≥ 0.90, weight ×1, capped to 30% of updates).
@@ -53,6 +53,16 @@ public interface IAdaptiveEngine
     /// Load model from disk.
     /// </summary>
     Task LoadAsync();
+
+    /// <summary>
+    /// Load weights from disk with graceful corruption recovery (WBP-03).
+    /// </summary>
+    Task LoadWeightsAsync();
+
+    /// <summary>
+    /// Blend Tier 1 and Tier 2 decisions, strictly maintaining security invariance (Category.Security never overridden).
+    /// </summary>
+    Category BlendDecision(Category tier1Category, float tier1Confidence, float[]? tier2Logits);
 
     /// <summary>
     /// Whether the engine has a valid model loaded.

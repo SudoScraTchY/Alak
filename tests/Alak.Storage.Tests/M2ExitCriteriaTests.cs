@@ -57,11 +57,11 @@ public class M2ExitCriteriaTests
             pages.ShouldBe(20); // 10k / 500
 
             // ---- bilingual FTS: EN and FA phrases both match ----
-            // (rows are inserted above without FTS sync; do it the way the pipeline would)
+            // (rows are synchronized automatically via triggers or manually here)
             using (var cmd = db.Underlying.CreateCommand())
             {
                 cmd.CommandText = """
-                    INSERT INTO notification_fts(rowid, title_n, body_n, sender_n)
+                    INSERT OR REPLACE INTO notification_fts(rowid, title_n, body_n, sender_n)
                     SELECT id,
                            COALESCE(title, ''),
                            COALESCE(text, ''),

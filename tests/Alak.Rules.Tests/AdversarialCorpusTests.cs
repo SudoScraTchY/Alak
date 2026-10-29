@@ -44,7 +44,7 @@ public class AdversarialCorpusTests
         var json = File.ReadAllText(path);
         using var doc = JsonDocument.Parse(json);
         var count = doc.RootElement.GetArrayLength();
-        count.ShouldBeGreaterThanOrEqualTo(60, $"Expected ≥ 60 adversarial cases, got {count}");
+        count.ShouldBeGreaterThanOrEqualTo(100, $"Expected ≥ 100 adversarial cases, got {count}");
     }
 
     [Fact]
@@ -170,7 +170,7 @@ public class AdversarialCorpusTests
     }
 
     [Fact]
-    public void AdversarialFile_EachTypeHasAtLeastSixCases()
+    public void AdversarialFile_EachTypeHasAtLeastTenCases()
     {
         var path = Path.Combine(s_root, AdversarialPath);
         var json = File.ReadAllText(path);
@@ -191,7 +191,7 @@ public class AdversarialCorpusTests
         foreach (var expected in ExpectedAdversarialTypes)
         {
             var count = typeCounts.GetValueOrDefault(expected, 0);
-            count.ShouldBeGreaterThanOrEqualTo(6, $"Adversarial type '{expected}' has only {count} cases (minimum 6)");
+            count.ShouldBeGreaterThanOrEqualTo(10, $"Adversarial type '{expected}' has only {count} cases (minimum 10)");
         }
     }
 }

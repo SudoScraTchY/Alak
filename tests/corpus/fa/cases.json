@@ -38,7 +38,13 @@
     "title": "حراجی",
     "text": "5% تخفیف فقط امروز — کد YAS",
     "expect": {
-      "category": "offers"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "YAS"
+        }
+      ]
     }
   },
   {
@@ -224,7 +230,13 @@
     "title": "خبرنامه",
     "text": "عض‌ها 10% تخفیف آخر هفته. کد: YAS",
     "expect": {
-      "category": "offers"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "YAS"
+        }
+      ]
     }
   },
   {
@@ -410,7 +422,13 @@
     "title": "جشنواره",
     "text": "فروش ویژه: 15% تخفیف سایت، کد YAS را وارد کنید",
     "expect": {
-      "category": "offers"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "YAS"
+        }
+      ]
     }
   },
   {
@@ -596,7 +614,13 @@
     "title": "لوازم",
     "text": "ویژه آخر هفته: 20% تخفیف + ارسال رایگان با کد YAS",
     "expect": {
-      "category": "offers"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "YAS"
+        }
+      ]
     }
   },
   {
@@ -782,7 +806,13 @@
     "title": "فروشگاه",
     "text": "از دست ندهید! 30% تخفیف روی همه خریدها با کد YAS",
     "expect": {
-      "category": "offers"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "YAS"
+        }
+      ]
     }
   },
   {
@@ -931,246 +961,806 @@
   },
   {
     "id": "fa-gen-060",
-    "package": "test.work0",
-    "channel_name": "کار",
-    "title": "اسلک",
-    "text": "سارا شما را در #طراحی-بررسی منشن کرد",
+    "package": "test.shop4",
+    "channel_name": "تخفیف‌ها",
+    "title": "فروشگاه",
+    "text": "سفارش دهید! 40% تخفیف روی همه خریدها با کد SNAPP30",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "SNAPP30"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-061",
-    "package": "test.work1",
-    "channel_name": "کار",
-    "title": "اسلک",
-    "text": "پیام جدید از علی در #مهندسی",
+    "package": "test.shop5",
+    "channel_name": "تخفیف‌ها",
+    "title": "تخفیف‌ها",
+    "text": "با کد SAVE10 40% تخفیف بگیرید",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "SAVE10"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-062",
-    "package": "test.work2",
-    "channel_name": "کار",
-    "title": "تیم‌ها",
-    "text": "جلسه تیم ساعت ۱۴:۰۰ شروع می‌شود",
+    "package": "test.shop6",
+    "channel_name": "تخفیف‌ها",
+    "title": "حراجی",
+    "text": "40% تخفیف فقط امروز — کد YAS",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "YAS"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-063",
-    "package": "test.work3",
-    "channel_name": "کار",
-    "title": "تقویم",
-    "text": "جلسه: برنامه‌ریزی اسپرینت ساعت ۱۵:۴۵",
+    "package": "test.shop0",
+    "channel_name": "تخفیف‌ها",
+    "title": "خرید",
+    "text": "ارسال رایگان برای خرید بالای ۲۰۰۰ هزار تومان با کد HELLO20",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "HELLO20"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-064",
-    "package": "test.work4",
-    "channel_name": "کار",
-    "title": "تقویم",
-    "text": "یادآوری: ۱:۱ با مدیر ساعت ۱۶:۲۰",
+    "package": "test.shop1",
+    "channel_name": "تخفیف‌ها",
+    "title": "خبرنامه",
+    "text": "عض‌ها 40% تخفیف آخر هفته. کد: TAKE30",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "TAKE30"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-065",
-    "package": "test.work5",
-    "channel_name": "کار",
-    "title": "گیت‌هاب",
-    "text": "مرور PR #۱۲۳۴ درخواست شده: رفع باگ ورود",
+    "package": "test.shop2",
+    "channel_name": "تخفیف‌ها",
+    "title": "پیشنهاد",
+    "text": "کد اختصاصی شما VIP40 به اندازه 40% تخفیف است",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "VIP40"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-066",
-    "package": "test.work0",
-    "channel_name": "کار",
-    "title": "گیت‌هاب",
-    "text": "ساخت CI شکست خورد: تست‌ها خراب",
+    "package": "test.shop3",
+    "channel_name": "تخفیف‌ها",
+    "title": "جشنواره",
+    "text": "فروش ویژه: 40% تخفیف سایت، کد FRESH50 را وارد کنید",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "FRESH50"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-067",
-    "package": "test.work1",
-    "channel_name": "کار",
-    "title": "ژیرا",
-    "text": "ماموریت ALAK-۹۹ به شما اختصاص داده شد",
+    "package": "test.shop4",
+    "channel_name": "تخفیف‌ها",
+    "title": "مد",
+    "text": "کالکشن جدید — 40% تخفیف با کد NEW5",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "NEW5"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-068",
-    "package": "test.work2",
-    "channel_name": "کار",
-    "title": "ایمیل",
-    "text": "تأیید فاکتور قبل از جمعه لازم است",
+    "package": "test.shop5",
+    "channel_name": "تخفیف‌ها",
+    "title": "لوازم",
+    "text": "ویژه آخر هفته: 40% تخفیف + ارسال رایگان با کد GET15",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "GET15"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-069",
-    "package": "test.work3",
-    "channel_name": "کار",
-    "title": "مستندات",
-    "text": "پریا سندی را با شما به اشتراک گذاشت",
+    "package": "test.shop6",
+    "channel_name": "تخفیف‌ها",
+    "title": "کافه",
+    "text": "پاداش وفاداری: 40% تخفیف نوشیدنی بعدی، کد DAY20",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "DAY20"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-070",
-    "package": "test.work4",
-    "channel_name": "کار",
-    "title": "اسلک",
-    "text": "استقرار انجام شد: استේجینگ آنلاین است",
+    "package": "test.shop0",
+    "channel_name": "تخفیف‌ها",
+    "title": "فروشگاه",
+    "text": "از دست ندهید! 50% تخفیف روی همه خریدها با کد MEGA10",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "MEGA10"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-071",
-    "package": "test.work5",
-    "channel_name": "کار",
-    "title": "نوتیون",
-    "text": "نظر سام درباره نقشه راه Q3",
+    "package": "test.shop1",
+    "channel_name": "تخفیف‌ها",
+    "title": "تخفیف‌ها",
+    "text": "با کد PLUS25 50% تخفیف بگیرید",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "PLUS25"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-072",
-    "package": "test.work0",
-    "channel_name": "کار",
-    "title": "اسلک",
-    "text": "سارا شما را در #طراحی-بررسی منشن کرد",
+    "package": "test.shop2",
+    "channel_name": "تخفیف‌ها",
+    "title": "حراجی",
+    "text": "50% تخفیف فقط امروز — کد SNAPP30",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "SNAPP30"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-073",
-    "package": "test.work1",
-    "channel_name": "کار",
-    "title": "اسلک",
-    "text": "پیام جدید از علی در #مهندسی",
+    "package": "test.shop3",
+    "channel_name": "تخفیف‌ها",
+    "title": "خرید",
+    "text": "ارسال رایگان برای خرید بالای ۱۰۰ هزار تومان با کد SAVE10",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "SAVE10"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-074",
-    "package": "test.work2",
-    "channel_name": "کار",
-    "title": "تیم‌ها",
-    "text": "جلسه تیم ساعت ۱۴:۰۰ شروع می‌شود",
+    "package": "test.shop4",
+    "channel_name": "تخفیف‌ها",
+    "title": "خبرنامه",
+    "text": "عض‌ها 50% تخفیف آخر هفته. کد: YAS",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "YAS"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-075",
-    "package": "test.work3",
-    "channel_name": "کار",
-    "title": "تقویم",
-    "text": "جلسه: برنامه‌ریزی اسپرینت ساعت ۱۵:۴۵",
+    "package": "test.shop5",
+    "channel_name": "تخفیف‌ها",
+    "title": "پیشنهاد",
+    "text": "کد اختصاصی شما HELLO20 به اندازه 50% تخفیف است",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "HELLO20"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-076",
-    "package": "test.work4",
-    "channel_name": "کار",
-    "title": "تقویم",
-    "text": "یادآوری: ۱:۱ با مدیر ساعت ۱۶:۲۰",
+    "package": "test.shop6",
+    "channel_name": "تخفیف‌ها",
+    "title": "جشنواره",
+    "text": "فروش ویژه: 50% تخفیف سایت، کد TAKE30 را وارد کنید",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "TAKE30"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-077",
-    "package": "test.work5",
-    "channel_name": "کار",
-    "title": "گیت‌هاب",
-    "text": "مرور PR #۱۲۳۴ درخواست شده: رفع باگ ورود",
+    "package": "test.shop0",
+    "channel_name": "تخفیف‌ها",
+    "title": "مد",
+    "text": "کالکشن جدید — 50% تخفیف با کد VIP40",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "VIP40"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-078",
-    "package": "test.work0",
-    "channel_name": "کار",
-    "title": "گیت‌هاب",
-    "text": "ساخت CI شکست خورد: تست‌ها خراب",
+    "package": "test.shop1",
+    "channel_name": "تخفیف‌ها",
+    "title": "لوازم",
+    "text": "ویژه آخر هفته: 50% تخفیف + ارسال رایگان با کد FRESH50",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "FRESH50"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-079",
-    "package": "test.work1",
-    "channel_name": "کار",
-    "title": "ژیرا",
-    "text": "ماموریت ALAK-۹۹ به شما اختصاص داده شد",
+    "package": "test.shop2",
+    "channel_name": "تخفیف‌ها",
+    "title": "کافه",
+    "text": "پاداش وفاداری: 50% تخفیف نوشیدنی بعدی، کد NEW5",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "NEW5"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-080",
-    "package": "test.work2",
-    "channel_name": "کار",
-    "title": "ایمیل",
-    "text": "تأیید فاکتور قبل از جمعه لازم است",
+    "package": "test.shop3",
+    "channel_name": "تخفیف‌ها",
+    "title": "فروشگاه",
+    "text": "سفارش دهید! 60% تخفیف روی همه خریدها با کد GET15",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "GET15"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-081",
-    "package": "test.work3",
-    "channel_name": "کار",
-    "title": "مستندات",
-    "text": "پریا سندی را با شما به اشتراک گذاشت",
+    "package": "test.shop4",
+    "channel_name": "تخفیف‌ها",
+    "title": "تخفیف‌ها",
+    "text": "با کد DAY20 60% تخفیف بگیرید",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "DAY20"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-082",
-    "package": "test.work4",
-    "channel_name": "کار",
-    "title": "اسلک",
-    "text": "استقرار انجام شد: استේجینگ آنلاین است",
+    "package": "test.shop5",
+    "channel_name": "تخفیف‌ها",
+    "title": "حراجی",
+    "text": "60% تخفیف فقط امروز — کد MEGA10",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "MEGA10"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-083",
-    "package": "test.work5",
-    "channel_name": "کار",
-    "title": "نوتیون",
-    "text": "نظر سام درباره نقشه راه Q3",
+    "package": "test.shop6",
+    "channel_name": "تخفیف‌ها",
+    "title": "خرید",
+    "text": "ارسال رایگان برای خرید بالای ۳۰۰ هزار تومان با کد PLUS25",
     "expect": {
-      "category": "work"
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "PLUS25"
+        }
+      ]
     }
   },
   {
     "id": "fa-gen-084",
+    "package": "test.shop0",
+    "channel_name": "تخفیف‌ها",
+    "title": "خبرنامه",
+    "text": "عض‌ها 60% تخفیف آخر هفته. کد: SNAPP30",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "SNAPP30"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-085",
+    "package": "test.shop1",
+    "channel_name": "تخفیف‌ها",
+    "title": "پیشنهاد",
+    "text": "کد اختصاصی شما SAVE10 به اندازه 60% تخفیف است",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "SAVE10"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-086",
+    "package": "test.shop2",
+    "channel_name": "تخفیف‌ها",
+    "title": "جشنواره",
+    "text": "فروش ویژه: 60% تخفیف سایت، کد YAS را وارد کنید",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "YAS"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-087",
+    "package": "test.shop3",
+    "channel_name": "تخفیف‌ها",
+    "title": "مد",
+    "text": "کالکشن جدید — 60% تخفیف با کد HELLO20",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "HELLO20"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-088",
+    "package": "test.shop4",
+    "channel_name": "تخفیف‌ها",
+    "title": "لوازم",
+    "text": "ویژه آخر هفته: 60% تخفیف + ارسال رایگان با کد TAKE30",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "TAKE30"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-089",
+    "package": "test.shop5",
+    "channel_name": "تخفیف‌ها",
+    "title": "کافه",
+    "text": "پاداش وفاداری: 60% تخفیف نوشیدنی بعدی، کد VIP40",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "VIP40"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-090",
+    "package": "test.shop6",
+    "channel_name": "تخفیف‌ها",
+    "title": "فروشگاه",
+    "text": "از دست ندهید! 70% تخفیف روی همه خریدها با کد FRESH50",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "FRESH50"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-091",
+    "package": "test.shop0",
+    "channel_name": "تخفیف‌ها",
+    "title": "تخفیف‌ها",
+    "text": "با کد NEW5 70% تخفیف بگیرید",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "NEW5"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-092",
+    "package": "test.shop1",
+    "channel_name": "تخفیف‌ها",
+    "title": "حراجی",
+    "text": "70% تخفیف فقط امروز — کد GET15",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "GET15"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-093",
+    "package": "test.shop2",
+    "channel_name": "تخفیف‌ها",
+    "title": "خرید",
+    "text": "ارسال رایگان برای خرید بالای ۱۰۰۰ هزار تومان با کد DAY20",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "DAY20"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-094",
+    "package": "test.shop3",
+    "channel_name": "تخفیف‌ها",
+    "title": "خبرنامه",
+    "text": "عض‌ها 70% تخفیف آخر هفته. کد: MEGA10",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "MEGA10"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-095",
+    "package": "test.shop4",
+    "channel_name": "تخفیف‌ها",
+    "title": "پیشنهاد",
+    "text": "کد اختصاصی شما PLUS25 به اندازه 70% تخفیف است",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "PLUS25"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-096",
+    "package": "test.shop5",
+    "channel_name": "تخفیف‌ها",
+    "title": "جشنواره",
+    "text": "فروش ویژه: 70% تخفیف سایت، کد SNAPP30 را وارد کنید",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "SNAPP30"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-097",
+    "package": "test.shop6",
+    "channel_name": "تخفیف‌ها",
+    "title": "مد",
+    "text": "کالکشن جدید — 70% تخفیف با کد SAVE10",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "SAVE10"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-098",
+    "package": "test.shop0",
+    "channel_name": "تخفیف‌ها",
+    "title": "لوازم",
+    "text": "ویژه آخر هفته: 70% تخفیف + ارسال رایگان با کد YAS",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "YAS"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-099",
+    "package": "test.shop1",
+    "channel_name": "تخفیف‌ها",
+    "title": "کافه",
+    "text": "پاداش وفاداری: 70% تخفیف نوشیدنی بعدی، کد HELLO20",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "HELLO20"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-100",
+    "package": "test.shop2",
+    "channel_name": "تخفیف‌ها",
+    "title": "فروشگاه",
+    "text": "سفارش دهید! 5% تخفیف روی همه خریدها با کد TAKE30",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "TAKE30"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-101",
+    "package": "test.shop3",
+    "channel_name": "تخفیف‌ها",
+    "title": "تخفیف‌ها",
+    "text": "با کد VIP40 5% تخفیف بگیرید",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "VIP40"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-102",
+    "package": "test.shop4",
+    "channel_name": "تخفیف‌ها",
+    "title": "حراجی",
+    "text": "5% تخفیف فقط امروز — کد FRESH50",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "FRESH50"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-103",
+    "package": "test.shop5",
+    "channel_name": "تخفیف‌ها",
+    "title": "خرید",
+    "text": "ارسال رایگان برای خرید بالای ۲۰۰۰ هزار تومان با کد NEW5",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "NEW5"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-104",
+    "package": "test.shop6",
+    "channel_name": "تخفیف‌ها",
+    "title": "خبرنامه",
+    "text": "عض‌ها 5% تخفیف آخر هفته. کد: GET15",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "GET15"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-105",
+    "package": "test.shop0",
+    "channel_name": "تخفیف‌ها",
+    "title": "پیشنهاد",
+    "text": "کد اختصاصی شما DAY20 به اندازه 5% تخفیف است",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "DAY20"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-106",
+    "package": "test.shop1",
+    "channel_name": "تخفیف‌ها",
+    "title": "جشنواره",
+    "text": "فروش ویژه: 5% تخفیف سایت، کد MEGA10 را وارد کنید",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "MEGA10"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-107",
+    "package": "test.shop2",
+    "channel_name": "تخفیف‌ها",
+    "title": "مد",
+    "text": "کالکشن جدید — 5% تخفیف با کد PLUS25",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "PLUS25"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-108",
+    "package": "test.shop3",
+    "channel_name": "تخفیف‌ها",
+    "title": "لوازم",
+    "text": "ویژه آخر هفته: 5% تخفیف + ارسال رایگان با کد SNAPP30",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "SNAPP30"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-109",
+    "package": "test.shop4",
+    "channel_name": "تخفیف‌ها",
+    "title": "کافه",
+    "text": "پاداش وفاداری: 5% تخفیف نوشیدنی بعدی، کد SAVE10",
+    "expect": {
+      "category": "offers",
+      "entities": [
+        {
+          "type": "promo_code",
+          "code": "SAVE10"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fa-gen-110",
     "package": "test.work0",
     "channel_name": "کار",
     "title": "اسلک",
@@ -1180,7 +1770,7 @@
     }
   },
   {
-    "id": "fa-gen-085",
+    "id": "fa-gen-111",
     "package": "test.work1",
     "channel_name": "کار",
     "title": "اسلک",
@@ -1190,7 +1780,7 @@
     }
   },
   {
-    "id": "fa-gen-086",
+    "id": "fa-gen-112",
     "package": "test.work2",
     "channel_name": "کار",
     "title": "تیم‌ها",
@@ -1200,7 +1790,7 @@
     }
   },
   {
-    "id": "fa-gen-087",
+    "id": "fa-gen-113",
     "package": "test.work3",
     "channel_name": "کار",
     "title": "تقویم",
@@ -1210,7 +1800,7 @@
     }
   },
   {
-    "id": "fa-gen-088",
+    "id": "fa-gen-114",
     "package": "test.work4",
     "channel_name": "کار",
     "title": "تقویم",
@@ -1220,7 +1810,7 @@
     }
   },
   {
-    "id": "fa-gen-089",
+    "id": "fa-gen-115",
     "package": "test.work5",
     "channel_name": "کار",
     "title": "گیت‌هاب",
@@ -1230,7 +1820,7 @@
     }
   },
   {
-    "id": "fa-gen-090",
+    "id": "fa-gen-116",
     "package": "test.work0",
     "channel_name": "کار",
     "title": "گیت‌هاب",
@@ -1240,7 +1830,7 @@
     }
   },
   {
-    "id": "fa-gen-091",
+    "id": "fa-gen-117",
     "package": "test.work1",
     "channel_name": "کار",
     "title": "ژیرا",
@@ -1250,7 +1840,7 @@
     }
   },
   {
-    "id": "fa-gen-092",
+    "id": "fa-gen-118",
     "package": "test.work2",
     "channel_name": "کار",
     "title": "ایمیل",
@@ -1260,7 +1850,7 @@
     }
   },
   {
-    "id": "fa-gen-093",
+    "id": "fa-gen-119",
     "package": "test.work3",
     "channel_name": "کار",
     "title": "مستندات",
@@ -1270,7 +1860,7 @@
     }
   },
   {
-    "id": "fa-gen-094",
+    "id": "fa-gen-120",
     "package": "test.work4",
     "channel_name": "کار",
     "title": "اسلک",
@@ -1280,7 +1870,7 @@
     }
   },
   {
-    "id": "fa-gen-095",
+    "id": "fa-gen-121",
     "package": "test.work5",
     "channel_name": "کار",
     "title": "نوتیون",
@@ -1290,7 +1880,7 @@
     }
   },
   {
-    "id": "fa-gen-096",
+    "id": "fa-gen-122",
     "package": "test.work0",
     "channel_name": "کار",
     "title": "اسلک",
@@ -1300,7 +1890,7 @@
     }
   },
   {
-    "id": "fa-gen-097",
+    "id": "fa-gen-123",
     "package": "test.work1",
     "channel_name": "کار",
     "title": "اسلک",
@@ -1310,7 +1900,7 @@
     }
   },
   {
-    "id": "fa-gen-098",
+    "id": "fa-gen-124",
     "package": "test.work2",
     "channel_name": "کار",
     "title": "تیم‌ها",
@@ -1320,7 +1910,7 @@
     }
   },
   {
-    "id": "fa-gen-099",
+    "id": "fa-gen-125",
     "package": "test.work3",
     "channel_name": "کار",
     "title": "تقویم",
@@ -1330,277 +1920,867 @@
     }
   },
   {
-    "id": "fa-gen-100",
-    "package": "test.msg0",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "پیام جدید از مریم",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-101",
-    "package": "test.msg1",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "مامان: چطورید؟",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-102",
-    "package": "test.msg2",
-    "channel_name": "پیام",
-    "title": "واتساپ",
-    "text": "علی عکس فرستاد",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-103",
-    "package": "test.msg3",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "یک تماس از دست رفته از دکتر احمدی",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-104",
-    "package": "test.msg4",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "خانواده: چطورید خوبید؟",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-105",
-    "package": "test.msg0",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "حسن: سلام خوبی؟",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-106",
-    "package": "test.msg1",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "مادربزرگ: زنگ بزن",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-107",
-    "package": "test.msg2",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "دوست: فردا عصر ببینمت؟",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-108",
-    "package": "test.msg3",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "پیام جدید از مریم",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-109",
-    "package": "test.msg4",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "مامان: چطورید؟",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-110",
-    "package": "test.msg0",
-    "channel_name": "پیام",
-    "title": "واتساپ",
-    "text": "علی عکس فرستاد",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-111",
-    "package": "test.msg1",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "یک تماس از دست رفته از دکتر احمدی",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-112",
-    "package": "test.msg2",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "خانواده: چطورید خوبید؟",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-113",
-    "package": "test.msg3",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "حسن: سلام خوبی؟",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-114",
-    "package": "test.msg4",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "مادربزرگ: زنگ بزن",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-115",
-    "package": "test.msg0",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "دوست: فردا عصر ببینمت؟",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-116",
-    "package": "test.msg1",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "پیام جدید از مریم",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-117",
-    "package": "test.msg2",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "مامان: چطورید؟",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-118",
-    "package": "test.msg3",
-    "channel_name": "پیام",
-    "title": "واتساپ",
-    "text": "علی عکس فرستاد",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-119",
-    "package": "test.msg4",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "یک تماس از دست رفته از دکتر احمدی",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-120",
-    "package": "test.msg0",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "خانواده: چطورید خوبید؟",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-121",
-    "package": "test.msg1",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "حسن: سلام خوبی؟",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-122",
-    "package": "test.msg2",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "مادربزرگ: زنگ بزن",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-123",
-    "package": "test.msg3",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "دوست: فردا عصر ببینمت؟",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-124",
-    "package": "test.msg4",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "پیام جدید از مریم",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
-    "id": "fa-gen-125",
-    "package": "test.msg0",
-    "channel_name": "پیام",
-    "title": "پیام",
-    "text": "مامان: چطورید؟",
-    "expect": {
-      "category": "people"
-    }
-  },
-  {
     "id": "fa-gen-126",
-    "package": "test.msg1",
-    "channel_name": "پیام",
-    "title": "واتساپ",
-    "text": "علی عکس فرستاد",
+    "package": "test.work4",
+    "channel_name": "کار",
+    "title": "تقویم",
+    "text": "یادآوری: ۱:۱ با مدیر ساعت ۱۶:۲۰",
     "expect": {
-      "category": "people"
+      "category": "work"
     }
   },
   {
     "id": "fa-gen-127",
+    "package": "test.work5",
+    "channel_name": "کار",
+    "title": "گیت‌هاب",
+    "text": "مرور PR #۱۲۳۴ درخواست شده: رفع باگ ورود",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-128",
+    "package": "test.work0",
+    "channel_name": "کار",
+    "title": "گیت‌هاب",
+    "text": "ساخت CI شکست خورد: تست‌ها خراب",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-129",
+    "package": "test.work1",
+    "channel_name": "کار",
+    "title": "ژیرا",
+    "text": "ماموریت ALAK-۹۹ به شما اختصاص داده شد",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-130",
+    "package": "test.work2",
+    "channel_name": "کار",
+    "title": "ایمیل",
+    "text": "تأیید فاکتور قبل از جمعه لازم است",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-131",
+    "package": "test.work3",
+    "channel_name": "کار",
+    "title": "مستندات",
+    "text": "پریا سندی را با شما به اشتراک گذاشت",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-132",
+    "package": "test.work4",
+    "channel_name": "کار",
+    "title": "اسلک",
+    "text": "استقرار انجام شد: استේجینگ آنلاین است",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-133",
+    "package": "test.work5",
+    "channel_name": "کار",
+    "title": "نوتیون",
+    "text": "نظر سام درباره نقشه راه Q3",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-134",
+    "package": "test.work0",
+    "channel_name": "کار",
+    "title": "اسلک",
+    "text": "سارا شما را در #طراحی-بررسی منشن کرد",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-135",
+    "package": "test.work1",
+    "channel_name": "کار",
+    "title": "اسلک",
+    "text": "پیام جدید از علی در #مهندسی",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-136",
+    "package": "test.work2",
+    "channel_name": "کار",
+    "title": "تیم‌ها",
+    "text": "جلسه تیم ساعت ۱۴:۰۰ شروع می‌شود",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-137",
+    "package": "test.work3",
+    "channel_name": "کار",
+    "title": "تقویم",
+    "text": "جلسه: برنامه‌ریزی اسپرینت ساعت ۱۵:۴۵",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-138",
+    "package": "test.work4",
+    "channel_name": "کار",
+    "title": "تقویم",
+    "text": "یادآوری: ۱:۱ با مدیر ساعت ۱۶:۲۰",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-139",
+    "package": "test.work5",
+    "channel_name": "کار",
+    "title": "گیت‌هاب",
+    "text": "مرور PR #۱۲۳۴ درخواست شده: رفع باگ ورود",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-140",
+    "package": "test.work0",
+    "channel_name": "کار",
+    "title": "گیت‌هاب",
+    "text": "ساخت CI شکست خورد: تست‌ها خراب",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-141",
+    "package": "test.work1",
+    "channel_name": "کار",
+    "title": "ژیرا",
+    "text": "ماموریت ALAK-۹۹ به شما اختصاص داده شد",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-142",
+    "package": "test.work2",
+    "channel_name": "کار",
+    "title": "ایمیل",
+    "text": "تأیید فاکتور قبل از جمعه لازم است",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-143",
+    "package": "test.work3",
+    "channel_name": "کار",
+    "title": "مستندات",
+    "text": "پریا سندی را با شما به اشتراک گذاشت",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-144",
+    "package": "test.work4",
+    "channel_name": "کار",
+    "title": "اسلک",
+    "text": "استقرار انجام شد: استේجینگ آنلاین است",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-145",
+    "package": "test.work5",
+    "channel_name": "کار",
+    "title": "نوتیون",
+    "text": "نظر سام درباره نقشه راه Q3",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-146",
+    "package": "test.work0",
+    "channel_name": "کار",
+    "title": "اسلک",
+    "text": "سارا شما را در #طراحی-بررسی منشن کرد",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-147",
+    "package": "test.work1",
+    "channel_name": "کار",
+    "title": "اسلک",
+    "text": "پیام جدید از علی در #مهندسی",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-148",
+    "package": "test.work2",
+    "channel_name": "کار",
+    "title": "تیم‌ها",
+    "text": "جلسه تیم ساعت ۱۴:۰۰ شروع می‌شود",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-149",
+    "package": "test.work3",
+    "channel_name": "کار",
+    "title": "تقویم",
+    "text": "جلسه: برنامه‌ریزی اسپرینت ساعت ۱۵:۴۵",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-150",
+    "package": "test.work4",
+    "channel_name": "کار",
+    "title": "تقویم",
+    "text": "یادآوری: ۱:۱ با مدیر ساعت ۱۶:۲۰",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-151",
+    "package": "test.work5",
+    "channel_name": "کار",
+    "title": "گیت‌هاب",
+    "text": "مرور PR #۱۲۳۴ درخواست شده: رفع باگ ورود",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-152",
+    "package": "test.work0",
+    "channel_name": "کار",
+    "title": "گیت‌هاب",
+    "text": "ساخت CI شکست خورد: تست‌ها خراب",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-153",
+    "package": "test.work1",
+    "channel_name": "کار",
+    "title": "ژیرا",
+    "text": "ماموریت ALAK-۹۹ به شما اختصاص داده شد",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-154",
+    "package": "test.work2",
+    "channel_name": "کار",
+    "title": "ایمیل",
+    "text": "تأیید فاکتور قبل از جمعه لازم است",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-155",
+    "package": "test.work3",
+    "channel_name": "کار",
+    "title": "مستندات",
+    "text": "پریا سندی را با شما به اشتراک گذاشت",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-156",
+    "package": "test.work4",
+    "channel_name": "کار",
+    "title": "اسلک",
+    "text": "استقرار انجام شد: استේجینگ آنلاین است",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-157",
+    "package": "test.work5",
+    "channel_name": "کار",
+    "title": "نوتیون",
+    "text": "نظر سام درباره نقشه راه Q3",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-158",
+    "package": "test.work0",
+    "channel_name": "کار",
+    "title": "اسلک",
+    "text": "سارا شما را در #طراحی-بررسی منشن کرد",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-159",
+    "package": "test.work1",
+    "channel_name": "کار",
+    "title": "اسلک",
+    "text": "پیام جدید از علی در #مهندسی",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-160",
+    "package": "test.work2",
+    "channel_name": "کار",
+    "title": "تیم‌ها",
+    "text": "جلسه تیم ساعت ۱۴:۰۰ شروع می‌شود",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-161",
+    "package": "test.work3",
+    "channel_name": "کار",
+    "title": "تقویم",
+    "text": "جلسه: برنامه‌ریزی اسپرینت ساعت ۱۵:۴۵",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-162",
+    "package": "test.work4",
+    "channel_name": "کار",
+    "title": "تقویم",
+    "text": "یادآوری: ۱:۱ با مدیر ساعت ۱۶:۲۰",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-163",
+    "package": "test.work5",
+    "channel_name": "کار",
+    "title": "گیت‌هاب",
+    "text": "مرور PR #۱۲۳۴ درخواست شده: رفع باگ ورود",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-164",
+    "package": "test.work0",
+    "channel_name": "کار",
+    "title": "گیت‌هاب",
+    "text": "ساخت CI شکست خورد: تست‌ها خراب",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-165",
+    "package": "test.work1",
+    "channel_name": "کار",
+    "title": "ژیرا",
+    "text": "ماموریت ALAK-۹۹ به شما اختصاص داده شد",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-166",
+    "package": "test.work2",
+    "channel_name": "کار",
+    "title": "ایمیل",
+    "text": "تأیید فاکتور قبل از جمعه لازم است",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-167",
+    "package": "test.work3",
+    "channel_name": "کار",
+    "title": "مستندات",
+    "text": "پریا سندی را با شما به اشتراک گذاشت",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-168",
+    "package": "test.work4",
+    "channel_name": "کار",
+    "title": "اسلک",
+    "text": "استقرار انجام شد: استේجینگ آنلاین است",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-169",
+    "package": "test.work5",
+    "channel_name": "کار",
+    "title": "نوتیون",
+    "text": "نظر سام درباره نقشه راه Q3",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-170",
+    "package": "test.work0",
+    "channel_name": "کار",
+    "title": "اسلک",
+    "text": "سارا شما را در #طراحی-بررسی منشن کرد",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-171",
+    "package": "test.work1",
+    "channel_name": "کار",
+    "title": "اسلک",
+    "text": "پیام جدید از علی در #مهندسی",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-172",
+    "package": "test.work2",
+    "channel_name": "کار",
+    "title": "تیم‌ها",
+    "text": "جلسه تیم ساعت ۱۴:۰۰ شروع می‌شود",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-173",
+    "package": "test.work3",
+    "channel_name": "کار",
+    "title": "تقویم",
+    "text": "جلسه: برنامه‌ریزی اسپرینت ساعت ۱۵:۴۵",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-174",
+    "package": "test.work4",
+    "channel_name": "کار",
+    "title": "تقویم",
+    "text": "یادآوری: ۱:۱ با مدیر ساعت ۱۶:۲۰",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-175",
+    "package": "test.work5",
+    "channel_name": "کار",
+    "title": "گیت‌هاب",
+    "text": "مرور PR #۱۲۳۴ درخواست شده: رفع باگ ورود",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-176",
+    "package": "test.work0",
+    "channel_name": "کار",
+    "title": "گیت‌هاب",
+    "text": "ساخت CI شکست خورد: تست‌ها خراب",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-177",
+    "package": "test.work1",
+    "channel_name": "کار",
+    "title": "ژیرا",
+    "text": "ماموریت ALAK-۹۹ به شما اختصاص داده شد",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-178",
+    "package": "test.work2",
+    "channel_name": "کار",
+    "title": "ایمیل",
+    "text": "تأیید فاکتور قبل از جمعه لازم است",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-179",
+    "package": "test.work3",
+    "channel_name": "کار",
+    "title": "مستندات",
+    "text": "پریا سندی را با شما به اشتراک گذاشت",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-180",
+    "package": "test.work4",
+    "channel_name": "کار",
+    "title": "اسلک",
+    "text": "استقرار انجام شد: استේجینگ آنلاین است",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-181",
+    "package": "test.work5",
+    "channel_name": "کار",
+    "title": "نوتیون",
+    "text": "نظر سام درباره نقشه راه Q3",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-182",
+    "package": "test.work0",
+    "channel_name": "کار",
+    "title": "اسلک",
+    "text": "سارا شما را در #طراحی-بررسی منشن کرد",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-183",
+    "package": "test.work1",
+    "channel_name": "کار",
+    "title": "اسلک",
+    "text": "پیام جدید از علی در #مهندسی",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-184",
+    "package": "test.work2",
+    "channel_name": "کار",
+    "title": "تیم‌ها",
+    "text": "جلسه تیم ساعت ۱۴:۰۰ شروع می‌شود",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-gen-185",
+    "package": "test.msg0",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "پیام جدید از مریم",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-186",
+    "package": "test.msg1",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "مامان: چطورید؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-187",
+    "package": "test.msg2",
+    "channel_name": "پیام",
+    "title": "واتساپ",
+    "text": "علی عکس فرستاد",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-188",
+    "package": "test.msg3",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "یک تماس از دست رفته از دکتر احمدی",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-189",
+    "package": "test.msg4",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "خانواده: چطورید خوبید؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-190",
+    "package": "test.msg0",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "حسن: سلام خوبی؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-191",
+    "package": "test.msg1",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "مادربزرگ: زنگ بزن",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-192",
+    "package": "test.msg2",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "دوست: فردا عصر ببینمت؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-193",
+    "package": "test.msg3",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "پیام جدید از مریم",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-194",
+    "package": "test.msg4",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "مامان: چطورید؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-195",
+    "package": "test.msg0",
+    "channel_name": "پیام",
+    "title": "واتساپ",
+    "text": "علی عکس فرستاد",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-196",
+    "package": "test.msg1",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "یک تماس از دست رفته از دکتر احمدی",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-197",
+    "package": "test.msg2",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "خانواده: چطورید خوبید؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-198",
+    "package": "test.msg3",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "حسن: سلام خوبی؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-199",
+    "package": "test.msg4",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "مادربزرگ: زنگ بزن",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-200",
+    "package": "test.msg0",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "دوست: فردا عصر ببینمت؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-201",
+    "package": "test.msg1",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "پیام جدید از مریم",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-202",
+    "package": "test.msg2",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "مامان: چطورید؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-203",
+    "package": "test.msg3",
+    "channel_name": "پیام",
+    "title": "واتساپ",
+    "text": "علی عکس فرستاد",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-204",
+    "package": "test.msg4",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "یک تماس از دست رفته از دکتر احمدی",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-205",
+    "package": "test.msg0",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "خانواده: چطورید خوبید؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-206",
+    "package": "test.msg1",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "حسن: سلام خوبی؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-207",
+    "package": "test.msg2",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "مادربزرگ: زنگ بزن",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-208",
+    "package": "test.msg3",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "دوست: فردا عصر ببینمت؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-209",
+    "package": "test.msg4",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "پیام جدید از مریم",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-210",
+    "package": "test.msg0",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "مامان: چطورید؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-211",
+    "package": "test.msg1",
+    "channel_name": "پیام",
+    "title": "واتساپ",
+    "text": "علی عکس فرستاد",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-212",
     "package": "test.msg2",
     "channel_name": "پیام",
     "title": "پیام",
@@ -1610,7 +2790,7 @@
     }
   },
   {
-    "id": "fa-gen-128",
+    "id": "fa-gen-213",
     "package": "test.msg3",
     "channel_name": "پیام",
     "title": "پیام",
@@ -1620,7 +2800,7 @@
     }
   },
   {
-    "id": "fa-gen-129",
+    "id": "fa-gen-214",
     "package": "test.msg4",
     "channel_name": "پیام",
     "title": "پیام",
@@ -1630,7 +2810,7 @@
     }
   },
   {
-    "id": "fa-gen-130",
+    "id": "fa-gen-215",
     "package": "test.msg0",
     "channel_name": "پیام",
     "title": "پیام",
@@ -1640,7 +2820,7 @@
     }
   },
   {
-    "id": "fa-gen-131",
+    "id": "fa-gen-216",
     "package": "test.msg1",
     "channel_name": "پیام",
     "title": "پیام",
@@ -1650,7 +2830,7 @@
     }
   },
   {
-    "id": "fa-gen-132",
+    "id": "fa-gen-217",
     "package": "test.msg2",
     "channel_name": "پیام",
     "title": "پیام",
@@ -1660,7 +2840,7 @@
     }
   },
   {
-    "id": "fa-gen-133",
+    "id": "fa-gen-218",
     "package": "test.msg3",
     "channel_name": "پیام",
     "title": "پیام",
@@ -1670,7 +2850,7 @@
     }
   },
   {
-    "id": "fa-gen-134",
+    "id": "fa-gen-219",
     "package": "test.msg4",
     "channel_name": "پیام",
     "title": "واتساپ",
@@ -1680,7 +2860,7 @@
     }
   },
   {
-    "id": "fa-gen-135",
+    "id": "fa-gen-220",
     "package": "test.msg0",
     "channel_name": "پیام",
     "title": "پیام",
@@ -1690,7 +2870,7 @@
     }
   },
   {
-    "id": "fa-gen-136",
+    "id": "fa-gen-221",
     "package": "test.msg1",
     "channel_name": "پیام",
     "title": "پیام",
@@ -1700,7 +2880,7 @@
     }
   },
   {
-    "id": "fa-gen-137",
+    "id": "fa-gen-222",
     "package": "test.msg2",
     "channel_name": "پیام",
     "title": "پیام",
@@ -1710,7 +2890,7 @@
     }
   },
   {
-    "id": "fa-gen-138",
+    "id": "fa-gen-223",
     "package": "test.msg3",
     "channel_name": "پیام",
     "title": "پیام",
@@ -1720,7 +2900,7 @@
     }
   },
   {
-    "id": "fa-gen-139",
+    "id": "fa-gen-224",
     "package": "test.msg4",
     "channel_name": "پیام",
     "title": "پیام",
@@ -1730,7 +2910,357 @@
     }
   },
   {
-    "id": "fa-gen-140",
+    "id": "fa-gen-225",
+    "package": "test.msg0",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "پیام جدید از مریم",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-226",
+    "package": "test.msg1",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "مامان: چطورید؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-227",
+    "package": "test.msg2",
+    "channel_name": "پیام",
+    "title": "واتساپ",
+    "text": "علی عکس فرستاد",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-228",
+    "package": "test.msg3",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "یک تماس از دست رفته از دکتر احمدی",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-229",
+    "package": "test.msg4",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "خانواده: چطورید خوبید؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-230",
+    "package": "test.msg0",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "حسن: سلام خوبی؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-231",
+    "package": "test.msg1",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "مادربزرگ: زنگ بزن",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-232",
+    "package": "test.msg2",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "دوست: فردا عصر ببینمت؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-233",
+    "package": "test.msg3",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "پیام جدید از مریم",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-234",
+    "package": "test.msg4",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "مامان: چطورید؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-235",
+    "package": "test.msg0",
+    "channel_name": "پیام",
+    "title": "واتساپ",
+    "text": "علی عکس فرستاد",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-236",
+    "package": "test.msg1",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "یک تماس از دست رفته از دکتر احمدی",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-237",
+    "package": "test.msg2",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "خانواده: چطورید خوبید؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-238",
+    "package": "test.msg3",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "حسن: سلام خوبی؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-239",
+    "package": "test.msg4",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "مادربزرگ: زنگ بزن",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-240",
+    "package": "test.msg0",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "دوست: فردا عصر ببینمت؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-241",
+    "package": "test.msg1",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "پیام جدید از مریم",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-242",
+    "package": "test.msg2",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "مامان: چطورید؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-243",
+    "package": "test.msg3",
+    "channel_name": "پیام",
+    "title": "واتساپ",
+    "text": "علی عکس فرستاد",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-244",
+    "package": "test.msg4",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "یک تماس از دست رفته از دکتر احمدی",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-245",
+    "package": "test.msg0",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "خانواده: چطورید خوبید؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-246",
+    "package": "test.msg1",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "حسن: سلام خوبی؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-247",
+    "package": "test.msg2",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "مادربزرگ: زنگ بزن",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-248",
+    "package": "test.msg3",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "دوست: فردا عصر ببینمت؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-249",
+    "package": "test.msg4",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "پیام جدید از مریم",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-250",
+    "package": "test.msg0",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "مامان: چطورید؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-251",
+    "package": "test.msg1",
+    "channel_name": "پیام",
+    "title": "واتساپ",
+    "text": "علی عکس فرستاد",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-252",
+    "package": "test.msg2",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "یک تماس از دست رفته از دکتر احمدی",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-253",
+    "package": "test.msg3",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "خانواده: چطورید خوبید؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-254",
+    "package": "test.msg4",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "حسن: سلام خوبی؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-255",
+    "package": "test.msg0",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "مادربزرگ: زنگ بزن",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-256",
+    "package": "test.msg1",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "دوست: فردا عصر ببینمت؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-257",
+    "package": "test.msg2",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "پیام جدید از مریم",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-258",
+    "package": "test.msg3",
+    "channel_name": "پیام",
+    "title": "پیام",
+    "text": "مامان: چطورید؟",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-259",
+    "package": "test.msg4",
+    "channel_name": "پیام",
+    "title": "واتساپ",
+    "text": "علی عکس فرستاد",
+    "expect": {
+      "category": "people"
+    }
+  },
+  {
+    "id": "fa-gen-260",
     "package": "test.bank0",
     "channel_name": "بانک",
     "title": "بانک",
@@ -1740,7 +3270,7 @@
     }
   },
   {
-    "id": "fa-gen-141",
+    "id": "fa-gen-261",
     "package": "test.bank1",
     "channel_name": "بانک",
     "title": "بانک",
@@ -1750,7 +3280,7 @@
     }
   },
   {
-    "id": "fa-gen-142",
+    "id": "fa-gen-262",
     "package": "test.bank2",
     "channel_name": "بانک",
     "title": "بانک",
@@ -1760,7 +3290,7 @@
     }
   },
   {
-    "id": "fa-gen-143",
+    "id": "fa-gen-263",
     "package": "test.bank3",
     "channel_name": "بانک",
     "title": "حسابداری",
@@ -1770,7 +3300,7 @@
     }
   },
   {
-    "id": "fa-gen-144",
+    "id": "fa-gen-264",
     "package": "test.bank0",
     "channel_name": "بانک",
     "title": "بانک",
@@ -1780,7 +3310,7 @@
     }
   },
   {
-    "id": "fa-gen-145",
+    "id": "fa-gen-265",
     "package": "test.bank1",
     "channel_name": "بانک",
     "title": "بانک",
@@ -1790,7 +3320,7 @@
     }
   },
   {
-    "id": "fa-gen-146",
+    "id": "fa-gen-266",
     "package": "test.bank2",
     "channel_name": "بانک",
     "title": "بانک",
@@ -1800,7 +3330,7 @@
     }
   },
   {
-    "id": "fa-gen-147",
+    "id": "fa-gen-267",
     "package": "test.bank3",
     "channel_name": "بانک",
     "title": "پرداخت",
@@ -1810,7 +3340,7 @@
     }
   },
   {
-    "id": "fa-gen-148",
+    "id": "fa-gen-268",
     "package": "test.bank0",
     "channel_name": "بانک",
     "title": "بانک",
@@ -1820,7 +3350,7 @@
     }
   },
   {
-    "id": "fa-gen-149",
+    "id": "fa-gen-269",
     "package": "test.bank1",
     "channel_name": "بانک",
     "title": "بانک",
@@ -1830,7 +3360,7 @@
     }
   },
   {
-    "id": "fa-gen-150",
+    "id": "fa-gen-270",
     "package": "test.bank2",
     "channel_name": "بانک",
     "title": "بانک",
@@ -1840,7 +3370,7 @@
     }
   },
   {
-    "id": "fa-gen-151",
+    "id": "fa-gen-271",
     "package": "test.bank3",
     "channel_name": "بانک",
     "title": "حسابداری",
@@ -1850,7 +3380,7 @@
     }
   },
   {
-    "id": "fa-gen-152",
+    "id": "fa-gen-272",
     "package": "test.bank0",
     "channel_name": "بانک",
     "title": "بانک",
@@ -1860,7 +3390,7 @@
     }
   },
   {
-    "id": "fa-gen-153",
+    "id": "fa-gen-273",
     "package": "test.bank1",
     "channel_name": "بانک",
     "title": "بانک",
@@ -1870,7 +3400,7 @@
     }
   },
   {
-    "id": "fa-gen-154",
+    "id": "fa-gen-274",
     "package": "test.bank2",
     "channel_name": "بانک",
     "title": "بانک",
@@ -1880,7 +3410,7 @@
     }
   },
   {
-    "id": "fa-gen-155",
+    "id": "fa-gen-275",
     "package": "test.bank3",
     "channel_name": "بانک",
     "title": "پرداخت",
@@ -1890,7 +3420,7 @@
     }
   },
   {
-    "id": "fa-gen-156",
+    "id": "fa-gen-276",
     "package": "test.bank0",
     "channel_name": "بانک",
     "title": "بانک",
@@ -1900,7 +3430,7 @@
     }
   },
   {
-    "id": "fa-gen-157",
+    "id": "fa-gen-277",
     "package": "test.bank1",
     "channel_name": "بانک",
     "title": "بانک",
@@ -1910,7 +3440,7 @@
     }
   },
   {
-    "id": "fa-gen-158",
+    "id": "fa-gen-278",
     "package": "test.bank2",
     "channel_name": "بانک",
     "title": "بانک",
@@ -1920,7 +3450,7 @@
     }
   },
   {
-    "id": "fa-gen-159",
+    "id": "fa-gen-279",
     "package": "test.bank3",
     "channel_name": "بانک",
     "title": "حسابداری",
@@ -1930,7 +3460,7 @@
     }
   },
   {
-    "id": "fa-gen-160",
+    "id": "fa-gen-280",
     "package": "test.bank0",
     "channel_name": "بانک",
     "title": "بانک",
@@ -1940,7 +3470,7 @@
     }
   },
   {
-    "id": "fa-gen-161",
+    "id": "fa-gen-281",
     "package": "test.bank1",
     "channel_name": "بانک",
     "title": "بانک",
@@ -1950,7 +3480,7 @@
     }
   },
   {
-    "id": "fa-gen-162",
+    "id": "fa-gen-282",
     "package": "test.bank2",
     "channel_name": "بانک",
     "title": "بانک",
@@ -1960,7 +3490,7 @@
     }
   },
   {
-    "id": "fa-gen-163",
+    "id": "fa-gen-283",
     "package": "test.bank3",
     "channel_name": "بانک",
     "title": "پرداخت",
@@ -1970,7 +3500,7 @@
     }
   },
   {
-    "id": "fa-gen-164",
+    "id": "fa-gen-284",
     "package": "test.bank0",
     "channel_name": "بانک",
     "title": "بانک",
@@ -1980,7 +3510,7 @@
     }
   },
   {
-    "id": "fa-gen-165",
+    "id": "fa-gen-285",
     "package": "test.bank1",
     "channel_name": "بانک",
     "title": "بانک",
@@ -1990,7 +3520,7 @@
     }
   },
   {
-    "id": "fa-gen-166",
+    "id": "fa-gen-286",
     "package": "test.bank2",
     "channel_name": "بانک",
     "title": "بانک",
@@ -2000,7 +3530,7 @@
     }
   },
   {
-    "id": "fa-gen-167",
+    "id": "fa-gen-287",
     "package": "test.bank3",
     "channel_name": "بانک",
     "title": "حسابداری",
@@ -2010,7 +3540,7 @@
     }
   },
   {
-    "id": "fa-gen-168",
+    "id": "fa-gen-288",
     "package": "test.bank0",
     "channel_name": "بانک",
     "title": "بانک",
@@ -2020,7 +3550,7 @@
     }
   },
   {
-    "id": "fa-gen-169",
+    "id": "fa-gen-289",
     "package": "test.bank1",
     "channel_name": "بانک",
     "title": "بانک",
@@ -2030,7 +3560,7 @@
     }
   },
   {
-    "id": "fa-gen-170",
+    "id": "fa-gen-290",
     "package": "test.bank2",
     "channel_name": "بانک",
     "title": "بانک",
@@ -2040,7 +3570,7 @@
     }
   },
   {
-    "id": "fa-gen-171",
+    "id": "fa-gen-291",
     "package": "test.bank3",
     "channel_name": "بانک",
     "title": "پرداخت",
@@ -2050,7 +3580,7 @@
     }
   },
   {
-    "id": "fa-gen-172",
+    "id": "fa-gen-292",
     "package": "test.bank0",
     "channel_name": "بانک",
     "title": "بانک",
@@ -2060,7 +3590,7 @@
     }
   },
   {
-    "id": "fa-gen-173",
+    "id": "fa-gen-293",
     "package": "test.bank1",
     "channel_name": "بانک",
     "title": "بانک",
@@ -2070,7 +3600,7 @@
     }
   },
   {
-    "id": "fa-gen-174",
+    "id": "fa-gen-294",
     "package": "test.bank2",
     "channel_name": "بانک",
     "title": "بانک",
@@ -2080,7 +3610,7 @@
     }
   },
   {
-    "id": "fa-gen-175",
+    "id": "fa-gen-295",
     "package": "test.bank3",
     "channel_name": "بانک",
     "title": "حسابداری",
@@ -2090,7 +3620,7 @@
     }
   },
   {
-    "id": "fa-gen-176",
+    "id": "fa-gen-296",
     "package": "test.bank0",
     "channel_name": "بانک",
     "title": "بانک",
@@ -2100,7 +3630,7 @@
     }
   },
   {
-    "id": "fa-gen-177",
+    "id": "fa-gen-297",
     "package": "test.bank1",
     "channel_name": "بانک",
     "title": "بانک",
@@ -2110,7 +3640,7 @@
     }
   },
   {
-    "id": "fa-gen-178",
+    "id": "fa-gen-298",
     "package": "test.bank2",
     "channel_name": "بانک",
     "title": "بانک",
@@ -2120,7 +3650,7 @@
     }
   },
   {
-    "id": "fa-gen-179",
+    "id": "fa-gen-299",
     "package": "test.bank3",
     "channel_name": "بانک",
     "title": "پرداخت",
@@ -2130,7 +3660,357 @@
     }
   },
   {
-    "id": "fa-gen-180",
+    "id": "fa-gen-300",
+    "package": "test.bank0",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "۲٬۵۰۰٬۰۰۰ ریال از حساب شما برداشت شد — خرید از شاپیر",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-301",
+    "package": "test.bank1",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "مبلغ ۱۰۰ هزار تومان واریز شد به حساب شما",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-302",
+    "package": "test.bank2",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "پرداخت ۲۰۰ هزار تومان با کارت پایان 1294 انجام شد",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-303",
+    "package": "test.bank3",
+    "channel_name": "بانک",
+    "title": "حسابداری",
+    "text": "صورتحساب شما: ۳۰۰ هزار تومان",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-304",
+    "package": "test.bank0",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "بازگشت وجه ۵۰۰ هزار تومان — مرجوعی سفارش",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-305",
+    "package": "test.bank1",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "مانده حساب شما: ۱۰۰۰ هزار تومان",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-306",
+    "package": "test.bank2",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "انتقال ۱۵۰۰ هزار تومان از حساب شما به حساب مقصد",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-307",
+    "package": "test.bank3",
+    "channel_name": "بانک",
+    "title": "پرداخت",
+    "text": "پرداخت ۲۰۰۰ هزار تومان برای شاپیر",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-308",
+    "package": "test.bank0",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "۲٬۵۰۰٬۰۰۰ ریال از حساب شما برداشت شد — خرید از کالاًند",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-309",
+    "package": "test.bank1",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "مبلغ ۱۰۰ هزار تومان واریز شد به حساب شما",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-310",
+    "package": "test.bank2",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "پرداخت ۲۰۰ هزار تومان با کارت پایان 1350 انجام شد",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-311",
+    "package": "test.bank3",
+    "channel_name": "بانک",
+    "title": "حسابداری",
+    "text": "صورتحساب شما: ۳۰۰ هزار تومان",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-312",
+    "package": "test.bank0",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "بازگشت وجه ۵۰۰ هزار تومان — مرجوعی سفارش",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-313",
+    "package": "test.bank1",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "مانده حساب شما: ۱۰۰۰ هزار تومان",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-314",
+    "package": "test.bank2",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "انتقال ۱۵۰۰ هزار تومان از حساب شما به حساب مقصد",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-315",
+    "package": "test.bank3",
+    "channel_name": "بانک",
+    "title": "پرداخت",
+    "text": "پرداخت ۲۰۰۰ هزار تومان برای کالاًند",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-316",
+    "package": "test.bank0",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "۲٬۵۰۰٬۰۰۰ ریال از حساب شما برداشت شد — خرید از استارباکس",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-317",
+    "package": "test.bank1",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "مبلغ ۱۰۰ هزار تومان واریز شد به حساب شما",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-318",
+    "package": "test.bank2",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "پرداخت ۲۰۰ هزار تومان با کارت پایان 1406 انجام شد",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-319",
+    "package": "test.bank3",
+    "channel_name": "بانک",
+    "title": "حسابداری",
+    "text": "صورتحساب شما: ۳۰۰ هزار تومان",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-320",
+    "package": "test.bank0",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "بازگشت وجه ۵۰۰ هزار تومان — مرجوعی سفارش",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-321",
+    "package": "test.bank1",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "مانده حساب شما: ۱۰۰۰ هزار تومان",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-322",
+    "package": "test.bank2",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "انتقال ۱۵۰۰ هزار تومان از حساب شما به حساب مقصد",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-323",
+    "package": "test.bank3",
+    "channel_name": "بانک",
+    "title": "پرداخت",
+    "text": "پرداخت ۲۰۰۰ هزار تومان برای استارباکس",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-324",
+    "package": "test.bank0",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "۲٬۵۰۰٬۰۰۰ ریال از حساب شما برداشت شد — خرید از آمازون",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-325",
+    "package": "test.bank1",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "مبلغ ۱۰۰ هزار تومان واریز شد به حساب شما",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-326",
+    "package": "test.bank2",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "پرداخت ۲۰۰ هزار تومان با کارت پایان 1462 انجام شد",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-327",
+    "package": "test.bank3",
+    "channel_name": "بانک",
+    "title": "حسابداری",
+    "text": "صورتحساب شما: ۳۰۰ هزار تومان",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-328",
+    "package": "test.bank0",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "بازگشت وجه ۵۰۰ هزار تومان — مرجوعی سفارش",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-329",
+    "package": "test.bank1",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "مانده حساب شما: ۱۰۰۰ هزار تومان",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-330",
+    "package": "test.bank2",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "انتقال ۱۵۰۰ هزار تومان از حساب شما به حساب مقصد",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-331",
+    "package": "test.bank3",
+    "channel_name": "بانک",
+    "title": "پرداخت",
+    "text": "پرداخت ۲۰۰۰ هزار تومان برای آمازون",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-332",
+    "package": "test.bank0",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "۲٬۵۰۰٬۰۰۰ ریال از حساب شما برداشت شد — خرید از دیجی‌کالا",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-333",
+    "package": "test.bank1",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "مبلغ ۱۰۰ هزار تومان واریز شد به حساب شما",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-334",
+    "package": "test.bank2",
+    "channel_name": "بانک",
+    "title": "بانک",
+    "text": "پرداخت ۲۰۰ هزار تومان با کارت پایان 1518 انجام شد",
+    "expect": {
+      "category": "money"
+    }
+  },
+  {
+    "id": "fa-gen-335",
     "package": "test.shop0",
     "channel_name": "فروشگاه",
     "title": "فروشگاه",
@@ -2140,7 +4020,7 @@
     }
   },
   {
-    "id": "fa-gen-181",
+    "id": "fa-gen-336",
     "package": "test.shop1",
     "channel_name": "فروشگاه",
     "title": "فروشگاه",
@@ -2150,7 +4030,7 @@
     }
   },
   {
-    "id": "fa-gen-182",
+    "id": "fa-gen-337",
     "package": "test.shop2",
     "channel_name": "فروشگاه",
     "title": "فروشگاه",
@@ -2160,7 +4040,7 @@
     }
   },
   {
-    "id": "fa-gen-183",
+    "id": "fa-gen-338",
     "package": "test.shop3",
     "channel_name": "فروشگاه",
     "title": "غذا",
@@ -2170,7 +4050,7 @@
     }
   },
   {
-    "id": "fa-gen-184",
+    "id": "fa-gen-339",
     "package": "test.shop4",
     "channel_name": "فروشگاه",
     "title": "غذا",
@@ -2180,7 +4060,7 @@
     }
   },
   {
-    "id": "fa-gen-185",
+    "id": "fa-gen-340",
     "package": "test.shop5",
     "channel_name": "فروشگاه",
     "title": "رانندگان",
@@ -2190,7 +4070,7 @@
     }
   },
   {
-    "id": "fa-gen-186",
+    "id": "fa-gen-341",
     "package": "test.shop6",
     "channel_name": "فروشگاه",
     "title": "رانندگان",
@@ -2200,7 +4080,7 @@
     }
   },
   {
-    "id": "fa-gen-187",
+    "id": "fa-gen-342",
     "package": "test.shop0",
     "channel_name": "فروشگاه",
     "title": "فروشگاه",
@@ -2210,7 +4090,7 @@
     }
   },
   {
-    "id": "fa-gen-188",
+    "id": "fa-gen-343",
     "package": "test.shop1",
     "channel_name": "فروشگاه",
     "title": "پیک",
@@ -2220,7 +4100,7 @@
     }
   },
   {
-    "id": "fa-gen-189",
+    "id": "fa-gen-344",
     "package": "test.shop2",
     "channel_name": "فروشگاه",
     "title": "فروشگاه",
@@ -2230,7 +4110,7 @@
     }
   },
   {
-    "id": "fa-gen-190",
+    "id": "fa-gen-345",
     "package": "test.shop3",
     "channel_name": "فروشگاه",
     "title": "فروشگاه",
@@ -2240,7 +4120,7 @@
     }
   },
   {
-    "id": "fa-gen-191",
+    "id": "fa-gen-346",
     "package": "test.shop4",
     "channel_name": "فروشگاه",
     "title": "فروشگاه",
@@ -2250,7 +4130,7 @@
     }
   },
   {
-    "id": "fa-gen-192",
+    "id": "fa-gen-347",
     "package": "test.shop5",
     "channel_name": "فروشگاه",
     "title": "فروشگاه",
@@ -2260,7 +4140,7 @@
     }
   },
   {
-    "id": "fa-gen-193",
+    "id": "fa-gen-348",
     "package": "test.shop6",
     "channel_name": "فروشگاه",
     "title": "غذا",
@@ -2270,7 +4150,7 @@
     }
   },
   {
-    "id": "fa-gen-194",
+    "id": "fa-gen-349",
     "package": "test.shop0",
     "channel_name": "فروشگاه",
     "title": "غذا",
@@ -2280,7 +4160,7 @@
     }
   },
   {
-    "id": "fa-gen-195",
+    "id": "fa-gen-350",
     "package": "test.shop1",
     "channel_name": "فروشگاه",
     "title": "رانندگان",
@@ -2290,7 +4170,7 @@
     }
   },
   {
-    "id": "fa-gen-196",
+    "id": "fa-gen-351",
     "package": "test.shop2",
     "channel_name": "فروشگاه",
     "title": "رانندگان",
@@ -2300,7 +4180,7 @@
     }
   },
   {
-    "id": "fa-gen-197",
+    "id": "fa-gen-352",
     "package": "test.shop3",
     "channel_name": "فروشگاه",
     "title": "فروشگاه",
@@ -2310,7 +4190,7 @@
     }
   },
   {
-    "id": "fa-gen-198",
+    "id": "fa-gen-353",
     "package": "test.shop4",
     "channel_name": "فروشگاه",
     "title": "پیک",
@@ -2320,7 +4200,7 @@
     }
   },
   {
-    "id": "fa-gen-199",
+    "id": "fa-gen-354",
     "package": "test.shop5",
     "channel_name": "فروشگاه",
     "title": "فروشگاه",
@@ -2330,7 +4210,7 @@
     }
   },
   {
-    "id": "fa-gen-200",
+    "id": "fa-gen-355",
     "package": "test.shop6",
     "channel_name": "فروشگاه",
     "title": "فروشگاه",
@@ -2340,7 +4220,7 @@
     }
   },
   {
-    "id": "fa-gen-201",
+    "id": "fa-gen-356",
     "package": "test.shop0",
     "channel_name": "فروشگاه",
     "title": "فروشگاه",
@@ -2350,7 +4230,7 @@
     }
   },
   {
-    "id": "fa-gen-202",
+    "id": "fa-gen-357",
     "package": "test.shop1",
     "channel_name": "فروشگاه",
     "title": "فروشگاه",
@@ -2360,7 +4240,7 @@
     }
   },
   {
-    "id": "fa-gen-203",
+    "id": "fa-gen-358",
     "package": "test.shop2",
     "channel_name": "فروشگاه",
     "title": "غذا",
@@ -2370,7 +4250,7 @@
     }
   },
   {
-    "id": "fa-gen-204",
+    "id": "fa-gen-359",
     "package": "test.shop3",
     "channel_name": "فروشگاه",
     "title": "غذا",
@@ -2380,7 +4260,7 @@
     }
   },
   {
-    "id": "fa-gen-205",
+    "id": "fa-gen-360",
     "package": "test.shop4",
     "channel_name": "فروشگاه",
     "title": "رانندگان",
@@ -2390,7 +4270,7 @@
     }
   },
   {
-    "id": "fa-gen-206",
+    "id": "fa-gen-361",
     "package": "test.shop5",
     "channel_name": "فروشگاه",
     "title": "رانندگان",
@@ -2400,7 +4280,7 @@
     }
   },
   {
-    "id": "fa-gen-207",
+    "id": "fa-gen-362",
     "package": "test.shop6",
     "channel_name": "فروشگاه",
     "title": "فروشگاه",
@@ -2410,7 +4290,7 @@
     }
   },
   {
-    "id": "fa-gen-208",
+    "id": "fa-gen-363",
     "package": "test.shop0",
     "channel_name": "فروشگاه",
     "title": "پیک",
@@ -2420,7 +4300,7 @@
     }
   },
   {
-    "id": "fa-gen-209",
+    "id": "fa-gen-364",
     "package": "test.shop1",
     "channel_name": "فروشگاه",
     "title": "فروشگاه",
@@ -2430,7 +4310,7 @@
     }
   },
   {
-    "id": "fa-gen-210",
+    "id": "fa-gen-365",
     "package": "test.shop2",
     "channel_name": "فروشگاه",
     "title": "فروشگاه",
@@ -2440,7 +4320,7 @@
     }
   },
   {
-    "id": "fa-gen-211",
+    "id": "fa-gen-366",
     "package": "test.shop3",
     "channel_name": "فروشگاه",
     "title": "فروشگاه",
@@ -2450,7 +4330,7 @@
     }
   },
   {
-    "id": "fa-gen-212",
+    "id": "fa-gen-367",
     "package": "test.shop4",
     "channel_name": "فروشگاه",
     "title": "فروشگاه",
@@ -2460,7 +4340,7 @@
     }
   },
   {
-    "id": "fa-gen-213",
+    "id": "fa-gen-368",
     "package": "test.shop5",
     "channel_name": "فروشگاه",
     "title": "غذا",
@@ -2470,7 +4350,7 @@
     }
   },
   {
-    "id": "fa-gen-214",
+    "id": "fa-gen-369",
     "package": "test.shop6",
     "channel_name": "فروشگاه",
     "title": "غذا",
@@ -2480,7 +4360,7 @@
     }
   },
   {
-    "id": "fa-gen-215",
+    "id": "fa-gen-370",
     "package": "test.shop0",
     "channel_name": "فروشگاه",
     "title": "رانندگان",
@@ -2490,7 +4370,7 @@
     }
   },
   {
-    "id": "fa-gen-216",
+    "id": "fa-gen-371",
     "package": "test.shop1",
     "channel_name": "فروشگاه",
     "title": "رانندگان",
@@ -2500,7 +4380,7 @@
     }
   },
   {
-    "id": "fa-gen-217",
+    "id": "fa-gen-372",
     "package": "test.shop2",
     "channel_name": "فروشگاه",
     "title": "فروشگاه",
@@ -2510,7 +4390,7 @@
     }
   },
   {
-    "id": "fa-gen-218",
+    "id": "fa-gen-373",
     "package": "test.shop3",
     "channel_name": "فروشگاه",
     "title": "پیک",
@@ -2520,7 +4400,7 @@
     }
   },
   {
-    "id": "fa-gen-219",
+    "id": "fa-gen-374",
     "package": "test.shop4",
     "channel_name": "فروشگاه",
     "title": "فروشگاه",
@@ -2530,7 +4410,357 @@
     }
   },
   {
-    "id": "fa-gen-220",
+    "id": "fa-gen-375",
+    "package": "test.shop5",
+    "channel_name": "فروشگاه",
+    "title": "فروشگاه",
+    "text": "سفارش 100520 ارسال شد — فردا می‌رسد",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-376",
+    "package": "test.shop6",
+    "channel_name": "فروشگاه",
+    "title": "فروشگاه",
+    "text": "سفارش 100533 در حال تحویل است",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-377",
+    "package": "test.shop0",
+    "channel_name": "فروشگاه",
+    "title": "فروشگاه",
+    "text": "سفارش 100546 تحویل داده شد. تجربه خود را ثبت کنید؟",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-378",
+    "package": "test.shop1",
+    "channel_name": "فروشگاه",
+    "title": "غذا",
+    "text": "غذای شما در راه است — ۲۰ دقیقه دیگر می‌رسد",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-379",
+    "package": "test.shop2",
+    "channel_name": "فروشگاه",
+    "title": "غذا",
+    "text": "راننده برای سفارش 100572 اختصاص داده شد",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-380",
+    "package": "test.shop3",
+    "channel_name": "فروشگاه",
+    "title": "رانندگان",
+    "text": "راننده شما در راه است",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-381",
+    "package": "test.shop4",
+    "channel_name": "فروشگاه",
+    "title": "رانندگان",
+    "text": "به مقصد ۳ دقیقه دیگر می‌رسید",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-382",
+    "package": "test.shop5",
+    "channel_name": "فروشگاه",
+    "title": "فروشگاه",
+    "text": "سفارش 100611 تأیید شد — رهگیری به زودی",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-383",
+    "package": "test.shop6",
+    "channel_name": "فروشگاه",
+    "title": "پیک",
+    "text": "بسته 100624 روی درب خانه شماست",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-384",
+    "package": "test.shop0",
+    "channel_name": "فروشگاه",
+    "title": "فروشگاه",
+    "text": "مرجوعی سفارش 100637 دریافت شد",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-385",
+    "package": "test.shop1",
+    "channel_name": "فروشگاه",
+    "title": "فروشگاه",
+    "text": "سفارش 100650 ارسال شد — فردا می‌رسد",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-386",
+    "package": "test.shop2",
+    "channel_name": "فروشگاه",
+    "title": "فروشگاه",
+    "text": "سفارش 100663 در حال تحویل است",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-387",
+    "package": "test.shop3",
+    "channel_name": "فروشگاه",
+    "title": "فروشگاه",
+    "text": "سفارش 100676 تحویل داده شد. تجربه خود را ثبت کنید؟",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-388",
+    "package": "test.shop4",
+    "channel_name": "فروشگاه",
+    "title": "غذا",
+    "text": "غذای شما در راه است — ۲۰ دقیقه دیگر می‌رسد",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-389",
+    "package": "test.shop5",
+    "channel_name": "فروشگاه",
+    "title": "غذا",
+    "text": "راننده برای سفارش 100702 اختصاص داده شد",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-390",
+    "package": "test.shop6",
+    "channel_name": "فروشگاه",
+    "title": "رانندگان",
+    "text": "راننده شما در راه است",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-391",
+    "package": "test.shop0",
+    "channel_name": "فروشگاه",
+    "title": "رانندگان",
+    "text": "به مقصد ۳ دقیقه دیگر می‌رسید",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-392",
+    "package": "test.shop1",
+    "channel_name": "فروشگاه",
+    "title": "فروشگاه",
+    "text": "سفارش 100741 تأیید شد — رهگیری به زودی",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-393",
+    "package": "test.shop2",
+    "channel_name": "فروشگاه",
+    "title": "پیک",
+    "text": "بسته 100754 روی درب خانه شماست",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-394",
+    "package": "test.shop3",
+    "channel_name": "فروشگاه",
+    "title": "فروشگاه",
+    "text": "مرجوعی سفارش 100767 دریافت شد",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-395",
+    "package": "test.shop4",
+    "channel_name": "فروشگاه",
+    "title": "فروشگاه",
+    "text": "سفارش 100780 ارسال شد — فردا می‌رسد",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-396",
+    "package": "test.shop5",
+    "channel_name": "فروشگاه",
+    "title": "فروشگاه",
+    "text": "سفارش 100793 در حال تحویل است",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-397",
+    "package": "test.shop6",
+    "channel_name": "فروشگاه",
+    "title": "فروشگاه",
+    "text": "سفارش 100806 تحویل داده شد. تجربه خود را ثبت کنید؟",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-398",
+    "package": "test.shop0",
+    "channel_name": "فروشگاه",
+    "title": "غذا",
+    "text": "غذای شما در راه است — ۲۰ دقیقه دیگر می‌رسد",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-399",
+    "package": "test.shop1",
+    "channel_name": "فروشگاه",
+    "title": "غذا",
+    "text": "راننده برای سفارش 100832 اختصاص داده شد",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-400",
+    "package": "test.shop2",
+    "channel_name": "فروشگاه",
+    "title": "رانندگان",
+    "text": "راننده شما در راه است",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-401",
+    "package": "test.shop3",
+    "channel_name": "فروشگاه",
+    "title": "رانندگان",
+    "text": "به مقصد ۳ دقیقه دیگر می‌رسید",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-402",
+    "package": "test.shop4",
+    "channel_name": "فروشگاه",
+    "title": "فروشگاه",
+    "text": "سفارش 100871 تأیید شد — رهگیری به زودی",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-403",
+    "package": "test.shop5",
+    "channel_name": "فروشگاه",
+    "title": "پیک",
+    "text": "بسته 100884 روی درب خانه شماست",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-404",
+    "package": "test.shop6",
+    "channel_name": "فروشگاه",
+    "title": "فروشگاه",
+    "text": "مرجوعی سفارش 100897 دریافت شد",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-405",
+    "package": "test.shop0",
+    "channel_name": "فروشگاه",
+    "title": "فروشگاه",
+    "text": "سفارش 100910 ارسال شد — فردا می‌رسد",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-406",
+    "package": "test.shop1",
+    "channel_name": "فروشگاه",
+    "title": "فروشگاه",
+    "text": "سفارش 100923 در حال تحویل است",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-407",
+    "package": "test.shop2",
+    "channel_name": "فروشگاه",
+    "title": "فروشگاه",
+    "text": "سفارش 100936 تحویل داده شد. تجربه خود را ثبت کنید؟",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-408",
+    "package": "test.shop3",
+    "channel_name": "فروشگاه",
+    "title": "غذا",
+    "text": "غذای شما در راه است — ۲۰ دقیقه دیگر می‌رسد",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-409",
+    "package": "test.shop4",
+    "channel_name": "فروشگاه",
+    "title": "غذا",
+    "text": "راننده برای سفارش 100962 اختصاص داده شد",
+    "expect": {
+      "category": "orders"
+    }
+  },
+  {
+    "id": "fa-gen-410",
     "package": "test.auth0",
     "channel_name": "احراز هویت",
     "title": "بانک",
@@ -2540,7 +4770,7 @@
     }
   },
   {
-    "id": "fa-gen-221",
+    "id": "fa-gen-411",
     "package": "test.auth1",
     "channel_name": "احراز هویت",
     "title": "احراز",
@@ -2550,7 +4780,7 @@
     }
   },
   {
-    "id": "fa-gen-222",
+    "id": "fa-gen-412",
     "package": "test.auth2",
     "channel_name": "احراز هویت",
     "title": "بانک",
@@ -2560,7 +4790,7 @@
     }
   },
   {
-    "id": "fa-gen-223",
+    "id": "fa-gen-413",
     "package": "test.auth0",
     "channel_name": "احراز هویت",
     "title": "احراز",
@@ -2570,7 +4800,7 @@
     }
   },
   {
-    "id": "fa-gen-224",
+    "id": "fa-gen-414",
     "package": "test.auth1",
     "channel_name": "احراز هویت",
     "title": "بانک",
@@ -2580,7 +4810,7 @@
     }
   },
   {
-    "id": "fa-gen-225",
+    "id": "fa-gen-415",
     "package": "test.auth2",
     "channel_name": "احراز هویت",
     "title": "امنیت",
@@ -2590,7 +4820,7 @@
     }
   },
   {
-    "id": "fa-gen-226",
+    "id": "fa-gen-416",
     "package": "test.auth0",
     "channel_name": "احراز هویت",
     "title": "احراز",
@@ -2600,7 +4830,7 @@
     }
   },
   {
-    "id": "fa-gen-227",
+    "id": "fa-gen-417",
     "package": "test.auth1",
     "channel_name": "احراز هویت",
     "title": "بانک",
@@ -2610,7 +4840,7 @@
     }
   },
   {
-    "id": "fa-gen-228",
+    "id": "fa-gen-418",
     "package": "test.auth2",
     "channel_name": "احراز هویت",
     "title": "بانک",
@@ -2620,7 +4850,7 @@
     }
   },
   {
-    "id": "fa-gen-229",
+    "id": "fa-gen-419",
     "package": "test.auth0",
     "channel_name": "احراز هویت",
     "title": "احراز",
@@ -2630,7 +4860,7 @@
     }
   },
   {
-    "id": "fa-gen-230",
+    "id": "fa-gen-420",
     "package": "test.auth1",
     "channel_name": "احراز هویت",
     "title": "بانک",
@@ -2640,7 +4870,7 @@
     }
   },
   {
-    "id": "fa-gen-231",
+    "id": "fa-gen-421",
     "package": "test.auth2",
     "channel_name": "احراز هویت",
     "title": "احراز",
@@ -2650,7 +4880,7 @@
     }
   },
   {
-    "id": "fa-gen-232",
+    "id": "fa-gen-422",
     "package": "test.auth0",
     "channel_name": "احراز هویت",
     "title": "بانک",
@@ -2660,7 +4890,7 @@
     }
   },
   {
-    "id": "fa-gen-233",
+    "id": "fa-gen-423",
     "package": "test.auth1",
     "channel_name": "احراز هویت",
     "title": "امنیت",
@@ -2670,7 +4900,7 @@
     }
   },
   {
-    "id": "fa-gen-234",
+    "id": "fa-gen-424",
     "package": "test.auth2",
     "channel_name": "احراز هویت",
     "title": "احراز",
@@ -2680,7 +4910,7 @@
     }
   },
   {
-    "id": "fa-gen-235",
+    "id": "fa-gen-425",
     "package": "test.auth0",
     "channel_name": "احراز هویت",
     "title": "بانک",
@@ -2690,7 +4920,7 @@
     }
   },
   {
-    "id": "fa-gen-236",
+    "id": "fa-gen-426",
     "package": "test.auth1",
     "channel_name": "احراز هویت",
     "title": "بانک",
@@ -2700,7 +4930,7 @@
     }
   },
   {
-    "id": "fa-gen-237",
+    "id": "fa-gen-427",
     "package": "test.auth2",
     "channel_name": "احراز هویت",
     "title": "احراز",
@@ -2710,7 +4940,7 @@
     }
   },
   {
-    "id": "fa-gen-238",
+    "id": "fa-gen-428",
     "package": "test.auth0",
     "channel_name": "احراز هویت",
     "title": "بانک",
@@ -2720,7 +4950,7 @@
     }
   },
   {
-    "id": "fa-gen-239",
+    "id": "fa-gen-429",
     "package": "test.auth1",
     "channel_name": "احراز هویت",
     "title": "احراز",
@@ -2730,7 +4960,7 @@
     }
   },
   {
-    "id": "fa-gen-240",
+    "id": "fa-gen-430",
     "package": "test.auth2",
     "channel_name": "احراز هویت",
     "title": "بانک",
@@ -2740,7 +4970,7 @@
     }
   },
   {
-    "id": "fa-gen-241",
+    "id": "fa-gen-431",
     "package": "test.auth0",
     "channel_name": "احراز هویت",
     "title": "امنیت",
@@ -2750,7 +4980,7 @@
     }
   },
   {
-    "id": "fa-gen-242",
+    "id": "fa-gen-432",
     "package": "test.auth1",
     "channel_name": "احراز هویت",
     "title": "احراز",
@@ -2760,7 +4990,7 @@
     }
   },
   {
-    "id": "fa-gen-243",
+    "id": "fa-gen-433",
     "package": "test.auth2",
     "channel_name": "احراز هویت",
     "title": "بانک",
@@ -2770,7 +5000,7 @@
     }
   },
   {
-    "id": "fa-gen-244",
+    "id": "fa-gen-434",
     "package": "test.auth0",
     "channel_name": "احراز هویت",
     "title": "بانک",
@@ -2780,7 +5010,7 @@
     }
   },
   {
-    "id": "fa-gen-245",
+    "id": "fa-gen-435",
     "package": "test.auth1",
     "channel_name": "احراز هویت",
     "title": "احراز",
@@ -2790,7 +5020,7 @@
     }
   },
   {
-    "id": "fa-gen-246",
+    "id": "fa-gen-436",
     "package": "test.auth2",
     "channel_name": "احراز هویت",
     "title": "بانک",
@@ -2800,7 +5030,7 @@
     }
   },
   {
-    "id": "fa-gen-247",
+    "id": "fa-gen-437",
     "package": "test.auth0",
     "channel_name": "احراز هویت",
     "title": "احراز",
@@ -2810,7 +5040,7 @@
     }
   },
   {
-    "id": "fa-gen-248",
+    "id": "fa-gen-438",
     "package": "test.auth1",
     "channel_name": "احراز هویت",
     "title": "بانک",
@@ -2820,7 +5050,7 @@
     }
   },
   {
-    "id": "fa-gen-249",
+    "id": "fa-gen-439",
     "package": "test.auth2",
     "channel_name": "احراز هویت",
     "title": "امنیت",
@@ -2830,7 +5060,307 @@
     }
   },
   {
-    "id": "fa-gen-250",
+    "id": "fa-gen-440",
+    "package": "test.auth0",
+    "channel_name": "احراز هویت",
+    "title": "احراز",
+    "text": "کد دو مرحله‌ای: 104110",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-441",
+    "package": "test.auth1",
+    "channel_name": "احراز هویت",
+    "title": "بانک",
+    "text": "رمز عبور حساب شما تغییر یافت",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-442",
+    "package": "test.auth2",
+    "channel_name": "احراز هویت",
+    "title": "بانک",
+    "text": "کد ورود شما: 104384 — این کد را به کسی ندهید",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-443",
+    "package": "test.auth0",
+    "channel_name": "احراز هویت",
+    "title": "احراز",
+    "text": "کد احراز هویت 104521 برای ورود",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-444",
+    "package": "test.auth1",
+    "channel_name": "احراز هویت",
+    "title": "بانک",
+    "text": "رمز یک‌بار مصرف: 104658 — فقط برای ۵ دقیقه",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-445",
+    "package": "test.auth2",
+    "channel_name": "احراز هویت",
+    "title": "احراز",
+    "text": "104795 کد تأیید شماست",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-446",
+    "package": "test.auth0",
+    "channel_name": "احراز هویت",
+    "title": "بانک",
+    "text": "برای تأیید شماره از کد 104932 استفاده کنید",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-447",
+    "package": "test.auth1",
+    "channel_name": "احراز هویت",
+    "title": "امنیت",
+    "text": "ورود جدید از دستگاه ناشناس",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-448",
+    "package": "test.auth2",
+    "channel_name": "احراز هویت",
+    "title": "احراز",
+    "text": "کد دو مرحله‌ای: 105206",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-449",
+    "package": "test.auth0",
+    "channel_name": "احراز هویت",
+    "title": "بانک",
+    "text": "رمز عبور حساب شما تغییر یافت",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-450",
+    "package": "test.auth1",
+    "channel_name": "احراز هویت",
+    "title": "بانک",
+    "text": "کد ورود شما: 105480 — این کد را به کسی ندهید",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-451",
+    "package": "test.auth2",
+    "channel_name": "احراز هویت",
+    "title": "احراز",
+    "text": "کد احراز هویت 105617 برای ورود",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-452",
+    "package": "test.auth0",
+    "channel_name": "احراز هویت",
+    "title": "بانک",
+    "text": "رمز یک‌بار مصرف: 105754 — فقط برای ۵ دقیقه",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-453",
+    "package": "test.auth1",
+    "channel_name": "احراز هویت",
+    "title": "احراز",
+    "text": "105891 کد تأیید شماست",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-454",
+    "package": "test.auth2",
+    "channel_name": "احراز هویت",
+    "title": "بانک",
+    "text": "برای تأیید شماره از کد 106028 استفاده کنید",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-455",
+    "package": "test.auth0",
+    "channel_name": "احراز هویت",
+    "title": "امنیت",
+    "text": "ورود جدید از دستگاه ناشناس",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-456",
+    "package": "test.auth1",
+    "channel_name": "احراز هویت",
+    "title": "احراز",
+    "text": "کد دو مرحله‌ای: 106302",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-457",
+    "package": "test.auth2",
+    "channel_name": "احراز هویت",
+    "title": "بانک",
+    "text": "رمز عبور حساب شما تغییر یافت",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-458",
+    "package": "test.auth0",
+    "channel_name": "احراز هویت",
+    "title": "بانک",
+    "text": "کد ورود شما: 106576 — این کد را به کسی ندهید",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-459",
+    "package": "test.auth1",
+    "channel_name": "احراز هویت",
+    "title": "احراز",
+    "text": "کد احراز هویت 106713 برای ورود",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-460",
+    "package": "test.auth2",
+    "channel_name": "احراز هویت",
+    "title": "بانک",
+    "text": "رمز یک‌بار مصرف: 106850 — فقط برای ۵ دقیقه",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-461",
+    "package": "test.auth0",
+    "channel_name": "احراز هویت",
+    "title": "احراز",
+    "text": "106987 کد تأیید شماست",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-462",
+    "package": "test.auth1",
+    "channel_name": "احراز هویت",
+    "title": "بانک",
+    "text": "برای تأیید شماره از کد 107124 استفاده کنید",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-463",
+    "package": "test.auth2",
+    "channel_name": "احراز هویت",
+    "title": "امنیت",
+    "text": "ورود جدید از دستگاه ناشناس",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-464",
+    "package": "test.auth0",
+    "channel_name": "احراز هویت",
+    "title": "احراز",
+    "text": "کد دو مرحله‌ای: 107398",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-465",
+    "package": "test.auth1",
+    "channel_name": "احراز هویت",
+    "title": "بانک",
+    "text": "رمز عبور حساب شما تغییر یافت",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-466",
+    "package": "test.auth2",
+    "channel_name": "احراز هویت",
+    "title": "بانک",
+    "text": "کد ورود شما: 107672 — این کد را به کسی ندهید",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-467",
+    "package": "test.auth0",
+    "channel_name": "احراز هویت",
+    "title": "احراز",
+    "text": "کد احراز هویت 107809 برای ورود",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-468",
+    "package": "test.auth1",
+    "channel_name": "احراز هویت",
+    "title": "بانک",
+    "text": "رمز یک‌بار مصرف: 107946 — فقط برای ۵ دقیقه",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-469",
+    "package": "test.auth2",
+    "channel_name": "احراز هویت",
+    "title": "احراز",
+    "text": "108083 کد تأیید شماست",
+    "expect": {
+      "category": "security"
+    }
+  },
+  {
+    "id": "fa-gen-470",
     "package": "test.soc0",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -2840,7 +5370,7 @@
     }
   },
   {
-    "id": "fa-gen-251",
+    "id": "fa-gen-471",
     "package": "test.soc1",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -2850,7 +5380,7 @@
     }
   },
   {
-    "id": "fa-gen-252",
+    "id": "fa-gen-472",
     "package": "test.soc2",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -2860,7 +5390,7 @@
     }
   },
   {
-    "id": "fa-gen-253",
+    "id": "fa-gen-473",
     "package": "test.soc3",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -2870,7 +5400,7 @@
     }
   },
   {
-    "id": "fa-gen-254",
+    "id": "fa-gen-474",
     "package": "test.soc0",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -2880,7 +5410,7 @@
     }
   },
   {
-    "id": "fa-gen-255",
+    "id": "fa-gen-475",
     "package": "test.soc1",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -2890,7 +5420,7 @@
     }
   },
   {
-    "id": "fa-gen-256",
+    "id": "fa-gen-476",
     "package": "test.soc2",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -2900,7 +5430,7 @@
     }
   },
   {
-    "id": "fa-gen-257",
+    "id": "fa-gen-477",
     "package": "test.soc3",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -2910,7 +5440,7 @@
     }
   },
   {
-    "id": "fa-gen-258",
+    "id": "fa-gen-478",
     "package": "test.soc0",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -2920,7 +5450,7 @@
     }
   },
   {
-    "id": "fa-gen-259",
+    "id": "fa-gen-479",
     "package": "test.soc1",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -2930,7 +5460,7 @@
     }
   },
   {
-    "id": "fa-gen-260",
+    "id": "fa-gen-480",
     "package": "test.soc2",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -2940,7 +5470,7 @@
     }
   },
   {
-    "id": "fa-gen-261",
+    "id": "fa-gen-481",
     "package": "test.soc3",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -2950,7 +5480,7 @@
     }
   },
   {
-    "id": "fa-gen-262",
+    "id": "fa-gen-482",
     "package": "test.soc0",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -2960,7 +5490,7 @@
     }
   },
   {
-    "id": "fa-gen-263",
+    "id": "fa-gen-483",
     "package": "test.soc1",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -2970,7 +5500,7 @@
     }
   },
   {
-    "id": "fa-gen-264",
+    "id": "fa-gen-484",
     "package": "test.soc2",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -2980,7 +5510,7 @@
     }
   },
   {
-    "id": "fa-gen-265",
+    "id": "fa-gen-485",
     "package": "test.soc3",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -2990,7 +5520,7 @@
     }
   },
   {
-    "id": "fa-gen-266",
+    "id": "fa-gen-486",
     "package": "test.soc0",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -3000,7 +5530,7 @@
     }
   },
   {
-    "id": "fa-gen-267",
+    "id": "fa-gen-487",
     "package": "test.soc1",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -3010,7 +5540,7 @@
     }
   },
   {
-    "id": "fa-gen-268",
+    "id": "fa-gen-488",
     "package": "test.soc2",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -3020,7 +5550,7 @@
     }
   },
   {
-    "id": "fa-gen-269",
+    "id": "fa-gen-489",
     "package": "test.soc3",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -3030,7 +5560,7 @@
     }
   },
   {
-    "id": "fa-gen-270",
+    "id": "fa-gen-490",
     "package": "test.soc0",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -3040,7 +5570,7 @@
     }
   },
   {
-    "id": "fa-gen-271",
+    "id": "fa-gen-491",
     "package": "test.soc1",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -3050,7 +5580,7 @@
     }
   },
   {
-    "id": "fa-gen-272",
+    "id": "fa-gen-492",
     "package": "test.soc2",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -3060,7 +5590,7 @@
     }
   },
   {
-    "id": "fa-gen-273",
+    "id": "fa-gen-493",
     "package": "test.soc3",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -3070,7 +5600,7 @@
     }
   },
   {
-    "id": "fa-gen-274",
+    "id": "fa-gen-494",
     "package": "test.soc0",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -3080,7 +5610,7 @@
     }
   },
   {
-    "id": "fa-gen-275",
+    "id": "fa-gen-495",
     "package": "test.soc1",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -3090,7 +5620,7 @@
     }
   },
   {
-    "id": "fa-gen-276",
+    "id": "fa-gen-496",
     "package": "test.soc2",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -3100,7 +5630,7 @@
     }
   },
   {
-    "id": "fa-gen-277",
+    "id": "fa-gen-497",
     "package": "test.soc3",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -3110,7 +5640,7 @@
     }
   },
   {
-    "id": "fa-gen-278",
+    "id": "fa-gen-498",
     "package": "test.soc0",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -3120,7 +5650,7 @@
     }
   },
   {
-    "id": "fa-gen-279",
+    "id": "fa-gen-499",
     "package": "test.soc1",
     "channel_name": "اجتماعی",
     "title": "اجتماعی",
@@ -3130,7 +5660,307 @@
     }
   },
   {
-    "id": "fa-gen-280",
+    "id": "fa-gen-500",
+    "package": "test.soc2",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "علی_کاربر عکس شما را لایک کرد",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-501",
+    "package": "test.soc3",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "فالوور جدید: مبین_کدنویس",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-502",
+    "package": "test.soc0",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "شما ۳ درخواست فالو جدید دارید",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-503",
+    "package": "test.soc1",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "پست شما ۱۲ لایک جدید گرفت",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-504",
+    "package": "test.soc2",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "ویدیوی شما به ۱٬۰۰۰ بازدید رسید",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-505",
+    "package": "test.soc3",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "استوری جدید از سارا",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-506",
+    "package": "test.soc0",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "علی_کاربر عکس شما را لایک کرد",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-507",
+    "package": "test.soc1",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "فالوور جدید: مبین_کدنویس",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-508",
+    "package": "test.soc2",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "شما ۳ درخواست فالو جدید دارید",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-509",
+    "package": "test.soc3",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "پست شما ۱۲ لایک جدید گرفت",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-510",
+    "package": "test.soc0",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "ویدیوی شما به ۱٬۰۰۰ بازدید رسید",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-511",
+    "package": "test.soc1",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "استوری جدید از سارا",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-512",
+    "package": "test.soc2",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "علی_کاربر عکس شما را لایک کرد",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-513",
+    "package": "test.soc3",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "فالوور جدید: مبین_کدنویس",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-514",
+    "package": "test.soc0",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "شما ۳ درخواست فالو جدید دارید",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-515",
+    "package": "test.soc1",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "پست شما ۱۲ لایک جدید گرفت",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-516",
+    "package": "test.soc2",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "ویدیوی شما به ۱٬۰۰۰ بازدید رسید",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-517",
+    "package": "test.soc3",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "استوری جدید از سارا",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-518",
+    "package": "test.soc0",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "علی_کاربر عکس شما را لایک کرد",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-519",
+    "package": "test.soc1",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "فالوور جدید: مبین_کدنویس",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-520",
+    "package": "test.soc2",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "شما ۳ درخواست فالو جدید دارید",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-521",
+    "package": "test.soc3",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "پست شما ۱۲ لایک جدید گرفت",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-522",
+    "package": "test.soc0",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "ویدیوی شما به ۱٬۰۰۰ بازدید رسید",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-523",
+    "package": "test.soc1",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "استوری جدید از سارا",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-524",
+    "package": "test.soc2",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "علی_کاربر عکس شما را لایک کرد",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-525",
+    "package": "test.soc3",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "فالوور جدید: مبین_کدنویس",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-526",
+    "package": "test.soc0",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "شما ۳ درخواست فالو جدید دارید",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-527",
+    "package": "test.soc1",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "پست شما ۱۲ لایک جدید گرفت",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-528",
+    "package": "test.soc2",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "ویدیوی شما به ۱٬۰۰۰ بازدید رسید",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-529",
+    "package": "test.soc3",
+    "channel_name": "اجتماعی",
+    "title": "اجتماعی",
+    "text": "استوری جدید از سارا",
+    "expect": {
+      "category": "social"
+    }
+  },
+  {
+    "id": "fa-gen-530",
     "package": "test.os0",
     "channel_name": "سیستم",
     "title": "سیستم",
@@ -3140,7 +5970,7 @@
     }
   },
   {
-    "id": "fa-gen-281",
+    "id": "fa-gen-531",
     "package": "test.os1",
     "channel_name": "سیستم",
     "title": "سیستم",
@@ -3150,7 +5980,7 @@
     }
   },
   {
-    "id": "fa-gen-282",
+    "id": "fa-gen-532",
     "package": "test.os2",
     "channel_name": "سیستم",
     "title": "باتری",
@@ -3160,7 +5990,7 @@
     }
   },
   {
-    "id": "fa-gen-283",
+    "id": "fa-gen-533",
     "package": "test.os0",
     "channel_name": "سیستم",
     "title": "هواشناسی",
@@ -3170,7 +6000,7 @@
     }
   },
   {
-    "id": "fa-gen-284",
+    "id": "fa-gen-534",
     "package": "test.os1",
     "channel_name": "سیستم",
     "title": "سیستم",
@@ -3180,7 +6010,7 @@
     }
   },
   {
-    "id": "fa-gen-285",
+    "id": "fa-gen-535",
     "package": "test.os2",
     "channel_name": "سیستم",
     "title": "سیستم",
@@ -3190,7 +6020,7 @@
     }
   },
   {
-    "id": "fa-gen-286",
+    "id": "fa-gen-536",
     "package": "test.os0",
     "channel_name": "سیستم",
     "title": "پشتیبان",
@@ -3200,7 +6030,7 @@
     }
   },
   {
-    "id": "fa-gen-287",
+    "id": "fa-gen-537",
     "package": "test.os1",
     "channel_name": "سیستم",
     "title": "سیستم",
@@ -3210,7 +6040,7 @@
     }
   },
   {
-    "id": "fa-gen-288",
+    "id": "fa-gen-538",
     "package": "test.os2",
     "channel_name": "سیستم",
     "title": "سیستم",
@@ -3220,7 +6050,7 @@
     }
   },
   {
-    "id": "fa-gen-289",
+    "id": "fa-gen-539",
     "package": "test.os0",
     "channel_name": "سیستم",
     "title": "باتری",
@@ -3230,7 +6060,7 @@
     }
   },
   {
-    "id": "fa-gen-290",
+    "id": "fa-gen-540",
     "package": "test.os1",
     "channel_name": "سیستم",
     "title": "هواشناسی",
@@ -3240,7 +6070,7 @@
     }
   },
   {
-    "id": "fa-gen-291",
+    "id": "fa-gen-541",
     "package": "test.os2",
     "channel_name": "سیستم",
     "title": "سیستم",
@@ -3250,7 +6080,7 @@
     }
   },
   {
-    "id": "fa-gen-292",
+    "id": "fa-gen-542",
     "package": "test.os0",
     "channel_name": "سیستم",
     "title": "سیستم",
@@ -3260,7 +6090,7 @@
     }
   },
   {
-    "id": "fa-gen-293",
+    "id": "fa-gen-543",
     "package": "test.os1",
     "channel_name": "سیستم",
     "title": "پشتیبان",
@@ -3270,7 +6100,7 @@
     }
   },
   {
-    "id": "fa-gen-294",
+    "id": "fa-gen-544",
     "package": "test.os2",
     "channel_name": "سیستم",
     "title": "سیستم",
@@ -3280,7 +6110,7 @@
     }
   },
   {
-    "id": "fa-gen-295",
+    "id": "fa-gen-545",
     "package": "test.os0",
     "channel_name": "سیستم",
     "title": "سیستم",
@@ -3290,7 +6120,7 @@
     }
   },
   {
-    "id": "fa-gen-296",
+    "id": "fa-gen-546",
     "package": "test.os1",
     "channel_name": "سیستم",
     "title": "باتری",
@@ -3300,7 +6130,7 @@
     }
   },
   {
-    "id": "fa-gen-297",
+    "id": "fa-gen-547",
     "package": "test.os2",
     "channel_name": "سیستم",
     "title": "هواشناسی",
@@ -3310,7 +6140,7 @@
     }
   },
   {
-    "id": "fa-gen-298",
+    "id": "fa-gen-548",
     "package": "test.os0",
     "channel_name": "سیستم",
     "title": "سیستم",
@@ -3320,7 +6150,7 @@
     }
   },
   {
-    "id": "fa-gen-299",
+    "id": "fa-gen-549",
     "package": "test.os1",
     "channel_name": "سیستم",
     "title": "سیستم",
@@ -3330,7 +6160,117 @@
     }
   },
   {
-    "id": "fa-gen-300",
+    "id": "fa-gen-550",
+    "package": "test.os2",
+    "channel_name": "سیستم",
+    "title": "پشتیبان",
+    "text": "آخرین پشتیبان: دیروز ساعت ۲۳:۴۲",
+    "expect": {
+      "category": "updates"
+    }
+  },
+  {
+    "id": "fa-gen-551",
+    "package": "test.os0",
+    "channel_name": "سیستم",
+    "title": "سیستم",
+    "text": "به‌روزرسانی سیستم موجود است: پچ امنیتی",
+    "expect": {
+      "category": "updates"
+    }
+  },
+  {
+    "id": "fa-gen-552",
+    "package": "test.os1",
+    "channel_name": "سیستم",
+    "title": "سیستم",
+    "text": "فضای ذخیره‌سازی تقریباً پر است: ۵۰۰ مگابایت باقی",
+    "expect": {
+      "category": "updates"
+    }
+  },
+  {
+    "id": "fa-gen-553",
+    "package": "test.os2",
+    "channel_name": "سیستم",
+    "title": "باتری",
+    "text": "باتری روی ۱۵٪ — شارژ کنید",
+    "expect": {
+      "category": "updates"
+    }
+  },
+  {
+    "id": "fa-gen-554",
+    "package": "test.os0",
+    "channel_name": "سیستم",
+    "title": "هواشناسی",
+    "text": "بارش باران ساعت ۶ عصر پیش‌بینی شده",
+    "expect": {
+      "category": "updates"
+    }
+  },
+  {
+    "id": "fa-gen-555",
+    "package": "test.os1",
+    "channel_name": "سیستم",
+    "title": "سیستم",
+    "text": "۳ برنامه در پس‌زمینه به‌روز شدند",
+    "expect": {
+      "category": "updates"
+    }
+  },
+  {
+    "id": "fa-gen-556",
+    "package": "test.os2",
+    "channel_name": "سیستم",
+    "title": "سیستم",
+    "text": "اسکرین‌شات ذخیره شد",
+    "expect": {
+      "category": "updates"
+    }
+  },
+  {
+    "id": "fa-gen-557",
+    "package": "test.os0",
+    "channel_name": "سیستم",
+    "title": "پشتیبان",
+    "text": "آخرین پشتیبان: دیروز ساعت ۲۳:۴۲",
+    "expect": {
+      "category": "updates"
+    }
+  },
+  {
+    "id": "fa-gen-558",
+    "package": "test.os1",
+    "channel_name": "سیستم",
+    "title": "سیستم",
+    "text": "به‌روزرسانی سیستم موجود است: پچ امنیتی",
+    "expect": {
+      "category": "updates"
+    }
+  },
+  {
+    "id": "fa-gen-559",
+    "package": "test.os2",
+    "channel_name": "سیستم",
+    "title": "سیستم",
+    "text": "فضای ذخیره‌سازی تقریباً پر است: ۵۰۰ مگابایت باقی",
+    "expect": {
+      "category": "updates"
+    }
+  },
+  {
+    "id": "fa-gen-560",
+    "package": "test.os0",
+    "channel_name": "سیستم",
+    "title": "باتری",
+    "text": "باتری روی ۱۵٪ — شارژ کنید",
+    "expect": {
+      "category": "updates"
+    }
+  },
+  {
+    "id": "fa-gen-561",
     "package": "test.misc0",
     "channel_name": "متفرقه",
     "title": "متفرقه",
@@ -3340,7 +6280,7 @@
     }
   },
   {
-    "id": "fa-gen-301",
+    "id": "fa-gen-562",
     "package": "test.misc1",
     "channel_name": "متفرقه",
     "title": "متفرقه",
@@ -3350,7 +6290,7 @@
     }
   },
   {
-    "id": "fa-gen-302",
+    "id": "fa-gen-563",
     "package": "test.misc2",
     "channel_name": "متفرقه",
     "title": "تصادفی",
@@ -3360,7 +6300,7 @@
     }
   },
   {
-    "id": "fa-gen-303",
+    "id": "fa-gen-564",
     "package": "test.misc3",
     "channel_name": "متفرقه",
     "title": "متفرقه",
@@ -3370,7 +6310,7 @@
     }
   },
   {
-    "id": "fa-gen-304",
+    "id": "fa-gen-565",
     "package": "test.misc4",
     "channel_name": "متفرقه",
     "title": "مراقبت",
@@ -3380,7 +6320,7 @@
     }
   },
   {
-    "id": "fa-gen-305",
+    "id": "fa-gen-566",
     "package": "test.misc0",
     "channel_name": "متفرقه",
     "title": "مراقبت",
@@ -3390,7 +6330,7 @@
     }
   },
   {
-    "id": "fa-gen-306",
+    "id": "fa-gen-567",
     "package": "test.misc1",
     "channel_name": "متفرقه",
     "title": "مراقبت",
@@ -3400,7 +6340,7 @@
     }
   },
   {
-    "id": "fa-gen-307",
+    "id": "fa-gen-568",
     "package": "test.misc2",
     "channel_name": "متفرقه",
     "title": "متفرقه",
@@ -3410,7 +6350,7 @@
     }
   },
   {
-    "id": "fa-gen-308",
+    "id": "fa-gen-569",
     "package": "test.misc3",
     "channel_name": "متفرقه",
     "title": "مراقبت",
@@ -3420,7 +6360,7 @@
     }
   },
   {
-    "id": "fa-gen-309",
+    "id": "fa-gen-570",
     "package": "test.misc4",
     "channel_name": "متفرقه",
     "title": "متفرقه",
@@ -3430,7 +6370,7 @@
     }
   },
   {
-    "id": "fa-gen-310",
+    "id": "fa-gen-571",
     "package": "test.misc0",
     "channel_name": "متفرقه",
     "title": "متفرقه",
@@ -3440,7 +6380,7 @@
     }
   },
   {
-    "id": "fa-gen-311",
+    "id": "fa-gen-572",
     "package": "test.misc1",
     "channel_name": "متفرقه",
     "title": "تصادفی",
@@ -3450,7 +6390,7 @@
     }
   },
   {
-    "id": "fa-gen-312",
+    "id": "fa-gen-573",
     "package": "test.misc2",
     "channel_name": "متفرقه",
     "title": "متفرقه",
@@ -3460,7 +6400,7 @@
     }
   },
   {
-    "id": "fa-gen-313",
+    "id": "fa-gen-574",
     "package": "test.misc3",
     "channel_name": "متفرقه",
     "title": "مراقبت",
@@ -3470,7 +6410,7 @@
     }
   },
   {
-    "id": "fa-gen-314",
+    "id": "fa-gen-575",
     "package": "test.misc4",
     "channel_name": "متفرقه",
     "title": "مراقبت",
@@ -3480,7 +6420,7 @@
     }
   },
   {
-    "id": "fa-gen-315",
+    "id": "fa-gen-576",
     "package": "test.misc0",
     "channel_name": "متفرقه",
     "title": "مراقبت",
@@ -3490,7 +6430,7 @@
     }
   },
   {
-    "id": "fa-gen-316",
+    "id": "fa-gen-577",
     "package": "test.misc1",
     "channel_name": "متفرقه",
     "title": "متفرقه",
@@ -3500,7 +6440,7 @@
     }
   },
   {
-    "id": "fa-gen-317",
+    "id": "fa-gen-578",
     "package": "test.misc2",
     "channel_name": "متفرقه",
     "title": "مراقبت",
@@ -3510,7 +6450,7 @@
     }
   },
   {
-    "id": "fa-gen-318",
+    "id": "fa-gen-579",
     "package": "test.misc3",
     "channel_name": "متفرقه",
     "title": "متفرقه",
@@ -3520,11 +6460,121 @@
     }
   },
   {
-    "id": "fa-gen-319",
+    "id": "fa-gen-580",
     "package": "test.misc4",
     "channel_name": "متفرقه",
     "title": "متفرقه",
     "text": "پشتیبان‌گیری با موفقیت انجام شد",
+    "expect": {
+      "category": "other"
+    }
+  },
+  {
+    "id": "fa-gen-581",
+    "package": "test.misc0",
+    "channel_name": "متفرقه",
+    "title": "تصادفی",
+    "text": "یک حافظه جدید در گالری شما",
+    "expect": {
+      "category": "other"
+    }
+  },
+  {
+    "id": "fa-gen-582",
+    "package": "test.misc1",
+    "channel_name": "متفرقه",
+    "title": "متفرقه",
+    "text": "شرایط خدمات به‌روز شد — برای مرور کلیک کنید",
+    "expect": {
+      "category": "other"
+    }
+  },
+  {
+    "id": "fa-gen-583",
+    "package": "test.misc2",
+    "channel_name": "متفرقه",
+    "title": "مراقبت",
+    "text": "چطور بودیم؟ سفارش آخر را امتیاز دهید",
+    "expect": {
+      "category": "other"
+    }
+  },
+  {
+    "id": "fa-gen-584",
+    "package": "test.misc3",
+    "channel_name": "متفرقه",
+    "title": "مراقبت",
+    "text": "نکته حساب: عکس پروفایل تنظیم کنید",
+    "expect": {
+      "category": "other"
+    }
+  },
+  {
+    "id": "fa-gen-585",
+    "package": "test.misc4",
+    "channel_name": "متفرقه",
+    "title": "مراقبت",
+    "text": "حساب خود را کامل کنید تا شروع کنید",
+    "expect": {
+      "category": "other"
+    }
+  },
+  {
+    "id": "fa-gen-586",
+    "package": "test.misc0",
+    "channel_name": "متفرقه",
+    "title": "متفرقه",
+    "text": "خلاصه هفتگی: ۵ نکته برای خواب بهتر",
+    "expect": {
+      "category": "other"
+    }
+  },
+  {
+    "id": "fa-gen-587",
+    "package": "test.misc1",
+    "channel_name": "متفرقه",
+    "title": "مراقبت",
+    "text": "ممنون از ثبت‌نام! حساب را کامل کنید",
+    "expect": {
+      "category": "other"
+    }
+  },
+  {
+    "id": "fa-gen-588",
+    "package": "test.misc2",
+    "channel_name": "متفرقه",
+    "title": "متفرقه",
+    "text": "کد پستی شما ۱۲۳۴۵۶۷۸۹۰ ثبت شد",
+    "expect": {
+      "category": "other"
+    }
+  },
+  {
+    "id": "fa-gen-589",
+    "package": "test.misc3",
+    "channel_name": "متفرقه",
+    "title": "متفرقه",
+    "text": "پشتیبان‌گیری با موفقیت انجام شد",
+    "expect": {
+      "category": "other"
+    }
+  },
+  {
+    "id": "fa-gen-590",
+    "package": "test.misc4",
+    "channel_name": "متفرقه",
+    "title": "تصادفی",
+    "text": "یک حافظه جدید در گالری شما",
+    "expect": {
+      "category": "other"
+    }
+  },
+  {
+    "id": "fa-gen-591",
+    "package": "test.misc0",
+    "channel_name": "متفرقه",
+    "title": "متفرقه",
+    "text": "شرایط خدمات به‌روز شد — برای مرور کلیک کنید",
     "expect": {
       "category": "other"
     }

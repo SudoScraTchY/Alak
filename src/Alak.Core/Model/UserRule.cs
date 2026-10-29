@@ -15,6 +15,12 @@ public sealed record UserRule(
     long UpdatedAt = 0)
 {
     // UI-friendly flat properties (mapped to Match/Action in repo)
+    public string? Package
+    {
+        get => Match.Package;
+        init => Match = Match with { Package = value };
+    }
+
     public string Pattern
     {
         get => Match.TextContains ?? "";
@@ -127,4 +133,5 @@ public sealed record GlobalSettings(
     string SlmPerformanceProfile = "balanced", // "battery" | "balanced" | "quality"
     bool AppLockEnabled = false,
     bool HideAmountsInLists = false,
-    bool NotificationRemindersEnabled = true);
+    bool NotificationRemindersEnabled = true,
+    bool ExcludeCommunications = false);

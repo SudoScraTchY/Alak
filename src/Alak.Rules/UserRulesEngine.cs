@@ -56,24 +56,39 @@ public sealed class UserRulesEngine
 
     public static bool Matches(UserRuleMatch match, string package, string? title, string? text, string? sender, string? channelId, string? accountEmail)
     {
-        if (match.Package != null && !string.Equals(match.Package, package, StringComparison.OrdinalIgnoreCase))
-            return false;
+        if (!string.IsNullOrWhiteSpace(match.Package))
+        {
+            var p = match.Package.Trim();
+            var matchesPkg = string.Equals(p, package, StringComparison.OrdinalIgnoreCase) ||
+                             package.Contains(p, StringComparison.OrdinalIgnoreCase) ||
+                             p.Contains(package, StringComparison.OrdinalIgnoreCase);
+            if (!matchesPkg)
+                return false;
+        }
         if (match.ChannelId != null && !string.Equals(match.ChannelId, channelId, StringComparison.OrdinalIgnoreCase))
             return false;
         if (match.AccountEmail != null && !string.Equals(match.AccountEmail, accountEmail, StringComparison.OrdinalIgnoreCase))
             return false;
 
-        // Title pattern
-        var titlePattern = match.TitleRegex ?? match.TitleContains;
-        var titleMode = match.TitleRegex != null ? RuleMatchMode.Regex : match.MatchMode;
-        if (!StringMatches(title, titlePattern, titleMode, match.CaseSensitive))
-            return false;
+        // Title pattern (if explicitly configured)
+        if (!string.IsNullOrEmpty(match.TitleContains) || !string.IsNullOrEmpty(match.TitleRegex))
+        {
+            var titlePattern = match.TitleRegex ?? match.TitleContains;
+            var titleMode = match.TitleRegex != null ? RuleMatchMode.Regex : match.MatchMode;
+            if (!StringMatches(title, titlePattern, titleMode, match.CaseSensitive))
+                return false;
+        }
 
-        // Text pattern
-        var textPattern = match.TextRegex ?? match.TextContains;
-        var textMode = match.TextRegex != null ? RuleMatchMode.Regex : match.MatchMode;
-        if (!StringMatches(text, textPattern, textMode, match.CaseSensitive))
-            return false;
+        // Text / general content pattern (matches in text OR title)
+        if (!string.IsNullOrEmpty(match.TextContains) || !string.IsNullOrEmpty(match.TextRegex))
+        {
+            var textPattern = match.TextRegex ?? match.TextContains;
+            var textMode = match.TextRegex != null ? RuleMatchMode.Regex : match.MatchMode;
+            var matchesInText = StringMatches(text, textPattern, textMode, match.CaseSensitive);
+            var matchesInTitle = StringMatches(title, textPattern, textMode, match.CaseSensitive);
+            if (!matchesInText && !matchesInTitle)
+                return false;
+        }
 
         // Sender pattern
         var senderPattern = match.SenderRegex ?? match.SenderContains;

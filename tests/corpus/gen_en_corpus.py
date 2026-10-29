@@ -164,8 +164,8 @@ def gen_cases():
     cases = []
     i = 0
 
-    # offers: 60
-    for k in range(60):
+    # offers: 110
+    for k in range(110):
         t, fmt, _ = OFFERS[k % len(OFFERS)]
         pct = PCT[(k // len(OFFERS)) % len(PCT)]
         code = CODES[k % len(CODES)]
@@ -175,19 +175,19 @@ def gen_cases():
         cases.append(_mk(i, "offers", f"com.shop{k % 7}", t, txt,
                          channel=chan_for(f"com.shop{k % 7}", alt_promo=True)))
         i += 1
-    # work: 40
-    for k in range(40):
+    # work: 75
+    for k in range(75):
         t, fmt, _ = WORK[k % len(WORK)]
         txt = fmt.format(time=TIMES[k % len(TIMES)])
         cases.append(_mk(i, "work", f"com.work{k % 6}", t, txt, channel=chan_for(f"com.work{k % 6}")))
         i += 1
-    # people: 40
-    for k in range(40):
+    # people: 75
+    for k in range(75):
         t, fmt, _ = PEOPLE[k % len(PEOPLE)]
         cases.append(_mk(i, "people", f"com.msg{k % 5}", t, fmt, channel=chan_for(f"com.msg{k % 5}")))
         i += 1
-    # money: 40
-    for k in range(40):
+    # money: 75
+    for k in range(75):
         t, fmt, _ = MONEY[k % len(MONEY)]
         txt = fmt.format(
             amt=AMTS[k % len(AMTS)],
@@ -197,32 +197,32 @@ def gen_cases():
         c = _mk(i, "money", f"com.bank{k % 4}", t, txt, channel=chan_for(f"com.bank{k % 4}"))
         cases.append(c)
         i += 1
-    # orders: 40
-    for k in range(40):
+    # orders: 75
+    for k in range(75):
         t, fmt, _ = ORDERS[k % len(ORDERS)]
         ref = f"{100000 + (k * 13) % 899999}"
         txt = fmt.format(ref=ref)
         cases.append(_mk(i, "orders", f"com.shop{k % 7}", t, txt, channel=chan_for(f"com.shop{k % 7}")))
         i += 1
-    # security: 30
-    for k in range(30):
+    # security: 60
+    for k in range(60):
         t, fmt, _ = SECURITY[k % len(SECURITY)]
         digits = f"{100000 + (k * 137) % 899999}"
         txt = fmt.format(digits6=digits)
         cases.append(_mk(i, "security", f"com.auth{k % 3}", t, txt, channel=chan_for(f"com.auth{k % 3}")))
         i += 1
-    # social: 30
-    for k in range(30):
+    # social: 60
+    for k in range(60):
         t, fmt, _ = SOCIAL[k % len(SOCIAL)]
         cases.append(_mk(i, "social", f"com.soc{k % 4}", t, fmt, channel=chan_for(f"com.soc{k % 4}")))
         i += 1
-    # updates: 20
-    for k in range(20):
+    # updates: 30
+    for k in range(30):
         t, fmt, _ = UPDATES[k % len(UPDATES)]
         cases.append(_mk(i, "updates", f"com.os{k % 3}", t, fmt, channel=chan_for(f"com.os{k % 3}")))
         i += 1
-    # other: 20
-    for k in range(20):
+    # other: 30
+    for k in range(30):
         t, fmt, _ = OTHER[k % len(OTHER)]
         cases.append(_mk(i, "other", f"com.misc{k % 5}", t, fmt, channel=chan_for(f"com.misc{k % 5}")))
         i += 1
@@ -238,15 +238,17 @@ def gen_cases():
     return cases
 
 def main():
-    # merge with existing hand-written cases (worked examples etc.)
+    # keep existing hand-written cases (worked examples etc.)
     with open(OUT, encoding="utf-8") as f:
         existing = json.load(f)
-    existing_ids = {c["id"] for c in existing}
-    gen = [c for c in gen_cases() if c["id"] not in existing_ids]
-    merged = existing + gen
+    hand_written = [c for c in existing if not c["id"].startswith("en-gen-")]
+    gen = gen_cases()
+    merged = hand_written + gen
+    merged.sort(key=lambda c: c["id"])
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(merged, f, ensure_ascii=False, indent=1)
-    print(f"existing {len(existing)} + generated {len(gen)} = {len(merged)} EN cases")
+    print(f"hand-written {len(hand_written)} + generated {len(gen)} = {len(merged)} EN cases")
 
 if __name__ == "__main__":
     main()
+

@@ -168,4 +168,39 @@ public class ScriptLanguageTests
         ScriptLanguage.FirstStrongDirection("123 codes")
             .ShouldBe(TextDirection.Ltr); // no strong char -> default LTR
     }
+
+    [Fact]
+    public void PF01_FoldSimd_FoldsSpanEquivalentToFoldChar()
+    {
+        // 1. Span shorter than vector length (< 8)
+        char[] shortBuf = "ABC۱۲۳".ToCharArray();
+        Normalizer.FoldSimd(shortBuf);
+        new string(shortBuf).ShouldBe("abc123");
+
+        // 2. Exact 8 chars
+        char[] exactBuf = "ABCDEFG1".ToCharArray();
+        Normalizer.FoldSimd(exactBuf);
+        new string(exactBuf).ShouldBe("abcdefg1");
+
+        // 3. Multi-chunk (> 8 chars) with mixed ASCII, Persian/Arabic digits, Arabic Yeh/Kaf
+        char[] multiBuf = "SALE ۵۰% كد تخفيف ١٢٣".ToCharArray();
+        Normalizer.FoldSimd(multiBuf);
+        // 'SALE' -> 'sale', '۵۰' -> '50', 'كد' -> 'کد', 'تخفيف' -> 'تخفیف', '١٢٣' -> '123'
+        new string(multiBuf).ShouldBe("sale 50% کد تخفیف 123");
+
+        // 4. Verify identical behavior between FoldSimd and sequential FoldChar
+        string testInput = "PROMO CODE: كد تخفيف ۱۲۳۴۵ و ١٢٣٤٥ NOW!";
+        char[] simdResult = testInput.ToCharArray();
+        Normalizer.FoldSimd(simdResult);
+
+        char[] scalarResult = testInput.ToCharArray();
+        for (int i = 0; i < scalarResult.Length; i++)
+        {
+            var f = Normalizer.FoldChar(scalarResult[i]);
+            if (f.HasValue) scalarResult[i] = f.Value;
+        }
+
+        new string(simdResult).ShouldBe(new string(scalarResult));
+    }
 }
+

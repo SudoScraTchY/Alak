@@ -1,3 +1,8 @@
+using System.Buffers;
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
 using System.Text;
 
 namespace Alak.Text;
@@ -51,13 +56,13 @@ public enum TextDirection { Ltr, Rtl }
 /// </summary>
 public static class Normalizer
 {
-    // NRM-009 emoji classes
-    private static readonly IReadOnlySet<char> s_promo = new HashSet<char>("🔥🎁💥🎉🏷️💰🛍️");
-    private static readonly IReadOnlySet<char> s_urgency = new HashSet<char>("⏰⌛🚨⚡");
-    private static readonly IReadOnlySet<char> s_delivery = new HashSet<char>("📦🚚");
-    private static readonly IReadOnlySet<char> s_security = new HashSet<char>("🔒🔐⚠️");
+    // NRM-009 emoji classes (SIMD-accelerated SearchValues in .NET)
+    private static readonly SearchValues<char> s_promo = SearchValues.Create("🔥🎁💥🎉🏷️💰🛍️");
+    private static readonly SearchValues<char> s_urgency = SearchValues.Create("⏰⌛🚨⚡");
+    private static readonly SearchValues<char> s_delivery = SearchValues.Create("📦🚚");
+    private static readonly SearchValues<char> s_security = SearchValues.Create("🔒🔐⚠️");
 
-    private static readonly IReadOnlySet<char> s_stripControls = new HashSet<char>(new[]
+    private static readonly SearchValues<char> s_stripControls = SearchValues.Create(new[]
     {
         '\u200B', '\u200E', '\u200F', '\u202A', '\u202B', '\u202C', '\u202D', '\u202E',
         '\u2066', '\u2067', '\u2068', '\u2069', '\uFEFF', '\u00AD',
@@ -206,35 +211,113 @@ public static class Normalizer
     }
 
 
-    /// <summary>Single-character fold for the matching view (NRM-004..007).</summary>
-    private static char? FoldChar(char c) => c switch
+    private static readonly SearchValues<char> s_whitespaceFold = SearchValues.Create(
+        " \t\u00A0\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A");
+
+    /// <summary>
+    /// SIMD-vectorized ASCII lowercase and Persian/Arabic-Indic digit folding across a span of characters (PF-01).
+    /// Uses 128-bit NEON / SSE2 vectors (8 UTF-16 code units per vector).
+    /// </summary>
+    public static void FoldSimd(Span<char> span)
     {
-        // NRM-004: Persian/Arabic unification (matching view)
-        '\u064A' or '\u0649' => 'ی',   // ي ى → ی
-        '\u0643' => 'ک',               // ك → ک
-        '\u0629' or '\u06C0' => 'ه',    // ة ۀ → ه
-        '\u0623' or '\u0625' => 'ا',    // أ إ → ا
-        '\u0624' => 'و',               // ؤ → و
-        '\u0626' => 'ی',               // ئ → ی
-        '\u0640' => null,              // tatweel removed
-        >= '\u064B' and <= '\u065F' => null, // harakat removed
-        '\u0670' => null,               // superscript alef
-        // NRM-005: digits + separators
-        >= '\u06F0' and <= '\u06F9' => (char)('0' + (c - '\u06F0')), // Persian digits
-        >= '\u0660' and <= '\u0669' => (char)('0' + (c - '\u0660')), // Arabic-Indic digits
-        '\u066C' => ',',               // ٬ thousands sep
-        '\u066B' => '.',               // ٫ decimal sep
-        '\u066A' => '%',               // ٪ percent
-        '\u060C' => ',',               // ،
-        '\u061B' => ';',               // ؛
-        '\u061F' => '?',               // ؟
-        // NRM-006: invariant lowercase
-        >= 'A' and <= 'Z' => (char)(c + 32),
-        // NRM-008: whitespace
-        ' ' or '\t' or '\u00A0' or '\u2000' or '\u2001' or '\u2002' or '\u2003'
-        or '\u2004' or '\u2005' or '\u2006' or '\u2007' or '\u2008' or '\u2009'
-        or '\u200A' => ' ',
-        '\n' => '\n',
-        _ => c,
-    };
+        int i = 0;
+        if (Vector128.IsHardwareAccelerated && span.Length >= Vector128<ushort>.Count)
+        {
+            var vUpperA = Vector128.Create((ushort)'A');
+            var vUpperZ = Vector128.Create((ushort)'Z');
+            var vAdd32 = Vector128.Create((ushort)32);
+
+            var vFa0 = Vector128.Create((ushort)'\u06F0');
+            var vFa9 = Vector128.Create((ushort)'\u06F9');
+            var vFaDiff = Vector128.Create((ushort)('\u06F0' - '0'));
+
+            var vAr0 = Vector128.Create((ushort)'\u0660');
+            var vAr9 = Vector128.Create((ushort)'\u0669');
+            var vArDiff = Vector128.Create((ushort)('\u0660' - '0'));
+
+            var spanUshort = MemoryMarshal.Cast<char, ushort>(span);
+            int limit = span.Length - Vector128<ushort>.Count;
+
+            for (; i <= limit; i += Vector128<ushort>.Count)
+            {
+                var v = Vector128.LoadUnsafe(ref spanUshort[i]);
+
+                // Vectorized ASCII uppercase to lowercase ('A'..'Z' -> 'a'..'z')
+                var isUpper = Vector128.GreaterThanOrEqual(v, vUpperA) & Vector128.LessThanOrEqual(v, vUpperZ);
+                v += (isUpper & vAdd32);
+
+                // Vectorized Persian digits ('\u06F0'..'\u06F9' -> '0'..'9')
+                var isFaDigit = Vector128.GreaterThanOrEqual(v, vFa0) & Vector128.LessThanOrEqual(v, vFa9);
+                v = Vector128.ConditionalSelect(isFaDigit, v - vFaDiff, v);
+
+                // Vectorized Arabic-Indic digits ('\u0660'..'\u0669' -> '0'..'9')
+                var isArDigit = Vector128.GreaterThanOrEqual(v, vAr0) & Vector128.LessThanOrEqual(v, vAr9);
+                v = Vector128.ConditionalSelect(isArDigit, v - vArDiff, v);
+
+                // Vectorized Arabic Yeh ('\u064A' and '\u0649' -> '\u06CC')
+                var isYeh1 = Vector128.Equals(v, Vector128.Create((ushort)'\u064A'));
+                var isYeh2 = Vector128.Equals(v, Vector128.Create((ushort)'\u0649'));
+                v = Vector128.ConditionalSelect(isYeh1 | isYeh2, Vector128.Create((ushort)'\u06CC'), v);
+
+                // Vectorized Arabic Kaf ('\u0643' -> '\u06A9')
+                var isKaf = Vector128.Equals(v, Vector128.Create((ushort)'\u0643'));
+                v = Vector128.ConditionalSelect(isKaf, Vector128.Create((ushort)'\u06A9'), v);
+
+                v.StoreUnsafe(ref spanUshort[i]);
+
+                // Apply scalar FoldChar on characters that require diacritic/whitespace/punctuation handling
+                for (int j = 0; j < Vector128<ushort>.Count; j++)
+                {
+                    char ch = span[i + j];
+                    var f = FoldChar(ch);
+                    if (f.HasValue) span[i + j] = f.Value;
+                }
+            }
+        }
+
+        for (; i < span.Length; i++)
+        {
+            var f = FoldChar(span[i]);
+            if (f.HasValue) span[i] = f.Value;
+        }
+    }
+
+    /// <summary>Single-character fold for the matching view (NRM-004..007).</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static char? FoldChar(char c)
+    {
+        // Fast-path ASCII common letters & digits
+        if (c < 128)
+        {
+            if (c >= 'A' && c <= 'Z') return (char)(c + 32);
+            if (c == ' ' || c == '\t') return ' ';
+            if (c == '\n') return '\n';
+            return c;
+        }
+
+        // Fast-path Persian & Arabic digits (NRM-005)
+        if (c >= '\u06F0' && c <= '\u06F9') return (char)('0' + (c - '\u06F0'));
+        if (c >= '\u0660' && c <= '\u0669') return (char)('0' + (c - '\u0660'));
+
+        return c switch
+        {
+            // NRM-004: Persian/Arabic unification (matching view)
+            '\u064A' or '\u0649' => 'ی',   // ي ى → ی
+            '\u0643' => 'ک',               // ك → ک
+            '\u0629' or '\u06C0' => 'ه',    // ة ۀ → ه
+            '\u0623' or '\u0625' => 'ا',    // أ إ → ا
+            '\u0624' => 'و',               // ؤ → و
+            '\u0626' => 'ی',               // ئ → ی
+            '\u0640' => null,              // tatweel removed
+            >= '\u064B' and <= '\u065F' => null, // harakat removed
+            '\u0670' => null,               // superscript alef
+            '\u066C' => ',',               // ٬ thousands sep
+            '\u066B' => '.',               // ٫ decimal sep
+            '\u066A' => '%',               // ٪ percent
+            '\u060C' => ',',               // ،
+            '\u061B' => ';',               // ؛
+            '\u061F' => '?',               // ؟
+            _ => s_whitespaceFold.Contains(c) ? ' ' : c,
+        };
+    }
 }

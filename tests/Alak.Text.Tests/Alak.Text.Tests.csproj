@@ -32,4 +32,9 @@
     <ProjectReference Include="..\..\src\Alak.Core\Alak.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="..\..\src\Alak.App\Controls\QrCodeGenerator.cs" Link="Controls\QrCodeGenerator.cs" />
+    <Compile Include="..\..\src\Alak.App\Controls\Code128Encoder.cs" Link="Controls\Code128Encoder.cs" />
+  </ItemGroup>
+
 </Project>

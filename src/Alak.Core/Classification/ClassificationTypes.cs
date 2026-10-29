@@ -37,8 +37,12 @@ public sealed record ClassificationResult(
     bool NeedsReview,
     IReadOnlyList<Tag> Tags,
     IReadOnlyList<Evidence> Evidence,
-    IReadOnlyList<Entity> Entities)
+    IReadOnlyList<Entity> Entities,
+    IReadOnlyList<ConceptHit>? ConceptHits = null)
 {
+    /// <summary>Concept hits triggered during classification (RUL-003 / WBP-02).</summary>
+    public IReadOnlyList<ConceptHit> ConceptHits { get; init; } = ConceptHits ?? Array.Empty<ConceptHit>();
+
     /// <summary>Confidence clamped to 0–1.</summary>
     public float Confidence { get; init; } = Math.Clamp(Confidence, 0f, 1f);
 

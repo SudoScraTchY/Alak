@@ -94,4 +94,22 @@ public static class StoreExtractor
         }
         return null;
     }
+
+    public static string? DetectStoreFromPackage(string packageName)
+    {
+        if (string.IsNullOrWhiteSpace(packageName)) return null;
+        var pkg = packageName.ToLowerInvariant();
+
+        foreach (var (canonical, aliases) in s_merchants)
+        {
+            foreach (var alias in aliases)
+            {
+                if (pkg.Contains(alias, StringComparison.OrdinalIgnoreCase))
+                {
+                    return canonical;
+                }
+            }
+        }
+        return null;
+    }
 }

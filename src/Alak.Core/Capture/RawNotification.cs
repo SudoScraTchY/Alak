@@ -64,6 +64,43 @@ public sealed record RawNotification(
         => string.IsNullOrWhiteSpace(value)
             ? throw new ArgumentException($"{name} is required.", name)
             : value;
+
+    /// <summary>
+    /// Factory creating a basic RawNotification instance for testing and pipelines.
+    /// </summary>
+    public static RawNotification Create(
+        string package,
+        string? channelId = null,
+        string? channelName = null,
+        string? title = null,
+        string? text = null,
+        long postedAtUtcMs = 0,
+        string? androidCategory = null) =>
+        new(
+            SbnKey: Guid.NewGuid().ToString("N"),
+            Package: package,
+            Id: 0,
+            Tag: null,
+            PostedAtUtcMs: postedAtUtcMs > 0 ? postedAtUtcMs : DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+            TzOffsetMin: 0,
+            ChannelId: channelId,
+            ChannelName: channelName,
+            AndroidCategory: androidCategory,
+            Importance: 3,
+            IsOngoing: false,
+            IsGroupSummary: false,
+            IsForegroundService: false,
+            IsClearable: true,
+            GroupKey: null,
+            Title: title,
+            Text: text,
+            BigText: null,
+            SubText: null,
+            TextLines: Array.Empty<string>(),
+            ActionLabels: Array.Empty<string>(),
+            ConversationTitle: null,
+            LooksRedactedByOs: false,
+            UserHandle: 0);
 }
 
 /// <summary>
@@ -84,4 +121,84 @@ public static class DefaultIgnoreFilter
         || (n.AndroidCategory is not null && s_categories.Contains(n.AndroidCategory))
         || n.Package.StartsWith("dev.alak.", StringComparison.Ordinal)
         || n.Package.StartsWith("com.alak.", StringComparison.Ordinal); // own package (D-01 namespace)
+}
+
+/// <summary>
+/// Detector for communication apps (SMS, instant messaging, email).
+/// Used by the setting to exclude private communications.
+/// </summary>
+public static class CommunicationAppDetector
+{
+    private static readonly HashSet<string> s_knownPackages = new(StringComparer.OrdinalIgnoreCase)
+    {
+        // SMS
+        "com.google.android.apps.messaging",
+        "com.samsung.android.messaging",
+        "com.android.mms",
+        "com.sonyericsson.conversations",
+        "com.motorola.messaging",
+        "com.simplemobiletools.sms.messenger",
+
+        // Messengers / Chat
+        "org.telegram.messenger",
+        "org.telegram.messenger.web",
+        "org.telegram.plus",
+        "org.thunderdog.challegram",
+        "com.whatsapp",
+        "com.whatsapp.w4b",
+        "org.thoughtcrime.securesms",
+        "com.discord",
+        "com.facebook.orca",
+        "com.viber.voip",
+        "com.skype.raider",
+        "com.microsoft.teams",
+        "com.slack",
+        "ir.resaneh.bale",
+        "ir.bale.messenger",
+        "com.bale.messenger",
+        "org.rubika.app",
+        "ir.resello.rubika",
+        "ir.eitaa.messenger",
+        "ir.soroush.messenger",
+        "ir.gap.im",
+
+        // Email
+        "com.google.android.gm",
+        "com.microsoft.office.outlook",
+        "com.google.android.apps.inbox",
+        "com.yahoo.mobile.client.android.mail",
+        "com.samsung.android.email.provider",
+        "ch.protonmail.android",
+        "com.fsck.k9",
+        "net.thunderbird.android"
+    };
+
+    private static readonly HashSet<string> s_communicationCategories = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "msg",
+        "email",
+        "social"
+    };
+
+    public static bool IsCommunicationApp(string? package)
+    {
+        if (string.IsNullOrWhiteSpace(package)) return false;
+        if (s_knownPackages.Contains(package)) return true;
+
+        var pkg = package.ToLowerInvariant();
+        return pkg.Contains(".messaging") ||
+               pkg.Contains(".sms") ||
+               pkg.Contains(".im.") ||
+               pkg.Contains(".messenger") ||
+               pkg.Contains(".email") ||
+               pkg.EndsWith(".mail");
+    }
+
+    public static bool IsCommunicationNotification(RawNotification n)
+    {
+        if (IsCommunicationApp(n.Package)) return true;
+        if (n.AndroidCategory != null && s_communicationCategories.Contains(n.AndroidCategory)) return true;
+        if (!string.IsNullOrWhiteSpace(n.ConversationTitle)) return true;
+        return false;
+    }
 }

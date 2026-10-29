@@ -94,6 +94,20 @@ public class CorpusTests
         var expected = JsonSerializer.Deserialize<Expect>(c.Expect.GetRawText())!;
         r.Category.ShouldBe(Enum.Parse<Category>(expected.Category, ignoreCase: true),
             $"case {c.Id}: got {r.Category}, confidence {r.Confidence:F2}");
+
+        foreach (var e in expected.Entities ?? new List<ExpectEntity>())
+        {
+            if (e.Type == "promo_code")
+            {
+                var pc = r.Entities.OfType<PromoCodeEntity>().SingleOrDefault(x => x.Code == e.Code);
+                pc.ShouldNotBeNull($"case {c.Id}: promo code '{e.Code}' not extracted");
+            }
+            else if (e.Type == "otp")
+            {
+                var o = r.Entities.OfType<OtpEntity>().FirstOrDefault();
+                o.ShouldNotBeNull($"case {c.Id}: otp not extracted");
+            }
+        }
     }
 
     [Theory]
@@ -109,6 +123,20 @@ public class CorpusTests
         var expected = JsonSerializer.Deserialize<Expect>(c.Expect.GetRawText())!;
         r.Category.ShouldBe(Enum.Parse<Category>(expected.Category, ignoreCase: true),
             $"case {c.Id}: got {r.Category}, confidence {r.Confidence:F2}");
+
+        foreach (var e in expected.Entities ?? new List<ExpectEntity>())
+        {
+            if (e.Type == "promo_code")
+            {
+                var pc = r.Entities.OfType<PromoCodeEntity>().SingleOrDefault(x => x.Code == e.Code);
+                pc.ShouldNotBeNull($"case {c.Id}: promo code '{e.Code}' not extracted");
+            }
+            else if (e.Type == "otp")
+            {
+                var o = r.Entities.OfType<OtpEntity>().FirstOrDefault();
+                o.ShouldNotBeNull($"case {c.Id}: otp not extracted");
+            }
+        }
     }
 
     private static RulesEngine.AppPrior? ToPrior(CorpusCase c)

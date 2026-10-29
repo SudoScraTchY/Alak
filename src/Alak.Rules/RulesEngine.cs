@@ -186,7 +186,7 @@ public static class RulesEngine
         if (n.LooksRedactedByOs)
             return new ClassificationResult(Category.Security, CategorySource.Rules, 1f, 1f, false,
                 new[] { new Tag("security") }, Array.Empty<Evidence>(),
-                new Entity[] { new OtpEntity(0, "text", default, 1f, "PF-02") });
+                new Entity[] { new OtpEntity(0, "text", default, 1f, "PF-02") }, Array.Empty<ConceptHit>());
 
         // ---- 1. normalize all fields (§8.2) ----
         var title = Normalizer.Normalize(n.Title ?? "");
@@ -234,7 +234,9 @@ public static class RulesEngine
             }
             var codes = rawCodes
                 .GroupBy(c => c.Code, StringComparer.Ordinal)
-                .Select(g => g.OrderByDescending(c => c.Confidence).First());
+                .Select(g => g.OrderByDescending(c => c.Confidence).First())
+                .OrderByDescending(c => c.Confidence)
+                .ToList();
             entities.AddRange(codes);
         }
 
@@ -285,8 +287,8 @@ public static class RulesEngine
             return e;
         }).ToList();
 
-        // ---- 4. log-odds scoring (§8.8) ----
-        var scores = new float[9];
+        // ---- 4. log-odds scoring (§8.8, RUL-019) ----
+        var scores = (float[])WeightsConfig.Default.CategoryBiasVector.Clone();
         void Add(Category c, float w) => scores[(int)c] += w;
 
         // Android category metadata
@@ -495,6 +497,6 @@ public static class RulesEngine
         }
 
         return new ClassificationResult(category, CategorySource.Rules, confidence, margin, needsReview,
-            tags, evidence, entities);
+            tags, evidence, entities, hits);
     }
 }

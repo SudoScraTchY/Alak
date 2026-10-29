@@ -91,6 +91,18 @@ public static class PromoCodeExtractor
             }
             var (aStart, aEnd) = anchor.Span;
 
+            var textAfterAnchor = n.Folded[aEnd..Math.Min(n.Folded.Length, aEnd + 5)].TrimStart();
+            var hasColonAfterAnchor = textAfterAnchor.StartsWith(':');
+            var isForwardOnlyAnchor = hasColonAfterAnchor ||
+                anchor.Term.StartsWith("با کد") ||
+                anchor.Term.StartsWith("with code") ||
+                anchor.Term.StartsWith("use code") ||
+                anchor.Term.StartsWith("enter code") ||
+                anchor.Term.StartsWith("apply code") ||
+                anchor.Term.StartsWith("using code") ||
+                anchor.Term.StartsWith("کد را وارد کنید") ||
+                anchor.Term.StartsWith("با استفاده از کد");
+
             // window: up to 6 tokens after, up to 4 before (no line crossing)
             foreach (var tok in tokens)
             {
@@ -98,9 +110,12 @@ public static class PromoCodeExtractor
                 var after = ts >= aEnd && ts - aEnd <= 40;   // ~6 tokens
                 var before = te <= aStart && aStart - te <= 25; // ~4 tokens
                 if (!after && !before) continue;
+                if (before && isForwardOnlyAnchor) continue;
 
                 var candidate = tok.Value.Trim().Trim(':', '"', '\'', '«', '»', '`', '[', ']', '*', '·', ',', '.', '(', ')', '!', '?', ';');
                 var trimmed = candidate;
+                if (trimmed.Contains(',') || trimmed.Contains('،')) continue;
+
                 var minLen = isPersianAnchor ? 3 : 4;
                 if (trimmed.Length < minLen || trimmed.Length > 24) continue;
 
@@ -111,11 +126,33 @@ public static class PromoCodeExtractor
                 if (isPersianAnchor && !hasLatin && !hasDigits) continue;
 
                 var shape = 0f;
+                if (after) shape += 0.6f;
+                else if (before) shape -= 0.4f;
+
                 if (hasLetters && hasDigits) shape += 1.5f;
                 else if (hasDigits && !hasLetters)
                 {
                     // numeric-only: strong anchor + offer context required, never with otp.*
                     if (!strong || !offerContext || otpPresent) continue;
+
+                    // Numeric tokens must not be monetary amounts (e.g. 'تا 150000', '150000 تومان')
+                    var textBefore = n.Folded[..ts].TrimEnd();
+                    if (textBefore.EndsWith("تا") || textBefore.EndsWith("سقف") || textBefore.EndsWith("حداقل") ||
+                        textBefore.EndsWith("حداکثر") || textBefore.EndsWith("کف") || textBefore.EndsWith("خرید"))
+                    {
+                        continue;
+                    }
+
+                    var textAfter = n.Folded[te..].TrimStart();
+                    if (textAfter.StartsWith("تومان") || textAfter.StartsWith("تومن") || textAfter.StartsWith("ریال") ||
+                        textAfter.StartsWith("تومانی") || textAfter.StartsWith("ریالی") ||
+                        textAfter.StartsWith("هزار") || textAfter.StartsWith("میلیون") || textAfter.StartsWith("میلیارد") ||
+                        textAfter.StartsWith("toman") || textAfter.StartsWith("rial") || textAfter.StartsWith("$") ||
+                        textAfter.StartsWith("usd") || textAfter.StartsWith("eur"))
+                    {
+                        continue;
+                    }
+
                     shape += 0.5f;
                 }
                 else if (trimmed.All(char.IsLetter) && trimmed.ToLowerInvariant() == trimmed)
@@ -128,6 +165,19 @@ public static class PromoCodeExtractor
                     else
                     {
                         continue; // lowercase word in English
+                    }
+                }
+                else if (trimmed.All(char.IsLetter) && !trimmed.All(char.IsUpper))
+                {
+                    // MixedCase/TitleCase word with only letters (e.g. 'Test', 'Body', 'Special')
+                    if (isPersianAnchor && hasLatin && after)
+                    {
+                        shape += 0.4f;
+                    }
+                    else
+                    {
+                        // In English, TitleCase words like 'Test' are normal text, not promo codes
+                        continue;
                     }
                 }
                 else shape += 0.4f;
@@ -215,7 +265,7 @@ public static class OtpExtractor
 public static class DiscountExtractor
 {
     private static readonly Regex s_persianAmountDiscount = new(
-        @"(?:(?<prefix>تخفیف|حراج|کسر|آف|off)\s+)?(?<num>\d+(?:[.,]\d+)?)\s*(?<scale>هزار|میلیون|میلیارد|k|m)?\s*(?<curr>تومان|تومن|تومانی|ریال|ریالی)(?:\s+(?<suffix>تخفیف|تخفیفی|کسر|آف|off))?",
+        @"(?:(?<prefix>تخفیف|حراج|کسر|آف|off|تا)\s+)?(?<num>\d+(?:[.,]\d+)?)\s*(?<scale>هزار|میلیون|میلیارد|k|m)?\s*(?<curr>تومان|تومن|تومانی|ریال|ریالی)(?:\s+(?<suffix>تخفیف|تخفیفی|کسر|آف|off))?",
         RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
     private static readonly Regex s_persianCap = new(

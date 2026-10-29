@@ -246,5 +246,25 @@
     "expect": {
       "category": "updates"
     }
+  },
+  {
+    "id": "fa-latn-gen-020",
+    "package": "test.en20",
+    "channel_name": "Slack",
+    "title": "Slack",
+    "text": "Standup starts in 10 minutes",
+    "expect": {
+      "category": "work"
+    }
+  },
+  {
+    "id": "fa-latn-gen-021",
+    "package": "test.en21",
+    "channel_name": "Insta",
+    "title": "Insta",
+    "text": "alex_dev liked your photo",
+    "expect": {
+      "category": "social"
+    }
   }
 ]

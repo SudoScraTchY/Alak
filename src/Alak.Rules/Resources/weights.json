@@ -1,0 +1,49 @@
+{
+  "version": "1.0",
+  "category_bias": {
+    "Security": 0.0,
+    "Money": 0.0,
+    "Orders": 0.0,
+    "People": 0.0,
+    "Work": 0.0,
+    "Offers": 0.0,
+    "Social": 0.0,
+    "Updates": 0.0,
+    "Other": 0.0
+  },
+  "family_caps": {
+    "lexicon": 3.0,
+    "metadata": 3.0,
+    "channel": 3.0,
+    "entity": 6.0,
+    "app_prior": 1.5,
+    "emoji": 1.0
+  },
+  "softmax": {
+    "temperature": 1.0,
+    "confidence_threshold": 0.35,
+    "review_confidence_threshold": 0.55,
+    "review_margin_threshold": 0.12
+  },
+  "metadata_evidence": {
+    "promo": { "Offers": 2.0 },
+    "recommendation": { "Offers": 1.0, "Social": 0.4 },
+    "message": { "People": 1.6 },
+    "email": { "Work": 0.7, "People": 0.4 },
+    "social": { "Social": 1.6 },
+    "event": { "Work": 0.6, "Updates": 0.3 },
+    "reminder": { "Work": 0.6, "Updates": 0.3 },
+    "missed_call": { "People": 2.4 },
+    "status": { "Updates": 1.0 },
+    "system": { "Updates": 1.0 },
+    "error": { "Updates": 1.0 }
+  },
+  "entity_evidence": {
+    "promo_code": { "Offers": 2.4 },
+    "discount": { "Offers": 1.2 },
+    "otp": { "Security": 6.0 },
+    "order_ref": { "Orders": 1.4 },
+    "money": { "Money": 2.0 },
+    "datetime": { "Work": 0.6 }
+  }
+}

@@ -1,4 +1,4 @@
-﻿// alak-pack CLI (spec §8.5, PCK-009): validate | test | coverage | lint | bundle | new
+// alak-pack CLI (spec §8.5, PCK-009): validate | test | coverage | lint | bundle | new
 using Alak.Packs.Tool;
 using System.Security.Cryptography;
 using System.Text.Json;

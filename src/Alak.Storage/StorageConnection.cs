@@ -10,6 +10,7 @@ namespace Alak.Storage;
 public sealed class StorageConnection : IDisposable
 {
     private readonly SqliteConnection _con;
+    private readonly object _syncRoot = new();
 
     public StorageConnection(string connectionString)
     {
@@ -24,64 +25,92 @@ public sealed class StorageConnection : IDisposable
     }
 
     public SqliteConnection Underlying => _con;
+    public object SyncRoot => _syncRoot;
 
     public long ExecuteScalar(string sql, params (string, object?)[] args)
     {
-        using var cmd = _con.CreateCommand();
-        cmd.CommandText = sql;
-        foreach (var (n, v) in args) cmd.Parameters.AddWithValue(n, v ?? DBNull.Value);
-        return Convert.ToInt64(cmd.ExecuteScalar());
+        lock (_syncRoot)
+        {
+            using var cmd = _con.CreateCommand();
+            cmd.CommandText = sql;
+            foreach (var (n, v) in args) cmd.Parameters.AddWithValue(n, v ?? DBNull.Value);
+            return Convert.ToInt64(cmd.ExecuteScalar());
+        }
     }
 
     public string ExecuteScalarText(string sql, params (string, object?)[] args)
     {
-        using var cmd = _con.CreateCommand();
-        cmd.CommandText = sql;
-        foreach (var (n, v) in args) cmd.Parameters.AddWithValue(n, v ?? DBNull.Value);
-        return cmd.ExecuteScalar()?.ToString() ?? "";
+        lock (_syncRoot)
+        {
+            using var cmd = _con.CreateCommand();
+            cmd.CommandText = sql;
+            foreach (var (n, v) in args) cmd.Parameters.AddWithValue(n, v ?? DBNull.Value);
+            return cmd.ExecuteScalar()?.ToString() ?? "";
+        }
     }
 
     public void Execute(string sql, params (string, object?)[] args)
     {
-        using var cmd = _con.CreateCommand();
-        cmd.CommandText = sql;
-        foreach (var (n, v) in args) cmd.Parameters.AddWithValue(n, v ?? DBNull.Value);
-        cmd.ExecuteNonQuery();
+        lock (_syncRoot)
+        {
+            using var cmd = _con.CreateCommand();
+            cmd.CommandText = sql;
+            foreach (var (n, v) in args) cmd.Parameters.AddWithValue(n, v ?? DBNull.Value);
+            cmd.ExecuteNonQuery();
+        }
     }
 
     public void Execute(string sql, SqliteTransaction tx, params (string, object?)[] args)
     {
-        using var cmd = _con.CreateCommand();
-        cmd.CommandText = sql;
-        cmd.Transaction = tx;
-        foreach (var (n, v) in args) cmd.Parameters.AddWithValue(n, v ?? DBNull.Value);
-        cmd.ExecuteNonQuery();
+        lock (_syncRoot)
+        {
+            using var cmd = _con.CreateCommand();
+            cmd.CommandText = sql;
+            cmd.Transaction = tx;
+            foreach (var (n, v) in args) cmd.Parameters.AddWithValue(n, v ?? DBNull.Value);
+            cmd.ExecuteNonQuery();
+        }
     }
 
     /// <summary>Execute a DELETE and return the number of affected rows.</summary>
     public int ExecuteDelete(string sql, params (string, object?)[] args)
     {
-        using var cmd = _con.CreateCommand();
-        cmd.CommandText = sql;
-        foreach (var (n, v) in args) cmd.Parameters.AddWithValue(n, v ?? DBNull.Value);
-        return cmd.ExecuteNonQuery();
+        lock (_syncRoot)
+        {
+            using var cmd = _con.CreateCommand();
+            cmd.CommandText = sql;
+            foreach (var (n, v) in args) cmd.Parameters.AddWithValue(n, v ?? DBNull.Value);
+            return cmd.ExecuteNonQuery();
+        }
     }
 
-    public void Dispose() => _con.Dispose();
+    public void Dispose()
+    {
+        lock (_syncRoot)
+        {
+            _con.Dispose();
+        }
+    }
 
     public long LastInsertRowId
     {
         get
         {
-            using var cmd = _con.CreateCommand();
-            cmd.CommandText = "SELECT last_insert_rowid();";
-            return Convert.ToInt64(cmd.ExecuteScalar());
+            lock (_syncRoot)
+            {
+                using var cmd = _con.CreateCommand();
+                cmd.CommandText = "SELECT last_insert_rowid();";
+                return Convert.ToInt64(cmd.ExecuteScalar());
+            }
         }
     }
 
     public SqliteTransaction BeginTransaction()
     {
-        return _con.BeginTransaction();
+        lock (_syncRoot)
+        {
+            return _con.BeginTransaction();
+        }
     }
 
     public SqliteCommand CreateCommand()
@@ -305,6 +334,30 @@ public sealed class StorageConnection : IDisposable
                 CREATE INDEX IF NOT EXISTS idx_user_rules_priority ON user_rules(priority, id);
                 CREATE INDEX IF NOT EXISTS idx_user_rules_enabled ON user_rules(enabled);
             "),
+
+            // Migration 8: SQLite triggers to synchronize notification_fts with notifications table (WBP-01)
+            (8L, @"
+                CREATE TRIGGER IF NOT EXISTS trg_notifications_ai AFTER INSERT ON notifications
+                BEGIN
+                    INSERT INTO notification_fts(rowid, title_n, body_n, sender_n)
+                    VALUES (new.id, coalesce(new.title, ''), coalesce(new.text, ''), coalesce(new.channel_name, new.package, ''));
+                END;
+
+                CREATE TRIGGER IF NOT EXISTS trg_notifications_ad AFTER DELETE ON notifications
+                BEGIN
+                    DELETE FROM notification_fts WHERE rowid = old.id;
+                END;
+
+                CREATE TRIGGER IF NOT EXISTS trg_notifications_au AFTER UPDATE ON notifications
+                BEGIN
+                    DELETE FROM notification_fts WHERE rowid = old.id;
+                    INSERT INTO notification_fts(rowid, title_n, body_n, sender_n)
+                    VALUES (new.id, coalesce(new.title, ''), coalesce(new.text, ''), coalesce(new.channel_name, new.package, ''));
+                END;
+
+                INSERT OR REPLACE INTO notification_fts(rowid, title_n, body_n, sender_n)
+                SELECT id, coalesce(title, ''), coalesce(text, ''), coalesce(channel_name, package, '') FROM notifications;
+            "),
         };
 
         public static void Apply(SqliteConnection con)
@@ -325,8 +378,7 @@ public sealed class StorageConnection : IDisposable
                 if (!applied.Contains(version))
                 {
                     using var tx = con.BeginTransaction();
-                    // Split by semicolon and execute each statement separately
-                    foreach (var stmt in sql.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+                    foreach (var stmt in SplitSqlStatements(sql))
                     {
                         if (!string.IsNullOrWhiteSpace(stmt))
                         {
@@ -337,6 +389,90 @@ public sealed class StorageConnection : IDisposable
                     tx.Commit();
                 }
             }
+        }
+
+        private static List<string> SplitSqlStatements(string sql)
+        {
+            var statements = new List<string>();
+            var sb = new System.Text.StringBuilder();
+            int depth = 0;
+            var span = sql.AsSpan();
+
+            for (int i = 0; i < span.Length; i++)
+            {
+                if (span[i] == '\'')
+                {
+                    sb.Append(span[i]);
+                    i++;
+                    while (i < span.Length)
+                    {
+                        sb.Append(span[i]);
+                        if (span[i] == '\'')
+                        {
+                            if (i + 1 < span.Length && span[i + 1] == '\'')
+                            {
+                                i++;
+                                sb.Append(span[i]);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                        i++;
+                    }
+                    continue;
+                }
+
+                if (span[i] == '-' && i + 1 < span.Length && span[i + 1] == '-')
+                {
+                    while (i < span.Length && span[i] != '\n')
+                    {
+                        sb.Append(span[i]);
+                        i++;
+                    }
+                    if (i < span.Length) sb.Append(span[i]);
+                    continue;
+                }
+
+                if (IsWord(span, i, "BEGIN") || IsWord(span, i, "CASE"))
+                {
+                    depth++;
+                }
+                else if (IsWord(span, i, "END"))
+                {
+                    if (depth > 0) depth--;
+                }
+                else if (span[i] == ';' && depth == 0)
+                {
+                    var s = sb.ToString().Trim();
+                    if (!string.IsNullOrWhiteSpace(s))
+                        statements.Add(s);
+                    sb.Clear();
+                    continue;
+                }
+
+                sb.Append(span[i]);
+            }
+
+            var last = sb.ToString().Trim();
+            if (!string.IsNullOrWhiteSpace(last))
+                statements.Add(last);
+
+            return statements;
+        }
+
+        private static bool IsWord(ReadOnlySpan<char> span, int index, string word)
+        {
+            if (index + word.Length > span.Length) return false;
+            if (!span.Slice(index, word.Length).Equals(word, StringComparison.OrdinalIgnoreCase)) return false;
+
+            if (index > 0 && (char.IsLetterOrDigit(span[index - 1]) || span[index - 1] == '_')) return false;
+
+            int after = index + word.Length;
+            if (after < span.Length && (char.IsLetterOrDigit(span[after]) || span[after] == '_')) return false;
+
+            return true;
         }
     }
 }

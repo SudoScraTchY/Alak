@@ -96,4 +96,32 @@ public class PerformanceTests
             hits.ShouldNotBeEmpty($"'{variant}' (folded: '{n.Folded}') must match کد~تخفیف");
         }
     }
+
+    [Fact]
+    public void ContainsAlphaNumericSimd_MultiChunkAndBoundaries_EvaluatesCorrectly()
+    {
+        // 1. Empty and short spans (< 8 chars)
+        ConceptMatcher.ContainsAlphaNumericSimd("").ShouldBeFalse();
+        ConceptMatcher.ContainsAlphaNumericSimd("   ").ShouldBeFalse();
+        ConceptMatcher.ContainsAlphaNumericSimd("---").ShouldBeFalse();
+        ConceptMatcher.ContainsAlphaNumericSimd("a").ShouldBeTrue();
+        ConceptMatcher.ContainsAlphaNumericSimd("--9").ShouldBeTrue();
+
+        // 2. Exact 8-char span
+        ConceptMatcher.ContainsAlphaNumericSimd("        ").ShouldBeFalse();
+        ConceptMatcher.ContainsAlphaNumericSimd("-------Z").ShouldBeTrue();
+        ConceptMatcher.ContainsAlphaNumericSimd("A-------").ShouldBeTrue();
+
+        // 3. Multi-chunk span (> 8 chars): alphanumeric in subsequent chunk (index >= 8)
+        // This validates that the SIMD loop does not early-return false on first non-matching chunk
+        ConceptMatcher.ContainsAlphaNumericSimd("        --------x").ShouldBeTrue();
+        ConceptMatcher.ContainsAlphaNumericSimd("        --------9").ShouldBeTrue();
+        ConceptMatcher.ContainsAlphaNumericSimd("-----------------").ShouldBeFalse();
+
+        // 4. Non-ASCII Unicode letters and digits across chunks
+        ConceptMatcher.ContainsAlphaNumericSimd("        --------س").ShouldBeTrue();
+        ConceptMatcher.ContainsAlphaNumericSimd("        --------۵").ShouldBeTrue();
+        ConceptMatcher.ContainsAlphaNumericSimd("کد تخفیف ویژه").ShouldBeTrue();
+    }
 }
+

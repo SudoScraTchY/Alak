@@ -55,6 +55,8 @@ EN_NEG = [
     ("bank", "Your verification code is 555123. Do not share it with anyone.", "security",
      [{"type": "otp", "length": 6}]),
     ("Updates", "System update available. Tap to install.", "updates", None),
+    ("Slack", "Standup starts in 10 minutes", "work", None),
+    ("Insta", "alex_dev liked your photo", "social", None),
 ]
 
 def main():

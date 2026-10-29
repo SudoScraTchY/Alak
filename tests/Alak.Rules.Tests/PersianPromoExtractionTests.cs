@@ -171,4 +171,28 @@ public class PersianPromoExtractionTests
         d.Value.ShouldBe(150000m);
         d.Currency.ShouldBe("IRR");
     }
+
+    [Fact]
+    public void DigikalaNotification_ExtractsCorrectPromoCode_NotDiscountAmount()
+    {
+        var n = MakeRaw("تخفیف آخر هفته‌ات رسید🎁", "تا ۱۵۰,۰۰۰ تومان با کد: DDJHG\nبرای خرید بالای ۱ میلیون تومان🛍️ \nفقط امروز👇", package: "com.digikala");
+        var r = RulesEngine.Classify(n);
+
+        var promo = r.Entities.OfType<PromoCodeEntity>().FirstOrDefault();
+        promo.ShouldNotBeNull();
+        promo!.Code.ShouldBe("DDJHG");
+        promo.Discount.ShouldNotBeNull();
+        promo.Discount!.Value.ShouldBe(150000m);
+    }
+
+    [Fact]
+    public void EnglishNotification_ExtractsPromoCodeAfterTrigger_NotNormalCapitalizedWordBefore()
+    {
+        var n = MakeRaw("Test Title", "Test Message Body with promo code SAVE50");
+        var r = RulesEngine.Classify(n);
+
+        var promo = r.Entities.OfType<PromoCodeEntity>().FirstOrDefault();
+        promo.ShouldNotBeNull();
+        promo!.Code.ShouldBe("SAVE50");
+    }
 }

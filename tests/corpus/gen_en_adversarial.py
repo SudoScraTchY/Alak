@@ -505,35 +505,35 @@ def main():
     all_cases = []
     
     print("Generating adversarial cases...")
-    all_cases.extend(gen_obfuscation(6))
-    print(f"  obfuscation: 6 cases")
+    all_cases.extend(gen_obfuscation(10))
+    print(f"  obfuscation: 10 cases")
     
-    all_cases.extend(gen_mixed_scripts(6))
-    print(f"  mixed_scripts: 6 cases")
+    all_cases.extend(gen_mixed_scripts(10))
+    print(f"  mixed_scripts: 10 cases")
     
-    all_cases.extend(gen_punctuation_glue(6))
-    print(f"  punctuation_glue: 6 cases")
+    all_cases.extend(gen_punctuation_glue(10))
+    print(f"  punctuation_glue: 10 cases")
     
-    all_cases.extend(gen_rtl_marks(6))
-    print(f"  rtl_marks: 6 cases")
+    all_cases.extend(gen_rtl_marks(10))
+    print(f"  rtl_marks: 10 cases")
     
-    all_cases.extend(gen_emoji_only(6))
-    print(f"  emoji_only: 6 cases")
+    all_cases.extend(gen_emoji_only(10))
+    print(f"  emoji_only: 10 cases")
     
-    all_cases.extend(gen_empty_title(6))
-    print(f"  empty_title: 6 cases")
+    all_cases.extend(gen_empty_title(10))
+    print(f"  empty_title: 10 cases")
     
-    all_cases.extend(gen_large_body(6))
-    print(f"  large_body: 6 cases")
+    all_cases.extend(gen_large_body(10))
+    print(f"  large_body: 10 cases")
     
-    all_cases.extend(gen_truncated_text(6))
-    print(f"  truncated_text: 6 cases")
+    all_cases.extend(gen_truncated_text(10))
+    print(f"  truncated_text: 10 cases")
     
-    all_cases.extend(gen_inbox_style_lines(6))
-    print(f"  inbox_style_lines: 6 cases")
+    all_cases.extend(gen_inbox_style_lines(10))
+    print(f"  inbox_style_lines: 10 cases")
     
-    all_cases.extend(gen_messaging_style_threads(6))
-    print(f"  messaging_style_threads: 6 cases")
+    all_cases.extend(gen_messaging_style_threads(10))
+    print(f"  messaging_style_threads: 10 cases")
     
     # Verify all 10 adversarial types present
     types_found = set(c["expect"]["adversarial_type"] for c in all_cases)
@@ -556,7 +556,7 @@ def main():
     
     # Output summary
     result = {
-        "passed": len(all_cases) >= 60 and len(types_found) == 10,
+        "passed": len(all_cases) >= 100 and len(types_found) == 10,
         "adversarial_cases_generated": len(all_cases),
         "categories_covered": len(types_found),
         "file_path": OUT

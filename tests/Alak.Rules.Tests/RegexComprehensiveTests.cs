@@ -227,6 +227,71 @@ public class RegexComprehensiveTests
         action.ShouldBeNull();
     }
 
+    [Fact]
+    public async Task EvaluateAsync_PackageBasedRule_MatchesAndSetsCategory()
+    {
+        // User wants: "all my reddit notification set to social media"
+        var rule = new UserRule(
+            Id: 1,
+            Priority: 1,
+            Match: new UserRuleMatch(Package: "reddit"),
+            Action: new UserRuleAction(SetCategory: "social"),
+            Enabled: true);
+
+        var repo = new InMemoryUserRulesRepository(rule);
+        var engine = new UserRulesEngine(repo);
+
+        // Matching reddit package
+        var action = await engine.EvaluateAsync(
+            "com.reddit.frontpage",
+            "Now in r/ProgrammerHumor",
+            "aResponseYouDontWantToGet",
+            null,
+            "notifications",
+            null);
+
+        action.ShouldNotBeNull();
+        action.SetCategory.ShouldBe("social");
+
+        // Non-reddit package should not match
+        var action2 = await engine.EvaluateAsync(
+            "ir.mci.ecareapp",
+            "این بسته حالا حالاها تمام نمیشه",
+            "بسته‌ های بلندمدت",
+            null,
+            null,
+            null);
+
+        action2.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task EvaluateAsync_PackageAndPatternCombined_MatchesBothConditions()
+    {
+        var rule = new UserRule(
+            Id: 1,
+            Priority: 1,
+            Match: new UserRuleMatch(Package: "com.digikala", TextContains: "تخفیف"),
+            Action: new UserRuleAction(SetCategory: "offers"),
+            Enabled: true);
+
+        var repo = new InMemoryUserRulesRepository(rule);
+        var engine = new UserRulesEngine(repo);
+
+        // Matches both package and text
+        var a1 = await engine.EvaluateAsync("com.digikala", "تخفیف آخر هفته", "کد DDJHG", null, null, null);
+        a1.ShouldNotBeNull();
+        a1.SetCategory.ShouldBe("offers");
+
+        // Different package does not match
+        var a2 = await engine.EvaluateAsync("cab.snapp.passenger", "تخفیف آخر هفته", "کد DDJHG", null, null, null);
+        a2.ShouldBeNull();
+
+        // Same package but without text does not match
+        var a3 = await engine.EvaluateAsync("com.digikala", "سفارش شما ارسال شد", "کد پیگیری", null, null, null);
+        a3.ShouldBeNull();
+    }
+
     #endregion
 
     #region Built-in Regex Extractors

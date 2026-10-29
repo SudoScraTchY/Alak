@@ -34,16 +34,19 @@ jobs:
           FAIL=0
           # 1) No banned permission strings anywhere in manifests or csproj AndroidXml
           if grep -rInE 'android\.permission\.(INTERNET|ACCESS_NETWORK_STATE|QUERY_ALL_PACKAGES|READ_EXTERNAL_STORAGE)' \
+               --exclude-dir=obj --exclude-dir=bin \
                --include='*.xml' --include='*.csproj' src/ ; then
             echo "::error::R2 violation: banned Android permission found"; FAIL=1
           fi
           # 2) No banned SDK families in any project file
           if grep -rInEi '(appcenter|appsflyer|firebase-analytics|crashlytics|google\.ads|admob|facebook|adjust|amplitude|mixpanel|segment|bugsnag|instabug|sentry|newrelic|datadog|appdynamics)' \
+               --exclude-dir=obj --exclude-dir=bin \
                --include='*.csproj' src/ ; then
             echo "::error::R2 violation: analytics/ad/crash SDK found"; FAIL=1
           fi
-          # 3) No HttpClient/WebRequest family in app code (D-03/R2)
-          if grep -rInE 'using System\.Net|HttpClient|HttpWebRequest|WebClient|Socket\(' \
+          # 3) No HttpClient/WebRequest/Socket/System.Net in app code (D-03/R2)
+          if grep -rInE 'System\.Net|HttpClient|HttpWebRequest|WebClient|Socket\(' \
+               --exclude-dir=obj --exclude-dir=bin \
                --include='*.cs' src/ ; then
             echo "::error::R2 violation: network client in code"; FAIL=1
           fi

@@ -63,11 +63,21 @@ public sealed class UserRulesRepository : IUserRulesRepository
                 slm_performance_profile TEXT NOT NULL DEFAULT 'balanced',
                 app_lock_enabled INTEGER NOT NULL DEFAULT 0,
                 hide_amounts_in_lists INTEGER NOT NULL DEFAULT 0,
-                notification_reminders_enabled INTEGER NOT NULL DEFAULT 1
+                notification_reminders_enabled INTEGER NOT NULL DEFAULT 1,
+                exclude_communications INTEGER NOT NULL DEFAULT 0
             );
             
             INSERT OR IGNORE INTO global_settings (id) VALUES (1);
         ");
+
+        try
+        {
+            _db.Execute("ALTER TABLE global_settings ADD COLUMN exclude_communications INTEGER NOT NULL DEFAULT 0;");
+        }
+        catch
+        {
+            // Column already exists
+        }
     }
 
     // User Rules
@@ -223,19 +233,21 @@ public sealed class UserRulesRepository : IUserRulesRepository
     public Task<GlobalSettings> GetGlobalSettingsAsync()
     {
         using var cmd = _db.CreateCommand();
-        cmd.CommandText = "SELECT theme, ui_language, calendar, digits, retention_overrides_json, global_size_cap, tier2_enabled, slm_performance_profile, app_lock_enabled, hide_amounts_in_lists, notification_reminders_enabled FROM global_settings WHERE id=1";
+        cmd.CommandText = "SELECT theme, ui_language, calendar, digits, retention_overrides_json, global_size_cap, tier2_enabled, slm_performance_profile, app_lock_enabled, hide_amounts_in_lists, notification_reminders_enabled, exclude_communications FROM global_settings WHERE id=1";
         using var r = cmd.ExecuteReader();
-        if (!r.Read()) return Task.FromResult(new GlobalSettings("system", "system", "auto", "auto", null, null, true, "balanced", false, false, true));
+        if (!r.Read()) return Task.FromResult(new GlobalSettings("system", "system", "auto", "auto", null, null, true, "balanced", false, false, true, false));
         
         var retJson = r.IsDBNull(4) ? null : r.GetString(4);
         var ret = retJson == null ? null : System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, int>>(retJson);
+        var excom = r.FieldCount > 11 && !r.IsDBNull(11) ? (r.GetInt64(11) != 0) : false;
         
         return Task.FromResult(new GlobalSettings(
             r.GetString(0), r.GetString(1), r.GetString(2), r.GetString(3), ret,
             r.IsDBNull(5) ? null : r.GetInt32(5),
             r.GetInt64(6) != 0, r.GetString(7),
             r.GetInt64(8) != 0, r.GetInt64(9) != 0,
-            r.GetInt64(10) != 0));
+            r.GetInt64(10) != 0,
+            excom));
     }
 
     public Task UpdateGlobalSettingsAsync(GlobalSettings settings)
@@ -247,13 +259,14 @@ public sealed class UserRulesRepository : IUserRulesRepository
                 theme=$theme, ui_language=$lang, calendar=$cal, digits=$dig,
                 retention_overrides_json=$ret, global_size_cap=$cap, tier2_enabled=$t2,
                 slm_performance_profile=$slm, app_lock_enabled=$lock, hide_amounts_in_lists=$hide,
-                notification_reminders_enabled=$remind
+                notification_reminders_enabled=$remind, exclude_communications=$excom
             WHERE id=1",
             ("$theme", settings.Theme), ("$lang", settings.UiLanguage), ("$cal", settings.Calendar), ("$dig", settings.Digits),
             ("$ret", (object?)retJson ?? DBNull.Value), ("$cap", (object?)settings.GlobalSizeCap ?? DBNull.Value),
             ("$t2", settings.Tier2Enabled ? 1 : 0), ("$slm", settings.SlmPerformanceProfile),
             ("$lock", settings.AppLockEnabled ? 1 : 0), ("$hide", settings.HideAmountsInLists ? 1 : 0),
-            ("$remind", settings.NotificationRemindersEnabled ? 1 : 0));
+            ("$remind", settings.NotificationRemindersEnabled ? 1 : 0),
+            ("$excom", settings.ExcludeCommunications ? 1 : 0));
         return Task.CompletedTask;
     }
 

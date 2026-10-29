@@ -1,3 +1,8 @@
+using System.Buffers;
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
 using Alak.Core.Classification;
 
 namespace Alak.Rules;
@@ -103,6 +108,72 @@ public sealed class ConceptMatcher
         }
     }
 
+    private static readonly SearchValues<char> s_asciiAlphaNumeric = SearchValues.Create(
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
+
+    /// <summary>Fast-path ASCII alphanumeric check with fallback to Unicode classification.</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsLetterOrDigitFast(char c)
+    {
+        if (c <= 127)
+        {
+            return s_asciiAlphaNumeric.Contains(c);
+        }
+        return char.IsLetterOrDigit(c);
+    }
+
+    /// <summary>
+    /// SIMD vector check using Vector128 to evaluate whether characters in a span are alphanumeric.
+    /// Hardware accelerated on ARM64 NEON and x64 AVX2/SSE2.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool ContainsAlphaNumericSimd(ReadOnlySpan<char> span)
+    {
+        int i = 0;
+        if (Vector128.IsHardwareAccelerated && span.Length >= Vector128<ushort>.Count)
+        {
+            var vLowerA = Vector128.Create((ushort)'a');
+            var vLowerZ = Vector128.Create((ushort)'z');
+            var vUpperA = Vector128.Create((ushort)'A');
+            var vUpperZ = Vector128.Create((ushort)'Z');
+            var vDigit0 = Vector128.Create((ushort)'0');
+            var vDigit9 = Vector128.Create((ushort)'9');
+            var vAsciiMax = Vector128.Create((ushort)127);
+
+            var spanUshort = MemoryMarshal.Cast<char, ushort>(span);
+            int limit = span.Length - Vector128<ushort>.Count;
+
+            for (; i <= limit; i += Vector128<ushort>.Count)
+            {
+                var v = Vector128.Create(spanUshort.Slice(i));
+
+                var isLower = Vector128.GreaterThanOrEqual(v, vLowerA) & Vector128.LessThanOrEqual(v, vLowerZ);
+                var isUpper = Vector128.GreaterThanOrEqual(v, vUpperA) & Vector128.LessThanOrEqual(v, vUpperZ);
+                var isDigit = Vector128.GreaterThanOrEqual(v, vDigit0) & Vector128.LessThanOrEqual(v, vDigit9);
+
+                if ((isLower | isUpper | isDigit) != Vector128<ushort>.Zero)
+                    return true;
+
+                var isNonAscii = Vector128.GreaterThan(v, vAsciiMax);
+                if (isNonAscii != Vector128<ushort>.Zero)
+                {
+                    for (int j = 0; j < Vector128<ushort>.Count; j++)
+                    {
+                        char ch = span[i + j];
+                        if (ch > 127 && char.IsLetterOrDigit(ch))
+                            return true;
+                    }
+                }
+            }
+        }
+
+        for (; i < span.Length; i++)
+        {
+            if (IsLetterOrDigitFast(span[i])) return true;
+        }
+        return false;
+    }
+
     /// <summary>Scan folded text; yields every concept hit with its span in the folded view.
     /// A hit counts only at word boundaries: the char before the match and the char after
     /// must not be a letter or digit (RUL-003, prevents 'address'→'ad', 'saved'→'save').</summary>
@@ -125,9 +196,9 @@ public sealed class ConceptMatcher
                 foreach (var hit in current.Outputs)
                 {
                     // word-boundary: preceding char (if any) must not be alphanumeric
-                    if (start > 0 && char.IsLetterOrDigit(folded[start - 1])) continue;
+                    if (start > 0 && IsLetterOrDigitFast(folded[start - 1])) continue;
                     // following char (if any) must not be alphanumeric
-                    if (end < folded.Length && char.IsLetterOrDigit(folded[end])) continue;
+                    if (end < folded.Length && IsLetterOrDigitFast(folded[end])) continue;
                     yield return new ConceptHit(hit.ConceptId, (start, end), hit.Weight, Fuzzy: false, hit.Term);
                 }
             }
