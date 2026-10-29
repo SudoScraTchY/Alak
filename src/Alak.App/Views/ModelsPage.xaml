@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Alak.App.ViewModels"
+             xmlns:services="clr-namespace:Alak.App.Services"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="Alak.App.Views.ModelsPage"
+             x:Name="ThisModelsPage"
+             x:DataType="vm:ModelsViewModel"
+             Title="Models"
+             Shell.NavBarIsVisible="False"
+             FlowDirection="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=CurrentFlowDirection}"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Salt}, Dark={StaticResource Night}}">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="16" Padding="16,12,16,28">
+
+            <!-- ===== HEADER ===== -->
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12" VerticalOptions="Center">
+                <Button Grid.Column="0"
+                        Text="←"
+                        FontSize="20"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        Padding="0"
+                        BackgroundColor="Transparent"
+                        TextColor="{AppThemeBinding Light={StaticResource Ink}, Dark={StaticResource Txt}}"
+                        Command="{Binding BackCommand}" />
+
+                <Label Grid.Column="1"
+                       Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Models_Title]}"
+                       Style="{StaticResource Text.Title}"
+                       FontFamily="{StaticResource Font.Bold}"
+                       VerticalOptions="Center" />
+            </Grid>
+
+            <!-- ===== 100% OFFLINE PRIVACY NOTICE (SPEC §13.8) ===== -->
+            <Border Style="{StaticResource Card.Row}"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Work}, Dark={StaticResource Tint.Work.Dark}}"
+                    Stroke="{AppThemeBinding Light={StaticResource Mark.Work}, Dark={StaticResource Mark.Work.Dark}}"
+                    StrokeThickness="1"
+                    Padding="14,12">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" VerticalOptions="Center">
+                    <Label Grid.Column="0" Text="🔒" FontSize="18" VerticalOptions="Start" />
+                    <Label Grid.Column="1"
+                           Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Models_OfflineNote]}"
+                           Style="{StaticResource Text.Caption}"
+                           LineBreakMode="WordWrap" />
+                </Grid>
+            </Border>
+
+            <!-- ===== IMPORT LOCAL MODEL BUTTON ===== -->
+            <VerticalStackLayout Spacing="8">
+                <Button Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Models_ImportLocal]}"
+                        Style="{StaticResource Button.Primary}"
+                        Command="{Binding ImportModelCommand}"
+                        IsEnabled="{Binding IsImporting, Converter={StaticResource InverseBoolConverter}}"
+                        HorizontalOptions="Fill" />
+
+                <!-- Import Progress -->
+                <ProgressBar Progress="{Binding ImportProgress}"
+                             IsVisible="{Binding IsImporting}"
+                             ProgressColor="{AppThemeBinding Light={StaticResource Mark.Work}, Dark={StaticResource Mark.Work.Dark}}"
+                             HeightRequest="6" />
+
+                <Label Text="{Binding ImportStatusText}"
+                       Style="{StaticResource Text.Caption}"
+                       IsVisible="{Binding IsImporting}"
+                       HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <!-- ===== INSTALLED MODELS LIST ===== -->
+            <VerticalStackLayout Spacing="10">
+                <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Models_Installed]}"
+                       Style="{StaticResource Text.Label}"
+                       FontFamily="{StaticResource Font.Bold}" />
+
+                <!-- Empty state -->
+                <Border Style="{StaticResource Card.Row}"
+                        Padding="16"
+                        IsVisible="{Binding InstalledModels.Count, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='invert'}">
+                    <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Models_NoModels]}"
+                           Style="{StaticResource Text.BodySecondary}"
+                           HorizontalOptions="Center" />
+                </Border>
+
+                <!-- Models list -->
+                <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding InstalledModels}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="services:InstalledModelInfo">
+                            <Border Style="{StaticResource Card.Row}" Padding="14">
+                                <Grid RowDefinitions="Auto,Auto" RowSpacing="10">
+                                    <!-- Name and Active badge -->
+                                    <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="8" VerticalOptions="Center">
+                                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                            <Label Text="{Binding Name}"
+                                                   Style="{StaticResource Text.Body}"
+                                                   FontFamily="{StaticResource Font.Bold}"
+                                                   LineBreakMode="TailTruncation" />
+                                            <HorizontalStackLayout Spacing="8">
+                                                <Label Text="{Binding FormattedSize}" Style="{StaticResource Text.Caption}" />
+                                                <Label Text="·" Style="{StaticResource Text.Caption}" />
+                                                <Border Style="{StaticResource Chip.Category}"
+                                                        BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Work}, Dark={StaticResource Tint.Work.Dark}}"
+                                                        Padding="6,1">
+                                                    <Label Text="{Binding Quantization}"
+                                                           FontFamily="{StaticResource Font.SemiBold}"
+                                                           FontSize="10"
+                                                           TextColor="{AppThemeBinding Light={StaticResource Mark.Work}, Dark={StaticResource Mark.Work.Dark}}" />
+                                                </Border>
+                                            </HorizontalStackLayout>
+                                        </VerticalStackLayout>
+
+                                        <!-- Active Badge -->
+                                        <Border Grid.Column="1"
+                                                Style="{StaticResource Chip.Category}"
+                                                BackgroundColor="{AppThemeBinding Light={StaticResource Tint.People}, Dark={StaticResource Tint.People.Dark}}"
+                                                IsVisible="{Binding IsActive}"
+                                                Padding="8,4"
+                                                VerticalOptions="Center">
+                                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Models_Active]}"
+                                                   FontFamily="{StaticResource Font.Bold}"
+                                                   FontSize="11"
+                                                   TextColor="{AppThemeBinding Light={StaticResource Mark.People}, Dark={StaticResource Mark.People.Dark}}" />
+                                        </Border>
+                                    </Grid>
+
+                                    <!-- Actions: Set Active / Delete -->
+                                    <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                        <Button Grid.Column="0"
+                                                Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Models_SetActive]}"
+                                                Style="{StaticResource Button.Secondary}"
+                                                HeightRequest="34"
+                                                FontSize="12"
+                                                IsVisible="{Binding IsActive, Converter={StaticResource InverseBoolConverter}}"
+                                                Command="{Binding Source={x:Reference ThisModelsPage}, Path=BindingContext.SetActiveModelCommand}"
+                                                CommandParameter="{Binding .}" />
+
+                                        <Button Grid.Column="1"
+                                                Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Models_Delete]}"
+                                                Style="{StaticResource Button.Secondary}"
+                                                TextColor="{StaticResource Mark.Danger}"
+                                                HeightRequest="34"
+                                                FontSize="12"
+                                                Command="{Binding Source={x:Reference ThisModelsPage}, Path=BindingContext.DeleteModelCommand}"
+                                                CommandParameter="{Binding .}" />
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+            <!-- ===== BENCHMARK SECTION ===== -->
+            <Border Style="{StaticResource Card.Row}" Padding="14">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Inference Performance Test" Style="{StaticResource Text.Label}" FontFamily="{StaticResource Font.Bold}" />
+                    <Button Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_TestInference]}"
+                            Style="{StaticResource Button.Secondary}"
+                            Command="{Binding RunBenchmarkCommand}"
+                            IsEnabled="{Binding IsRunningBenchmark, Converter={StaticResource InverseBoolConverter}}"
+                            HorizontalOptions="Fill" />
+                    <Label Text="{Binding BenchmarkResult}"
+                           Style="{StaticResource Text.Caption}"
+                           FontFamily="{StaticResource Font.Code}"
+                           IsVisible="{Binding BenchmarkResult, Converter={StaticResource StringNotEmptyConverter}}"
+                           HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- ===== CURATED EXTERNAL CATALOG (HUGGING FACE) ===== -->
+            <VerticalStackLayout Spacing="10">
+                <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Models_CuratedCatalog]}"
+                       Style="{StaticResource Text.Label}"
+                       FontFamily="{StaticResource Font.Bold}" />
+
+                <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding CuratedModels}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="vm:CuratedModelItem">
+                            <Border Style="{StaticResource Card.Row}" Padding="14">
+                                <Grid RowDefinitions="Auto,Auto" RowSpacing="10">
+                                    <VerticalStackLayout Grid.Row="0" Spacing="4">
+                                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                            <Label Grid.Column="0"
+                                                   Text="{Binding Title}"
+                                                   Style="{StaticResource Text.Body}"
+                                                   FontFamily="{StaticResource Font.Bold}" />
+                                            <Border Grid.Column="1" Style="{StaticResource Chip.Category}"
+                                                    BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Promo}, Dark={StaticResource Tint.Promo.Dark}}"
+                                                    Padding="6,1">
+                                                <Label Text="{Binding Quantization}"
+                                                       FontFamily="{StaticResource Font.SemiBold}"
+                                                       FontSize="10"
+                                                       TextColor="{AppThemeBinding Light={StaticResource Mark.Promo}, Dark={StaticResource Mark.Promo.Dark}}" />
+                                            </Border>
+                                        </Grid>
+                                        <Label Text="{Binding Description}" Style="{StaticResource Text.Caption}" LineBreakMode="WordWrap" />
+                                    </VerticalStackLayout>
+
+                                    <Button Grid.Row="1"
+                                            Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Models_DownloadExternal]}"
+                                            Style="{StaticResource Button.Secondary}"
+                                            HeightRequest="36"
+                                            FontSize="12"
+                                            Command="{Binding OpenDownloadUrlCommand}"
+                                            HorizontalOptions="Fill" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

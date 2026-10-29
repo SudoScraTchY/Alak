@@ -13,9 +13,11 @@
             <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="2" InputTransparent="True">
                 <Label x:Name="TitleLabel"
                        InputTransparent="True"
+                       LineBreakMode="TailTruncation"
                        Style="{StaticResource Text.Body}" />
                 <Label x:Name="DescriptionLabel"
                        InputTransparent="True"
+                       LineBreakMode="TailTruncation"
                        Style="{StaticResource Text.Caption}" />
             </VerticalStackLayout>
 

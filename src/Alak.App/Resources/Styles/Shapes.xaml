@@ -90,6 +90,7 @@
             </Setter.Value>
         </Setter>
         <Setter Property="Padding" Value="14,12" />
+        <Setter Property="Margin" Value="16,6" />
         <Setter Property="StrokeDashArray" Value="3,2" />
     </Style>
 

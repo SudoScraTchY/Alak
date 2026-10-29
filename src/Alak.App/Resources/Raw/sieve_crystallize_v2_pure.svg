@@ -1,0 +1,185 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="bezelGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E323A"/>
+      <stop offset="50%" stop-color="#12252B"/>
+      <stop offset="100%" stop-color="#091316"/>
+    </linearGradient>
+
+    <linearGradient id="beamGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFC93C" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#FFC93C" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#FFC93C" stop-opacity="0.9"/>
+    </linearGradient>
+
+    <filter id="softGlow3" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+
+    <filter id="stubShadow2" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+
+    <style>
+      /* Sieve Rim breathing */
+      .rim-pulse2 {
+        animation: rimPulse2 2.8s ease-in-out infinite;
+        transform-origin: 200px 175px;
+      }
+      @keyframes rimPulse2 {
+        0%, 100% { transform: scale(1); opacity: 0.95; }
+        50% { transform: scale(1.03); opacity: 1; }
+      }
+
+      /* Sieve grid lines shimmer */
+      .mesh-line2 {
+        stroke-dasharray: 6 3;
+        animation: meshShimmer2 4s linear infinite;
+      }
+      @keyframes meshShimmer2 {
+        0% { stroke-dashoffset: 0; }
+        100% { stroke-dashoffset: 36; }
+      }
+
+      /* Noise dots falling into sieve */
+      .dot-in-1 { animation: fallIn2 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+      .dot-in-2 { animation: fallIn2 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite 0.4s; }
+      .dot-in-3 { animation: fallIn2 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite 0.9s; }
+      .dot-in-4 { animation: fallIn2 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite 1.3s; }
+      .dot-in-5 { animation: fallIn2 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite 1.7s; }
+
+      @keyframes fallIn2 {
+        0% { transform: translateY(-50px) scale(0.6); opacity: 0; }
+        30% { opacity: 0.85; }
+        60% { transform: translateY(0px) scale(1); opacity: 1; }
+        75% { transform: translateY(15px) scale(0.85); opacity: 0.6; }
+        100% { transform: translateY(30px) scale(0); opacity: 0; }
+      }
+
+      /* Filtered, pure settled stub emerging */
+      .stub-out2 {
+        animation: stubFloat2 2.2s ease-in-out infinite;
+        transform-origin: 200px 290px;
+      }
+      @keyframes stubFloat2 {
+        0%, 100% {
+          transform: translateY(0) scale(1);
+          filter: drop-shadow(0 4px 10px rgba(255, 201, 60, 0.25));
+        }
+        50% {
+          transform: translateY(-8px) scale(1.02);
+          filter: drop-shadow(0 8px 18px rgba(255, 201, 60, 0.5));
+        }
+      }
+
+      .signal-wave2 {
+        animation: signalSweep2 2.2s ease-out infinite;
+        transform-origin: 200px 175px;
+      }
+      @keyframes signalSweep2 {
+        0% { r: 50px; opacity: 0.8; stroke-width: 3; }
+        80% { r: 105px; opacity: 0; stroke-width: 1; }
+        100% { r: 105px; opacity: 0; stroke-width: 0; }
+      }
+    </style>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="100%" height="100%" rx="36" fill="#0C1417"/>
+
+  <!-- Subtle ambient halo -->
+  <circle cx="200" cy="175" r="130" fill="#12252B" opacity="0.6"/>
+  <circle cx="200" cy="175" r="80" fill="#1B2A2F" opacity="0.8"/>
+
+  <!-- Radiating signal wave -->
+  <circle class="signal-wave2" cx="200" cy="175" r="50" fill="none" stroke="#FFC93C" opacity="0.5"/>
+
+  <!-- ==================== 1. INCOMING NOISE PARTICLES (TOP) ==================== -->
+  <g id="incoming-noise-particles">
+    <g class="dot-in-1" transform="translate(160, 105)">
+      <circle cx="0" cy="0" r="6" fill="#7C9CFF"/>
+      <rect x="-10" y="-2" width="20" height="4" rx="2" fill="#7C9CFF" opacity="0.4"/>
+    </g>
+    <g class="dot-in-2" transform="translate(235, 95)">
+      <circle cx="0" cy="0" r="7" fill="#B98CFF"/>
+      <rect x="-12" y="-2" width="24" height="4" rx="2" fill="#B98CFF" opacity="0.4"/>
+    </g>
+    <g class="dot-in-3" transform="translate(190, 80)">
+      <circle cx="0" cy="0" r="5" fill="#FF9A57"/>
+    </g>
+    <g class="dot-in-4" transform="translate(135, 120)">
+      <circle cx="0" cy="0" r="5.5" fill="#FF7A9C"/>
+    </g>
+    <g class="dot-in-5" transform="translate(260, 115)">
+      <circle cx="0" cy="0" r="6" fill="#3CC8DD"/>
+    </g>
+  </g>
+
+  <!-- ==================== 2. THE SIEVE CHAMBER (CENTER) ==================== -->
+  <g class="rim-pulse2">
+    <!-- Outer Sieve Rim -->
+    <circle cx="200" cy="175" r="82" fill="url(#bezelGrad2)" stroke="#243339" stroke-width="4"/>
+    <circle cx="200" cy="175" r="78" fill="none" stroke="#FFC93C" stroke-width="1.5" stroke-dasharray="10 4" opacity="0.6"/>
+
+    <!-- Fine Mesh Lattice -->
+    <g stroke="#3D5058" stroke-width="1.2" opacity="0.75" class="mesh-line2">
+      <!-- Horizontal Wires -->
+      <line x1="135" y1="145" x2="265" y2="145"/>
+      <line x1="126" y1="160" x2="274" y2="160"/>
+      <line x1="122" y1="175" x2="278" y2="175" stroke="#FFC93C" stroke-width="1.6" opacity="0.9"/>
+      <line x1="126" y1="190" x2="274" y2="190"/>
+      <line x1="135" y1="205" x2="265" y2="205"/>
+
+      <!-- Vertical Wires -->
+      <line x1="145" y1="135" x2="145" y2="215"/>
+      <line x1="160" y1="126" x2="160" y2="224"/>
+      <line x1="175" y1="122" x2="175" y2="228"/>
+      <line x1="200" y1="120" x2="200" y2="230" stroke="#FFC93C" stroke-width="1.6" opacity="0.9"/>
+      <line x1="225" y1="122" x2="225" y2="228"/>
+      <line x1="240" y1="126" x2="240" y2="224"/>
+      <line x1="255" y1="135" x2="255" y2="215"/>
+    </g>
+
+    <!-- Center Active Core -->
+    <circle cx="200" cy="175" r="14" fill="#0C1417" stroke="#FFC93C" stroke-width="2.5" filter="url(#softGlow3)"/>
+    <circle cx="200" cy="175" r="6" fill="#FFDE6A"/>
+  </g>
+
+  <!-- ==================== 3. SIFTED RESULT: THE TICKET STUB (BOTTOM) ==================== -->
+  <g class="stub-out2" transform="translate(0, 0)">
+    <!-- Light Beam -->
+    <polygon points="175,185 225,185 250,290 150,290" fill="url(#beamGrad2)" opacity="0.3"/>
+
+    <!-- Paper Ticket Stub Body -->
+    <g transform="translate(130, 275)" filter="url(#stubShadow2)">
+      <!-- Main stub rect with notched tear-edges -->
+      <path d="M 0,0 
+               L 140,0 
+               A 7,7 0 0,1 140,14 
+               L 140,46 
+               A 7,7 0 0,1 140,60 
+               L 0,60 
+               A 7,7 0 0,1 0,46 
+               L 0,14 
+               A 7,7 0 0,1 0,0 Z" 
+            fill="#FFFFFF" stroke="#DCE2E5" stroke-width="1.6"/>
+
+      <!-- Category spine (Wallet Gold) -->
+      <rect x="0" y="0" width="6" height="60" fill="#FFC93C"/>
+
+      <!-- Perforated tear line -->
+      <line x1="98" y1="0" x2="98" y2="60" stroke="#A3B5BB" stroke-width="1.8" stroke-dasharray="3.5 3.5"/>
+
+      <!-- Clean code representation blocks -->
+      <rect x="16" y="16" width="55" height="8" rx="4" fill="#12252B"/>
+      <rect x="16" y="32" width="38" height="5" rx="2.5" fill="#4A5D64"/>
+      <rect x="16" y="42" width="24" height="4" rx="2" fill="#A3B5BB"/>
+
+      <!-- Tear-off stamp badge -->
+      <circle cx="118" cy="30" r="12" fill="#31324A"/>
+      <circle cx="118" cy="30" r="6" fill="#FFC93C"/>
+    </g>
+  </g>
+</svg>

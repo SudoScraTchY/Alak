@@ -2,102 +2,382 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Alak.App.ViewModels"
+             xmlns:services="clr-namespace:Alak.App.Services"
              x:Class="Alak.App.Views.DetailPage"
+             x:Name="ThisDetailPage"
              x:DataType="vm:DetailViewModel"
+             Shell.NavBarIsVisible="False"
+             FlowDirection="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=CurrentFlowDirection}"
              BackgroundColor="{AppThemeBinding Light={StaticResource Salt}, Dark={StaticResource Night}}">
-    <ScrollView>
-        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,*" RowSpacing="16" Margin="16,16,16,24">
-            <!-- Category spine + chip -->
-            <Grid Grid.Row="0" ColumnDefinitions="4,*,Auto" Margin="0,0,0,8">
-                <BoxView Grid.Column="0" Grid.RowSpan="2"
-                         WidthRequest="4"
-                         Color="{Binding Notification.CategoryMarkColor}"
-                         VerticalOptions="Fill" />
-                
-                <StackLayout Grid.Column="1" Spacing="4">
-                    <Label Text="{Binding Notification.Title}"
-                           Style="{StaticResource Text.Title}" />
-                    <Frame Style="{StaticResource Frame.Chip}"
-                           BackgroundColor="{Binding Notification.CategoryTintColor}"
-                           HorizontalOptions="Start"
-                           Padding="12,4">
-                        <Label Text="{Binding Notification.Category, Converter={StaticResource CategoryLabelConverter}}"
-                               Style="{StaticResource Text.Caption}"
-                               TextColor="{Binding Notification.CategoryMarkColor}"
-                               FontAttributes="Bold" />
-                    </Frame>
-                </StackLayout>
 
-                <Label Grid.Column="2"
-                       Text="{Binding Notification.Timestamp, Converter={StaticResource RelativeTimeConverter}}"
-                       Style="{StaticResource Text.Caption}"
-                       VerticalOptions="Center"
-                       HorizontalOptions="End" />
-            </Grid>
+    <Grid>
+        <!-- ===== MAIN CONTENT SCROLLVIEW ===== -->
+        <ScrollView>
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,*" RowSpacing="16" Margin="16,12,16,32">
+                <!-- Row 0: Top Navigation Bar: Back button -->
+                <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" VerticalOptions="Center" Margin="0,0,0,4">
+                    <Border Grid.Column="0"
+                            Style="{StaticResource Chip.Filter}"
+                            Padding="12,6"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource Paper}, Dark={StaticResource SurfaceDark}}"
+                            Stroke="{AppThemeBinding Light={StaticResource Hairline}, Dark={StaticResource HairlineD}}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BackCommand}" />
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                            <Label Text="←" FontSize="14" FontFamily="{StaticResource Font.Bold}" VerticalOptions="Center" />
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Detail_Back]}"
+                                   Style="{StaticResource Text.Label}"
+                                   FontSize="12"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </Border>
 
-            <!-- Channel info -->
-            <Frame Grid.Row="1" Style="{StaticResource Frame.Card}" Margin="0">
-                <Grid ColumnDefinitions="*" ColumnSpacing="12">
-                    <StackLayout Spacing="2">
-                        <Label Text="{Binding Notification.ChannelName}"
-                               Style="{StaticResource Text.Body}"
-                               FontAttributes="Bold" />
-                        <Label Text="{Binding Notification.Package}"
-                               Style="{StaticResource Text.Caption}" />
+                    <Button Grid.Column="2"
+                            Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Detail_ViewInWallet]}"
+                            Style="{StaticResource Button.Secondary}"
+                            HeightRequest="32"
+                            Padding="10,0"
+                            FontSize="11"
+                            Command="{Binding ViewInWalletCommand}"
+                            IsVisible="{Binding Notification.HasCode}" />
+                </Grid>
+
+                <!-- Row 1: Category spine + chip + timestamp -->
+                <Grid Grid.Row="1" ColumnDefinitions="4,*,Auto" ColumnSpacing="12" Margin="0,0,0,4">
+                    <BoxView Grid.Column="0"
+                             WidthRequest="4"
+                             CornerRadius="2"
+                             Color="{Binding Notification.CategoryMarkColor}"
+                             VerticalOptions="Fill" />
+
+                    <StackLayout Grid.Column="1" Spacing="6" VerticalOptions="Center">
+                        <Label Text="{Binding Notification.Title}"
+                               Style="{StaticResource Text.Title}"
+                               MaxLines="3"
+                               LineBreakMode="WordWrap" />
+
+                        <!-- Interactive Category Chip (Tap to change) -->
+                        <Border Style="{StaticResource Chip.Category}"
+                                BackgroundColor="{Binding Notification.CategoryTintColor}"
+                                StrokeThickness="1"
+                                Stroke="{Binding Notification.CategoryMarkColor}">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenCategoryPickerCommand}" />
+                            </Border.GestureRecognizers>
+                            <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                                <Label Text="{Binding Notification.Category, Converter={StaticResource CategoryLabelConverter}}"
+                                       Style="{StaticResource Text.Caption}"
+                                       TextColor="{Binding Notification.CategoryMarkColor}"
+                                       FontAttributes="Bold" />
+                                <Label Text="✏️" FontSize="11" VerticalOptions="Center" Opacity="0.7" />
+                            </HorizontalStackLayout>
+                        </Border>
                     </StackLayout>
+
+                    <Label Grid.Column="2"
+                           Text="{Binding Notification.Timestamp, Converter={StaticResource RelativeTimeConverter}}"
+                           Style="{StaticResource Text.Caption}"
+                           VerticalOptions="Start"
+                           HorizontalOptions="End" />
                 </Grid>
-            </Frame>
 
-            <!-- Full text -->
-            <Frame Grid.Row="2" Style="{StaticResource Frame.Card}" Margin="0">
-                <Label Text="{Binding Notification.Text}"
-                       Style="{StaticResource Text.Body}"
-                       LineBreakMode="WordWrap" />
-            </Frame>
-
-            <!-- Extracted code (if any) -->
-            <Frame Grid.Row="3" Style="{StaticResource Frame.Card}" Margin="0"
-                   IsVisible="{Binding Notification.HasCode}">
-                <Grid RowDefinitions="Auto,Auto" RowSpacing="12">
-                    <Label Text="Extracted code"
-                           Style="{StaticResource Text.Label}" />
-                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
-                        <Label Grid.Column="0"
-                               Text="{Binding Notification.ExtractedCode}"
-                               Style="{StaticResource Text.Code}"
-                               LineBreakMode="WordWrap"
-                               VerticalOptions="Center" />
-                        <Button Grid.Column="1"
-                                Text="Copy"
-                                Style="{StaticResource Button.Primary}"
-                                Command="{Binding CopyCodeCommand}"
-                                WidthRequest="100"
-                                VerticalOptions="Center" />
+                <!-- Row 2: Category update confirmation toast/banner -->
+                <Border Grid.Row="2"
+                        Style="{StaticResource Card.Surface}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Work}, Dark={StaticResource Tint.Work.Dark}}"
+                        Stroke="{AppThemeBinding Light={StaticResource Mark.Work}, Dark={StaticResource Mark.Work.Dark}}"
+                        StrokeThickness="1"
+                        Padding="12,8"
+                        IsVisible="{Binding CategoryUpdateMessage, Converter={StaticResource StringNotEmptyConverter}}">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" VerticalOptions="Center">
+                        <Label Text="✓" TextColor="{AppThemeBinding Light={StaticResource Mark.Work}, Dark={StaticResource Mark.Work.Dark}}" FontAttributes="Bold" />
+                        <Label Grid.Column="1" Text="{Binding CategoryUpdateMessage}" Style="{StaticResource Text.Caption}" FontAttributes="Bold" />
                     </Grid>
-                </Grid>
-            </Frame>
+                </Border>
 
-            <!-- Actions -->
-            <Grid Grid.Row="4" ColumnDefinitions="*,*,*" ColumnSpacing="12">
-                <Button Grid.Column="0"
-                        Text="Mark read"
-                        Style="{StaticResource Button.Secondary}"
-                        Command="{Binding MarkReadCommand}"
-                        IsVisible="{Binding Notification.IsRead, Converter={StaticResource InverseBoolConverter}}" />
-                <Button Grid.Column="1"
-                        Text="Share"
-                        Style="{StaticResource Button.Secondary}"
-                        Command="{Binding ShareCommand}" />
-                <Button Grid.Column="2"
-                        Text="Delete"
-                        Style="{StaticResource Button.Secondary}"
-                        Command="{Binding DeleteCommand}"
-                        TextColor="{StaticResource ErrorColor}"
-                        BorderColor="{StaticResource ErrorColor}" />
+                <!-- Row 3: Channel & App Info -->
+                <Border Grid.Row="3" Style="{StaticResource Card.Surface}" Margin="0">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12" VerticalOptions="Center">
+                        <Label Text="📱" FontSize="20" VerticalOptions="Center" />
+                        <StackLayout Grid.Column="1" Spacing="2">
+                            <Label Text="{Binding Notification.ChannelName}"
+                                   Style="{StaticResource Text.Body}"
+                                   FontAttributes="Bold" />
+                            <Label Text="{Binding Notification.Package}"
+                                   Style="{StaticResource Text.Caption}" />
+                        </StackLayout>
+                    </Grid>
+                </Border>
+
+                <!-- Row 4: Full notification body -->
+                <Border Grid.Row="4" Style="{StaticResource Card.Surface}" Margin="0">
+                    <Label Text="{Binding Notification.Text}"
+                           Style="{StaticResource Text.Body}"
+                           LineBreakMode="WordWrap" />
+                </Border>
+
+                <!-- Row 5: Extracted promo code (if any) -->
+                <Border Grid.Row="5" Style="{StaticResource Card.Surface}" Margin="0"
+                       IsVisible="{Binding Notification.HasCode}">
+                    <Grid RowDefinitions="Auto,Auto" RowSpacing="12">
+                        <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                            <Label Text="Extracted Code"
+                                   Style="{StaticResource Text.Label}" />
+                            <Label Grid.Column="1"
+                                   Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Detail_ViewInWallet]}"
+                                   Style="{StaticResource Text.Caption}"
+                                   FontFamily="{StaticResource Font.SemiBold}"
+                                   TextColor="{AppThemeBinding Light={StaticResource Mark.Wallet}, Dark={StaticResource Mark.Wallet.Dark}}">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ViewInWalletCommand}" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </Grid>
+                        <Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
+                            <Border Grid.Column="0"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Wallet}, Dark={StaticResource Tint.Wallet.Dark}}"
+                                    Stroke="{AppThemeBinding Light={StaticResource Mark.Wallet}, Dark={StaticResource Mark.Wallet.Dark}}"
+                                    StrokeThickness="1"
+                                    StrokeShape="RoundRectangle 8"
+                                    Padding="12,8">
+                                <Label Text="{Binding Notification.ExtractedCode}"
+                                       Style="{StaticResource Text.Code}"
+                                       TextColor="{AppThemeBinding Light={StaticResource Mark.Wallet}, Dark={StaticResource Mark.Wallet.Dark}}"
+                                       VerticalOptions="Center" />
+                            </Border>
+                            <Button Grid.Column="1"
+                                    Text="Copy"
+                                    Style="{StaticResource Button.Primary}"
+                                    Command="{Binding CopyCodeCommand}"
+                                    WidthRequest="80"
+                                    VerticalOptions="Center" />
+                            <Button Grid.Column="2"
+                                    Text="Wallet"
+                                    Style="{StaticResource Button.Secondary}"
+                                    Command="{Binding ViewInWalletCommand}"
+                                    WidthRequest="80"
+                                    VerticalOptions="Center" />
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <!-- Row 6: AI Explanation & Summary Card (Tier 3 SLM) -->
+                <Border Grid.Row="6"
+                        Style="{StaticResource Card.Surface}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Promo}, Dark={StaticResource Tint.Promo.Dark}}"
+                        Stroke="{AppThemeBinding Light={StaticResource Mark.Promo}, Dark={StaticResource Mark.Promo.Dark}}"
+                        StrokeThickness="1.5"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="16"
+                        IsVisible="{Binding HasAiSummary}">
+                    <VerticalStackLayout Spacing="10">
+                        <!-- AI Header + Importance badge -->
+                        <Grid ColumnDefinitions="Auto,*,Auto" VerticalOptions="Center">
+                            <HorizontalStackLayout Grid.Column="0" Spacing="6" VerticalOptions="Center">
+                                <Label Text="✨" FontSize="16" VerticalOptions="Center" />
+                                <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Detail_AiSummaryTitle]}"
+                                       Style="{StaticResource Text.Label}"
+                                       FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light={StaticResource Mark.Promo}, Dark={StaticResource Mark.Promo.Dark}}" />
+                            </HorizontalStackLayout>
+
+                            <Border Grid.Column="2"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Paper}, Dark={StaticResource Raised}}"
+                                    Stroke="{AppThemeBinding Light={StaticResource Mark.Promo}, Dark={StaticResource Mark.Promo.Dark}}"
+                                    StrokeThickness="1"
+                                    StrokeShape="RoundRectangle 6"
+                                    Padding="8,2"
+                                    IsVisible="{Binding AiImportance, Converter={StaticResource StringNotEmptyConverter}}">
+                                <Label Text="{Binding AiImportance}"
+                                       Style="{StaticResource Text.Caption}"
+                                       FontAttributes="Bold" />
+                            </Border>
+                        </Grid>
+
+                        <!-- Summary text -->
+                        <Label Text="{Binding AiSummaryText}"
+                               Style="{StaticResource Text.Body}"
+                               LineBreakMode="WordWrap" />
+
+                        <!-- Action item (if extracted) -->
+                        <Border BackgroundColor="{AppThemeBinding Light={StaticResource Paper}, Dark={StaticResource Raised}}"
+                                StrokeThickness="1"
+                                Stroke="{AppThemeBinding Light={StaticResource Hairline}, Dark={StaticResource HairlineD}}"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="10,6"
+                                IsVisible="{Binding AiAction, Converter={StaticResource StringNotEmptyConverter}}">
+                            <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                                <Label Text="💡" VerticalOptions="Center" />
+                                <Label Text="{Binding AiAction}" Style="{StaticResource Text.Caption}" FontAttributes="Bold" VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <!-- Tags (if any) -->
+                        <FlexLayout BindableLayout.ItemsSource="{Binding AiTags}" Wrap="Wrap" Margin="0,4,0,0">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="0,0,6,6"
+                                            Padding="8,3"
+                                            StrokeThickness="1"
+                                            Stroke="{AppThemeBinding Light={StaticResource Hairline}, Dark={StaticResource HairlineD}}"
+                                            StrokeShape="RoundRectangle 4"
+                                            BackgroundColor="{AppThemeBinding Light={StaticResource Paper}, Dark={StaticResource Raised}}">
+                                        <Label Text="{Binding .}" Style="{StaticResource Text.Caption}" />
+                                    </Border>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </FlexLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Row 7: AI Loading State Card -->
+                <Border Grid.Row="7"
+                        Style="{StaticResource Card.Surface}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Promo}, Dark={StaticResource Tint.Promo.Dark}}"
+                        Stroke="{AppThemeBinding Light={StaticResource Mark.Promo}, Dark={StaticResource Mark.Promo.Dark}}"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="16"
+                        IsVisible="{Binding IsAiSummaryLoading}">
+                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" VerticalOptions="Center">
+                        <ActivityIndicator Grid.Column="0"
+                                           IsRunning="True"
+                                           Color="{AppThemeBinding Light={StaticResource Mark.Promo}, Dark={StaticResource Mark.Promo.Dark}}"
+                                           WidthRequest="24"
+                                           HeightRequest="24"
+                                           VerticalOptions="Center" />
+                        <Label Grid.Column="1"
+                               Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Detail_GeneratingAiSummary]}"
+                               Style="{StaticResource Text.BodySecondary}"
+                               VerticalOptions="Center" />
+                        <Button Grid.Column="2"
+                                Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Common_Cancel]}"
+                                Style="{StaticResource Button.Secondary}"
+                                Command="{Binding CancelAiSummaryCommand}"
+                                HeightRequest="36"
+                                Padding="12,0" />
+                    </Grid>
+                </Border>
+
+                <!-- Row 8: Action Buttons (Explain AI, Change Category, Mark Read, Share, Delete) -->
+                <VerticalStackLayout Grid.Row="8" Spacing="10">
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <Button Grid.Column="0"
+                                Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Detail_ExplainAi]}"
+                                Style="{StaticResource Button.Primary}"
+                                Command="{Binding ExplainWithAiCommand}" />
+                        <Button Grid.Column="1"
+                                Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Detail_ChangeCategory]}"
+                                Style="{StaticResource Button.Secondary}"
+                                Command="{Binding OpenCategoryPickerCommand}" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                        <Button Grid.Column="0"
+                                Text="Mark read"
+                                Style="{StaticResource Button.Secondary}"
+                                Command="{Binding MarkReadCommand}"
+                                IsVisible="{Binding Notification.IsRead, Converter={StaticResource InverseBoolConverter}}" />
+                        <Button Grid.Column="1"
+                                Text="Share"
+                                Style="{StaticResource Button.Secondary}"
+                                Command="{Binding ShareCommand}" />
+                        <Button Grid.Column="2"
+                                Text="Delete"
+                                Style="{StaticResource Button.Secondary}"
+                                Command="{Binding DeleteCommand}"
+                                TextColor="{StaticResource ErrorColor}"
+                                BorderColor="{StaticResource ErrorColor}" />
+                    </Grid>
+                </VerticalStackLayout>
+
+                <!-- Spacer -->
+                <BoxView Grid.Row="9" HeightRequest="60" Color="Transparent" />
             </Grid>
+        </ScrollView>
 
-            <!-- Spacer -->
-            <BoxView Grid.Row="5" HeightRequest="100" Color="Transparent" />
+        <!-- ===== CATEGORY PICKER MODAL OVERLAY (Tier 2 Reclassification) ===== -->
+        <Grid BackgroundColor="#80000000"
+              IsVisible="{Binding IsCategoryPickerOpen}"
+              ZIndex="100">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding CloseCategoryPickerCommand}" />
+            </Grid.GestureRecognizers>
+
+            <Border VerticalOptions="End"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Paper}, Dark={StaticResource Raised}}"
+                    StrokeThickness="0"
+                    Margin="0"
+                    Padding="20,20,20,32">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="20,20,0,0" />
+                </Border.StrokeShape>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer /> <!-- Absorb taps on card -->
+                </Border.GestureRecognizers>
+
+                <VerticalStackLayout Spacing="14">
+                    <!-- Sheet Header -->
+                    <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                        <Label Grid.Column="0"
+                               Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Detail_ChangeCategory]}"
+                               Style="{StaticResource Text.Title}" />
+                        <Button Grid.Column="1"
+                                Text="✕"
+                                FontSize="16"
+                                WidthRequest="36"
+                                HeightRequest="36"
+                                Padding="0"
+                                BackgroundColor="Transparent"
+                                TextColor="{AppThemeBinding Light={StaticResource Ink}, Dark={StaticResource Txt}}"
+                                Command="{Binding CloseCategoryPickerCommand}" />
+                    </Grid>
+
+                    <Label Text="Alak will immediately learn this correction on-device for future notifications."
+                           Style="{StaticResource Text.Caption}" />
+
+                    <!-- Category Items List -->
+                    <CollectionView ItemsSource="{Binding AvailableCategories}"
+                                    SelectionMode="None"
+                                    HeightRequest="320">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="vm:CategoryOption">
+                                <Border Margin="0,4"
+                                        Padding="12,10"
+                                        StrokeThickness="1"
+                                        Stroke="{AppThemeBinding Light={StaticResource Hairline}, Dark={StaticResource HairlineD}}"
+                                        StrokeShape="RoundRectangle 10"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource Paper}, Dark={StaticResource Raised}}">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={x:Reference ThisDetailPage}, Path=BindingContext.ChangeCategoryCommand}"
+                                                              CommandParameter="{Binding Key}" />
+                                    </Border.GestureRecognizers>
+                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" VerticalOptions="Center">
+                                        <BoxView Grid.Column="0"
+                                                 WidthRequest="12"
+                                                 HeightRequest="12"
+                                                 CornerRadius="6"
+                                                 Color="{Binding MarkColor}"
+                                                 VerticalOptions="Center" />
+                                        <Label Grid.Column="1"
+                                               Text="{Binding Label}"
+                                               Style="{StaticResource Text.Body}"
+                                               VerticalOptions="Center" />
+                                        <Label Grid.Column="2"
+                                               Text="✓"
+                                               TextColor="{Binding MarkColor}"
+                                               FontAttributes="Bold"
+                                               FontSize="16"
+                                               IsVisible="{Binding IsSelected}"
+                                               VerticalOptions="Center" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
         </Grid>
-    </ScrollView>
+    </Grid>
 </ContentPage>

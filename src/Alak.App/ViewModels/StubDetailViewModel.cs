@@ -16,6 +16,7 @@ public partial class StubDetailViewModel : ObservableObject
     [ObservableProperty]
     private bool _isLoading;
 
+    public ICommand BackCommand { get; }
     public ICommand CopyCodeCommand { get; }
     public ICommand ShareCommand { get; }
     public ICommand DismissCommand { get; }
@@ -24,6 +25,7 @@ public partial class StubDetailViewModel : ObservableObject
     {
         _repository = repository;
 
+        BackCommand = new AsyncRelayCommand(async () => await Shell.Current.GoToAsync(".."));
         CopyCodeCommand = new AsyncRelayCommand(CopyCodeAsync);
         ShareCommand = new AsyncRelayCommand(ShareAsync);
         DismissCommand = new AsyncRelayCommand(DismissAsync);

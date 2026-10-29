@@ -90,17 +90,18 @@ public class CategoryLabelConverter : IValueConverter
     {
         if (value is string cat && !string.IsNullOrEmpty(cat))
         {
-            // Sentence case always (spec §12.3: "Mark as used", never "MARK AS USED").
-            return cat switch
+            var loc = Services.LocalizationManager.Instance;
+            return cat.ToLowerInvariant() switch
             {
-                "promo" => "Promo",
-                "work" => "Work",
-                "people" => "People",
-                "money" => "Money",
-                "orders" => "Orders",
-                "security" => "Security",
-                "social" => "Social",
-                "updates" => "Updates",
+                "promo" or "promotions" or "offers" => loc["Cat_Promo"],
+                "work" => loc["Cat_Work"],
+                "people" => loc["Cat_People"],
+                "money" => loc["Cat_Money"],
+                "orders" => loc["Cat_Orders"],
+                "security" => loc["Cat_Security"],
+                "social" => loc["Cat_Social"],
+                "updates" => loc["Cat_Updates"],
+                "other" => loc["Cat_Other"],
                 _ => char.ToUpperInvariant(cat[0]) + cat[1..]
             };
         }
@@ -217,6 +218,47 @@ public class StepGreaterThanConverter : IValueConverter
             return currentStep > stepIndex;
         }
         return false;
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotImplementedException();
+}
+
+public class BoolToActiveTabColorConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        bool isActive = value is bool b && b;
+        if (string.Equals(parameter as string, "invert", StringComparison.OrdinalIgnoreCase))
+            isActive = !isActive;
+
+        var theme = Application.Current?.RequestedTheme ?? AppTheme.Light;
+        var mode = parameter as string;
+
+        if (mode is "stroke" or "stroke_invert")
+        {
+            if (isActive)
+            {
+                return theme == AppTheme.Dark ? Color.FromArgb("#7C9CFF") : Color.FromArgb("#2F5BE0"); // Mark.Work
+            }
+            return theme == AppTheme.Dark ? Color.FromArgb("#243339") : Color.FromArgb("#DCE2E5"); // Hairline
+        }
+
+        if (mode is "text" or "text_invert")
+        {
+            if (isActive)
+            {
+                return theme == AppTheme.Dark ? Color.FromArgb("#7C9CFF") : Color.FromArgb("#2F5BE0"); // Mark.Work
+            }
+            return theme == AppTheme.Dark ? Color.FromArgb("#A3B5BB") : Color.FromArgb("#4A5D64"); // Ink2/Txt2
+        }
+
+        // Background color
+        if (isActive)
+        {
+            return theme == AppTheme.Dark ? Color.FromArgb("#26354A") : Color.FromArgb("#E3EAFD"); // Tint.Work
+        }
+        return Colors.Transparent;
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

@@ -14,6 +14,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <!-- Converters -->
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
             <converters:BoolToFontWeightConverter x:Key="BoolToFontWeightConverter" />
             <converters:RelativeTimeConverter x:Key="RelativeTimeConverter" />
             <converters:StringNotEmptyConverter x:Key="StringNotEmptyConverter" />
@@ -23,6 +24,7 @@
             <converters:StepToColorConverter x:Key="StepToColorConverter" />
             <converters:StepEqualsConverter x:Key="StepEqualsConverter" />
             <converters:StepGreaterThanConverter x:Key="StepGreaterThanConverter" />
+            <converters:BoolToActiveTabColorConverter x:Key="BoolToActiveTabColorConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

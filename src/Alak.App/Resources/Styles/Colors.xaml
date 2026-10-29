@@ -82,6 +82,8 @@
          The app's kebab ids predate the spec palette: "promo" here means the spec's "Offers". -->
     <Color x:Key="Mark.Promo">#8248D6</Color>
     <Color x:Key="Mark.Promo.Dark">#B98CFF</Color>
+    <Color x:Key="Tint.Promo">#F0E7FC</Color>
+    <Color x:Key="Tint.Promo.Dark">#31324A</Color>
     <Color x:Key="Category.Promo.Tint">#F0E7FC</Color>
     <Color x:Key="Category.Work.Tint">#E3EAFD</Color>
     <Color x:Key="Category.People.Tint">#DBF3E8</Color>

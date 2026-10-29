@@ -3,10 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Alak.App.ViewModels"
              xmlns:conv="clr-namespace:Alak.App.Converters"
+             xmlns:controls="clr-namespace:Alak.App.Controls"
+             xmlns:services="clr-namespace:Alak.App.Services"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="Alak.App.Views.WalletPage"
+             x:Name="ThisWalletPage"
              x:DataType="vm:WalletViewModel"
+             Shell.NavBarIsVisible="False"
              Title="Codes"
+             FlowDirection="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=CurrentFlowDirection}"
              BackgroundColor="{AppThemeBinding Light={StaticResource Salt}, Dark={StaticResource Night}}">
 
     <ContentPage.Resources>
@@ -28,6 +33,7 @@
     <RefreshView Command="{Binding LoadCommand}" IsRefreshing="{Binding IsLoading}"
                  Style="{StaticResource RefreshView.Standard}">
         <CollectionView ItemsSource="{Binding ActiveCodes}"
+                        ItemSizingStrategy="MeasureFirstItem"
                         Style="{StaticResource CollectionView.Inbox}">
 
             <CollectionView.Header>
@@ -43,40 +49,45 @@
                            Style="{StaticResource Text.Section}"
                            Margin="16,12,16,4"
                            IsVisible="{Binding ExpiringSoonCodes.Count, Converter={StaticResource BoolToVisibility}}" />
-                    <VerticalStackLayout Spacing="0" Margin="0,0,0,8"
+                    <VerticalStackLayout Spacing="8" Margin="0,0,0,12"
                                          BindableLayout.ItemsSource="{Binding ExpiringSoonCodes}">
                         <BindableLayout.ItemTemplate>
                             <DataTemplate x:DataType="vm:PromoCodeItem">
                                 <Border Style="{StaticResource Stub.Border}"
                                         Stroke="{Binding Code.Kind, Converter={StaticResource CategoryToColor}}">
                                     <Border.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=ViewDetailsCommand}"
+                                        <TapGestureRecognizer Command="{Binding Source={x:Reference ThisWalletPage}, Path=BindingContext.ViewDetailsCommand}"
                                                               CommandParameter="{Binding}" />
                                     </Border.GestureRecognizers>
-                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="6">
+                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="6">
                                         <!-- kind + source -->
                                         <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
                                             <BoxView Grid.Column="0" WidthRequest="8" HeightRequest="8" CornerRadius="4"
                                                      VerticalOptions="Center"
                                                      Color="{Binding Code.Kind, Converter={StaticResource CategoryToColor}}" />
                                             <Label Grid.Column="1" Text="{Binding SourceDisplay}" Style="{StaticResource Text.Caption}"
-                                                   VerticalOptions="Center" MaxLines="1" LineBreakMode="TailTruncation" />
+                                                    VerticalOptions="Center" MaxLines="1" LineBreakMode="TailTruncation" />
                                             <Label Grid.Column="2" Text="{Binding KindText}" Style="{StaticResource Text.Caption}"
-                                                   FontFamily="{StaticResource Font.SemiBold}" VerticalOptions="Center" />
+                                                    FontFamily="{StaticResource Font.SemiBold}" VerticalOptions="Center" />
                                         </Grid>
 
                                         <!-- the code, mono + copy -->
                                         <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="8">
                                             <Label Grid.Column="0" Text="{Binding Code.DisplayCode}"
-                                                   Style="{StaticResource Text.Code}" FontSize="17"
-                                                   VerticalOptions="Center" LineBreakMode="TailTruncation" />
+                                                    Style="{StaticResource Text.Code}" FontSize="17"
+                                                    VerticalOptions="Center" LineBreakMode="TailTruncation">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding Source={x:Reference ThisWalletPage}, Path=BindingContext.ViewDetailsCommand}"
+                                                                          CommandParameter="{Binding}" />
+                                                </Label.GestureRecognizers>
+                                            </Label>
                                             <Border Grid.Column="1" Style="{StaticResource Chip.Category}"
                                                     BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Wallet}, Dark={StaticResource Tint.Wallet.Dark}}"
                                                     VerticalOptions="Center">
                                                 <Label Text="Copy" FontFamily="{StaticResource Font.SemiBold}" FontSize="12"
-                                                       TextColor="{AppThemeBinding Light={StaticResource Mark.Wallet}, Dark={StaticResource Mark.Wallet.Dark}}">
+                                                        TextColor="{AppThemeBinding Light={StaticResource Mark.Wallet}, Dark={StaticResource Mark.Wallet.Dark}}">
                                                     <Label.GestureRecognizers>
-                                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=CopyCodeCommand}"
+                                                        <TapGestureRecognizer Command="{Binding Source={x:Reference ThisWalletPage}, Path=BindingContext.CopyCodeCommand}"
                                                                               CommandParameter="{Binding}" />
                                                     </Label.GestureRecognizers>
                                                 </Label>
@@ -86,49 +97,103 @@
                                         <!-- value + expiry -->
                                         <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="8">
                                             <Label Grid.Column="0" Text="{Binding DiscountText}" Style="{StaticResource Text.BodySecondary}"
-                                                   MaxLines="1" LineBreakMode="TailTruncation" />
+                                                    MaxLines="1" LineBreakMode="TailTruncation" />
                                             <Label Grid.Column="1" Text="{Binding ValidUntilText}" Style="{StaticResource Text.Caption}"
-                                                   TextColor="{StaticResource Mark.Danger}" FontFamily="{StaticResource Font.SemiBold}"
-                                                   IsVisible="{Binding Code.HasValidUntil}" />
+                                                    TextColor="{StaticResource Mark.Danger}" FontFamily="{StaticResource Font.SemiBold}"
+                                                    IsVisible="{Binding Code.HasValidUntil}" />
                                         </Grid>
 
-                                        <!-- expiry drain bar -->
-                                        <BoxView Grid.Row="3" HeightRequest="3" CornerRadius="1.5"
-                                                 Color="{Binding Code.Kind, Converter={StaticResource CategoryToColor}}"
-                                                 IsVisible="{Binding Code.HasValidUntil}" />
+                                        <!-- 3px expiry drain bar (SPEC §12.7) -->
+                                        <Grid Grid.Row="3" HeightRequest="3" IsVisible="{Binding Code.HasValidUntil}">
+                                            <BoxView BackgroundColor="{AppThemeBinding Light={StaticResource Hairline}, Dark={StaticResource HairlineD}}"
+                                                     HeightRequest="3" CornerRadius="1.5" HorizontalOptions="Fill" />
+                                            <ProgressBar Progress="{Binding DrainFraction}"
+                                                         ProgressColor="{Binding ExpiryBarColor}"
+                                                         HeightRequest="3"
+                                                         HorizontalOptions="Fill" />
+                                        </Grid>
 
                                         <!-- quiet actions -->
-                                        <Grid Grid.Row="4" ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="4">
-                                            <Label Grid.Column="0" Text="Mark used" Style="{StaticResource Text.Caption}"
-                                                   FontFamily="{StaticResource Font.SemiBold}"
-                                                   TextColor="{AppThemeBinding Light={StaticResource Ink2}, Dark={StaticResource Txt2}}"
-                                                   IsVisible="{Binding IsUsed, Converter={StaticResource InvertedBool}}">
-                                                <Label.GestureRecognizers>
-                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=MarkUsedCommand}"
-                                                                          CommandParameter="{Binding}" />
-                                                </Label.GestureRecognizers>
-                                            </Label>
-                                            <Label Grid.Column="1" Text="Remind" Style="{StaticResource Text.Caption}"
-                                                   FontFamily="{StaticResource Font.SemiBold}"
-                                                   TextColor="{AppThemeBinding Light={StaticResource Ink2}, Dark={StaticResource Txt2}}"
-                                                   IsVisible="{Binding Code.HasValidUntil}">
-                                                <Label.GestureRecognizers>
-                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=SetReminderCommand}"
-                                                                          CommandParameter="{Binding}" />
-                                                </Label.GestureRecognizers>
-                                            </Label>
-                                            <Label Grid.Column="2" Text="Dismiss" Style="{StaticResource Text.Caption}"
-                                                   FontFamily="{StaticResource Font.SemiBold}"
-                                                   TextColor="{AppThemeBinding Light={StaticResource Ink3}, Dark={StaticResource Txt3}}"
-                                                   IsVisible="{Binding IsDismissed, Converter={StaticResource InvertedBool}}">
-                                                <Label.GestureRecognizers>
-                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=DismissCommand}"
-                                                                          CommandParameter="{Binding}" />
-                                                </Label.GestureRecognizers>
-                                            </Label>
-                                            <Label Grid.Column="3" Text="{Binding ReminderText}" Style="{StaticResource Text.Caption}"
-                                                   IsVisible="{Binding HasReminder}" VerticalOptions="Center" />
+                                        <Grid Grid.Row="4" ColumnDefinitions="*,Auto" Margin="0,4,0,0">
+                                            <HorizontalStackLayout Grid.Column="0" Spacing="16" VerticalOptions="Center">
+                                                <Border Style="{StaticResource Chip.Category}"
+                                                        BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Wallet}, Dark={StaticResource Tint.Wallet.Dark}}"
+                                                        Padding="8,3"
+                                                        VerticalOptions="Center">
+                                                    <Border.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding ToggleExpandedCommand}" />
+                                                    </Border.GestureRecognizers>
+                                                    <Label Text="Barcode" Style="{StaticResource Text.Caption}"
+                                                           FontFamily="{StaticResource Font.SemiBold}"
+                                                           TextColor="{AppThemeBinding Light={StaticResource Mark.Wallet}, Dark={StaticResource Mark.Wallet.Dark}}" />
+                                                </Border>
+                                                <Label Text="Mark used" Style="{StaticResource Text.Caption}"
+                                                       FontFamily="{StaticResource Font.SemiBold}"
+                                                       Padding="4,2"
+                                                       TextColor="{AppThemeBinding Light={StaticResource Ink2}, Dark={StaticResource Txt2}}"
+                                                       IsVisible="{Binding IsUsed, Converter={StaticResource InvertedBool}}">
+                                                    <Label.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding Source={x:Reference ThisWalletPage}, Path=BindingContext.MarkUsedCommand}"
+                                                                              CommandParameter="{Binding}" />
+                                                    </Label.GestureRecognizers>
+                                                </Label>
+                                                <Label Text="Remind" Style="{StaticResource Text.Caption}"
+                                                       FontFamily="{StaticResource Font.SemiBold}"
+                                                       Padding="4,2"
+                                                       TextColor="{AppThemeBinding Light={StaticResource Ink2}, Dark={StaticResource Txt2}}"
+                                                       IsVisible="{Binding Code.HasValidUntil}">
+                                                    <Label.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding Source={x:Reference ThisWalletPage}, Path=BindingContext.SetReminderCommand}"
+                                                                              CommandParameter="{Binding}" />
+                                                    </Label.GestureRecognizers>
+                                                </Label>
+                                                <Label Text="Dismiss" Style="{StaticResource Text.Caption}"
+                                                       FontFamily="{StaticResource Font.SemiBold}"
+                                                       Padding="4,2"
+                                                       TextColor="{AppThemeBinding Light={StaticResource Ink3}, Dark={StaticResource Txt3}}"
+                                                       IsVisible="{Binding IsDismissed, Converter={StaticResource InvertedBool}}">
+                                                    <Label.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding Source={x:Reference ThisWalletPage}, Path=BindingContext.DismissCommand}"
+                                                                              CommandParameter="{Binding}" />
+                                                    </Label.GestureRecognizers>
+                                                </Label>
+                                            </HorizontalStackLayout>
+                                            <Label Grid.Column="1" Text="{Binding ReminderText}" Style="{StaticResource Text.Caption}"
+                                                   IsVisible="{Binding HasReminder}" VerticalOptions="Center" HorizontalOptions="End"
+                                                   LineBreakMode="TailTruncation" />
                                         </Grid>
+
+                                        <!-- Expanded Vector Barcode & QR code section (Wave 3) -->
+                                        <VerticalStackLayout Grid.Row="5" Spacing="8" Margin="0,4,0,2" IsVisible="{Binding IsExpanded}">
+                                            <BoxView HeightRequest="0.5" Color="{AppThemeBinding Light={StaticResource Divider}, Dark={StaticResource HairlineD}}" />
+                                            <Grid ColumnDefinitions="*,Auto" Margin="4,0">
+                                                <Label Text="Vector Barcode / QR (Offline)" Style="{StaticResource Text.Caption}" VerticalOptions="Center" />
+                                                <Border Grid.Column="1" Style="{StaticResource Chip.Category}"
+                                                        BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Wallet}, Dark={StaticResource Tint.Wallet.Dark}}"
+                                                        Padding="8,3">
+                                                    <Border.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding ToggleBarcodeTypeCommand}" />
+                                                    </Border.GestureRecognizers>
+                                                    <Label Text="{Binding BarcodeType, StringFormat='Format: {0}'}"
+                                                           FontFamily="{StaticResource Font.SemiBold}" FontSize="11"
+                                                           TextColor="{AppThemeBinding Light={StaticResource Mark.Wallet}, Dark={StaticResource Mark.Wallet.Dark}}" />
+                                                </Border>
+                                            </Grid>
+                                            <Border StrokeThickness="1"
+                                                    Stroke="{AppThemeBinding Light={StaticResource Hairline}, Dark={StaticResource HairlineD}}"
+                                                    StrokeShape="RoundRectangle 8"
+                                                    BackgroundColor="White"
+                                                    Padding="12,8"
+                                                    HorizontalOptions="Center">
+                                                <controls:BarcodeGraphicsView Value="{Binding Code.RawCode}"
+                                                                              BarcodeType="{Binding BarcodeType}"
+                                                                              BarColor="Black"
+                                                                              QuietZoneColor="White"
+                                                                              HeightRequest="95"
+                                                                              WidthRequest="260"
+                                                                              HorizontalOptions="Center" />
+                                            </Border>
+                                        </VerticalStackLayout>
                                     </Grid>
                                 </Border>
                             </DataTemplate>
@@ -143,10 +208,10 @@
                     <Border Style="{StaticResource Stub.Border}"
                             Stroke="{Binding Code.Kind, Converter={StaticResource CategoryToColor}}">
                         <Border.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=ViewDetailsCommand}"
+                            <TapGestureRecognizer Command="{Binding Source={x:Reference ThisWalletPage}, Path=BindingContext.ViewDetailsCommand}"
                                                   CommandParameter="{Binding}" />
                         </Border.GestureRecognizers>
-                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="6">
+                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="6">
                             <!-- kind + source -->
                             <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
                                 <BoxView Grid.Column="0" WidthRequest="8" HeightRequest="8" CornerRadius="4"
@@ -162,14 +227,19 @@
                             <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="8">
                                 <Label Grid.Column="0" Text="{Binding Code.DisplayCode}"
                                        Style="{StaticResource Text.Code}" FontSize="17"
-                                       VerticalOptions="Center" LineBreakMode="TailTruncation" />
+                                       VerticalOptions="Center" LineBreakMode="TailTruncation">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={x:Reference ThisWalletPage}, Path=BindingContext.ViewDetailsCommand}"
+                                                              CommandParameter="{Binding}" />
+                                    </Label.GestureRecognizers>
+                                </Label>
                                 <Border Grid.Column="1" Style="{StaticResource Chip.Category}"
                                         BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Wallet}, Dark={StaticResource Tint.Wallet.Dark}}"
                                         VerticalOptions="Center">
                                     <Label Text="Copy" FontFamily="{StaticResource Font.SemiBold}" FontSize="12"
                                            TextColor="{AppThemeBinding Light={StaticResource Mark.Wallet}, Dark={StaticResource Mark.Wallet.Dark}}">
                                         <Label.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=CopyCodeCommand}"
+                                            <TapGestureRecognizer Command="{Binding Source={x:Reference ThisWalletPage}, Path=BindingContext.CopyCodeCommand}"
                                                                   CommandParameter="{Binding}" />
                                         </Label.GestureRecognizers>
                                     </Label>
@@ -185,43 +255,97 @@
                                        IsVisible="{Binding Code.HasValidUntil}" />
                             </Grid>
 
-                            <!-- expiry drain bar -->
-                            <BoxView Grid.Row="3" HeightRequest="3" CornerRadius="1.5"
-                                     Color="{Binding Code.Kind, Converter={StaticResource CategoryToColor}}"
-                                     IsVisible="{Binding Code.HasValidUntil}" />
+                            <!-- 3px expiry drain bar (SPEC §12.7) -->
+                            <Grid Grid.Row="3" HeightRequest="3" IsVisible="{Binding Code.HasValidUntil}">
+                                <BoxView BackgroundColor="{AppThemeBinding Light={StaticResource Hairline}, Dark={StaticResource HairlineD}}"
+                                         HeightRequest="3" CornerRadius="1.5" HorizontalOptions="Fill" />
+                                <ProgressBar Progress="{Binding DrainFraction}"
+                                             ProgressColor="{Binding ExpiryBarColor}"
+                                             HeightRequest="3"
+                                             HorizontalOptions="Fill" />
+                            </Grid>
 
                             <!-- quiet actions -->
-                            <Grid Grid.Row="4" ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="12">
-                                <Label Grid.Column="0" Text="Mark used" Style="{StaticResource Text.Caption}"
-                                       FontFamily="{StaticResource Font.SemiBold}"
-                                       TextColor="{AppThemeBinding Light={StaticResource Ink2}, Dark={StaticResource Txt2}}"
-                                       IsVisible="{Binding IsUsed, Converter={StaticResource InvertedBool}}">
-                                    <Label.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=MarkUsedCommand}"
-                                                              CommandParameter="{Binding}" />
-                                    </Label.GestureRecognizers>
-                                </Label>
-                                <Label Grid.Column="1" Text="Remind" Style="{StaticResource Text.Caption}"
-                                       FontFamily="{StaticResource Font.SemiBold}"
-                                       TextColor="{AppThemeBinding Light={StaticResource Ink2}, Dark={StaticResource Txt2}}"
-                                       IsVisible="{Binding Code.HasValidUntil}">
-                                    <Label.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=SetReminderCommand}"
-                                                              CommandParameter="{Binding}" />
-                                    </Label.GestureRecognizers>
-                                </Label>
-                                <Label Grid.Column="2" Text="Dismiss" Style="{StaticResource Text.Caption}"
-                                       FontFamily="{StaticResource Font.SemiBold}"
-                                       TextColor="{AppThemeBinding Light={StaticResource Ink3}, Dark={StaticResource Txt3}}"
-                                       IsVisible="{Binding IsDismissed, Converter={StaticResource InvertedBool}}">
-                                    <Label.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=DismissCommand}"
-                                                              CommandParameter="{Binding}" />
-                                    </Label.GestureRecognizers>
-                                </Label>
-                                <Label Grid.Column="3" Text="{Binding ReminderText}" Style="{StaticResource Text.Caption}"
-                                       IsVisible="{Binding HasReminder}" VerticalOptions="Center" />
+                            <Grid Grid.Row="4" ColumnDefinitions="*,Auto" Margin="0,4,0,0">
+                                <HorizontalStackLayout Grid.Column="0" Spacing="16" VerticalOptions="Center">
+                                    <Border Style="{StaticResource Chip.Category}"
+                                            BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Wallet}, Dark={StaticResource Tint.Wallet.Dark}}"
+                                            Padding="8,3"
+                                            VerticalOptions="Center">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding ToggleExpandedCommand}" />
+                                        </Border.GestureRecognizers>
+                                        <Label Text="Barcode" Style="{StaticResource Text.Caption}"
+                                               FontFamily="{StaticResource Font.SemiBold}"
+                                               TextColor="{AppThemeBinding Light={StaticResource Mark.Wallet}, Dark={StaticResource Mark.Wallet.Dark}}" />
+                                    </Border>
+                                    <Label Text="Mark used" Style="{StaticResource Text.Caption}"
+                                           FontFamily="{StaticResource Font.SemiBold}"
+                                           Padding="4,2"
+                                           TextColor="{AppThemeBinding Light={StaticResource Ink2}, Dark={StaticResource Txt2}}"
+                                           IsVisible="{Binding IsUsed, Converter={StaticResource InvertedBool}}">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={x:Reference ThisWalletPage}, Path=BindingContext.MarkUsedCommand}"
+                                                                  CommandParameter="{Binding}" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    <Label Text="Remind" Style="{StaticResource Text.Caption}"
+                                           FontFamily="{StaticResource Font.SemiBold}"
+                                           Padding="4,2"
+                                           TextColor="{AppThemeBinding Light={StaticResource Ink2}, Dark={StaticResource Txt2}}"
+                                           IsVisible="{Binding Code.HasValidUntil}">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={x:Reference ThisWalletPage}, Path=BindingContext.SetReminderCommand}"
+                                                                  CommandParameter="{Binding}" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    <Label Text="Dismiss" Style="{StaticResource Text.Caption}"
+                                           FontFamily="{StaticResource Font.SemiBold}"
+                                           Padding="4,2"
+                                           TextColor="{AppThemeBinding Light={StaticResource Ink3}, Dark={StaticResource Txt3}}"
+                                           IsVisible="{Binding IsDismissed, Converter={StaticResource InvertedBool}}">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={x:Reference ThisWalletPage}, Path=BindingContext.DismissCommand}"
+                                                                  CommandParameter="{Binding}" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </HorizontalStackLayout>
+                                <Label Grid.Column="1" Text="{Binding ReminderText}" Style="{StaticResource Text.Caption}"
+                                       IsVisible="{Binding HasReminder}" VerticalOptions="Center" HorizontalOptions="End"
+                                       LineBreakMode="TailTruncation" />
                             </Grid>
+
+                            <!-- Expanded Vector Barcode & QR code section (Wave 3) -->
+                            <VerticalStackLayout Grid.Row="5" Spacing="8" Margin="0,4,0,2" IsVisible="{Binding IsExpanded}">
+                                <BoxView HeightRequest="0.5" Color="{AppThemeBinding Light={StaticResource Divider}, Dark={StaticResource HairlineD}}" />
+                                <Grid ColumnDefinitions="*,Auto" Margin="4,0">
+                                    <Label Text="Vector Barcode / QR (Offline)" Style="{StaticResource Text.Caption}" VerticalOptions="Center" />
+                                    <Border Grid.Column="1" Style="{StaticResource Chip.Category}"
+                                            BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Wallet}, Dark={StaticResource Tint.Wallet.Dark}}"
+                                            Padding="8,3">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding ToggleBarcodeTypeCommand}" />
+                                        </Border.GestureRecognizers>
+                                        <Label Text="{Binding BarcodeType, StringFormat='Format: {0}'}"
+                                               FontFamily="{StaticResource Font.SemiBold}" FontSize="11"
+                                               TextColor="{AppThemeBinding Light={StaticResource Mark.Wallet}, Dark={StaticResource Mark.Wallet.Dark}}" />
+                                    </Border>
+                                </Grid>
+                                <Border StrokeThickness="1"
+                                        Stroke="{AppThemeBinding Light={StaticResource Hairline}, Dark={StaticResource HairlineD}}"
+                                        StrokeShape="RoundRectangle 8"
+                                        BackgroundColor="White"
+                                        Padding="12,8"
+                                        HorizontalOptions="Center">
+                                    <controls:BarcodeGraphicsView Value="{Binding Code.RawCode}"
+                                                                  BarcodeType="{Binding BarcodeType}"
+                                                                  BarColor="Black"
+                                                                  QuietZoneColor="White"
+                                                                  HeightRequest="95"
+                                                                  WidthRequest="260"
+                                                                  HorizontalOptions="Center" />
+                                </Border>
+                            </VerticalStackLayout>
                         </Grid>
                     </Border>
                 </DataTemplate>
@@ -256,6 +380,10 @@
                         <BindableLayout.ItemTemplate>
                             <DataTemplate x:DataType="vm:PromoCodeItem">
                                 <Border Style="{StaticResource Card.Row}" Opacity="0.65">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={x:Reference ThisWalletPage}, Path=BindingContext.ViewDetailsCommand}"
+                                                              CommandParameter="{Binding}" />
+                                    </Border.GestureRecognizers>
                                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
                                         <BoxView Grid.Column="0" WidthRequest="3" Color="{StaticResource Mark.Success}"
                                                  VerticalOptions="Fill" />
@@ -281,6 +409,10 @@
                         <BindableLayout.ItemTemplate>
                             <DataTemplate x:DataType="vm:PromoCodeItem">
                                 <Border Style="{StaticResource Card.Row}" Opacity="0.6">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={x:Reference ThisWalletPage}, Path=BindingContext.ViewDetailsCommand}"
+                                                              CommandParameter="{Binding}" />
+                                    </Border.GestureRecognizers>
                                     <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
                                         <BoxView Grid.Column="0" WidthRequest="3" Color="{StaticResource Mark.Danger}"
                                                  VerticalOptions="Fill" />
@@ -295,7 +427,7 @@
                                                FontFamily="{StaticResource Font.SemiBold}" FontSize="13"
                                                TextColor="{AppThemeBinding Light={StaticResource Mark.Wallet}, Dark={StaticResource Mark.Wallet.Dark}}">
                                             <Label.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WalletViewModel}}, Path=UndoDismissCommand}"
+                                                <TapGestureRecognizer Command="{Binding Source={x:Reference ThisWalletPage}, Path=BindingContext.UndoDismissCommand}"
                                                                       CommandParameter="{Binding}" />
                                             </Label.GestureRecognizers>
                                         </Label>
@@ -322,6 +454,10 @@
                                 <BindableLayout.ItemTemplate>
                                     <DataTemplate x:DataType="vm:PromoCodeItem">
                                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" Padding="14,4,14,4" Opacity="0.5">
+                                            <Grid.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={x:Reference ThisWalletPage}, Path=BindingContext.ViewDetailsCommand}"
+                                                                      CommandParameter="{Binding}" />
+                                            </Grid.GestureRecognizers>
                                             <BoxView Grid.Column="0" WidthRequest="3" Color="{AppThemeBinding Light={StaticResource Ink3}, Dark={StaticResource Txt3}}"
                                                      VerticalOptions="Fill" />
                                             <Grid Grid.Column="1" RowDefinitions="Auto,Auto" RowSpacing="2">

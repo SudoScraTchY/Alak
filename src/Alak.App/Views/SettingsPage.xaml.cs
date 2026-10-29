@@ -10,4 +10,13 @@ public partial class SettingsPage : ContentPage
         InitializeComponent();
         BindingContext = viewModel;
     }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        if (BindingContext is SettingsViewModel vm)
+        {
+            vm.RefreshPermissions();
+        }
+    }
 }

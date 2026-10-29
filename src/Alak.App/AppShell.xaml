@@ -2,9 +2,12 @@
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
         xmlns:views="clr-namespace:Alak.App.Views"
+        xmlns:services="clr-namespace:Alak.App.Services"
         x:Class="Alak.App.AppShell"
         Shell.FlyoutBehavior="Disabled"
+        Shell.NavBarIsVisible="False"
         Shell.NavBarHasShadow="False"
+        FlowDirection="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=CurrentFlowDirection}"
         Shell.BackgroundColor="{AppThemeBinding Light={StaticResource Salt}, Dark={StaticResource Night}}"
         Shell.ForegroundColor="{AppThemeBinding Light={StaticResource Ink}, Dark={StaticResource Txt}}"
         Shell.TitleColor="{AppThemeBinding Light={StaticResource Ink}, Dark={StaticResource Txt}}"
@@ -20,23 +23,19 @@
         registered via Routing.RegisterRoute in code-behind instead.
     -->
     <TabBar>
-        <Tab Title="Inbox" Icon="inbox.svg" Route="inbox">
+        <Tab Title="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Tab_Inbox]}" Icon="inbox.svg" Route="inbox">
             <ShellContent ContentTemplate="{DataTemplate views:InboxPage}" />
         </Tab>
 
-        <Tab Title="Scan" Icon="scan.svg" Route="scan">
-            <ShellContent ContentTemplate="{DataTemplate views:ScanPage}" />
-        </Tab>
-
-        <Tab Title="Codes" Icon="wallet.svg" Route="wallet">
+        <Tab Title="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Tab_Codes]}" Icon="wallet.svg" Route="wallet">
             <ShellContent ContentTemplate="{DataTemplate views:WalletPage}" />
         </Tab>
 
-        <Tab Title="Rules" Icon="rules.svg" Route="rules">
-            <ShellContent ContentTemplate="{DataTemplate views:RulesPage}" />
+        <Tab Title="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Tab_Digest]}" Icon="digest.svg" Route="digest">
+            <ShellContent ContentTemplate="{DataTemplate views:DigestPage}" />
         </Tab>
 
-        <Tab Title="Settings" Icon="settings.svg" Route="settings">
+        <Tab Title="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Tab_Settings]}" Icon="settings.svg" Route="settings">
             <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" />
         </Tab>
     </TabBar>

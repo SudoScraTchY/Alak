@@ -3,218 +3,299 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Alak.App.ViewModels"
              xmlns:controls="clr-namespace:Alak.App.Controls"
+             xmlns:services="clr-namespace:Alak.App.Services"
              x:Class="Alak.App.Views.SettingsPage"
              x:DataType="vm:SettingsViewModel"
              BackgroundColor="{AppThemeBinding Light={StaticResource Salt}, Dark={StaticResource Night}}"
+             Shell.NavBarIsVisible="False"
+             FlowDirection="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=CurrentFlowDirection}"
              Title="Settings">
     <ScrollView>
-        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="24" Margin="16,16,16,24">
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="20" Margin="16,16,16,24">
             <!-- General -->
-            <Frame Grid.Row="0" Style="{StaticResource Frame.Card}" Margin="0">
-                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="16">
-                    <Label Grid.Row="0" Text="General" Style="{StaticResource Text.Label}" />
+            <Border Grid.Row="0" Style="{StaticResource Card.Row}" Padding="16">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_General]}" Style="{StaticResource Text.Label}" />
                     
-                    <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="16">
-                        <StackLayout>
-                            <Label Text="Notifications" Style="{StaticResource Text.Body}" />
-                            <Label Text="Receive notification alerts" Style="{StaticResource Text.Caption}" />
-                        </StackLayout>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_Notifications]}" Style="{StaticResource Text.Body}" />
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_NotificationsDesc]}" Style="{StaticResource Text.Caption}" />
+                        </VerticalStackLayout>
                         <Switch Grid.Column="1" 
                                 IsToggled="{Binding NotificationsEnabled}"
                                 Style="{StaticResource Switch.Standard}" />
                     </Grid>
 
-                    <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="16">
-                        <StackLayout>
-                            <Label Text="Adaptive Learning" Style="{StaticResource Text.Body}" />
-                            <Label Text="Personalize classification from dismissals" Style="{StaticResource Text.Caption}" />
-                        </StackLayout>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_AdaptiveLearning]}" Style="{StaticResource Text.Body}" />
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_AdaptiveLearningDesc]}" Style="{StaticResource Text.Caption}" />
+                        </VerticalStackLayout>
                         <Switch Grid.Column="1" 
                                 IsToggled="{Binding AdaptiveLearningEnabled}"
                                 Style="{StaticResource Switch.Standard}" />
                     </Grid>
 
-                    <Grid Grid.Row="3" ColumnDefinitions="*,Auto" ColumnSpacing="16">
-                        <StackLayout>
-                            <Label Text="RTL Layout" Style="{StaticResource Text.Body}" />
-                            <Label Text="Right-to-left for Persian" Style="{StaticResource Text.Caption}" />
-                        </StackLayout>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_RtlLayout]}" Style="{StaticResource Text.Body}" />
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_RtlLayoutDesc]}" Style="{StaticResource Text.Caption}" />
+                        </VerticalStackLayout>
                         <Switch Grid.Column="1" 
                                 IsToggled="{Binding RtlLayoutEnabled}"
                                 Style="{StaticResource Switch.Standard}" />
                     </Grid>
-                </Grid>
-            </Frame>
+                </VerticalStackLayout>
+            </Border>
 
             <!-- Global Settings (spec §11.4) -->
-            <Frame Grid.Row="1" Style="{StaticResource Frame.Card}" Margin="0">
-                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="16">
-                    <Label Grid.Row="0" Text="Global Settings" Style="{StaticResource Text.Label}" />
+            <Border Grid.Row="1" Style="{StaticResource Card.Row}" Padding="16">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_Global]}" Style="{StaticResource Text.Label}" />
 
-                    <controls:OptionComboBox Grid.Row="1"
-                                             Title="Theme"
+                    <controls:OptionComboBox Title="Theme"
                                              Options="system,light,dark"
                                              OptionLabels="System,Light,Dark"
                                              SelectedItem="{Binding SelectedTheme, Mode=TwoWay}" />
 
-                    <controls:OptionComboBox Grid.Row="2"
-                                             Title="UI Language"
+                    <controls:OptionComboBox Title="UI Language"
                                              Options="system,en,fa"
                                              OptionLabels="System,English,فارسی"
                                              SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" />
 
-                    <controls:OptionComboBox Grid.Row="3"
-                                             Title="Calendar"
+                    <controls:OptionComboBox Title="Calendar"
                                              Options="auto,gregorian,jalali"
                                              OptionLabels="Auto,Gregorian,Jalali"
                                              SelectedItem="{Binding SelectedCalendar, Mode=TwoWay}" />
 
-                    <controls:OptionComboBox Grid.Row="4"
-                                             Title="Digits"
+                    <controls:OptionComboBox Title="Digits"
                                              Options="auto,latin,persian"
                                              OptionLabels="Auto,Latin,Persian"
                                              SelectedItem="{Binding SelectedDigits, Mode=TwoWay}" />
 
-                    <controls:OptionComboBox Grid.Row="5"
-                                             Title="SLM Performance Profile"
+                    <controls:OptionComboBox Title="SLM Performance Profile"
                                              Options="battery,balanced,quality"
                                              OptionLabels="Battery,Balanced,Quality"
                                              SelectedItem="{Binding SelectedPerformanceProfile, Mode=TwoWay}" />
 
-                    <Grid Grid.Row="6" ColumnDefinitions="*,Auto" ColumnSpacing="16">
-                        <StackLayout>
-                            <Label Text="Tier 2 (SLM)" Style="{StaticResource Text.Body}" />
-                            <Label Text="Enable on-device SLM reranker" Style="{StaticResource Text.Caption}" />
-                        </StackLayout>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_Tier2]}" Style="{StaticResource Text.Body}" />
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_Tier2Desc]}" Style="{StaticResource Text.Caption}" />
+                        </VerticalStackLayout>
                         <Switch Grid.Column="1" 
                                 IsToggled="{Binding Tier2Enabled}"
                                 Style="{StaticResource Switch.Standard}" />
                     </Grid>
+                </VerticalStackLayout>
+            </Border>
 
-                    <Grid Grid.Row="7" ColumnDefinitions="*,Auto" ColumnSpacing="16">
-                        <StackLayout>
-                            <Label Text="App Lock (Biometric/PIN)" Style="{StaticResource Text.Body}" />
-                            <Label Text="Require auth to open app" Style="{StaticResource Text.Caption}" />
-                        </StackLayout>
-                        <Switch Grid.Column="1" 
-                                IsToggled="{Binding AppLockEnabled}"
-                                Style="{StaticResource Switch.Standard}" />
-                    </Grid>
-                </Grid>
-            </Frame>
+            <!-- SLM On-Device Model Manager -->
+            <Border Grid.Row="2" Style="{StaticResource Card.Row}" Padding="16">
+                <VerticalStackLayout Spacing="14">
+                    <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_SlmModel]}" Style="{StaticResource Text.Label}" />
+
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="SmolLM2-135M-Instruct (Q4_K_M GGUF)" Style="{StaticResource Text.Body}" FontAttributes="Bold" />
+                        <Label Text="{Binding ModelStatusText}" Style="{StaticResource Text.Caption}" TextColor="{AppThemeBinding Light={StaticResource Mark.Work}, Dark={StaticResource Tint.Work.Dark}}" />
+                    </VerticalStackLayout>
+
+                    <ProgressBar Progress="{Binding ModelDownloadProgress}"
+                                 IsVisible="{Binding IsModelDownloading}"
+                                 ProgressColor="{AppThemeBinding Light={StaticResource Mark.Work}, Dark={StaticResource Mark.Work.Dark}}"
+                                 HeightRequest="6" />
+
+                    <Button Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_ImportModel]}"
+                            Style="{StaticResource Button.Primary}"
+                            Command="{Binding ImportModelCommand}"
+                            IsVisible="{Binding IsModelDownloaded, Converter={StaticResource InverseBoolConverter}}"
+                            IsEnabled="{Binding IsModelDownloading, Converter={StaticResource InverseBoolConverter}}"
+                            HorizontalOptions="Fill" />
+
+                    <Button Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_TestInference]}"
+                            Style="{StaticResource Button.Secondary}"
+                            Command="{Binding RunBenchmarkCommand}"
+                            IsVisible="{Binding IsModelDownloaded}"
+                            HorizontalOptions="Fill" />
+
+                    <Button Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_ManageModels]}"
+                            Style="{StaticResource Button.Secondary}"
+                            Command="{Binding OpenModelsCommand}"
+                            HorizontalOptions="Fill" />
+
+                    <Label Text="{Binding BenchmarkResult}"
+                           Style="{StaticResource Text.Caption}"
+                           IsVisible="{Binding BenchmarkResult, Converter={StaticResource StringNotEmptyConverter}}"
+                           HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Border>
 
             <!-- Display and Privacy -->
-            <Frame Grid.Row="2" Style="{StaticResource Frame.Card}" Margin="0">
-                <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="16">
-                    <Label Grid.Row="0" Text="Display &amp; Privacy" Style="{StaticResource Text.Label}" />
+            <Border Grid.Row="3" Style="{StaticResource Card.Row}" Padding="16">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_DisplayPrivacy]}" Style="{StaticResource Text.Label}" />
 
-                    <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="16">
-                        <StackLayout>
-                            <Label Text="Hide Amounts in Lists" Style="{StaticResource Text.Body}" />
-                            <Label Text="Mask currency amounts in notification list" Style="{StaticResource Text.Caption}" />
-                        </StackLayout>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_ExcludeComms]}" Style="{StaticResource Text.Body}" />
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_ExcludeCommsDesc]}" Style="{StaticResource Text.Caption}" />
+                        </VerticalStackLayout>
+                        <Switch Grid.Column="1" 
+                                IsToggled="{Binding ExcludeCommunications}"
+                                Style="{StaticResource Switch.Standard}" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_HideAmounts]}" Style="{StaticResource Text.Body}" />
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_HideAmountsDesc]}" Style="{StaticResource Text.Caption}" />
+                        </VerticalStackLayout>
                         <Switch Grid.Column="1" 
                                 IsToggled="{Binding HideAmountsInLists}"
                                 Style="{StaticResource Switch.Standard}" />
                     </Grid>
 
-                    <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="16">
-                        <StackLayout>
-                            <Label Text="Notification Reminders" Style="{StaticResource Text.Body}" />
-                            <Label Text="Show reminders for unread notifications" Style="{StaticResource Text.Caption}" />
-                        </StackLayout>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_NotificationReminders]}" Style="{StaticResource Text.Body}" />
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_NotificationRemindersDesc]}" Style="{StaticResource Text.Caption}" />
+                        </VerticalStackLayout>
                         <Switch Grid.Column="1" 
                                 IsToggled="{Binding NotificationRemindersEnabled}"
                                 Style="{StaticResource Switch.Standard}" />
                     </Grid>
 
-                    <Grid Grid.Row="3" ColumnDefinitions="*,Auto" ColumnSpacing="16">
-                        <StackLayout>
-                            <Label Text="Global Size Cap (MB)" Style="{StaticResource Text.Body}" />
-                            <Label Text="0 = unlimited, max DB size" Style="{StaticResource Text.Caption}" />
-                        </StackLayout>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_AppOpenPromoReminders]}" Style="{StaticResource Text.Body}" />
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_AppOpenPromoRemindersDesc]}" Style="{StaticResource Text.Caption}" />
+                        </VerticalStackLayout>
+                        <Switch Grid.Column="1" 
+                                IsToggled="{Binding AppOpenPromoRemindersEnabled}"
+                                Style="{StaticResource Switch.Standard}" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16" IsVisible="{Binding AppOpenPromoRemindersEnabled}">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_UsageAccessPermission]}" Style="{StaticResource Text.Body}" />
+                            <Label Text="{Binding UsageAccessStatusText}" Style="{StaticResource Text.Caption}" />
+                        </VerticalStackLayout>
+                        <Button Grid.Column="1"
+                                Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_GrantUsageAccess]}"
+                                Style="{StaticResource Button.Secondary}"
+                                Command="{Binding RequestUsageAccessCommand}"
+                                IsVisible="{Binding HasUsageAccess, Converter={StaticResource InverseBoolConverter}}"
+                                HeightRequest="36"
+                                Padding="12,0" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_AppLock]}" Style="{StaticResource Text.Body}" />
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_AppLockDesc]}" Style="{StaticResource Text.Caption}" />
+                        </VerticalStackLayout>
+                        <Switch Grid.Column="1" 
+                                IsToggled="{Binding AppLockEnabled}"
+                                Style="{StaticResource Switch.Standard}" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_GlobalSizeCap]}" Style="{StaticResource Text.Body}" />
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_GlobalSizeCapDesc]}" Style="{StaticResource Text.Caption}" />
+                        </VerticalStackLayout>
                         <Entry Grid.Column="1"
                                Text="{Binding GlobalSizeCapMb}"
                                Keyboard="Numeric"
                                WidthRequest="80"
                                Style="{StaticResource Entry.Standard}" />
                     </Grid>
-                </Grid>
-            </Frame>
+                </VerticalStackLayout>
+            </Border>
 
             <!-- Data Management -->
-            <Frame Grid.Row="3" Style="{StaticResource Frame.Card}" Margin="0">
-                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="16">
-                    <Label Grid.Row="0" Text="Data Management" Style="{StaticResource Text.Label}" />
+            <Border Grid.Row="4" Style="{StaticResource Card.Row}" Padding="16">
+                <VerticalStackLayout Spacing="14">
+                    <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_DataManagement]}" Style="{StaticResource Text.Label}" />
 
-                    <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="16">
-                        <StackLayout>
-                            <Label Text="Stored Notifications" Style="{StaticResource Text.Body}" />
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_StoredNotifications]}" Style="{StaticResource Text.Body}" />
                             <Label Text="{Binding NotificationCount, StringFormat='{0} notifications'}" Style="{StaticResource Text.Caption}" />
-                        </StackLayout>
+                        </VerticalStackLayout>
                         <Label Grid.Column="1" Text="{Binding StorageSize}" Style="{StaticResource Text.Caption}" VerticalOptions="Center" />
                     </Grid>
 
-                    <Button Grid.Row="2"
-                            Text="Manage Sources"
+                    <Button Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_ManageSources]}"
                             Style="{StaticResource Button.Secondary}"
                             Command="{Binding OpenSourcesCommand}"
                             HorizontalOptions="Fill" />
 
-                    <Button Grid.Row="3"
-                            Text="Export Data (JSON)"
+                    <Button Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_Rules]}"
+                            Style="{StaticResource Button.Secondary}"
+                            Command="{Binding OpenRulesCommand}"
+                            HorizontalOptions="Fill" />
+
+                    <Button Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_ExportBackup]}"
+                            Style="{StaticResource Button.Secondary}"
+                            Command="{Binding ExportBackupCommand}"
+                            HorizontalOptions="Fill" />
+
+                    <Button Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_RestoreBackup]}"
+                            Style="{StaticResource Button.Secondary}"
+                            Command="{Binding RestoreBackupCommand}"
+                            HorizontalOptions="Fill" />
+
+                    <Button Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_ExportData]}"
                             Style="{StaticResource Button.Secondary}"
                             Command="{Binding ExportDataCommand}"
                             HorizontalOptions="Fill" />
 
-                    <Button Grid.Row="4"
-                            Text="Clear All Data"
+                    <Button Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_ClearAllData]}"
                             Style="{StaticResource Button.Secondary}"
                             Command="{Binding ClearDataCommand}"
                             TextColor="{StaticResource ErrorColor}"
                             BorderColor="{StaticResource ErrorColor}"
                             HorizontalOptions="Fill" />
-                </Grid>
-            </Frame>
+                </VerticalStackLayout>
+            </Border>
 
             <!-- Onboarding -->
-            <Frame Grid.Row="4" Style="{StaticResource Frame.Card}" Margin="0">
-                <Grid RowDefinitions="Auto,Auto" RowSpacing="16">
-                    <Label Grid.Row="0" Text="Onboarding" Style="{StaticResource Text.Label}" />
-                    <Button Grid.Row="1"
-                            Text="Re-run Onboarding"
+            <Border Grid.Row="5" Style="{StaticResource Card.Row}" Padding="16">
+                <VerticalStackLayout Spacing="14">
+                    <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_Onboarding]}" Style="{StaticResource Text.Label}" />
+                    <Button Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_RerunOnboarding]}"
                             Style="{StaticResource Button.Secondary}"
                             Command="{Binding OpenOnboardingCommand}"
                             HorizontalOptions="Fill" />
-                </Grid>
-            </Frame>
+                </VerticalStackLayout>
+            </Border>
 
             <!-- About -->
-            <Frame Grid.Row="5" Style="{StaticResource Frame.Card}" Margin="0">
-                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="12">
-                    <Label Grid.Row="0" Text="About" Style="{StaticResource Text.Label}" />
+            <Border Grid.Row="6" Style="{StaticResource Card.Row}" Padding="16">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_About]}" Style="{StaticResource Text.Label}" />
                     
-                    <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="16">
-                        <Label Text="Version" Style="{StaticResource Text.Body}" />
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_Version]}" Style="{StaticResource Text.Body}" />
                         <Label Grid.Column="1" Text="{Binding AppVersion}" Style="{StaticResource Text.Caption}" />
                     </Grid>
 
-                    <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="16">
-                        <Label Text="Framework" Style="{StaticResource Text.Body}" />
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_Framework]}" Style="{StaticResource Text.Body}" />
                         <Label Grid.Column="1" Text=".NET MAUI / .NET 10" Style="{StaticResource Text.Caption}" />
                     </Grid>
 
-                    <Label Grid.Row="3" 
-                           Text="Alak — Smart Persian Notification Classifier"
+                    <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_AppDesc]}"
                            Style="{StaticResource Text.Caption}"
                            HorizontalOptions="Center" />
 
-                    <Label Grid.Row="4" 
-                           Text="Built with MAUI, SQLite, and local SLM"
+                    <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Settings_BuiltWith]}"
                            Style="{StaticResource Text.Caption}"
                            HorizontalOptions="Center" />
-                </Grid>
-            </Frame>
+                </VerticalStackLayout>
+            </Border>
         </Grid>
     </ScrollView>
 </ContentPage>

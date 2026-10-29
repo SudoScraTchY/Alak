@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
@@ -118,6 +118,18 @@
         <Setter Property="FontFamily" Value="{StaticResource Font.SemiBold}" />
         <Setter Property="FontSize" Value="13" />
         <Setter Property="LineHeight" Value="1.05" />
+        <Setter Property="TextColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource Ink2}" Dark="{StaticResource Txt2}" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Overline (badges, tags, match modes): 10px, SemiBold -->
+    <Style x:Key="Text.Overline" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource Font.SemiBold}" />
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="LineHeight" Value="1.0" />
         <Setter Property="TextColor">
             <Setter.Value>
                 <AppThemeBinding Light="{StaticResource Ink2}" Dark="{StaticResource Txt2}" />

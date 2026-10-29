@@ -1,3 +1,4 @@
+using Alak.Adaptive;
 using Alak.Core.Capture;
 using Alak.Core.Classification;
 using Alak.Core.Model;
@@ -23,6 +24,10 @@ public sealed class NotificationIngestionService : INotificationIngestionService
     private readonly IUserRulesRepository _userRulesRepository;
     private readonly IPromoCodeRepository _promoCodeRepository;
     private readonly UserRulesEngine _userRulesEngine;
+    private readonly IAdaptiveEngine _adaptiveEngine;
+    private readonly IPackLoader _packLoader;
+    private readonly IRuleCompiler _ruleCompiler;
+    private PackSet? _activePackSet;
 
     public event Action<Notification>? NotificationIngested;
 
@@ -30,12 +35,26 @@ public sealed class NotificationIngestionService : INotificationIngestionService
         INotificationRepository notificationRepository,
         IUserRulesRepository userRulesRepository,
         IPromoCodeRepository promoCodeRepository,
-        UserRulesEngine userRulesEngine)
+        UserRulesEngine userRulesEngine,
+        IAdaptiveEngine adaptiveEngine,
+        IPackLoader packLoader,
+        IRuleCompiler ruleCompiler)
     {
         _notificationRepository = notificationRepository;
         _userRulesRepository = userRulesRepository;
         _promoCodeRepository = promoCodeRepository;
         _userRulesEngine = userRulesEngine;
+        _adaptiveEngine = adaptiveEngine;
+        _packLoader = packLoader;
+        _ruleCompiler = ruleCompiler;
+    }
+
+    private async ValueTask<PackSet> GetPackSetAsync()
+    {
+        if (_activePackSet != null) return _activePackSet;
+        var packs = await _packLoader.LoadAsync();
+        _activePackSet = await _ruleCompiler.CompileAsync(packs);
+        return _activePackSet;
     }
 
     public async Task IngestAsync(RawNotification raw)
@@ -46,6 +65,14 @@ public sealed class NotificationIngestionService : INotificationIngestionService
             if (DefaultIgnoreFilter.ShouldIgnore(raw))
             {
                 Debug.WriteLine($"[Ingestion] Ignored by DefaultIgnoreFilter: {raw.Package} - {raw.Title}");
+                return;
+            }
+
+            // 1b. Exclude private communications filter (SMS, email, messengers)
+            var globalSettings = await _userRulesRepository.GetGlobalSettingsAsync();
+            if (globalSettings.ExcludeCommunications && CommunicationAppDetector.IsCommunicationNotification(raw))
+            {
+                Debug.WriteLine($"[Ingestion] Ignored private communication notification: {raw.Package} - {raw.Title}");
                 return;
             }
 
@@ -65,15 +92,65 @@ public sealed class NotificationIngestionService : INotificationIngestionService
                 return;
             }
 
-            // 4. Tier 1 classification
-            var classification = RulesEngine.Classify(raw, PackSet.BuiltInDefault);
+            // 4. Tier 1 classification using all active packs (WBP-02)
+            var packSet = await GetPackSetAsync();
+            var classification = RulesEngine.Classify(raw, packSet);
             
-            var category = userAction?.SetCategory
-                ?? appSettings?.DefaultCategoryOverride
+            var category = userAction?.SetCategory?.ToLowerInvariant()
+                ?? appSettings?.DefaultCategoryOverride?.ToLowerInvariant()
                 ?? classification.Category.ToKebabId();
 
+            // 4b. Tier 2 Adaptive Engine inference & pseudo-label learning (spec §9.1)
+            var fullText = (raw.Title ?? "") + " " + (raw.Text ?? "");
+            if (globalSettings.Tier2Enabled && userAction?.SetCategory == null && appSettings?.DefaultCategoryOverride == null)
+            {
+                try
+                {
+                    var conceptHits = classification.ConceptHits.ToArray();
+
+                    if (_adaptiveEngine.CorrectionCount > 0)
+                    {
+                        var adaptiveLogits = await _adaptiveEngine.InferAsync(
+                            raw.Package,
+                            raw.ChannelId ?? "",
+                            fullText,
+                            conceptHits,
+                            classification.Entities,
+                            raw.AndroidCategory);
+
+                        if (adaptiveLogits != null && adaptiveLogits.Length == 9)
+                        {
+                            var blendedCategory = _adaptiveEngine.BlendDecision(
+                                classification.Category,
+                                classification.Confidence,
+                                adaptiveLogits);
+                            category = blendedCategory.ToKebabId();
+                            Debug.WriteLine($"[Ingestion] Tier 2 Adaptive categorized as: {category} (beta={_adaptiveEngine.Beta:F2})");
+                        }
+                    }
+
+                    // Pseudo-label learning from high-confidence Tier 1 results (>= 0.90)
+                    if (classification.Confidence >= 0.90f)
+                    {
+                        await _adaptiveEngine.LearnFromHighConfidenceAsync(
+                            raw.Package,
+                            raw.ChannelId ?? "",
+                            fullText,
+                            conceptHits,
+                            classification.Entities,
+                            classification.Category,
+                            classification.Confidence,
+                            raw.AndroidCategory);
+                    }
+                }
+                catch (Exception adaptiveEx)
+                {
+                    Debug.WriteLine($"[Ingestion] Tier 2 Adaptive error: {adaptiveEx.Message}");
+                }
+            }
+
             // 5. Promo code extraction & wallet upsert
-            var promoEntity = classification.Entities.OfType<PromoCodeEntity>().FirstOrDefault();
+            var promoEntity = classification.Entities.OfType<PromoCodeEntity>().OrderByDescending(p => p.Confidence).FirstOrDefault();
             string? extractedCode = promoEntity?.Code;
 
             if (promoEntity != null && (category == "offers" || category == "promo"))
@@ -103,7 +180,8 @@ public sealed class NotificationIngestionService : INotificationIngestionService
                         StoreHint: promoEntity.StoreHint,
                         FirstSeenAt: raw.PostedAtUtcMs,
                         LastSeenAt: raw.PostedAtUtcMs,
-                        TimesSeen: 1
+                        TimesSeen: 1,
+                        NotificationId: raw.SbnKey
                     );
 
                     await _promoCodeRepository.UpsertAsync(promoCode);
@@ -116,7 +194,6 @@ public sealed class NotificationIngestionService : INotificationIngestionService
             }
 
             // 6. Persian script detection
-            var fullText = (raw.Title ?? "") + " " + (raw.Text ?? "");
             var isPersian = ScriptLanguage.FirstStrongDirection(fullText) == TextDirection.Rtl ||
                             ScriptLanguage.Guess(fullText).Language == LanguageFa.Persian;
 

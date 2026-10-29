@@ -17,7 +17,7 @@ public partial class InboxPage : ContentPage
 
         if (BindingContext is InboxViewModel vm)
         {
-            await vm.InitializeAsync();
+            await vm.InitializeAsync(force: true);
         }
     }
 }

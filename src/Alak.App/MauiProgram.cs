@@ -44,16 +44,6 @@ public static class MauiProgram
         builder
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
-            .ConfigureMauiHandlers(handlers =>
-            {
-                // ZXing.Net.MAUI 0.10.x has no Use-extension; register handlers manually.
-                handlers.AddHandler(
-                    typeof(ZXing.Net.Maui.Controls.CameraBarcodeReaderView),
-                    typeof(ZXing.Net.Maui.CameraBarcodeReaderViewHandler));
-                handlers.AddHandler(
-                    typeof(ZXing.Net.Maui.Controls.BarcodeGeneratorView),
-                    typeof(ZXing.Net.Maui.BarcodeGeneratorViewHandler));
-            })
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("Vazirmatn-Regular.ttf", "Vazirmatn");
@@ -74,27 +64,149 @@ public static class MauiProgram
         builder.Services.AddSingleton<UserRulesEngine>();
         builder.Services.AddSingleton<INotificationIngestionService, NotificationIngestionService>();
         builder.Services.AddSingleton<IAdaptiveEngine, AdaptiveEngine>();
-        builder.Services.AddSingleton<IInferenceEngine, InferenceEngineStub>(); // M8 will swap
+        builder.Services.AddSingleton<IInferenceEngine, LLamaInferenceEngine>();
+        builder.Services.AddSingleton<IModelService, ModelService>();
+        builder.Services.AddSingleton<IBiometricAuthService, BiometricAuthService>();
         builder.Services.AddSingleton<IPromoCodeRepository, PromoCodeRepository>();
+        builder.Services.AddSingleton<IBackupService>(sp =>
+        {
+            var conn = sp.GetRequiredService<StorageConnection>();
+            var modelPath = Path.Combine(FileSystem.AppDataDirectory, "adaptive-v1.bin");
+            return new BackupService(conn, modelPath);
+        });
 
-        // ViewModels
-        builder.Services.AddTransient<InboxViewModel>();
+        // Main Tab ViewModels & Pages (Singletons to eliminate tab switching lag and preserve state)
+        builder.Services.AddSingleton<InboxViewModel>();
+        builder.Services.AddSingleton<InboxPage>();
+        builder.Services.AddSingleton<WalletViewModel>();
+        builder.Services.AddSingleton<WalletPage>();
+        builder.Services.AddSingleton<DigestViewModel>();
+        builder.Services.AddSingleton<DigestPage>();
+        builder.Services.AddSingleton<RulesViewModel>();
+        builder.Services.AddSingleton<RulesPage>();
+        builder.Services.AddSingleton<SettingsViewModel>();
+        builder.Services.AddSingleton<SettingsPage>();
+
+        // Modal / Navigation ViewModels & Pages
         builder.Services.AddTransient<DetailViewModel>();
-        builder.Services.AddTransient<SettingsViewModel>();
+        builder.Services.AddTransient<DetailPage>();
         builder.Services.AddTransient<OnboardingViewModel>();
-        builder.Services.AddTransient<RulesViewModel>();
+        builder.Services.AddTransient<OnboardingPage>();
         builder.Services.AddTransient<StubDetailViewModel>();
-        builder.Services.AddTransient<WalletViewModel>();
-        builder.Services.AddTransient<ScanViewModel>();
+        builder.Services.AddTransient<StubDetailPage>();
         builder.Services.AddTransient<SourcesViewModel>();
         builder.Services.AddTransient<SourcesPage>();
+        builder.Services.AddTransient<ModelsViewModel>();
+        builder.Services.AddTransient<ModelsPage>();
+
+        // Security & Key Provider (SEC-002)
+        builder.Services.AddSingleton<ISecureKeyProvider, SecureKeyProvider>();
 
         // Storage
-        var dbPath = Path.Combine(FileSystem.AppDataDirectory, "alak.db");
-        builder.Services.AddSingleton(new StorageConnection($"Data Source={dbPath};Mode=ReadWriteCreate;Password=alak_secure_key_2024"));
+        builder.Services.AddSingleton<StorageConnection>(sp =>
+        {
+            var keyProvider = sp.GetRequiredService<ISecureKeyProvider>();
+            string password;
+            try
+            {
+                password = keyProvider.GetDatabasePassword();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[MauiProgram] Initial KeyStore retrieval failed: {ex.Message}. Retrying via re-initialization.");
+                if (keyProvider.ReinitializeKey())
+                {
+                    password = keyProvider.GetDatabasePassword();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "alak.db");
+            var mainConnStr = $"Data Source={dbPath};Mode=ReadWriteCreate;Password={password}";
+
+            try
+            {
+                return new StorageConnection(mainConnStr);
+            }
+            catch (Microsoft.Data.Sqlite.SqliteException ex) when (ex.SqliteErrorCode == 26)
+            {
+                // Attempt legacy migration: if the DB was created with the fallback dev key "alak_secure_key_2024"
+                const string fallbackPassword = "alak_secure_key_2024";
+                if (password != fallbackPassword)
+                {
+                    try
+                    {
+                        var legacyConnStr = $"Data Source={dbPath};Mode=ReadWrite;Password={fallbackPassword}";
+                        using (var legacyConn = new Microsoft.Data.Sqlite.SqliteConnection(legacyConnStr))
+                        {
+                            legacyConn.Open();
+                            using var testCmd = legacyConn.CreateCommand();
+                            testCmd.CommandText = "SELECT count(*) FROM sqlite_master;";
+                            testCmd.ExecuteScalar();
+
+                            using var rekeyCmd = legacyConn.CreateCommand();
+                            rekeyCmd.CommandText = $"PRAGMA rekey = '{password.Replace("'", "''")}';";
+                            rekeyCmd.ExecuteNonQuery();
+                        }
+                        // Successfully rekeyed to the hardware-backed password
+                        return new StorageConnection(mainConnStr);
+                    }
+                    catch
+                    {
+                        // Fall through to retry or error handling
+                    }
+                }
+
+                // Never wipe or rename without first retrying KeyStore re-initialization
+                System.Diagnostics.Debug.WriteLine("[MauiProgram] SQLite Error 26: Attempting KeyStore re-initialization before taking recovery action.");
+                if (keyProvider.ReinitializeKey())
+                {
+                    try
+                    {
+                        var retriedPassword = keyProvider.GetDatabasePassword();
+                        var retriedConnStr = $"Data Source={dbPath};Mode=ReadWriteCreate;Password={retriedPassword}";
+                        return new StorageConnection(retriedConnStr);
+                    }
+                    catch (Exception retryEx)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[MauiProgram] Re-initialized KeyStore connection failed: {retryEx.Message}");
+                    }
+                }
+
+                // If DB truly cannot be decrypted by any means (hardware key lost/corrupted after reinstall),
+                // safely preserve the corrupt DB as backup and create a fresh one to allow app recovery.
+                try
+                {
+                    var backupPath = dbPath + $".corrupt.{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
+                    if (File.Exists(dbPath)) File.Move(dbPath, backupPath);
+                    if (File.Exists(dbPath + "-wal")) File.Move(dbPath + "-wal", backupPath + "-wal");
+                    if (File.Exists(dbPath + "-shm")) File.Move(dbPath + "-shm", backupPath + "-shm");
+                }
+                catch { }
+
+                return new StorageConnection(mainConnStr);
+            }
+        });
 
         var app = builder.Build();
         AppServices.Current = app.Services;
+
+        // Tab Warming: warm primary tab singletons in background to eliminate ~1.5s first-tap lag
+        Task.Run(() =>
+        {
+            try
+            {
+                _ = app.Services.GetService<InboxViewModel>();
+                _ = app.Services.GetService<WalletViewModel>();
+                _ = app.Services.GetService<DigestViewModel>();
+                _ = app.Services.GetService<SettingsViewModel>();
+            }
+            catch { }
+        });
+
         return app;
     }
 }

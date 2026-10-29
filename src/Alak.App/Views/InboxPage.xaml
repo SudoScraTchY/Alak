@@ -2,10 +2,13 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Alak.App.ViewModels"
+             xmlns:services="clr-namespace:Alak.App.Services"
              x:Class="Alak.App.Views.InboxPage"
+             x:Name="ThisPage"
              x:DataType="vm:InboxViewModel"
              Title="Inbox"
              Shell.NavBarIsVisible="False"
+             FlowDirection="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=CurrentFlowDirection}"
              BackgroundColor="{AppThemeBinding Light={StaticResource Salt}, Dark={StaticResource Night}}">
 
     <Grid RowDefinitions="Auto,Auto,Auto,*"
@@ -15,45 +18,88 @@
         <!-- ===== HEADER ===== -->
         <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="16,4">
             <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
-                <Label Text="Inbox" Style="{StaticResource Text.Title}" />
+                <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Inbox_Title]}" Style="{StaticResource Text.Title}" />
                 <Label Text="{Binding UnreadCount, StringFormat='· {0} unread', FallbackValue=''}"
                        Style="{StaticResource Text.Caption}"
                        VerticalOptions="Center" />
             </HorizontalStackLayout>
+
+            <!-- AI Day Digest Button -->
+            <Border Grid.Column="1"
+                    Style="{StaticResource Chip.Filter}"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Promo}, Dark={StaticResource Tint.Promo.Dark}}"
+                    Stroke="{AppThemeBinding Light={StaticResource Mark.Promo}, Dark={StaticResource Mark.Promo.Dark}}"
+                    StrokeThickness="1"
+                    Padding="10,4"
+                    VerticalOptions="Center">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding OpenDailyDigestCommand}" />
+                </Border.GestureRecognizers>
+                <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                    <Label Text="✨" FontSize="13" VerticalOptions="Center" />
+                    <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Inbox_DailyDigest]}"
+                           Style="{StaticResource Text.Label}"
+                           FontSize="12"
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource Mark.Promo}, Dark={StaticResource Mark.Promo.Dark}}"
+                           VerticalOptions="Center" />
+                </HorizontalStackLayout>
+            </Border>
         </Grid>
 
         <!-- ===== SEARCH ===== -->
-        <Border Grid.Row="1" Style="{StaticResource Card.Row}" Margin="16,4" Padding="6,2">
-            <SearchBar Style="{StaticResource SearchBar.Standard}"
+        <Border Grid.Row="1" Style="{StaticResource Card.Row}" Margin="16,4" Padding="12,0">
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" VerticalOptions="Center">
+                <Label Text="🔍" VerticalOptions="Center" FontSize="14" Opacity="0.6" />
+                <Entry Grid.Column="1"
+                       Style="{StaticResource Entry.Standard}"
                        Text="{Binding SearchQuery, Mode=TwoWay}"
-                       Placeholder="Search notifications"
-                       SearchCommand="{Binding RefreshCommand}" />
+                       Placeholder="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Inbox_SearchPlaceholder]}"
+                       ReturnCommand="{Binding RefreshCommand}"
+                       ClearButtonVisibility="WhileEditing"
+                       HeightRequest="42"
+                       VerticalOptions="Center" />
+            </Grid>
         </Border>
 
         <!-- ===== CATEGORY FILTER PILLS ===== -->
-        <ScrollView Grid.Row="2" Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
-            <HorizontalStackLayout Spacing="8" Padding="16,8,16,4"
-                                   BindableLayout.ItemsSource="{Binding CategoryFilters}">
-                <BindableLayout.ItemTemplate>
-                    <DataTemplate x:DataType="vm:CategoryFilter">
-                        <Border Style="{StaticResource Chip.Filter}">
-                            <HorizontalStackLayout Spacing="6">
-                                <BoxView WidthRequest="8" HeightRequest="8" CornerRadius="4"
-                                         VerticalOptions="Center"
-                                         Color="{Binding MarkColor}" />
-                                <Label Text="{Binding Label}" Style="{StaticResource Text.Label}" FontSize="13" />
-                                <Label Text="{Binding Count, StringFormat='{0}'}" Style="{StaticResource Text.Caption}"
-                                       VerticalOptions="Center" />
-                            </HorizontalStackLayout>
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:InboxViewModel}}, Path=CategoryFilterChangedCommand}"
-                                                      CommandParameter="{Binding}" />
-                            </Border.GestureRecognizers>
-                        </Border>
-                    </DataTemplate>
-                </BindableLayout.ItemTemplate>
-            </HorizontalStackLayout>
-        </ScrollView>
+        <CollectionView Grid.Row="2"
+                        HeightRequest="42"
+                        ItemsSource="{Binding CategoryFilters}"
+                        SelectionMode="Single"
+                        SelectedItem="{Binding SelectedCategoryFilter, Mode=TwoWay}"
+                        ItemSizingStrategy="MeasureAllItems"
+                        HorizontalScrollBarVisibility="Never"
+                        Margin="16,4,16,4">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:CategoryFilter">
+                    <Border Style="{StaticResource Chip.Filter}">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup Name="CommonStates">
+                                <VisualState Name="Normal" />
+                                <VisualState Name="Selected">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Tint.Work}, Dark={StaticResource Tint.Work.Dark}}" />
+                                        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Mark.Work}, Dark={StaticResource Mark.Work.Dark}}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                            <BoxView WidthRequest="8" HeightRequest="8" CornerRadius="4"
+                                     VerticalOptions="Center"
+                                     Color="{Binding MarkColor}" />
+                            <Label Text="{Binding Label}" Style="{StaticResource Text.Label}" FontSize="13" LineBreakMode="NoWrap" VerticalOptions="Center" />
+                            <Label Text="{Binding Count, StringFormat='{0}'}" Style="{StaticResource Text.Caption}"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
         <!-- ===== LIST ===== -->
         <RefreshView Grid.Row="3"
@@ -61,100 +107,128 @@
                      IsRefreshing="{Binding IsRefreshing}"
                      Command="{Binding RefreshCommand}">
             <CollectionView Style="{StaticResource CollectionView.Inbox}"
-                            ItemsSource="{Binding Notifications}">
+                            ItemsSource="{Binding GroupedNotifications}"
+                            IsGrouped="True"
+                            ItemSizingStrategy="MeasureAllItems"
+                            RemainingItemsThreshold="5"
+                            RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="8" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.GroupHeaderTemplate>
+                    <DataTemplate x:DataType="vm:NotificationGroup">
+                        <Grid Padding="4,8,4,4">
+                            <Border Style="{StaticResource Chip.Filter}"
+                                    HorizontalOptions="Start"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Salt}, Dark={StaticResource Night}}"
+                                    Stroke="{AppThemeBinding Light={StaticResource Ink3}, Dark={StaticResource Txt3}}"
+                                    StrokeThickness="0.5"
+                                    Padding="10,3">
+                                <Label Text="{Binding Header}"
+                                       Style="{StaticResource Text.Caption}"
+                                       FontFamily="{StaticResource Font.SemiBold}"
+                                       FontSize="12"
+                                       TextColor="{AppThemeBinding Light={StaticResource Ink2}, Dark={StaticResource Txt2}}" />
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.GroupHeaderTemplate>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="vm:NotificationViewModel">
                         <Border Style="{StaticResource Card.Row}">
-                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                                <!-- Category spine -->
-                                <BoxView Grid.Column="0"
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={x:Reference ThisPage}, Path=BindingContext.OpenDetailCommand}"
+                                                      CommandParameter="{Binding}" />
+                            </Border.GestureRecognizers>
+                            <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="8" RowSpacing="4">
+                                <!-- Category spine (spans all rows) -->
+                                <BoxView Grid.Column="0" Grid.Row="0" Grid.RowSpan="3"
                                          Style="{StaticResource BoxView.CategorySpine}"
                                          Color="{Binding CategoryMarkColor}" />
 
-                                <Grid Grid.Column="1" RowDefinitions="Auto,Auto,Auto" RowSpacing="4">
-                                    <!-- Title + time -->
-                                    <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                                        <Label Grid.Column="0"
-                                               Text="{Binding Title}"
-                                               Style="{StaticResource Text.Body}"
-                                               FontAttributes="{Binding IsRead, Converter={StaticResource BoolToFontWeightConverter}, ConverterParameter=false}"
-                                               MaxLines="1"
-                                               LineBreakMode="TailTruncation" />
-                                        <Label Grid.Column="1"
-                                               Text="{Binding Timestamp, Converter={StaticResource RelativeTimeConverter}}"
-                                               Style="{StaticResource Text.Caption}"
-                                               VerticalOptions="Center" />
-                                    </Grid>
+                                <!-- Title + time -->
+                                <Label Grid.Column="1" Grid.Row="0"
+                                       Text="{Binding Title}"
+                                       Style="{StaticResource Text.Body}"
+                                       FontAttributes="{Binding IsRead, Converter={StaticResource BoolToFontWeightConverter}, ConverterParameter=false}"
+                                       MaxLines="1"
+                                       LineBreakMode="TailTruncation" />
+                                <Label Grid.Column="2" Grid.Row="0"
+                                       Text="{Binding Timestamp, Converter={StaticResource RelativeTimeConverter}}"
+                                       Style="{StaticResource Text.Caption}"
+                                       VerticalOptions="Center" />
 
-                                    <!-- Preview -->
-                                    <Label Grid.Row="1"
-                                           Text="{Binding Text}"
-                                           Style="{StaticResource Text.BodySecondary}"
-                                           MaxLines="2"
-                                           LineBreakMode="TailTruncation" />
+                                <!-- Preview -->
+                                <Label Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1"
+                                       Text="{Binding Text}"
+                                       Style="{StaticResource Text.BodySecondary}"
+                                       MaxLines="2"
+                                       LineBreakMode="TailTruncation" />
 
-                                    <!-- Channel · chip · code -->
-                                    <Grid Grid.Row="2" ColumnDefinitions="Auto,Auto,*,Auto,Auto" ColumnSpacing="8" Margin="0,4,0,0">
-                                        <Label Grid.Column="0"
-                                               Text="{Binding ChannelName}"
-                                               Style="{StaticResource Text.Caption}"
-                                               VerticalOptions="Center"
-                                               MaxLines="1"
-                                               LineBreakMode="TailTruncation" />
+                                <!-- Channel · Category · Extracted Code -->
+                                <HorizontalStackLayout Grid.Column="1" Grid.Row="2" Spacing="6" VerticalOptions="Center">
+                                    <Label Text="{Binding DisplayChannelName}"
+                                           Style="{StaticResource Text.Caption}"
+                                           VerticalOptions="Center"
+                                           MaximumWidthRequest="90"
+                                           LineBreakMode="TailTruncation"
+                                           IsVisible="{Binding DisplayChannelName, Converter={StaticResource StringNotEmptyConverter}}" />
 
-                                        <Border Grid.Column="1"
-                                                Style="{StaticResource Chip.Category}"
-                                                BackgroundColor="{Binding CategoryTintColor}"
-                                                IsVisible="{Binding Category, Converter={StaticResource StringNotEmptyConverter}}">
-                                            <Label Text="{Binding Category, Converter={StaticResource CategoryLabelConverter}}"
+                                    <Border Style="{StaticResource Chip.Category}"
+                                            BackgroundColor="{Binding CategoryTintColor}"
+                                            IsVisible="{Binding Category, Converter={StaticResource StringNotEmptyConverter}}"
+                                            VerticalOptions="Center">
+                                        <Label Text="{Binding Category, Converter={StaticResource CategoryLabelConverter}}"
+                                               FontFamily="{StaticResource Font.SemiBold}"
+                                               FontSize="11"
+                                               LineHeight="1.3"
+                                               LineBreakMode="NoWrap"
+                                               TextColor="{Binding CategoryMarkColor}" />
+                                    </Border>
+
+                                    <!-- Extracted code, mono -->
+                                    <Border Style="{StaticResource Chip.Category}"
+                                            BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Wallet}, Dark={StaticResource Tint.Wallet.Dark}}"
+                                            IsVisible="{Binding HasCode}"
+                                            VerticalOptions="Center">
+                                        <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                                            <Label Text="{Binding ExtractedCode}"
+                                                   FontFamily="{StaticResource Font.Mono}"
+                                                   FontSize="12"
+                                                   LineHeight="1.3"
+                                                   TextColor="{AppThemeBinding Light={StaticResource Mark.Wallet}, Dark={StaticResource Mark.Wallet.Dark}}"
+                                                   VerticalOptions="Center">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding Source={x:Reference ThisPage}, Path=BindingContext.OpenDetailCommand}"
+                                                                          CommandParameter="{Binding}" />
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                            <Label Text="Copy"
                                                    FontFamily="{StaticResource Font.SemiBold}"
                                                    FontSize="11"
-                                                   LineHeight="1.3"
-                                                   TextColor="{Binding CategoryMarkColor}" />
-                                        </Border>
+                                                   TextColor="{AppThemeBinding Light={StaticResource Mark.Wallet}, Dark={StaticResource Mark.Wallet.Dark}}"
+                                                   VerticalOptions="Center">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding CopyCodeCommand}"
+                                                                          CommandParameter="{Binding}" />
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                        </HorizontalStackLayout>
+                                    </Border>
+                                </HorizontalStackLayout>
 
-                                        <!-- Extracted code, mono -->
-                                        <Border Grid.Column="2"
-                                                Style="{StaticResource Chip.Category}"
-                                                BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Wallet}, Dark={StaticResource Tint.Wallet.Dark}}"
-                                                IsVisible="{Binding HasCode}"
-                                                HorizontalOptions="Start">
-                                            <HorizontalStackLayout Spacing="8">
-                                                <Label Text="{Binding ExtractedCode}"
-                                                       FontFamily="{StaticResource Font.Mono}"
-                                                       FontSize="13"
-                                                       LineHeight="1.3"
-                                                       TextColor="{AppThemeBinding Light={StaticResource Mark.Wallet}, Dark={StaticResource Mark.Wallet.Dark}}" />
-                                                <Label Text="Copy"
-                                                       FontFamily="{StaticResource Font.SemiBold}"
-                                                       FontSize="11"
-                                                       TextColor="{AppThemeBinding Light={StaticResource Mark.Wallet}, Dark={StaticResource Mark.Wallet.Dark}}"
-                                                       VerticalOptions="Center">
-                                                    <Label.GestureRecognizers>
-                                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:InboxViewModel}}, Path=CopyCodeCommand}"
-                                                                              CommandParameter="{Binding}" />
-                                                    </Label.GestureRecognizers>
-                                                </Label>
-                                            </HorizontalStackLayout>
-                                        </Border>
-
-                                        <Label Grid.Column="4"
-                                               Text="Mark read"
-                                               Style="{StaticResource Text.Caption}"
-                                               VerticalOptions="Center"
-                                               IsVisible="{Binding IsRead, Converter={StaticResource InverseBoolConverter}}">
-                                            <Label.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:InboxViewModel}}, Path=DismissCommand}"
-                                                                      CommandParameter="{Binding}" />
-                                            </Label.GestureRecognizers>
-                                        </Label>
-                                    </Grid>
-                                </Grid>
-
-                                <Border.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:InboxViewModel}}, Path=OpenDetailCommand}"
-                                                          CommandParameter="{Binding}" />
-                                </Border.GestureRecognizers>
+                                <!-- Mark read -->
+                                <Label Grid.Column="2" Grid.Row="2"
+                                       Text="Mark read"
+                                       Style="{StaticResource Text.Caption}"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="End"
+                                       IsVisible="{Binding IsRead, Converter={StaticResource InverseBoolConverter}}">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding DismissCommand}"
+                                                              CommandParameter="{Binding}" />
+                                    </Label.GestureRecognizers>
+                                </Label>
                             </Grid>
                         </Border>
                     </DataTemplate>

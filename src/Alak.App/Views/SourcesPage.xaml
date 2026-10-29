@@ -3,10 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Alak.App.ViewModels"
              xmlns:conv="clr-namespace:Alak.App.Converters"
+             xmlns:services="clr-namespace:Alak.App.Services"
              x:Class="Alak.App.Views.SourcesPage"
+             x:Name="ThisSourcesPage"
              x:DataType="vm:SourcesViewModel"
              BackgroundColor="{AppThemeBinding Light={StaticResource Salt}, Dark={StaticResource Night}}"
-             Title="Sources">
+             Shell.NavBarIsVisible="False"
+             Title="Sources"
+             FlowDirection="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=CurrentFlowDirection}">
     <ContentPage.Resources>
         <ResourceDictionary>
             <conv:BoolToFontWeightConverter x:Key="BoolToFontWeightConverter" />
@@ -95,16 +99,16 @@
                             <Grid Grid.Row="4" Grid.ColumnSpan="2" ColumnDefinitions="*,*,Auto" ColumnSpacing="12">
                                 <Button Grid.Column="0"
                                         Text="Save settings"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SourcesViewModel}}, Path=SaveSourceSettingsCommand}"
+                                        Command="{Binding Source={x:Reference ThisSourcesPage}, Path=BindingContext.SaveSourceSettingsCommand}"
                                         CommandParameter="{Binding .}"
                                         Style="{StaticResource Button.Primary}"
-                                        IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type vm:SourcesViewModel}}, Path=IsLoading, Converter={StaticResource InverseBoolConverter}}" />
+                                        IsEnabled="{Binding Source={x:Reference ThisSourcesPage}, Path=BindingContext.IsLoading, Converter={StaticResource InverseBoolConverter}}" />
                                 <Button Grid.Column="1"
                                         Text="Apply to existing"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SourcesViewModel}}, Path=ApplyToExistingCommand}"
+                                        Command="{Binding Source={x:Reference ThisSourcesPage}, Path=BindingContext.ApplyToExistingCommand}"
                                         CommandParameter="{Binding .}"
                                         Style="{StaticResource Button.Secondary}"
-                                        IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type vm:SourcesViewModel}}, Path=IsLoading, Converter={StaticResource InverseBoolConverter}}" />
+                                        IsEnabled="{Binding Source={x:Reference ThisSourcesPage}, Path=BindingContext.IsLoading, Converter={StaticResource InverseBoolConverter}}" />
                             </Grid>
                         </Grid>
                     </Frame>

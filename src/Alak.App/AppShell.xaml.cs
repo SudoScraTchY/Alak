@@ -18,6 +18,22 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("onboarding", typeof(OnboardingPage));
         Routing.RegisterRoute("stub-detail", typeof(StubDetailPage));
         Routing.RegisterRoute("sources", typeof(SourcesPage));
+        Routing.RegisterRoute("rules", typeof(RulesPage));
+        Routing.RegisterRoute("models", typeof(ModelsPage));
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        if (!string.IsNullOrEmpty(App.PendingRoute))
+        {
+            var route = App.PendingRoute;
+            App.PendingRoute = null;
+            Dispatcher.Dispatch(async () =>
+            {
+                await GoToAsync(route);
+            });
+        }
     }
 
     protected override void OnNavigated(ShellNavigatedEventArgs args)

@@ -1,0 +1,12 @@
+root ::= "{" ws "\"summary\"" ws ":" ws string ws "," ws "\"importance\"" ws ":" ws importance ws ( "," ws "\"action\"" ws ":" ws ( string | "null" ) )? ( "," ws "\"category_suggestion\"" ws ":" ws ( category | "null" ) )? ( "," ws "\"tags\"" ws ":" ws string_list )? ( "," ws "\"facts\"" ws ":" ws fact_list )? "}"
+
+importance ::= "\"low\"" | "\"normal\"" | "\"high\""
+category ::= "\"offers\"" | "\"work\"" | "\"people\"" | "\"money\"" | "\"orders\"" | "\"security\"" | "\"social\"" | "\"updates\"" | "\"other\""
+
+string_list ::= "[" ws ( string ( ws "," ws string )* )? ws "]"
+fact_list ::= "[" ws ( fact ( ws "," ws fact )* )? ws "]"
+fact ::= "{" ws "\"label\"" ws ":" ws string ws "," ws "\"value\"" ws ":" ws string ws "}"
+
+string ::= "\"" char* "\""
+char ::= [^"\\\x7F\x00-\x1F] | "\\" (["\\/bfnrt] | "u" [0-9a-fA-F]{4})
+ws ::= [ \t\n\r]*

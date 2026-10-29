@@ -1,0 +1,159 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="288dp"
+    android:height="288dp"
+    android:viewportWidth="288"
+    android:viewportHeight="288">
+
+    <!-- Ambient Glow Cone -->
+    <path
+        android:pathData="M 94,105 L 194,105 L 164,155 L 124,155 Z"
+        android:fillColor="#15262C" />
+
+    <!-- Noise Particles (Groups for animation) -->
+    <!-- Particle 1: Center Gold -->
+    <group
+        android:name="group_p1"
+        android:pivotX="144"
+        android:pivotY="78">
+        <path
+            android:name="path_p1"
+            android:pathData="M 144,74 A 4,4 0 1,0 144.01,74 Z"
+            android:fillColor="#FFC93C" />
+    </group>
+
+    <!-- Particle 2: Left Mid Purple -->
+    <group
+        android:name="group_p2"
+        android:pivotX="126"
+        android:pivotY="84">
+        <path
+            android:name="path_p2"
+            android:pathData="M 126,80.5 A 3.5,3.5 0 1,0 126.01,80.5 Z"
+            android:fillColor="#8248D6" />
+    </group>
+
+    <!-- Particle 3: Right Mid Cyan -->
+    <group
+        android:name="group_p3"
+        android:pivotX="162"
+        android:pivotY="84">
+        <path
+            android:name="path_p3"
+            android:pathData="M 162,80.5 A 3.5,3.5 0 1,0 162.01,80.5 Z"
+            android:fillColor="#3CC8DD" />
+    </group>
+
+    <!-- Particle 4: Far Left Coral -->
+    <group
+        android:name="group_p4"
+        android:pivotX="110"
+        android:pivotY="90">
+        <path
+            android:name="path_p4"
+            android:pathData="M 110,86.8 A 3.2,3.2 0 1,0 110.01,86.8 Z"
+            android:fillColor="#FF9A57" />
+    </group>
+
+    <!-- Particle 5: Far Right Teal -->
+    <group
+        android:name="group_p5"
+        android:pivotX="178"
+        android:pivotY="90">
+        <path
+            android:name="path_p5"
+            android:pathData="M 178,86.8 A 3.2,3.2 0 1,0 178.01,86.8 Z"
+            android:fillColor="#0C8397" />
+    </group>
+
+    <!-- Funnel Body -->
+    <path
+        android:pathData="M 94,105 L 194,105 L 164,155 L 124,155 Z"
+        android:fillColor="#1B2A2F"
+        android:strokeColor="#2A3A40"
+        android:strokeWidth="2" />
+
+    <!-- Funnel Perforations -->
+    <!-- Row 1 -->
+    <path
+        android:pathData="M 114,118 A 2,2 0 1,0 114.01,118 Z M 129,118 A 2,2 0 1,0 129.01,118 Z M 144,118 A 2,2 0 1,0 144.01,118 Z M 159,118 A 2,2 0 1,0 159.01,118 Z M 174,118 A 2,2 0 1,0 174.01,118 Z"
+        android:fillColor="#0C1417" />
+    <!-- Row 2 -->
+    <path
+        android:pathData="M 124,133 A 2,2 0 1,0 124.01,133 Z M 137,133 A 2,2 0 1,0 137.01,133 Z M 151,133 A 2,2 0 1,0 151.01,133 Z M 164,133 A 2,2 0 1,0 164.01,133 Z"
+        android:fillColor="#0C1417" />
+    <!-- Row 3 -->
+    <path
+        android:pathData="M 134,146 A 1.8,1.8 0 1,0 134.01,146 Z M 144,146 A 1.8,1.8 0 1,0 144.01,146 Z M 154,146 A 1.8,1.8 0 1,0 154.01,146 Z"
+        android:fillColor="#0C1417" />
+
+    <!-- Golden Sieve Mesh Grill at Throat -->
+    <path
+        android:pathData="M 124,155 L 164,155 A 2,2 0 0,1 166,157 L 166,161 A 2,2 0 0,1 164,163 L 124,163 A 2,2 0 0,1 122,161 L 122,157 A 2,2 0 0,1 124,155 Z"
+        android:fillColor="#12252B"
+        android:strokeColor="#FFC93C"
+        android:strokeWidth="1.6" />
+
+    <!-- Vertical Mesh Grill Bars -->
+    <path
+        android:pathData="M 130,155 L 130,163 M 137,155 L 137,163 M 144,155 L 144,163 M 151,155 L 151,163 M 158,155 L 158,163"
+        android:strokeColor="#FFC93C"
+        android:strokeWidth="1.2" />
+
+    <!-- Golden Sieve Laser Beam (Sweeps vertically across throat) -->
+    <group
+        android:name="group_laser"
+        android:pivotX="144"
+        android:pivotY="155">
+        <path
+            android:name="path_laser"
+            android:pathData="M 121,155 L 167,155"
+            android:strokeColor="#FFC93C"
+            android:strokeWidth="2.2"
+            android:strokeAlpha="0.9" />
+    </group>
+
+    <!-- Emerging Organized Output Cards -->
+    <group
+        android:name="group_cards"
+        android:pivotX="144"
+        android:pivotY="163">
+        <!-- Card 1: Main Salt/Gold Slab -->
+        <path
+            android:pathData="M 99,173 L 189,173 A 3,3 0 0,1 192,176 L 192,185 A 3,3 0 0,1 189,188 L 99,188 A 3,3 0 0,1 96,185 L 96,176 A 3,3 0 0,1 99,173 Z"
+            android:fillColor="#FFFFFF" />
+        <!-- Card 1 Golden Spine -->
+        <path
+            android:pathData="M 98,173 L 100,173 A 2,2 0 0,1 102,175 L 102,186 A 2,2 0 0,1 100,188 L 98,188 A 2,2 0 0,1 96,186 L 96,175 A 2,2 0 0,1 98,173 Z"
+            android:fillColor="#FFC93C" />
+        <!-- Card 1 Text Stub -->
+        <path
+            android:pathData="M 106,179 L 142,179"
+            android:strokeColor="#12252B"
+            android:strokeWidth="3"
+            android:strokeLineCap="round" />
+        <!-- Card 1 Badge -->
+        <path
+            android:pathData="M 183,178 A 2.8,2.8 0 1,0 183.01,178 Z"
+            android:fillColor="#FFEDB5" />
+
+        <!-- Card 2: Secondary Salt/Teal Slab -->
+        <path
+            android:pathData="M 105,191 L 183,191 A 3,3 0 0,1 186,194 L 186,201 A 3,3 0 0,1 183,204 L 105,204 A 3,3 0 0,1 102,201 L 102,194 A 3,3 0 0,1 105,191 Z"
+            android:fillColor="#FFFFFF" />
+        <!-- Card 2 Teal Spine -->
+        <path
+            android:pathData="M 104,191 L 106,191 A 2,2 0 0,1 108,193 L 108,202 A 2,2 0 0,1 106,204 L 104,204 A 2,2 0 0,1 102,202 L 102,193 A 2,2 0 0,1 104,191 Z"
+            android:fillColor="#0C8397" />
+        <!-- Card 2 Text Stub -->
+        <path
+            android:pathData="M 112,196.5 L 138,196.5"
+            android:strokeColor="#12252B"
+            android:strokeWidth="2.5"
+            android:strokeLineCap="round" />
+        <!-- Card 2 Badge -->
+        <path
+            android:pathData="M 178,196 A 2.2,2.2 0 1,0 178.01,196 Z"
+            android:fillColor="#A7F3D0" />
+    </group>
+
+</vector>

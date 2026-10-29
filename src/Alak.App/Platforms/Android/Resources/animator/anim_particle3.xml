@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:ordering="together">
+    <objectAnimator
+        android:propertyName="translationY"
+        android:valueFrom="0"
+        android:valueTo="70"
+        android:duration="1000"
+        android:repeatCount="infinite"
+        android:repeatMode="restart"
+        android:interpolator="@android:interpolator/accelerate_quad" />
+    <objectAnimator
+        android:propertyName="translationX"
+        android:valueFrom="0"
+        android:valueTo="-18"
+        android:duration="1000"
+        android:repeatCount="infinite"
+        android:repeatMode="restart"
+        android:interpolator="@android:interpolator/accelerate_quad" />
+    <objectAnimator
+        android:propertyName="scaleX"
+        android:valueFrom="1.0"
+        android:valueTo="0.2"
+        android:duration="1000"
+        android:repeatCount="infinite"
+        android:repeatMode="restart"
+        android:interpolator="@android:interpolator/accelerate_quad" />
+    <objectAnimator
+        android:propertyName="scaleY"
+        android:valueFrom="1.0"
+        android:valueTo="0.2"
+        android:duration="1000"
+        android:repeatCount="infinite"
+        android:repeatMode="restart"
+        android:interpolator="@android:interpolator/accelerate_quad" />
+</set>

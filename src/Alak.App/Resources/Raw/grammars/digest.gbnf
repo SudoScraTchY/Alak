@@ -1,0 +1,11 @@
+root ::= "{" ws "\"headline\"" ws ":" ws string ws "," ws "\"sections\"" ws ":" ws section_list ws ( "," ws "\"follow_ups\"" ws ":" ws string_list )? "}"
+
+section_list ::= "[" ws ( section ( ws "," ws section )* )? ws "]"
+section ::= "{" ws "\"category\"" ws ":" ws category ws "," ws "\"bullets\"" ws ":" ws string_list ws "}"
+
+category ::= "\"offers\"" | "\"work\"" | "\"people\"" | "\"money\"" | "\"orders\"" | "\"security\"" | "\"social\"" | "\"updates\"" | "\"other\""
+
+string_list ::= "[" ws ( string ( ws "," ws string )* )? ws "]"
+string ::= "\"" char* "\""
+char ::= [^"\\\x7F\x00-\x1F] | "\\" (["\\/bfnrt] | "u" [0-9a-fA-F]{4})
+ws ::= [ \t\n\r]*

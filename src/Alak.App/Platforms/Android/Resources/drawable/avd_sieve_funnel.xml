@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/vd_sieve_funnel">
+
+    <target
+        android:name="group_laser"
+        android:animation="@animator/anim_laser" />
+
+    <target
+        android:name="group_p1"
+        android:animation="@animator/anim_particle1" />
+
+    <target
+        android:name="group_p2"
+        android:animation="@animator/anim_particle2" />
+
+    <target
+        android:name="group_p3"
+        android:animation="@animator/anim_particle3" />
+
+    <target
+        android:name="group_p4"
+        android:animation="@animator/anim_particle4" />
+
+    <target
+        android:name="group_p5"
+        android:animation="@animator/anim_particle5" />
+
+    <target
+        android:name="group_cards"
+        android:animation="@animator/anim_cards" />
+
+</animated-vector>

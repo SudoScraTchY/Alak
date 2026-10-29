@@ -2,16 +2,40 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Alak.App.ViewModels"
+             xmlns:services="clr-namespace:Alak.App.Services"
              x:Class="Alak.App.Views.StubDetailPage"
              x:DataType="vm:StubDetailViewModel"
              BackgroundColor="{AppThemeBinding Light={StaticResource Salt}, Dark={StaticResource Night}}"
-             Title="Detail">
+             Shell.NavBarIsVisible="False"
+             Title="Detail"
+             FlowDirection="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=CurrentFlowDirection}">
     <ScrollView>
-        <!-- Stub card - ticket shape per §12.7 -->
-        <Frame Style="{StaticResource Frame.Stub}" 
-               Margin="16,16,16,24"
-               HorizontalOptions="Center"
-               VerticalOptions="Start">
+        <VerticalStackLayout Spacing="0">
+            <!-- Back Button Bar -->
+            <Grid Padding="16,12,16,0">
+                <Border HorizontalOptions="Start"
+                        Style="{StaticResource Chip.Filter}"
+                        Padding="12,6"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource Paper}, Dark={StaticResource SurfaceDark}}"
+                        Stroke="{AppThemeBinding Light={StaticResource Hairline}, Dark={StaticResource HairlineD}}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BackCommand}" />
+                    </Border.GestureRecognizers>
+                    <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                        <Label Text="←" FontSize="14" FontFamily="{StaticResource Font.Bold}" VerticalOptions="Center" />
+                        <Label Text="Back"
+                               Style="{StaticResource Text.Label}"
+                               FontSize="12"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                </Border>
+            </Grid>
+
+            <!-- Stub card - ticket shape per §12.7 -->
+            <Frame Style="{StaticResource Frame.Stub}" 
+                   Margin="16,12,16,24"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Start">
             <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="12">
                 <!-- Top tear edge -->
                 <BoxView Grid.Row="0" HeightRequest="8" 
@@ -114,5 +138,6 @@
                 </Grid>
             </Grid>
         </Frame>
+        </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

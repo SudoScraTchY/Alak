@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Alak.Core.Model;
 using Alak.Storage;
+using Alak.App.Services;
 using System.Collections.ObjectModel;
 
 namespace Alak.App.ViewModels;
@@ -17,6 +18,7 @@ public partial class WalletViewModel : ObservableObject
     private readonly IUserRulesRepository _userRulesRepo;
     private readonly INotificationRepository _notifRepo;
     private readonly Alak.App.Services.INotificationIngestionService _ingestionService;
+    private bool _isLoaded;
 
     [ObservableProperty]
     private ObservableCollection<PromoCodeItem> _expiringSoonCodes = [];
@@ -49,6 +51,8 @@ public partial class WalletViewModel : ObservableObject
     public IRelayCommand<PromoCodeItem> UndoDismissCommand { get; }
     public IRelayCommand<PromoCodeItem> SetReminderCommand { get; }
     public IRelayCommand<PromoCodeItem> EditCodeCommand { get; }
+    public IRelayCommand<PromoCodeItem> ToggleExpandedCommand { get; }
+    public IRelayCommand<PromoCodeItem> ToggleBarcodeFormatCommand { get; }
     public IRelayCommand LoadCommand { get; }
     public IRelayCommand ToggleExpiredSectionCommand { get; }
 
@@ -64,7 +68,7 @@ public partial class WalletViewModel : ObservableObject
         _ingestionService = ingestionService;
         _ingestionService.NotificationIngested += _ =>
         {
-            MainThread.BeginInvokeOnMainThread(async () => await LoadCodes());
+            MainThread.BeginInvokeOnMainThread(async () => await LoadCodes(force: true));
         };
 
         CopyCodeCommand = new RelayCommand<PromoCodeItem>(CopyCode);
@@ -74,12 +78,15 @@ public partial class WalletViewModel : ObservableObject
         UndoDismissCommand = new RelayCommand<PromoCodeItem>(UndoDismiss);
         SetReminderCommand = new RelayCommand<PromoCodeItem>(SetReminder);
         EditCodeCommand = new RelayCommand<PromoCodeItem>(EditCode);
-        LoadCommand = new AsyncRelayCommand(LoadCodes);
+        ToggleExpandedCommand = new RelayCommand<PromoCodeItem>(item => { if (item != null) item.IsExpanded = !item.IsExpanded; });
+        ToggleBarcodeFormatCommand = new RelayCommand<PromoCodeItem>(item => item?.ToggleBarcodeType());
+        LoadCommand = new AsyncRelayCommand(() => LoadCodes(force: true));
         ToggleExpiredSectionCommand = new RelayCommand(() => ShowExpiredSection = !ShowExpiredSection);
     }
 
-    public async Task LoadCodes()
+    public async Task LoadCodes(bool force = false)
     {
+        if (_isLoaded && !force) return;
         IsLoading = true;
         try
         {
@@ -140,6 +147,7 @@ public partial class WalletViewModel : ObservableObject
             OnPropertyChanged(nameof(DismissedCodes));
             OnPropertyChanged(nameof(ExpiredCodes));
             OnPropertyChanged(nameof(SummaryText));
+            _isLoaded = true;
         }
         finally
         {
@@ -170,24 +178,47 @@ public partial class WalletViewModel : ObservableObject
         if (item == null) return;
         try
         {
-            var all = await _notifRepo.GetAllAsync();
-            var notif = all.FirstOrDefault(n =>
-                (!string.IsNullOrEmpty(item.Code.RawCode) && n.ExtractedCode == item.Code.RawCode) ||
-                (!string.IsNullOrEmpty(item.Code.RawCode) && (n.Text.Contains(item.Code.RawCode, StringComparison.OrdinalIgnoreCase) || n.Title.Contains(item.Code.RawCode, StringComparison.OrdinalIgnoreCase))) ||
-                (n.Package == item.Code.Package));
-
-            if (notif != null)
+            Notification? notif = null;
+            if (!string.IsNullOrEmpty(item.Code.NotificationId))
             {
-                await Shell.Current.GoToAsync($"detail?id={notif.Id}");
-                return;
+                notif = await _notifRepo.GetByIdAsync(item.Code.NotificationId);
             }
 
-            var page = Shell.Current?.CurrentPage ?? Application.Current?.Windows[0]?.Page;
-            if (page != null)
+            if (notif == null)
             {
-                await page.DisplayAlertAsync("Promo details",
-                    $"Code: {item.Code.RawCode}\nPackage: {item.Code.Package}\nDiscount: {item.DiscountText}\nExpiry: {item.ValidUntilText}", "OK");
+                var all = await _notifRepo.GetAllAsync();
+                notif = all.FirstOrDefault(n =>
+                    (!string.IsNullOrEmpty(item.Code.RawCode) && string.Equals(n.ExtractedCode, item.Code.RawCode, StringComparison.OrdinalIgnoreCase)) ||
+                    (!string.IsNullOrEmpty(item.Code.CodeNorm) && string.Equals(n.ExtractedCode, item.Code.CodeNorm, StringComparison.OrdinalIgnoreCase)) ||
+                    (!string.IsNullOrEmpty(item.Code.RawCode) && (n.Text.Contains(item.Code.RawCode, StringComparison.OrdinalIgnoreCase) || n.Title.Contains(item.Code.RawCode, StringComparison.OrdinalIgnoreCase))));
             }
+
+            if (notif == null)
+            {
+                var fallbackId = string.IsNullOrEmpty(item.Code.NotificationId)
+                    ? $"promo_{item.Code.Id}"
+                    : item.Code.NotificationId;
+                var notifTitle = !string.IsNullOrEmpty(item.SourceDisplay) ? item.SourceDisplay : item.Code.Package;
+                var notifText = $"{item.DiscountText}\nCode: {item.Code.RawCode}";
+                var timestamp = item.Code.FirstSeenAt > 0
+                    ? DateTimeOffset.FromUnixTimeMilliseconds(item.Code.FirstSeenAt)
+                    : DateTimeOffset.UtcNow;
+                notif = new Notification(
+                    Id: fallbackId,
+                    Package: item.Code.Package,
+                    ChannelName: "Promo Wallet",
+                    Title: notifTitle,
+                    Text: notifText,
+                    Category: "promo",
+                    Timestamp: timestamp,
+                    IsRead: true,
+                    IsPersian: false,
+                    ExtractedCode: item.Code.RawCode
+                );
+                await _notifRepo.AddAsync(notif);
+            }
+
+            await Shell.Current.GoToAsync($"detail?id={Uri.EscapeDataString(notif.Id)}");
         }
         catch (Exception ex)
         {
@@ -375,4 +406,50 @@ public partial class PromoCodeItem : ObservableObject
     public bool IsDismissed => Code.Status == PromoCodeStatus.Dismissed;
     public bool IsExpired => Code.Status == PromoCodeStatus.Expired;
     public bool IsMaybe => Code.Status == PromoCodeStatus.Maybe;
+
+    [ObservableProperty]
+    private bool _isExpanded;
+
+    [ObservableProperty]
+    private Alak.App.Controls.BarcodeType _barcodeType = Alak.App.Controls.BarcodeType.Code128;
+
+    [RelayCommand]
+    public void ToggleExpanded() => IsExpanded = !IsExpanded;
+
+    [RelayCommand]
+    public void ToggleBarcodeType()
+    {
+        BarcodeType = BarcodeType == Alak.App.Controls.BarcodeType.Code128
+            ? Alak.App.Controls.BarcodeType.QrCode
+            : Alak.App.Controls.BarcodeType.Code128;
+    }
+
+    public double DrainFraction
+    {
+        get
+        {
+            if (!Code.ValidUntil.HasValue) return 1.0;
+            var now = DateTimeOffset.UtcNow;
+            var end = Code.ValidUntil.Value;
+            if (now >= end) return 0.0;
+            var start = Code.ValidFrom ?? (Code.FirstSeenAt > 0 ? DateTimeOffset.FromUnixTimeMilliseconds(Code.FirstSeenAt) : end.AddDays(-7));
+            var totalMs = (end - start).TotalMilliseconds;
+            if (totalMs <= 0) return 0.0;
+            var remMs = (end - now).TotalMilliseconds;
+            return Math.Clamp(remMs / totalMs, 0.0, 1.0);
+        }
+    }
+
+    public Color ExpiryBarColor
+    {
+        get
+        {
+            if (!Code.ValidUntil.HasValue) return Color.FromArgb("#B77900");
+            if (Code.ValidUntil.Value <= DateTimeOffset.UtcNow.AddHours(6))
+            {
+                return Color.FromArgb("#DC2626"); // SPEC §12.7 error/danger in final 6 hours
+            }
+            return Color.FromArgb("#B77900"); // Standard gold wallet accent
+        }
+    }
 }

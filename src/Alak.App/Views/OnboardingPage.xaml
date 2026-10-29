@@ -2,25 +2,25 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Alak.App.ViewModels"
+             xmlns:services="clr-namespace:Alak.App.Services"
              x:Class="Alak.App.Views.OnboardingPage"
              x:DataType="vm:OnboardingViewModel"
              Shell.TabBarIsVisible="False"
              Shell.NavBarIsVisible="False"
+             FlowDirection="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=CurrentFlowDirection}"
              BackgroundColor="{AppThemeBinding Light={StaticResource Salt}, Dark={StaticResource Night}}">
 
     <!--
         Onboarding (SPEC §13.1) — full-screen: no tab bar, no nav bar.
-        Rows: progress → centered content → pinned actions. The previous version
-        rendered its content behind the nav bar and over the buttons.
+        Rows: progress → scrollable centered content → pinned actions.
     -->
     <Grid RowDefinitions="Auto,*,Auto"
-          ColumnDefinitions="0.9*,0.1*"
           Padding="24,24,24,24"
-          RowSpacing="32">
+          RowSpacing="20">
 
-        <!-- Progress: five thin segments, filled up to CurrentStep -->
-        <Grid Grid.Row="0" Grid.ColumnSpan="2"
-              ColumnDefinitions="*,*,*,*,*" ColumnSpacing="8">
+        <!-- Progress: seven thin segments, filled up to CurrentStep -->
+        <Grid Grid.Row="0"
+              ColumnDefinitions="*,*,*,*,*,*,*" ColumnSpacing="6">
             <BoxView Grid.Column="0" HeightRequest="3" CornerRadius="1.5"
                      Color="{Binding CurrentStep, Converter={StaticResource StepToColorConverter}, ConverterParameter=0}" />
             <BoxView Grid.Column="1" HeightRequest="3" CornerRadius="1.5"
@@ -31,74 +31,217 @@
                      Color="{Binding CurrentStep, Converter={StaticResource StepToColorConverter}, ConverterParameter=3}" />
             <BoxView Grid.Column="4" HeightRequest="3" CornerRadius="1.5"
                      Color="{Binding CurrentStep, Converter={StaticResource StepToColorConverter}, ConverterParameter=4}" />
+            <BoxView Grid.Column="5" HeightRequest="3" CornerRadius="1.5"
+                     Color="{Binding CurrentStep, Converter={StaticResource StepToColorConverter}, ConverterParameter=5}" />
+            <BoxView Grid.Column="6" HeightRequest="3" CornerRadius="1.5"
+                     Color="{Binding CurrentStep, Converter={StaticResource StepToColorConverter}, ConverterParameter=6}" />
         </Grid>
 
-        <!-- Centered step content -->
-        <Grid Grid.Row="1" Grid.ColumnSpan="2"
-              RowDefinitions="Auto,Auto,Auto" RowSpacing="24"
-              VerticalOptions="Center">
+        <!-- Scrollable centered step content -->
+        <ScrollView Grid.Row="1" VerticalOptions="Center">
+            <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="20" HorizontalOptions="Fill">
 
-            <Label Grid.Row="0"
-                   Text="{Binding StepTitle}"
-                   Style="{StaticResource Text.Display}"
-                   HorizontalOptions="Center"
-                   HorizontalTextAlignment="Center" />
+                <Label Grid.Row="0"
+                       Text="{Binding StepTitle}"
+                       Style="{StaticResource Text.Display}"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center" />
 
-            <Label Grid.Row="1"
-                   Text="{Binding StepDescription}"
-                   Style="{StaticResource Text.Body}"
-                   HorizontalOptions="Center"
-                   HorizontalTextAlignment="Center"
-                   LineBreakMode="WordWrap" />
+                <Label Grid.Row="1"
+                       Text="{Binding StepDescription}"
+                       Style="{StaticResource Text.Body}"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"
+                       LineBreakMode="WordWrap" />
 
-            <!-- Step 1: language -->
-            <Grid Grid.Row="2" RowDefinitions="Auto,Auto" RowSpacing="12"
-                  IsVisible="{Binding CurrentStep, Converter={StaticResource StepEqualsConverter}, ConverterParameter=1}">
-                <Label Grid.Row="0" Text="Display language" Style="{StaticResource Text.Section}" HorizontalOptions="Center" />
-                <Border Grid.Row="1" Style="{StaticResource Card.Row}" HorizontalOptions="Center" WidthRequest="280" Padding="12,4" Margin="0">
-                    <Picker SelectedItem="{Binding SelectedLanguage}" Style="{StaticResource Picker.Standard}">
-                        <Picker.Items>
-                            <x:String>en (English)</x:String>
-                            <x:String>fa (فارسی)</x:String>
-                            <x:String>fa-latn (Finglish)</x:String>
-                        </Picker.Items>
-                    </Picker>
-                </Border>
+                <!-- Step 0: Welcome privacy reassurance -->
+                <Grid Grid.Row="2"
+                      IsVisible="{Binding CurrentStep, Converter={StaticResource StepEqualsConverter}, ConverterParameter=0}"
+                      HorizontalOptions="Center">
+                    <Border Style="{StaticResource Card.Surface}" WidthRequest="300" Padding="16,14" Margin="0">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Privacy &amp; Architecture" Style="{StaticResource Text.Section}" />
+                            <Label Text="• 100% on-device processing" Style="{StaticResource Text.Caption}" />
+                            <Label Text="• Zero network permissions in manifest" Style="{StaticResource Text.Caption}" />
+                            <Label Text="• Encrypted local database (SQLCipher)" Style="{StaticResource Text.Caption}" />
+                            <Label Text="• No data ever leaves your phone" Style="{StaticResource Text.Caption}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Step 1: language -->
+                <Grid Grid.Row="2" RowDefinitions="Auto,Auto" RowSpacing="12"
+                      IsVisible="{Binding CurrentStep, Converter={StaticResource StepEqualsConverter}, ConverterParameter=1}">
+                    <Label Grid.Row="0" Text="Display language" Style="{StaticResource Text.Section}" HorizontalOptions="Center" />
+                    <Border Grid.Row="1" Style="{StaticResource Card.Row}" HorizontalOptions="Center" WidthRequest="280" Padding="12,4" Margin="0">
+                        <Picker SelectedItem="{Binding SelectedLanguage}" Style="{StaticResource Picker.Standard}">
+                            <Picker.Items>
+                                <x:String>en (English)</x:String>
+                                <x:String>fa (فارسی)</x:String>
+                                <x:String>fa-latn (Finglish)</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </Border>
+                </Grid>
+
+                <!-- Step 2: calendar -->
+                <Grid Grid.Row="2" RowDefinitions="Auto,Auto" RowSpacing="12"
+                      IsVisible="{Binding CurrentStep, Converter={StaticResource StepEqualsConverter}, ConverterParameter=2}">
+                    <Label Grid.Row="0" Text="Calendar system" Style="{StaticResource Text.Section}" HorizontalOptions="Center" />
+                    <Border Grid.Row="1" Style="{StaticResource Card.Row}" HorizontalOptions="Center" WidthRequest="280" Padding="12,4" Margin="0">
+                        <Picker SelectedItem="{Binding SelectedCalendar}" Style="{StaticResource Picker.Standard}">
+                            <Picker.Items>
+                                <x:String>jalali (شمسی)</x:String>
+                                <x:String>gregorian</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </Border>
+                </Grid>
+
+                <!-- Step 3: notification access -->
+                <Grid Grid.Row="2" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="12"
+                      IsVisible="{Binding CurrentStep, Converter={StaticResource StepEqualsConverter}, ConverterParameter=3}"
+                      HorizontalOptions="Center" WidthRequest="300">
+
+                    <!-- Status badge -->
+                    <Border Grid.Row="0" Style="{StaticResource Card.Row}" Margin="0" Padding="12,8" HorizontalOptions="Fill">
+                        <Label Text="{Binding NotificationAccessStatusText}"
+                               TextColor="{Binding NotificationAccessStatusColor}"
+                               Style="{StaticResource Text.Label}"
+                               HorizontalOptions="Center" />
+                    </Border>
+
+                    <!-- Grant button -->
+                    <Button Grid.Row="1"
+                            Text="Grant notification access"
+                            Style="{StaticResource Button.Primary}"
+                            WidthRequest="280"
+                            HorizontalOptions="Center"
+                            Command="{Binding OpenNotificationSettingsCommand}" />
+
+                    <!-- Restricted settings helper card -->
+                    <Border Grid.Row="2" Style="{StaticResource Card.Surface}" Margin="0" Padding="14,10" HorizontalOptions="Fill">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Switch greyed out? (Restricted settings)" Style="{StaticResource Text.Section}" />
+                            <Label Text="On Android 13+, sideloaded apps require allowing restricted settings:&#10;1. Tap 'Open App Info' below&#10;2. Tap the ⋮ (three dots) menu in the top corner&#10;3. Tap 'Allow restricted settings'&#10;4. Return here and grant access"
+                                   Style="{StaticResource Text.Caption}"
+                                   LineBreakMode="WordWrap" />
+                            <Button Text="Open App Info"
+                                    Style="{StaticResource Button.Secondary}"
+                                    HorizontalOptions="Fill"
+                                    Margin="0,4,0,0"
+                                    Command="{Binding OpenAppInfoSettingsCommand}" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Refresh status -->
+                    <Button Grid.Row="3"
+                            Text="Check Status"
+                            Style="{StaticResource Button.Ghost}"
+                            HorizontalOptions="Center"
+                            Command="{Binding CheckNotificationAccessCommand}" />
+                </Grid>
+
+                <!-- Step 4: battery optimization -->
+                <Grid Grid.Row="2" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="12"
+                      IsVisible="{Binding CurrentStep, Converter={StaticResource StepEqualsConverter}, ConverterParameter=4}"
+                      HorizontalOptions="Center" WidthRequest="300">
+
+                    <!-- Status badge -->
+                    <Border Grid.Row="0" Style="{StaticResource Card.Row}" Margin="0" Padding="12,8" HorizontalOptions="Fill">
+                        <Label Text="{Binding BatteryOptimizationStatusText}"
+                               TextColor="{Binding BatteryOptimizationStatusColor}"
+                               Style="{StaticResource Text.Label}"
+                               HorizontalOptions="Center" />
+                    </Border>
+
+                    <!-- Disable optimization button -->
+                    <Button Grid.Row="1"
+                            Text="Disable Battery Optimization"
+                            Style="{StaticResource Button.Primary}"
+                            WidthRequest="280"
+                            HorizontalOptions="Center"
+                            Command="{Binding OpenBatteryOptimizationCommand}" />
+
+                    <!-- System battery list button -->
+                    <Button Grid.Row="2"
+                            Text="Open Battery Settings List"
+                            Style="{StaticResource Button.Secondary}"
+                            WidthRequest="280"
+                            HorizontalOptions="Center"
+                            Command="{Binding OpenBatterySettingsListCommand}" />
+
+                    <!-- Refresh status -->
+                    <Button Grid.Row="3"
+                            Text="Check Status"
+                            Style="{StaticResource Button.Ghost}"
+                            HorizontalOptions="Center"
+                            Command="{Binding CheckBatteryOptimizationCommand}" />
+                </Grid>
+
+                <!-- Step 5: background activity & autostart -->
+                <Grid Grid.Row="2" RowDefinitions="Auto,Auto,Auto" RowSpacing="12"
+                      IsVisible="{Binding CurrentStep, Converter={StaticResource StepEqualsConverter}, ConverterParameter=5}"
+                      HorizontalOptions="Center" WidthRequest="300">
+
+                    <!-- Guidance Card -->
+                    <Border Grid.Row="0" Style="{StaticResource Card.Surface}" Margin="0" Padding="14,12" HorizontalOptions="Fill">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="{Binding DetectedManufacturer, StringFormat='Device: {0}'}" Style="{StaticResource Text.Section}" />
+                            <Label Text="{Binding BackgroundProcessGuidance}"
+                                   Style="{StaticResource Text.Caption}"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Open Autostart button -->
+                    <Button Grid.Row="1"
+                            Text="Open Autostart Settings"
+                            Style="{StaticResource Button.Primary}"
+                            WidthRequest="280"
+                            HorizontalOptions="Center"
+                            Command="{Binding OpenAutostartSettingsCommand}" />
+
+                    <!-- Open App Info button -->
+                    <Button Grid.Row="2"
+                            Text="Open App Info"
+                            Style="{StaticResource Button.Secondary}"
+                            WidthRequest="280"
+                            HorizontalOptions="Center"
+                            Command="{Binding OpenAppInfoSettingsCommand}" />
+                </Grid>
+
+                <!-- Step 6: capture depth -->
+                <Grid Grid.Row="2" RowDefinitions="Auto" RowSpacing="12"
+                      IsVisible="{Binding CurrentStep, Converter={StaticResource StepEqualsConverter}, ConverterParameter=6}"
+                      HorizontalOptions="Center" WidthRequest="300">
+
+                    <Border Style="{StaticResource Card.Surface}" Margin="0" Padding="16,14" HorizontalOptions="Fill">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="Default Capture Depth" Style="{StaticResource Text.Section}" />
+                            <Label Text="• Chats, Email, Finance: Full Content" Style="{StaticResource Text.Caption}" />
+                            <Label Text="• Shopping, Social, News: Summary Only" Style="{StaticResource Text.Caption}" />
+                            <Label Text="• System &amp; Other: Excluded" Style="{StaticResource Text.Caption}" />
+                            <Label Text="You can customize capture depth for individual apps and rules anytime in the Rules tab."
+                                   Style="{StaticResource Text.Caption}"
+                                   LineBreakMode="WordWrap"
+                                   Margin="0,4,0,0" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
             </Grid>
-
-            <!-- Step 2: calendar -->
-            <Grid Grid.Row="2" RowDefinitions="Auto,Auto" RowSpacing="12"
-                  IsVisible="{Binding CurrentStep, Converter={StaticResource StepEqualsConverter}, ConverterParameter=2}">
-                <Label Grid.Row="0" Text="Calendar system" Style="{StaticResource Text.Section}" HorizontalOptions="Center" />
-                <Border Grid.Row="1" Style="{StaticResource Card.Row}" HorizontalOptions="Center" WidthRequest="280" Padding="12,4" Margin="0">
-                    <Picker SelectedItem="{Binding SelectedCalendar}" Style="{StaticResource Picker.Standard}">
-                        <Picker.Items>
-                            <x:String>jalali (شمسی)</x:String>
-                            <x:String>gregorian</x:String>
-                        </Picker.Items>
-                    </Picker>
-                </Border>
-            </Grid>
-
-            <!-- Step 3: notification access -->
-            <Grid Grid.Row="2" RowDefinitions="Auto" 
-                  IsVisible="{Binding CurrentStep, Converter={StaticResource StepEqualsConverter}, ConverterParameter=3}">
-                <Button Text="Grant notification access"
-                        Style="{StaticResource Button.Primary}"
-                        WidthRequest="280"
-                        HorizontalOptions="Center"
-                        Command="{Binding NextCommand}" />
-            </Grid>
-        </Grid>
+        </ScrollView>
 
         <!-- Pinned navigation -->
-        <Grid Grid.Row="2" Grid.ColumnSpan="2"
-              ColumnDefinitions="*,*,Auto" ColumnSpacing="12">
+        <Grid Grid.Row="2"
+              ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
             <Button Grid.Column="1"
                     Text="Back"
                     Style="{StaticResource Button.Secondary}"
                     Command="{Binding BackCommand}"
-                    IsVisible="{Binding CurrentStep, Converter={StaticResource StepGreaterThanConverter}, ConverterParameter=0}" />
+                    IsVisible="{Binding CurrentStep, Converter={StaticResource StepGreaterThanConverter}, ConverterParameter=0}"
+                    WidthRequest="100" />
             <Button Grid.Column="2"
                     Text="{Binding NextButtonText}"
                     Style="{StaticResource Button.Primary}"

@@ -80,7 +80,7 @@ public partial class SourcesViewModel : ObservableObject
             
             var action = new UserRuleAction
             {
-                SetCategory = item.SelectedCategory?.ToString(),
+                SetCategory = item.SelectedCategory?.ToString().ToLowerInvariant(),
                 Mute = item.Mute
             };
             
@@ -120,10 +120,9 @@ public partial class SourcesViewModel : ObservableObject
         try
         {
             StatusMessage = "Applying to existing notifications...";
-            // This would be a background batch operation (PER-011)
-            // For now, show the intent
-            await Task.Delay(500);
-            StatusMessage = $"Applied to up to 500 existing notifications for {item.DisplayLabel}";
+            var targetCat = (item.SelectedCategory ?? Category.Other).ToKebabId();
+            var count = await _notificationRepo.UpdateCategoryForPackageAsync(item.PackageName, targetCat);
+            StatusMessage = $"Updated {count} existing notifications for {item.DisplayLabel} to {targetCat}";
         }
         catch (Exception ex)
         {

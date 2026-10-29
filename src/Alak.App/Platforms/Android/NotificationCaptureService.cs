@@ -26,23 +26,35 @@ public sealed class NotificationCaptureService : NotificationListenerService
         base.OnListenerConnected();
         Log.Info(Tag, "NotificationCaptureService connected to Android system");
 
-        // Backfill active notifications on connect (CAP-002)
         try
         {
-            var active = GetActiveNotifications();
-            if (active != null)
-            {
-                Log.Info(Tag, $"Backfilling {active.Length} active notifications");
-                foreach (var sbn in active)
-                {
-                    ProcessNotification(sbn);
-                }
-            }
+            AppLaunchPromoReminderService.Instance.Start(this);
         }
         catch (Exception ex)
         {
-            Log.Error(Tag, $"Error backfilling active notifications: {ex}");
+            Log.Warn(Tag, $"Error starting AppLaunchPromoReminderService: {ex.Message}");
         }
+
+        // Backfill active notifications on connect (CAP-002) in the background to avoid main-thread jank
+        Task.Run(() =>
+        {
+            try
+            {
+                var active = GetActiveNotifications();
+                if (active != null)
+                {
+                    Log.Info(Tag, $"Backfilling {active.Length} active notifications in background");
+                    foreach (var sbn in active)
+                    {
+                        ProcessNotification(sbn);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(Tag, $"Error backfilling active notifications: {ex}");
+            }
+        });
     }
 
     public override void OnListenerDisconnected()
@@ -51,11 +63,34 @@ public sealed class NotificationCaptureService : NotificationListenerService
         Log.Warn(Tag, "NotificationCaptureService disconnected from Android system; requesting rebind");
         try
         {
+            AppLaunchPromoReminderService.Instance.Stop(this);
+        }
+        catch (Exception ex)
+        {
+            Log.Warn(Tag, $"Error stopping AppLaunchPromoReminderService on disconnect: {ex.Message}");
+        }
+
+        try
+        {
             RequestRebind(new ComponentName(this, Java.Lang.Class.FromType(typeof(NotificationCaptureService))));
         }
         catch (Exception ex)
         {
             Log.Error(Tag, $"Error requesting rebind: {ex}");
+        }
+    }
+
+    public override void OnDestroy()
+    {
+        base.OnDestroy();
+        Log.Info(Tag, "NotificationCaptureService destroyed");
+        try
+        {
+            AppLaunchPromoReminderService.Instance.Stop(this);
+        }
+        catch (Exception ex)
+        {
+            Log.Warn(Tag, $"Error stopping AppLaunchPromoReminderService on destroy: {ex.Message}");
         }
     }
 
@@ -146,6 +181,13 @@ public sealed class NotificationCaptureService : NotificationListenerService
                 UserHandle: sbn.User != null ? sbn.User.GetHashCode() : 0
             );
 
+            // Privacy check: exclude communication apps if setting is enabled
+            if (Microsoft.Maui.Storage.Preferences.Get("exclude_communications", false) && CommunicationAppDetector.IsCommunicationNotification(raw))
+            {
+                Log.Info(Tag, $"Skipping communication notification from {raw.Package} per privacy setting.");
+                return;
+            }
+
             Log.Info(Tag, $"Captured notification: [{raw.Package}] '{raw.Title}': '{raw.Text}'");
 
             // Dispatch to ingestion service (fire & forget on background task)
@@ -154,6 +196,12 @@ public sealed class NotificationCaptureService : NotificationListenerService
                 try
                 {
                     var services = AppServices.Current;
+                    for (int i = 0; i < 15 && services == null; i++)
+                    {
+                        await Task.Delay(100);
+                        services = AppServices.Current;
+                    }
+
                     var ingestion = services?.GetService<INotificationIngestionService>();
                     if (ingestion != null)
                     {

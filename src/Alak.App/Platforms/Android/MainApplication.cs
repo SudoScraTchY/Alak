@@ -3,7 +3,11 @@ using Android.Runtime;
 
 namespace Alak.App;
 
-[Application]
+[Application(
+    Icon = "@mipmap/appicon",
+    RoundIcon = "@mipmap/appicon_round",
+    Theme = "@style/AppTheme",
+    SupportsRtl = true)]
 public class MainApplication : MauiApplication
 {
     public MainApplication(IntPtr handle, JniHandleOwnership ownership)

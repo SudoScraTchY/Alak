@@ -15,7 +15,7 @@ public partial class WalletPage : ContentPage
         base.OnAppearing();
         if (BindingContext is WalletViewModel vm)
         {
-            await vm.LoadCodes();
+            await vm.LoadCodes(force: false);
         }
     }
 }

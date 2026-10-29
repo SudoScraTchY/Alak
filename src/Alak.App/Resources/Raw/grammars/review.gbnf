@@ -1,0 +1,10 @@
+root ::= "{" ws "\"items\"" ws ":" ws item_list ws "}"
+
+item_list ::= "[" ws ( item ( ws "," ws item )* )? ws "]"
+item ::= "{" ws "\"id\"" ws ":" ws integer ws "," ws "\"category\"" ws ":" ws category ws "," ws "\"confidence\"" ws ":" ws confidence ws "}"
+
+category ::= "\"offers\"" | "\"work\"" | "\"people\"" | "\"money\"" | "\"orders\"" | "\"security\"" | "\"social\"" | "\"updates\"" | "\"other\""
+confidence ::= "\"low\"" | "\"medium\"" | "\"high\""
+
+integer ::= "-"? [0-9]+
+ws ::= [ \t\n\r]*

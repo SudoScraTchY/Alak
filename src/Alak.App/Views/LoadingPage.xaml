@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Alak.App.Views.LoadingPage"
+             BackgroundColor="#12252B"
+             Shell.NavBarIsVisible="False">
+
+    <Grid BackgroundColor="#12252B"
+          HorizontalOptions="Fill"
+          VerticalOptions="Fill">
+
+        <Grid.GestureRecognizers>
+            <TapGestureRecognizer Tapped="OnTapped" />
+        </Grid.GestureRecognizers>
+
+        <!-- Ambient Glow Background -->
+        <BoxView HorizontalOptions="Center"
+                 VerticalOptions="Center"
+                 TranslationY="-90"
+                 WidthRequest="220"
+                 HeightRequest="220"
+                 CornerRadius="110"
+                 Color="#162A30"
+                 Opacity="0.6" />
+
+        <!-- Main Animation Container -->
+        <VerticalStackLayout HorizontalOptions="Center"
+                             VerticalOptions="Center"
+                             Spacing="0"
+                             WidthRequest="320">
+
+            <!-- ZONE 1 & 2: Funnel + Sieve Grill + Laser Area (Height 165) -->
+            <Grid HeightRequest="165"
+                  WidthRequest="320"
+                  HorizontalOptions="Center">
+
+                <!-- Funnel Body: Top width 160, Throat width 64, Height 70 -->
+                <Path HorizontalOptions="Center"
+                      VerticalOptions="End"
+                      TranslationY="-30"
+                      Aspect="Uniform"
+                      WidthRequest="160"
+                      HeightRequest="70"
+                      Stroke="#243339"
+                      StrokeThickness="2"
+                      Data="M 0,0 L 160,0 L 112,70 L 48,70 Z">
+                    <Path.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Color="#1B2A2F" Offset="0.0" />
+                            <GradientStop Color="#12252B" Offset="1.0" />
+                        </LinearGradientBrush>
+                    </Path.Fill>
+                </Path>
+
+                <!-- Perforations inside funnel -->
+                <Grid HorizontalOptions="Center"
+                      VerticalOptions="End"
+                      TranslationY="-45"
+                      RowDefinitions="Auto,Auto,Auto"
+                      RowSpacing="8">
+                    <!-- Row 1 -->
+                    <HorizontalStackLayout Grid.Row="0" Spacing="16" HorizontalOptions="Center">
+                        <BoxView WidthRequest="5" HeightRequest="5" CornerRadius="2.5" Color="#0C1417" />
+                        <BoxView WidthRequest="5" HeightRequest="5" CornerRadius="2.5" Color="#0C1417" />
+                        <BoxView WidthRequest="5" HeightRequest="5" CornerRadius="2.5" Color="#0C1417" />
+                        <BoxView WidthRequest="5" HeightRequest="5" CornerRadius="2.5" Color="#0C1417" />
+                        <BoxView WidthRequest="5" HeightRequest="5" CornerRadius="2.5" Color="#0C1417" />
+                    </HorizontalStackLayout>
+                    <!-- Row 2 -->
+                    <HorizontalStackLayout Grid.Row="1" Spacing="14" HorizontalOptions="Center">
+                        <BoxView WidthRequest="5" HeightRequest="5" CornerRadius="2.5" Color="#0C1417" />
+                        <BoxView WidthRequest="5" HeightRequest="5" CornerRadius="2.5" Color="#0C1417" />
+                        <BoxView WidthRequest="5" HeightRequest="5" CornerRadius="2.5" Color="#0C1417" />
+                        <BoxView WidthRequest="5" HeightRequest="5" CornerRadius="2.5" Color="#0C1417" />
+                    </HorizontalStackLayout>
+                    <!-- Row 3 -->
+                    <HorizontalStackLayout Grid.Row="2" Spacing="12" HorizontalOptions="Center">
+                        <BoxView WidthRequest="5" HeightRequest="5" CornerRadius="2.5" Color="#0C1417" />
+                        <BoxView WidthRequest="5" HeightRequest="5" CornerRadius="2.5" Color="#0C1417" />
+                        <BoxView WidthRequest="5" HeightRequest="5" CornerRadius="2.5" Color="#0C1417" />
+                    </HorizontalStackLayout>
+                </Grid>
+
+                <!-- Golden Mesh Grill at Throat (Width 64, Height 10) -->
+                <Border HorizontalOptions="Center"
+                        VerticalOptions="End"
+                        TranslationY="-22"
+                        WidthRequest="64"
+                        HeightRequest="10"
+                        Stroke="#FFC93C"
+                        StrokeThickness="1.8"
+                        StrokeShape="RoundRectangle 3"
+                        BackgroundColor="#12252B">
+                    <Grid ColumnDefinitions="*,*,*,*,*" Margin="2,0">
+                        <BoxView Grid.Column="0" WidthRequest="1.2" Color="#FFC93C" HorizontalOptions="Center" />
+                        <BoxView Grid.Column="1" WidthRequest="1.2" Color="#FFC93C" HorizontalOptions="Center" />
+                        <BoxView Grid.Column="2" WidthRequest="1.6" Color="#FFC93C" HorizontalOptions="Center" />
+                        <BoxView Grid.Column="3" WidthRequest="1.2" Color="#FFC93C" HorizontalOptions="Center" />
+                        <BoxView Grid.Column="4" WidthRequest="1.2" Color="#FFC93C" HorizontalOptions="Center" />
+                    </Grid>
+                </Border>
+
+                <!-- Sieve Laser Sweep -->
+                <BoxView x:Name="LaserBeam"
+                         HorizontalOptions="Center"
+                         VerticalOptions="End"
+                         TranslationY="-27"
+                         WidthRequest="100"
+                         HeightRequest="2"
+                         Color="#FFC93C"
+                         Opacity="0.8" />
+
+                <!-- Incoming Particles (Symmetrically distributed above mouth) -->
+                <!-- Center Particle -->
+                <Border x:Name="ParticleCenter"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Start"
+                        TranslationX="0"
+                        TranslationY="0"
+                        WidthRequest="12"
+                        HeightRequest="12"
+                        StrokeShape="RoundRectangle 6"
+                        BackgroundColor="#FFC93C"
+                        Stroke="Transparent" />
+
+                <!-- Left-Mid Particle -->
+                <Border x:Name="ParticleLeftMid"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Start"
+                        TranslationX="-35"
+                        TranslationY="5"
+                        WidthRequest="12"
+                        HeightRequest="12"
+                        StrokeShape="RoundRectangle 6"
+                        BackgroundColor="#B98CFF"
+                        Stroke="Transparent" />
+
+                <!-- Right-Mid Particle -->
+                <Border x:Name="ParticleRightMid"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Start"
+                        TranslationX="35"
+                        TranslationY="5"
+                        WidthRequest="12"
+                        HeightRequest="12"
+                        StrokeShape="RoundRectangle 6"
+                        BackgroundColor="#3CC8DD"
+                        Stroke="Transparent" />
+
+                <!-- Outer-Left Particle -->
+                <Border x:Name="ParticleOuterLeft"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Start"
+                        TranslationX="-65"
+                        TranslationY="12"
+                        WidthRequest="10"
+                        HeightRequest="10"
+                        StrokeShape="RoundRectangle 5"
+                        BackgroundColor="#FF9A57"
+                        Stroke="Transparent" />
+
+                <!-- Outer-Right Particle -->
+                <Border x:Name="ParticleOuterRight"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Start"
+                        TranslationX="65"
+                        TranslationY="12"
+                        WidthRequest="10"
+                        HeightRequest="10"
+                        StrokeShape="RoundRectangle 5"
+                        BackgroundColor="#8CE8FF"
+                        Stroke="Transparent" />
+
+            </Grid>
+
+            <!-- ZONE 3: Three Clean Notification Cards (Stacked with 10px spacing) -->
+            <VerticalStackLayout Spacing="10"
+                                 HorizontalOptions="Center"
+                                 WidthRequest="280"
+                                 Margin="0,10,0,0">
+
+                <!-- CARD 1: WALLET / PROMO CODE (Docked at top) -->
+                <Border x:Name="CardWallet"
+                        HeightRequest="48"
+                        WidthRequest="280"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 8"
+                        Stroke="Transparent"
+                        Opacity="0"
+                        TranslationY="-25">
+                    <Border.Shadow>
+                        <Shadow Brush="#000000" Offset="0,4" Radius="6" Opacity="0.3" />
+                    </Border.Shadow>
+                    <Grid ColumnDefinitions="Auto,*,Auto" VerticalOptions="Fill" HorizontalOptions="Fill">
+                        <!-- Gold Spine -->
+                        <BoxView Grid.Column="0" WidthRequest="7" Color="#FFC93C" />
+                        <!-- Content -->
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="12,0" Spacing="1">
+                            <Label Text="SNAPP50" FontFamily="JetBrainsMono" FontSize="13" FontAttributes="Bold" TextColor="#12252B" CharacterSpacing="1" />
+                            <Label Text="50% off ride promo" FontFamily="Vazirmatn" FontSize="9" TextColor="#4A5D64" />
+                        </VerticalStackLayout>
+                        <!-- Badge -->
+                        <Border Grid.Column="2" VerticalOptions="Center" Margin="0,0,10,0" Padding="8,3" BackgroundColor="#FFEDB5" StrokeShape="RoundRectangle 4" Stroke="Transparent">
+                            <Label Text="WALLET" FontSize="9" FontAttributes="Bold" TextColor="#B77900" />
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- CARD 2: OFFERS (Middle card) -->
+                <Border x:Name="CardOffers"
+                        HeightRequest="48"
+                        WidthRequest="280"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 8"
+                        Stroke="Transparent"
+                        Opacity="0"
+                        TranslationY="-25">
+                    <Border.Shadow>
+                        <Shadow Brush="#000000" Offset="0,4" Radius="6" Opacity="0.3" />
+                    </Border.Shadow>
+                    <Grid ColumnDefinitions="Auto,*,Auto" VerticalOptions="Fill" HorizontalOptions="Fill">
+                        <!-- Purple Spine -->
+                        <BoxView Grid.Column="0" WidthRequest="7" Color="#8248D6" />
+                        <!-- Content -->
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="12,0" Spacing="1">
+                            <Label Text="Digikala · Flash Sale" FontFamily="VazirmatnBold" FontSize="12" TextColor="#12252B" />
+                            <Label Text="Special discount up to 70%" FontFamily="Vazirmatn" FontSize="9" TextColor="#4A5D64" />
+                        </VerticalStackLayout>
+                        <!-- Badge -->
+                        <Border Grid.Column="2" VerticalOptions="Center" Margin="0,0,10,0" Padding="8,3" BackgroundColor="#F0E7FC" StrokeShape="RoundRectangle 4" Stroke="Transparent">
+                            <Label Text="OFFERS" FontSize="9" FontAttributes="Bold" TextColor="#8248D6" />
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- CARD 3: MONEY (Bottom card) -->
+                <Border x:Name="CardMoney"
+                        HeightRequest="48"
+                        WidthRequest="280"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 8"
+                        Stroke="Transparent"
+                        Opacity="0"
+                        TranslationY="-25">
+                    <Border.Shadow>
+                        <Shadow Brush="#000000" Offset="0,4" Radius="6" Opacity="0.3" />
+                    </Border.Shadow>
+                    <Grid ColumnDefinitions="Auto,*,Auto" VerticalOptions="Fill" HorizontalOptions="Fill">
+                        <!-- Teal Spine -->
+                        <BoxView Grid.Column="0" WidthRequest="7" Color="#0C8397" />
+                        <!-- Content -->
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="12,0" Spacing="1">
+                            <Label Text="Mellat Bank · Deposit" FontFamily="VazirmatnBold" FontSize="12" TextColor="#12252B" />
+                            <Label Text="+250,000 Toman received" FontFamily="Vazirmatn" FontSize="9" TextColor="#4A5D64" />
+                        </VerticalStackLayout>
+                        <!-- Badge -->
+                        <Border Grid.Column="2" VerticalOptions="Center" Margin="0,0,10,0" Padding="8,3" BackgroundColor="#D8F0F4" StrokeShape="RoundRectangle 4" Stroke="Transparent">
+                            <Label Text="MONEY" FontSize="9" FontAttributes="Bold" TextColor="#0C8397" />
+                        </Border>
+                    </Grid>
+                </Border>
+
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+
+    </Grid>
+
+</ContentPage>

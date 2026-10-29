@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Alak.App.ViewModels"
+             xmlns:services="clr-namespace:Alak.App.Services"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="Alak.App.Views.DigestPage"
+             x:DataType="vm:DigestViewModel"
+             Title="Digest"
+             Shell.NavBarIsVisible="False"
+             FlowDirection="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=CurrentFlowDirection}"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Salt}, Dark={StaticResource Night}}">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="16" Padding="16,12,16,28">
+
+            <!-- ===== HEADER ===== -->
+            <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                <VerticalStackLayout Grid.Column="0" Spacing="2">
+                    <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Digest_Title]}"
+                           Style="{StaticResource Text.Title}"
+                           FontFamily="{StaticResource Font.Bold}" />
+                    <Label Text="{Binding NotificationCountSummary}"
+                           Style="{StaticResource Text.Caption}" />
+                </VerticalStackLayout>
+
+                <Button Grid.Column="1"
+                        Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Digest_CopyAll]}"
+                        Style="{StaticResource Button.Secondary}"
+                        HeightRequest="36"
+                        Padding="12,0"
+                        FontSize="12"
+                        Command="{Binding CopyAllCommand}"
+                        IsVisible="{Binding HasNotifications}" />
+            </Grid>
+
+            <!-- ===== MODE SELECTOR (Segmented Control §13.5) ===== -->
+            <Border StrokeThickness="1"
+                    Stroke="{AppThemeBinding Light={StaticResource Hairline}, Dark={StaticResource HairlineD}}"
+                    StrokeShape="RoundRectangle 8"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Paper}, Dark={StaticResource SurfaceDark}}"
+                    Padding="4">
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="4">
+                    <!-- AI Digest Button (Primary) -->
+                    <Border Grid.Column="0"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 6"
+                            BackgroundColor="{Binding IsAiMode, Converter={StaticResource BoolToActiveTabColorConverter}}"
+                            Padding="8,8">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding SelectAiModeCommand}" />
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout HorizontalOptions="Center" Spacing="6">
+                            <Label Text="✨" FontSize="13" VerticalOptions="Center" />
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Digest_ModeAi]}"
+                                   Style="{StaticResource Text.Label}"
+                                   TextColor="{Binding IsAiMode, Converter={StaticResource BoolToActiveTabColorConverter}, ConverterParameter='text'}"
+                                   FontSize="12"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- Rules Digest Button -->
+                    <Border Grid.Column="1"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 6"
+                            BackgroundColor="{Binding IsRulesMode, Converter={StaticResource BoolToActiveTabColorConverter}}"
+                            Padding="8,8">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding SelectRulesModeCommand}" />
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout HorizontalOptions="Center" Spacing="6">
+                            <Label Text="⚡" FontSize="13" VerticalOptions="Center" />
+                            <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Digest_ModeRules]}"
+                                   Style="{StaticResource Text.Label}"
+                                   TextColor="{Binding IsRulesMode, Converter={StaticResource BoolToActiveTabColorConverter}, ConverterParameter='text'}"
+                                   FontSize="12"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- ===== PERIOD SELECTOR PILLS ===== -->
+            <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+                <!-- Today Pill -->
+                <Border Style="{StaticResource Chip.Filter}"
+                        BackgroundColor="{Binding IsPeriodToday, Converter={StaticResource BoolToActiveTabColorConverter}}"
+                        Stroke="{Binding IsPeriodToday, Converter={StaticResource BoolToActiveTabColorConverter}, ConverterParameter='stroke'}"
+                        Padding="14,6">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SelectPeriodCommand}" CommandParameter="today" />
+                    </Border.GestureRecognizers>
+                    <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Digest_PeriodToday]}"
+                           Style="{StaticResource Text.Label}"
+                           TextColor="{Binding IsPeriodToday, Converter={StaticResource BoolToActiveTabColorConverter}, ConverterParameter='text'}"
+                           FontSize="12"
+                           VerticalOptions="Center" />
+                </Border>
+
+                <!-- Yesterday Pill -->
+                <Border Style="{StaticResource Chip.Filter}"
+                        BackgroundColor="{Binding IsPeriodYesterday, Converter={StaticResource BoolToActiveTabColorConverter}}"
+                        Stroke="{Binding IsPeriodYesterday, Converter={StaticResource BoolToActiveTabColorConverter}, ConverterParameter='stroke'}"
+                        Padding="14,6">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SelectPeriodCommand}" CommandParameter="yesterday" />
+                    </Border.GestureRecognizers>
+                    <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Digest_PeriodYesterday]}"
+                           Style="{StaticResource Text.Label}"
+                           TextColor="{Binding IsPeriodYesterday, Converter={StaticResource BoolToActiveTabColorConverter}, ConverterParameter='text'}"
+                           FontSize="12"
+                           VerticalOptions="Center" />
+                </Border>
+
+                <!-- Past 7 Days Pill -->
+                <Border Style="{StaticResource Chip.Filter}"
+                        BackgroundColor="{Binding IsPeriodWeek, Converter={StaticResource BoolToActiveTabColorConverter}}"
+                        Stroke="{Binding IsPeriodWeek, Converter={StaticResource BoolToActiveTabColorConverter}, ConverterParameter='stroke'}"
+                        Padding="14,6">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SelectPeriodCommand}" CommandParameter="week" />
+                    </Border.GestureRecognizers>
+                    <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Digest_Period7Days]}"
+                           Style="{StaticResource Text.Label}"
+                           TextColor="{Binding IsPeriodWeek, Converter={StaticResource BoolToActiveTabColorConverter}, ConverterParameter='text'}"
+                           FontSize="12"
+                           VerticalOptions="Center" />
+                </Border>
+            </HorizontalStackLayout>
+
+            <!-- ===== AI MODE ACTION & STATUS PANEL ===== -->
+            <VerticalStackLayout Spacing="10" IsVisible="{Binding IsAiMode}">
+                <!-- Deep SLM Generate Button when model is installed -->
+                <Button Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Digest_Generate]}"
+                        Style="{StaticResource Button.Primary}"
+                        Command="{Binding GenerateDigestCommand}"
+                        IsVisible="{Binding IsGenerating, Converter={StaticResource InverseBoolConverter}}"
+                        IsEnabled="{Binding IsModelInstalled}"
+                        HorizontalOptions="Fill" />
+
+                <!-- Local model status banner if no model is installed -->
+                <Border Style="{StaticResource Card.Row}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Promo}, Dark={StaticResource Tint.Promo.Dark}}"
+                        Stroke="{AppThemeBinding Light={StaticResource Mark.Promo}, Dark={StaticResource Mark.Promo.Dark}}"
+                        IsVisible="{Binding IsModelInstalled, Converter={StaticResource InverseBoolConverter}}"
+                        Padding="14">
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12" VerticalOptions="Center">
+                        <Label Grid.Column="0"
+                               Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Digest_NoModel]}"
+                               Style="{StaticResource Text.Caption}"
+                               VerticalOptions="Center" />
+                        <Button Grid.Column="1"
+                                Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Digest_ManageModels]}"
+                                Style="{StaticResource Button.Secondary}"
+                                HeightRequest="34"
+                                Padding="10,0"
+                                FontSize="11"
+                                Command="{Binding OpenModelsCommand}"
+                                VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+                <!-- In-Progress & Cancel (SLM-008) -->
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12" IsVisible="{Binding IsGenerating}">
+                    <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                        <ActivityIndicator IsRunning="{Binding IsGenerating}"
+                                           Color="{AppThemeBinding Light={StaticResource Mark.Work}, Dark={StaticResource Mark.Work.Dark}}"
+                                           WidthRequest="24"
+                                           HeightRequest="24" />
+                        <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Digest_Generating]}"
+                               Style="{StaticResource Text.BodySecondary}"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    <Button Grid.Column="1"
+                            Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Digest_Cancel]}"
+                            Style="{StaticResource Button.Secondary}"
+                            HeightRequest="36"
+                            Padding="12,0"
+                            Command="{Binding CancelGenerationCommand}" />
+                </Grid>
+
+                <!-- Streaming text card -->
+                <Border Style="{StaticResource Card.Row}"
+                        Padding="12"
+                        IsVisible="{Binding IsStreaming}">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Live SLM Generation" Style="{StaticResource Text.Caption}" FontFamily="{StaticResource Font.SemiBold}" />
+                        <Label Text="{Binding StreamingText}"
+                               Style="{StaticResource Text.Code}"
+                               FontSize="13"
+                               LineBreakMode="WordWrap" />
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+
+            <!-- ===== QUICK INSIGHTS CARDS ===== -->
+            <VerticalStackLayout Spacing="8" IsVisible="{Binding HasInsightCards}">
+                <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Digest_QuickInsights]}"
+                       Style="{StaticResource Text.Label}"
+                       FontFamily="{StaticResource Font.Bold}" />
+                <FlexLayout BindableLayout.ItemsSource="{Binding InsightCards}" Wrap="Wrap" JustifyContent="SpaceBetween">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="vm:DigestInsightCard">
+                            <Border Style="{StaticResource Card.Row}"
+                                    BackgroundColor="{Binding TintColor}"
+                                    Stroke="{Binding BadgeColor}"
+                                    StrokeThickness="1"
+                                    Padding="10,8"
+                                    Margin="0,0,0,8"
+                                    WidthRequest="165"
+                                    FlexLayout.Grow="1">
+                                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                                    <Label Text="{Binding Icon}" FontSize="18" VerticalOptions="Center" />
+                                    <VerticalStackLayout Spacing="2" VerticalOptions="Center">
+                                        <Label Text="{Binding Title}" Style="{StaticResource Text.Label}" FontSize="12" FontFamily="{StaticResource Font.Bold}" TextColor="{Binding BadgeColor}" />
+                                        <Label Text="{Binding Summary}" Style="{StaticResource Text.Caption}" FontSize="11" LineBreakMode="WordWrap" />
+                                    </VerticalStackLayout>
+                                </HorizontalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+            </VerticalStackLayout>
+
+            <!-- ===== ACTION ITEMS & FOLLOW-UPS ===== -->
+            <Border Style="{StaticResource Card.Row}"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Promo}, Dark={StaticResource Tint.Promo.Dark}}"
+                    Stroke="{AppThemeBinding Light={StaticResource Mark.Promo}, Dark={StaticResource Mark.Promo.Dark}}"
+                    StrokeThickness="1.5"
+                    Padding="14"
+                    IsVisible="{Binding HasFollowUps}">
+                <VerticalStackLayout Spacing="10">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" VerticalOptions="Center">
+                        <Label Text="💡" FontSize="16" VerticalOptions="Center" />
+                        <Label Grid.Column="1"
+                               Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Digest_ActionItems]}"
+                               Style="{StaticResource Text.Label}"
+                               FontFamily="{StaticResource Font.Bold}"
+                               TextColor="{AppThemeBinding Light={StaticResource Mark.Promo}, Dark={StaticResource Mark.Promo.Dark}}"
+                               VerticalOptions="Center" />
+                    </Grid>
+                    <BoxView HeightRequest="0.5" Color="{AppThemeBinding Light={StaticResource Hairline}, Dark={StaticResource HairlineD}}" />
+                    <VerticalStackLayout Spacing="6" BindableLayout.ItemsSource="{Binding FollowUps}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                    <Label Text="✓" TextColor="{AppThemeBinding Light={StaticResource Mark.Promo}, Dark={StaticResource Mark.Promo.Dark}}" FontAttributes="Bold" FontSize="13" VerticalOptions="Start" />
+                                    <Label Grid.Column="1"
+                                           Text="{Binding .}"
+                                           Style="{StaticResource Text.BodySecondary}"
+                                           FontAttributes="Bold"
+                                           LineBreakMode="WordWrap" />
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- ===== HEADLINE CARD ===== -->
+            <Border Style="{StaticResource Card.Row}"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Work}, Dark={StaticResource Tint.Work.Dark}}"
+                    Stroke="{AppThemeBinding Light={StaticResource Mark.Work}, Dark={StaticResource Mark.Work.Dark}}"
+                    StrokeThickness="1"
+                    Padding="14,12"
+                    IsVisible="{Binding Headline, Converter={StaticResource StringNotEmptyConverter}}">
+                <Label Text="{Binding Headline}"
+                       Style="{StaticResource Text.Body}"
+                       FontFamily="{StaticResource Font.Bold}"
+                       LineBreakMode="WordWrap" />
+            </Border>
+
+            <!-- ===== CATEGORIZED BULLETED SECTIONS ===== -->
+            <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding Sections}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="vm:DigestSectionItem">
+                        <Border Style="{StaticResource Card.Row}"
+                                Stroke="{Binding CategoryMarkColor}"
+                                StrokeThickness="1"
+                                Padding="14">
+                            <VerticalStackLayout Spacing="10">
+                                <!-- Section Header: Mark indicator + Category title + Copy button -->
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8" VerticalOptions="Center">
+                                    <BoxView Grid.Column="0"
+                                             WidthRequest="10" HeightRequest="10"
+                                             CornerRadius="5"
+                                             Color="{Binding CategoryMarkColor}"
+                                             VerticalOptions="Center" />
+                                    <Label Grid.Column="1"
+                                           Text="{Binding CategoryLabel}"
+                                           Style="{StaticResource Text.Label}"
+                                           FontFamily="{StaticResource Font.Bold}"
+                                           FontSize="15"
+                                           VerticalOptions="Center" />
+                                    <Button Grid.Column="2"
+                                            Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Digest_CopySection]}"
+                                            Style="{StaticResource Button.Secondary}"
+                                            HeightRequest="30"
+                                            Padding="10,0"
+                                            FontSize="11"
+                                            Command="{Binding CopySectionCommand}" />
+                                </Grid>
+
+                                <BoxView HeightRequest="0.5" Color="{AppThemeBinding Light={StaticResource Divider}, Dark={StaticResource HairlineD}}" />
+
+                                <!-- Bullets list -->
+                                <VerticalStackLayout Spacing="6" BindableLayout.ItemsSource="{Binding Bullets}">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate x:DataType="x:String">
+                                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                                <Label Text="•" FontSize="14" Opacity="0.7" VerticalOptions="Start" />
+                                                <Label Grid.Column="1"
+                                                       Text="{Binding .}"
+                                                       Style="{StaticResource Text.BodySecondary}"
+                                                       LineBreakMode="WordWrap" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

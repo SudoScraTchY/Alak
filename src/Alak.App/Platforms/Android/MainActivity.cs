@@ -6,6 +6,8 @@ namespace Alak.App;
 
 [Activity(
     Label = "Alak",
+    Icon = "@mipmap/appicon",
+    RoundIcon = "@mipmap/appicon_round",
     MainLauncher = true,
     Exported = true,
     Theme = "@style/AppTheme",
@@ -33,6 +35,15 @@ public class MainActivity : MauiAppCompatActivity
         {
             Android.Util.Log.Warn("AlakMainActivity", $"RequestRebind failed: {ex.Message}");
         }
+
+        try
+        {
+            Platforms.Android.AppLaunchPromoReminderService.Instance.Start(this);
+        }
+        catch (System.Exception ex)
+        {
+            Android.Util.Log.Warn("AlakMainActivity", $"Start AppLaunchPromoReminderService failed: {ex.Message}");
+        }
         HandleIntent(Intent);
     }
 
@@ -47,13 +58,17 @@ public class MainActivity : MauiAppCompatActivity
         var route = intent?.GetStringExtra("route");
         if (!string.IsNullOrEmpty(route))
         {
-            Microsoft.Maui.Controls.Application.Current?.Dispatcher.Dispatch(async () =>
+            if (Microsoft.Maui.Controls.Shell.Current != null)
             {
-                if (Microsoft.Maui.Controls.Shell.Current != null)
+                Microsoft.Maui.Controls.Application.Current?.Dispatcher.Dispatch(async () =>
                 {
                     await Microsoft.Maui.Controls.Shell.Current.GoToAsync(route);
-                }
-            });
+                });
+            }
+            else
+            {
+                App.PendingRoute = route;
+            }
         }
     }
 }

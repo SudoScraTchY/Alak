@@ -1,4 +1,6 @@
+using System;
 using Alak.App.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Controls;
 
 namespace Alak.App.Views;
@@ -6,6 +8,10 @@ namespace Alak.App.Views;
 public partial class StubDetailPage : ContentPage, IQueryAttributable
 {
     private string? _loadedId;
+
+    public StubDetailPage() : this(AppServices.Current?.GetRequiredService<StubDetailViewModel>()!)
+    {
+    }
 
     public StubDetailPage(StubDetailViewModel viewModel)
     {
@@ -17,10 +23,11 @@ public partial class StubDetailPage : ContentPage, IQueryAttributable
     {
         if (query.TryGetValue("id", out var idObj) && idObj is string id && !string.IsNullOrEmpty(id))
         {
-            if (_loadedId != id && BindingContext is StubDetailViewModel vm)
+            var unescapedId = Uri.UnescapeDataString(id);
+            if (_loadedId != unescapedId && BindingContext is StubDetailViewModel vm)
             {
-                _loadedId = id;
-                _ = vm.LoadAsync(id);
+                _loadedId = unescapedId;
+                _ = vm.LoadAsync(unescapedId);
             }
         }
     }
@@ -38,11 +45,15 @@ public partial class StubDetailPage : ContentPage, IQueryAttributable
                 if (qIdx >= 0 && qIdx < loc.Length - 1)
                 {
                     var query = loc.Substring(qIdx);
-                    var id = System.Web.HttpUtility.ParseQueryString(query)["id"];
-                    if (!string.IsNullOrEmpty(id) && _loadedId != id)
+                    var rawId = System.Web.HttpUtility.ParseQueryString(query)["id"];
+                    if (!string.IsNullOrEmpty(rawId))
                     {
-                        _loadedId = id;
-                        await vm.LoadAsync(id);
+                        var unescapedId = Uri.UnescapeDataString(rawId);
+                        if (_loadedId != unescapedId)
+                        {
+                            _loadedId = unescapedId;
+                            await vm.LoadAsync(unescapedId);
+                        }
                     }
                 }
             }

@@ -2,9 +2,14 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Alak.Core.Model;
 using Alak.Storage;
+using Alak.App.Design;
+using Microsoft.Maui.Graphics;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System;
 
 namespace Alak.App.ViewModels;
 
@@ -14,8 +19,10 @@ public partial class RulesViewModel : ObservableObject
 
     // Static helpers for picker ItemsSource
     public static IEnumerable<Category> CategoryValues => Enum.GetValues<Category>();
+    public static IEnumerable<Category> AvailableCategories => Enum.GetValues<Category>();
     public static IEnumerable<UserRuleActionType> RuleActionValues => Enum.GetValues<UserRuleActionType>();
     public static IEnumerable<RuleMatchMode> RuleMatchModeValues => Enum.GetValues<RuleMatchMode>();
+    public static IEnumerable<CaptureDepth> AvailableCaptureDepths => Enum.GetValues<CaptureDepth>();
 
     [ObservableProperty]
     private ObservableCollection<UserRuleViewModel> _rules = new();
@@ -24,7 +31,26 @@ public partial class RulesViewModel : ObservableObject
     private bool _isLoading;
 
     [ObservableProperty]
+    private string _newRulePackage = "";
+
+    partial void OnNewRulePackageChanged(string value)
+    {
+        if (AddRuleCommand is AsyncRelayCommand cmd)
+        {
+            cmd.NotifyCanExecuteChanged();
+        }
+    }
+
+    [ObservableProperty]
     private string _newRulePattern = "";
+
+    partial void OnNewRulePatternChanged(string value)
+    {
+        if (AddRuleCommand is AsyncRelayCommand cmd)
+        {
+            cmd.NotifyCanExecuteChanged();
+        }
+    }
 
     [ObservableProperty]
     private Category _newRuleCategory = Category.Offers;
@@ -46,19 +72,23 @@ public partial class RulesViewModel : ObservableObject
     public ICommand ToggleRuleCommand { get; }
     public ICommand ReorderRulesCommand { get; }
     public ICommand LoadRulesCommand { get; }
+    public ICommand BackCommand { get; }
 
     public RulesViewModel(IUserRulesRepository rulesRepo)
     {
         _rulesRepo = rulesRepo;
 
-        AddRuleCommand = new AsyncRelayCommand(AddRuleAsync, () => !string.IsNullOrWhiteSpace(NewRulePattern));
+        AddRuleCommand = new AsyncRelayCommand(AddRuleAsync, CanAddRule);
         DeleteRuleCommand = new AsyncRelayCommand<UserRuleViewModel>(DeleteRuleAsync);
         ToggleRuleCommand = new AsyncRelayCommand<UserRuleViewModel>(ToggleRuleAsync);
         ReorderRulesCommand = new AsyncRelayCommand(ReorderRulesAsync);
         LoadRulesCommand = new AsyncRelayCommand(LoadRulesAsync);
+        BackCommand = new AsyncRelayCommand(async () => await Shell.Current.GoToAsync(".."));
 
         _ = LoadRulesAsync();
     }
+
+    private bool CanAddRule() => !string.IsNullOrWhiteSpace(NewRulePattern) || !string.IsNullOrWhiteSpace(NewRulePackage);
 
     private async Task LoadRulesAsync()
     {
@@ -80,11 +110,15 @@ public partial class RulesViewModel : ObservableObject
 
     private async Task AddRuleAsync()
     {
-        if (string.IsNullOrWhiteSpace(NewRulePattern)) return;
+        if (!CanAddRule()) return;
+
+        var pkg = string.IsNullOrWhiteSpace(NewRulePackage) ? null : NewRulePackage.Trim();
+        var pat = string.IsNullOrWhiteSpace(NewRulePattern) ? null : NewRulePattern.Trim();
 
         var match = new UserRuleMatch
         {
-            TextContains = NewRulePattern.Trim()
+            Package = pkg,
+            TextContains = pat
         };
 
         var action = new UserRuleAction
@@ -113,6 +147,7 @@ public partial class RulesViewModel : ObservableObject
         Rules.Add(new UserRuleViewModel(rule));
 
         // Reset form
+        NewRulePackage = "";
         NewRulePattern = "";
         NewRulePriority = 0;
     }
@@ -152,10 +187,42 @@ public partial class UserRuleViewModel : ObservableObject
     public UserRule Rule 
     { 
         get => _rule; 
-        set => SetProperty(ref _rule, value); 
+        set
+        {
+            if (SetProperty(ref _rule, value))
+            {
+                OnPropertyChanged(nameof(Pattern));
+                OnPropertyChanged(nameof(Package));
+                OnPropertyChanged(nameof(HasPackage));
+                OnPropertyChanged(nameof(HasPattern));
+                OnPropertyChanged(nameof(DisplayTitle));
+                OnPropertyChanged(nameof(Category));
+                OnPropertyChanged(nameof(ActionType));
+                OnPropertyChanged(nameof(MatchMode));
+                OnPropertyChanged(nameof(Priority));
+                OnPropertyChanged(nameof(Enabled));
+                OnPropertyChanged(nameof(EnabledText));
+                OnPropertyChanged(nameof(CategoryColor));
+            }
+        }
     }
 
     public string Pattern => Rule.Match.TextContains ?? "";
+    public string? Package => Rule.Match.Package;
+    public bool HasPackage => !string.IsNullOrWhiteSpace(Package);
+    public bool HasPattern => !string.IsNullOrWhiteSpace(Pattern);
+
+    public string DisplayTitle
+    {
+        get
+        {
+            if (HasPackage && HasPattern) return $"{Package} · \"{Pattern}\"";
+            if (HasPackage) return $"App: {Package}";
+            if (HasPattern) return $"\"{Pattern}\"";
+            return "(All notifications)";
+        }
+    }
+
     public string Category => Rule.Action.SetCategory ?? "other";
     public string ActionType => Rule.ActionType.ToString();
     public string MatchMode => Rule.MatchMode.ToString();
@@ -163,5 +230,22 @@ public partial class UserRuleViewModel : ObservableObject
     public bool Enabled => Rule.Enabled;
     public string EnabledText => Rule.Enabled ? "Enabled" : "Disabled";
 
-    public void Refresh() => OnPropertyChanged(nameof(EnabledText));
+    public Color CategoryColor => Color.FromArgb(Category.ToLowerInvariant() switch
+    {
+        "promo" or "offers" => DesignTokens.CategoryMark.Promo,
+        "work" => DesignTokens.CategoryMark.Work,
+        "people" => DesignTokens.CategoryMark.People,
+        "money" => DesignTokens.CategoryMark.Money,
+        "orders" => DesignTokens.CategoryMark.Orders,
+        "security" => DesignTokens.CategoryMark.Security,
+        "social" => DesignTokens.CategoryMark.Social,
+        "updates" => DesignTokens.CategoryMark.Updates,
+        _ => DesignTokens.CategoryMark.Other
+    });
+
+    public void Refresh()
+    {
+        OnPropertyChanged(nameof(Enabled));
+        OnPropertyChanged(nameof(EnabledText));
+    }
 }

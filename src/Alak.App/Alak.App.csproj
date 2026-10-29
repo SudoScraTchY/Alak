@@ -13,11 +13,7 @@
 
     <!-- Embed assemblies in APK (Fast Deployment staging is flaky on x86_64 emulators) -->
     <AndroidFastDeploymentType>None</AndroidFastDeploymentType>
-    <!-- Store native libs + assemblies UNCOMPRESSED: monodroid requires lib/ entries
-         STORED (Deflate-compressed libmonodroid.so triggers "No assemblies found" abort) -->
-    <AndroidEnableAssemblyCompression>false</AndroidEnableAssemblyCompression>
-    <!-- Let Android extract native libs at install (compressed lib/ entries otherwise
-         trigger monodroid "ALL entries MUST be STORED" abort on API 30 emulators) -->
+    <!-- Let Android extract native libs at install -->
     <AndroidExtractNativeLibs>true</AndroidExtractNativeLibs>
     <!-- Self-contained runtime: no shared Mono runtime dependency (emulator lacks it) -->
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
@@ -41,6 +37,17 @@
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
     <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</TargetPlatformMinVersion>
     <AndroidTargetSdkVersion>36</AndroidTargetSdkVersion>
+    <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <RuntimeIdentifiers>android-arm64</RuntimeIdentifiers>
+    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+    <PublishTrimmed>true</PublishTrimmed>
+    <TrimMode>partial</TrimMode>
+    <AndroidStripLibraries>true</AndroidStripLibraries>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
   </PropertyGroup>
 
   <ItemGroup>
@@ -48,7 +55,7 @@
     <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#12252B" />
 
     <!-- Splash Screen -->
-    <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#F3F5F6" BaseSize="128,128" />
+    <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#12252B" BaseSize="128,128" />
 
     <!-- Images -->
     <MauiImage Include="Resources\Images\*" />
@@ -65,10 +72,22 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageReference Include="CommunityToolkit.Maui" Version="15.0.1" />
+    <PackageReference Include="LLamaSharp" Version="0.30.0" />
     <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.110" />
-    <PackageReference Include="Xamarin.Google.Android.Material" Version="1.14.0.6" />
-    <PackageReference Include="ZXing.Net.Maui" Version="0.10.4" />
-    <PackageReference Include="ZXing.Net.Maui.Controls" Version="0.10.4" />
+  </ItemGroup>
+
+  <!-- Custom compiled generic ARM64-v8a llama.cpp runtimes (built with -march=armv8-a -moutline-atomics for Snapdragon 680 compatibility) -->
+  <ItemGroup Condition="'$(RuntimeIdentifier)' == 'android-arm64' or ('$(RuntimeIdentifier)' == '' and $(RuntimeIdentifiers.Contains('android-arm64')))">
+    <AndroidNativeLibrary Include="Platforms\Android\native\arm64-v8a\libllama.so" Link="lib\arm64-v8a\libllama.so" Abi="arm64-v8a" />
+    <AndroidNativeLibrary Include="Platforms\Android\native\arm64-v8a\libggml.so" Link="lib\arm64-v8a\libggml.so" Abi="arm64-v8a" />
+    <AndroidNativeLibrary Include="Platforms\Android\native\arm64-v8a\libggml-base.so" Link="lib\arm64-v8a\libggml-base.so" Abi="arm64-v8a" />
+    <AndroidNativeLibrary Include="Platforms\Android\native\arm64-v8a\libggml-cpu.so" Link="lib\arm64-v8a\libggml-cpu.so" Abi="arm64-v8a" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(RuntimeIdentifier)' == 'android-x64' or ('$(RuntimeIdentifier)' == '' and $(RuntimeIdentifiers.Contains('android-x64')))">
+    <AndroidNativeLibrary Include="Platforms\Android\native\x86_64\libllama.so" Link="lib\x86_64\libllama.so" Abi="x86_64" />
+    <AndroidNativeLibrary Include="Platforms\Android\native\x86_64\libggml.so" Link="lib\x86_64\libggml.so" Abi="x86_64" />
+    <AndroidNativeLibrary Include="Platforms\Android\native\x86_64\libggml-base.so" Link="lib\x86_64\libggml-base.so" Abi="x86_64" />
+    <AndroidNativeLibrary Include="Platforms\Android\native\x86_64\libggml-cpu.so" Link="lib\x86_64\libggml-cpu.so" Abi="x86_64" />
   </ItemGroup>
 
   <ItemGroup>
