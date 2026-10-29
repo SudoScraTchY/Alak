@@ -197,12 +197,7 @@
                                                    FontSize="12"
                                                    LineHeight="1.3"
                                                    TextColor="{AppThemeBinding Light={StaticResource Mark.Wallet}, Dark={StaticResource Mark.Wallet.Dark}}"
-                                                   VerticalOptions="Center">
-                                                <Label.GestureRecognizers>
-                                                    <TapGestureRecognizer Command="{Binding Source={x:Reference ThisPage}, Path=BindingContext.OpenDetailCommand}"
-                                                                          CommandParameter="{Binding}" />
-                                                </Label.GestureRecognizers>
-                                            </Label>
+                                                   VerticalOptions="Center" />
                                             <Label Text="Copy"
                                                    FontFamily="{StaticResource Font.SemiBold}"
                                                    FontSize="11"

@@ -45,7 +45,7 @@ public partial class WalletViewModel : ObservableObject
     private string _summaryText = "";
 
     public IRelayCommand<PromoCodeItem> CopyCodeCommand { get; }
-    public IRelayCommand<PromoCodeItem> ViewDetailsCommand { get; }
+    public IAsyncRelayCommand<PromoCodeItem> ViewDetailsCommand { get; }
     public IRelayCommand<PromoCodeItem> MarkUsedCommand { get; }
     public IRelayCommand<PromoCodeItem> DismissCommand { get; }
     public IRelayCommand<PromoCodeItem> UndoDismissCommand { get; }
@@ -72,7 +72,7 @@ public partial class WalletViewModel : ObservableObject
         };
 
         CopyCodeCommand = new RelayCommand<PromoCodeItem>(CopyCode);
-        ViewDetailsCommand = new RelayCommand<PromoCodeItem>(ViewDetails);
+        ViewDetailsCommand = new AsyncRelayCommand<PromoCodeItem>(ViewDetailsAsync);
         MarkUsedCommand = new RelayCommand<PromoCodeItem>(MarkUsed);
         DismissCommand = new RelayCommand<PromoCodeItem>(Dismiss);
         UndoDismissCommand = new RelayCommand<PromoCodeItem>(UndoDismiss);
@@ -173,7 +173,7 @@ public partial class WalletViewModel : ObservableObject
         await Shell.Current.DisplayAlertAsync("Copied", $"Code \"{item.Code.RawCode}\" copied to clipboard", "OK");
     }
 
-    private async void ViewDetails(PromoCodeItem? item)
+    private async Task ViewDetailsAsync(PromoCodeItem? item)
     {
         if (item == null) return;
         try

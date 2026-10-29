@@ -75,12 +75,7 @@
                                         <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="8">
                                             <Label Grid.Column="0" Text="{Binding Code.DisplayCode}"
                                                     Style="{StaticResource Text.Code}" FontSize="17"
-                                                    VerticalOptions="Center" LineBreakMode="TailTruncation">
-                                                <Label.GestureRecognizers>
-                                                    <TapGestureRecognizer Command="{Binding Source={x:Reference ThisWalletPage}, Path=BindingContext.ViewDetailsCommand}"
-                                                                          CommandParameter="{Binding}" />
-                                                </Label.GestureRecognizers>
-                                            </Label>
+                                                    VerticalOptions="Center" LineBreakMode="TailTruncation" />
                                             <Border Grid.Column="1" Style="{StaticResource Chip.Category}"
                                                     BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Wallet}, Dark={StaticResource Tint.Wallet.Dark}}"
                                                     VerticalOptions="Center">
@@ -227,12 +222,7 @@
                             <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="8">
                                 <Label Grid.Column="0" Text="{Binding Code.DisplayCode}"
                                        Style="{StaticResource Text.Code}" FontSize="17"
-                                       VerticalOptions="Center" LineBreakMode="TailTruncation">
-                                    <Label.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding Source={x:Reference ThisWalletPage}, Path=BindingContext.ViewDetailsCommand}"
-                                                              CommandParameter="{Binding}" />
-                                    </Label.GestureRecognizers>
-                                </Label>
+                                       VerticalOptions="Center" LineBreakMode="TailTruncation" />
                                 <Border Grid.Column="1" Style="{StaticResource Chip.Category}"
                                         BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Wallet}, Dark={StaticResource Tint.Wallet.Dark}}"
                                         VerticalOptions="Center">
