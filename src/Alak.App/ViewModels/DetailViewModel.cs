@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Alak.Core;
+using Alak.Core.Linking;
 using Alak.Core.Model;
 using Alak.Core.Classification;
 using Alak.Core.Capture;
@@ -12,6 +13,7 @@ using Alak.Inference.Abstractions.Tasks;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Windows.Input;
+using Microsoft.Maui.Controls;
 
 namespace Alak.App.ViewModels;
 
@@ -39,6 +41,18 @@ public partial class DetailViewModel : ObservableObject
 
     [ObservableProperty]
     private bool _isLoading;
+
+    [ObservableProperty]
+    private string _sourceLabel = string.Empty;
+
+    [ObservableProperty]
+    private ImageSource? _sourceIcon;
+
+    [ObservableProperty]
+    private bool _hasSourceIcon;
+
+    [ObservableProperty]
+    private bool _isViaSms;
 
     // Category Changing (Tier 2)
     [ObservableProperty]
@@ -124,12 +138,40 @@ public partial class DetailViewModel : ObservableObject
             if (notification != null)
             {
                 Notification = new NotificationViewModel(notification);
+                await PopulateSourceInfoAsync(notification);
                 PopulateAvailableCategories();
             }
         }
         finally
         {
             IsLoading = false;
+        }
+    }
+
+    private async Task PopulateSourceInfoAsync(Notification notification)
+    {
+        IsViaSms = notification.IsAttributed;
+        var package = notification.SourcePackage;
+        SourceLabel = PackageNameHumanizer.Humanize(package);
+        SourceIcon = null;
+        HasSourceIcon = false;
+
+        try
+        {
+            var infos = await _repository.GetAppInfosAsync(new[] { package });
+            if (!infos.TryGetValue(package, out var info)) return;
+
+            if (!string.IsNullOrWhiteSpace(info.Label)) SourceLabel = info.Label!;
+            if (info.IconPng is { Length: > 0 })
+            {
+                var bytes = info.IconPng;
+                SourceIcon = ImageSource.FromStream(() => new MemoryStream(bytes));
+                HasSourceIcon = true;
+            }
+        }
+        catch
+        {
+            // Identity is cosmetic; the notification still renders with the humanized name.
         }
     }
 

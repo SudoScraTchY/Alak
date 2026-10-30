@@ -46,4 +46,19 @@ public interface INotificationRepository
     /// Prune non-pinned notifications older than maxAge (STO-001 / WBP-01).
     /// </summary>
     Task<int> PruneExpiredAsync(TimeSpan maxAge, CancellationToken ct = default);
+
+    /// <summary>
+    /// Cache the resolved label and small icon for a package (CAP-013).
+    /// </summary>
+    Task UpsertAppInfoAsync(string package, string? label, byte[]? iconPng);
+
+    /// <summary>
+    /// Labels/icons for the requested packages (missing packages are omitted).
+    /// </summary>
+    Task<IReadOnlyDictionary<string, AppIdentity>> GetAppInfosAsync(IReadOnlyCollection<string> packages);
+
+    /// <summary>
+    /// Packages that still lack a resolved label, for the startup backfill.
+    /// </summary>
+    Task<IReadOnlyList<string>> GetPackagesWithoutLabelAsync(int limit);
 }

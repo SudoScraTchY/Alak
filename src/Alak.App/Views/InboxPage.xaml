@@ -167,12 +167,27 @@
 
                                 <!-- Channel · Category · Extracted Code -->
                                 <HorizontalStackLayout Grid.Column="1" Grid.Row="2" Spacing="6" VerticalOptions="Center">
-                                    <Label Text="{Binding DisplayChannelName}"
+                                    <Image Source="{Binding SourceIcon}"
+                                           WidthRequest="16"
+                                           HeightRequest="16"
+                                           VerticalOptions="Center"
+                                           IsVisible="{Binding HasSourceIcon}" />
+
+                                    <Label Text="{Binding SourceLabel}"
                                            Style="{StaticResource Text.Caption}"
                                            VerticalOptions="Center"
-                                           MaximumWidthRequest="90"
-                                           LineBreakMode="TailTruncation"
-                                           IsVisible="{Binding DisplayChannelName, Converter={StaticResource StringNotEmptyConverter}}" />
+                                           MaximumWidthRequest="110"
+                                           LineBreakMode="TailTruncation" />
+
+                                    <Border Style="{StaticResource Chip.Category}"
+                                            BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Work}, Dark={StaticResource Tint.Work.Dark}}"
+                                            IsVisible="{Binding IsViaSms}"
+                                            VerticalOptions="Center">
+                                        <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Inbox_ViaSms]}"
+                                               FontSize="10"
+                                               LineHeight="1.2"
+                                               TextColor="{AppThemeBinding Light={StaticResource Mark.Work}, Dark={StaticResource Mark.Work.Dark}}" />
+                                    </Border>
 
                                     <Border Style="{StaticResource Chip.Category}"
                                             BackgroundColor="{Binding CategoryTintColor}"

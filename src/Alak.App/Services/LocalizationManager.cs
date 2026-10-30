@@ -116,6 +116,7 @@ public class LocalizationManager : INotifyPropertyChanged
         { "Inbox_DailyDigest", "Daily Digest" },
         { "Inbox_Today", "Today" },
         { "Inbox_Yesterday", "Yesterday" },
+        { "Inbox_ViaSms", "via SMS" },
 
         // Categories
         { "Cat_All", "All" },
@@ -318,6 +319,7 @@ public class LocalizationManager : INotifyPropertyChanged
         { "Inbox_DailyDigest", "خلاصه اعلان‌ها" },
         { "Inbox_Today", "امروز" },
         { "Inbox_Yesterday", "دیروز" },
+        { "Inbox_ViaSms", "از طریق پیامک" },
 
         // Categories
         { "Cat_All", "همه" },

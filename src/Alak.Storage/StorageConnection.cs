@@ -358,6 +358,21 @@ public sealed class StorageConnection : IDisposable
                 INSERT OR REPLACE INTO notification_fts(rowid, title_n, body_n, sender_n)
                 SELECT id, coalesce(title, ''), coalesce(text, ''), coalesce(channel_name, package, '') FROM notifications;
             "),
+
+            // Migration 9: SMS source attribution (display-only) + learned domain index
+            (9L, @"
+                ALTER TABLE notifications ADD COLUMN attributed_package TEXT;
+
+                CREATE TABLE IF NOT EXISTS app_domains (
+                  host            TEXT NOT NULL,
+                  package         TEXT NOT NULL,
+                  hits            INTEGER NOT NULL DEFAULT 1,
+                  first_seen_at   INTEGER NOT NULL,
+                  last_seen_at    INTEGER NOT NULL,
+                  PRIMARY KEY (host, package)
+                );
+                CREATE INDEX IF NOT EXISTS ix_app_domains_host ON app_domains(host);
+            "),
         };
 
         public static void Apply(SqliteConnection con)

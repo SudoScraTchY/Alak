@@ -52,7 +52,9 @@ public sealed record RawNotification(
     IReadOnlyList<string> ActionLabels,
     string? ConversationTitle,
     bool LooksRedactedByOs,
-    int UserHandle)
+    int UserHandle,
+    string? AppLabel = null,
+    byte[]? AppIconPng = null)
 {
     /// <summary>Validated: sbn_key is mandatory (CAP-003).</summary>
     public string SbnKey { get; } = GuardNotBlank(SbnKey, nameof(SbnKey));
@@ -193,6 +195,23 @@ public static class CommunicationAppDetector
                pkg.Contains(".email") ||
                pkg.EndsWith(".mail");
     }
+
+    private static readonly HashSet<string> s_smsPackages = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "com.google.android.apps.messaging",
+        "com.samsung.android.messaging",
+        "com.android.mms",
+        "com.sonyericsson.conversations",
+        "com.motorola.messaging",
+        "com.simplemobiletools.sms.messenger"
+    };
+
+    /// <summary>
+    /// True only for system SMS/MMS apps. Attribution is limited to these: the text
+    /// carries a link from a brand, but the posting package is the SMS app.
+    /// </summary>
+    public static bool IsSmsApp(string? package)
+        => !string.IsNullOrWhiteSpace(package) && s_smsPackages.Contains(package);
 
     public static bool IsCommunicationNotification(RawNotification n)
     {

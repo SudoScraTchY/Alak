@@ -26,7 +26,7 @@ public sealed class NotificationRepository : INotificationRepository
             
             using var cmd = _db.CreateCommand();
             cmd.CommandText = @"
-                SELECT uid, package, channel_name, title, text, category, posted_at, is_read, is_persian, extracted_code
+                SELECT uid, package, channel_name, title, text, category, posted_at, is_read, is_persian, extracted_code, attributed_package
                 FROM notifications
                 ORDER BY posted_at DESC";
 
@@ -43,7 +43,8 @@ public sealed class NotificationRepository : INotificationRepository
                     Timestamp: DateTimeOffset.FromUnixTimeMilliseconds(reader.GetInt64(6)),
                     IsRead: reader.GetBoolean(7),
                     IsPersian: reader.GetBoolean(8),
-                    ExtractedCode: reader.IsDBNull(9) ? null : reader.GetString(9)
+                    ExtractedCode: reader.IsDBNull(9) ? null : reader.GetString(9),
+                    AttributedPackage: reader.IsDBNull(10) ? null : reader.GetString(10)
                 ));
             }
 
@@ -57,7 +58,7 @@ public sealed class NotificationRepository : INotificationRepository
         {
             using var cmd = _db.CreateCommand();
             cmd.CommandText = @"
-                SELECT uid, package, channel_name, title, text, category, posted_at, is_read, is_persian, extracted_code
+                SELECT uid, package, channel_name, title, text, category, posted_at, is_read, is_persian, extracted_code, attributed_package
                 FROM notifications
                 WHERE uid = @id";
             cmd.Parameters.AddWithValue("@id", id);
@@ -75,7 +76,8 @@ public sealed class NotificationRepository : INotificationRepository
                     Timestamp: DateTimeOffset.FromUnixTimeMilliseconds(reader.GetInt64(6)),
                     IsRead: reader.GetBoolean(7),
                     IsPersian: reader.GetBoolean(8),
-                    ExtractedCode: reader.IsDBNull(9) ? null : reader.GetString(9)
+                    ExtractedCode: reader.IsDBNull(9) ? null : reader.GetString(9),
+                    AttributedPackage: reader.IsDBNull(10) ? null : reader.GetString(10)
                 ));
             }
 
@@ -103,12 +105,12 @@ public sealed class NotificationRepository : INotificationRepository
                 INSERT INTO notifications (
                     uid, sbn_key, package, channel_name, title, text, category,
                     posted_at, captured_at, updated_at, tz_offset_min, content_hash,
-                    is_read, is_persian, extracted_code
+                    is_read, is_persian, extracted_code, attributed_package
                 )
                 VALUES (
                     @uid, @sbn_key, @package, @channel_name, @title, @text, @category,
                     @posted_at, @captured_at, @updated_at, 0, @content_hash,
-                    @is_read, @is_persian, @extracted_code
+                    @is_read, @is_persian, @extracted_code, @attributed_package
                 )
                 ON CONFLICT(uid) DO UPDATE SET
                     title = excluded.title,
@@ -117,6 +119,7 @@ public sealed class NotificationRepository : INotificationRepository
                     is_read = excluded.is_read,
                     is_persian = excluded.is_persian,
                     extracted_code = excluded.extracted_code,
+                    attributed_package = excluded.attributed_package,
                     updated_at = excluded.updated_at";
             
             cmd.Parameters.AddWithValue("@uid", notification.Id);
@@ -133,6 +136,7 @@ public sealed class NotificationRepository : INotificationRepository
             cmd.Parameters.AddWithValue("@is_read", notification.IsRead ? 1 : 0);
             cmd.Parameters.AddWithValue("@is_persian", notification.IsPersian ? 1 : 0);
             cmd.Parameters.AddWithValue("@extracted_code", notification.ExtractedCode ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@attributed_package", notification.AttributedPackage ?? (object)DBNull.Value);
 
             cmd.ExecuteNonQuery();
             return Task.CompletedTask;
@@ -265,7 +269,7 @@ public sealed class NotificationRepository : INotificationRepository
             if (isPromoOrOffers)
             {
                 cmd.CommandText = @"
-                    SELECT uid, package, channel_name, title, text, category, posted_at, is_read, is_persian, extracted_code
+                    SELECT uid, package, channel_name, title, text, category, posted_at, is_read, is_persian, extracted_code, attributed_package
                     FROM notifications
                     WHERE (@before IS NULL OR posted_at < @before)
                       AND (category = 'promo' OR category = 'offers')
@@ -275,7 +279,7 @@ public sealed class NotificationRepository : INotificationRepository
             else
             {
                 cmd.CommandText = @"
-                    SELECT uid, package, channel_name, title, text, category, posted_at, is_read, is_persian, extracted_code
+                    SELECT uid, package, channel_name, title, text, category, posted_at, is_read, is_persian, extracted_code, attributed_package
                     FROM notifications
                     WHERE (@before IS NULL OR posted_at < @before)
                       AND (@category IS NULL OR category = @category)
@@ -300,7 +304,8 @@ public sealed class NotificationRepository : INotificationRepository
                     Timestamp: DateTimeOffset.FromUnixTimeMilliseconds(reader.GetInt64(6)),
                     IsRead: reader.GetBoolean(7),
                     IsPersian: reader.GetBoolean(8),
-                    ExtractedCode: reader.IsDBNull(9) ? null : reader.GetString(9)
+                    ExtractedCode: reader.IsDBNull(9) ? null : reader.GetString(9),
+                    AttributedPackage: reader.IsDBNull(10) ? null : reader.GetString(10)
                 ));
             }
 
@@ -319,7 +324,7 @@ public sealed class NotificationRepository : INotificationRepository
             var results = new List<Notification>();
             using var cmd = _db.CreateCommand();
             cmd.CommandText = @"
-                SELECT n.uid, n.package, n.channel_name, n.title, n.text, n.category, n.posted_at, n.is_read, n.is_persian, n.extracted_code
+                SELECT n.uid, n.package, n.channel_name, n.title, n.text, n.category, n.posted_at, n.is_read, n.is_persian, n.extracted_code, n.attributed_package
                 FROM notification_fts f
                 JOIN notifications n ON n.id = f.rowid
                 WHERE notification_fts MATCH @query
@@ -345,7 +350,8 @@ public sealed class NotificationRepository : INotificationRepository
                         Timestamp: DateTimeOffset.FromUnixTimeMilliseconds(reader.GetInt64(6)),
                         IsRead: reader.GetBoolean(7),
                         IsPersian: reader.GetBoolean(8),
-                        ExtractedCode: reader.IsDBNull(9) ? null : reader.GetString(9)
+                        ExtractedCode: reader.IsDBNull(9) ? null : reader.GetString(9),
+                        AttributedPackage: reader.IsDBNull(10) ? null : reader.GetString(10)
                     ));
                 }
             }
@@ -355,7 +361,7 @@ public sealed class NotificationRepository : INotificationRepository
                 results.Clear();
                 using var fallbackCmd = _db.CreateCommand();
                 fallbackCmd.CommandText = @"
-                    SELECT n.uid, n.package, n.channel_name, n.title, n.text, n.category, n.posted_at, n.is_read, n.is_persian, n.extracted_code
+                    SELECT n.uid, n.package, n.channel_name, n.title, n.text, n.category, n.posted_at, n.is_read, n.is_persian, n.extracted_code, n.attributed_package
                     FROM notification_fts f
                     JOIN notifications n ON n.id = f.rowid
                     WHERE notification_fts MATCH @query
@@ -379,7 +385,8 @@ public sealed class NotificationRepository : INotificationRepository
                             Timestamp: DateTimeOffset.FromUnixTimeMilliseconds(reader.GetInt64(6)),
                             IsRead: reader.GetBoolean(7),
                             IsPersian: reader.GetBoolean(8),
-                            ExtractedCode: reader.IsDBNull(9) ? null : reader.GetString(9)
+                            ExtractedCode: reader.IsDBNull(9) ? null : reader.GetString(9),
+                            AttributedPackage: reader.IsDBNull(10) ? null : reader.GetString(10)
                         ));
                     }
                 }
@@ -404,6 +411,83 @@ public sealed class NotificationRepository : INotificationRepository
             cmd.Parameters.AddWithValue("@cutoff", cutoff);
             var affected = cmd.ExecuteNonQuery();
             return Task.FromResult(affected);
+        }
+    }
+
+    public Task UpsertAppInfoAsync(string package, string? label, byte[]? iconPng)
+    {
+        if (string.IsNullOrWhiteSpace(package)) return Task.CompletedTask;
+
+        lock (_db.SyncRoot)
+        {
+            var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            using var cmd = _db.CreateCommand();
+            cmd.CommandText = @"
+                INSERT INTO apps(package, label, first_seen_at, icon_png)
+                VALUES (@p, @label, @t, @icon)
+                ON CONFLICT(package) DO UPDATE SET
+                    label = COALESCE(excluded.label, apps.label),
+                    icon_png = COALESCE(excluded.icon_png, apps.icon_png)";
+            cmd.Parameters.AddWithValue("@p", package);
+            cmd.Parameters.AddWithValue("@label", (object?)label ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@t", now);
+            cmd.Parameters.AddWithValue("@icon", (object?)iconPng ?? DBNull.Value);
+            cmd.ExecuteNonQuery();
+            return Task.CompletedTask;
+        }
+    }
+
+    public Task<IReadOnlyDictionary<string, AppIdentity>> GetAppInfosAsync(IReadOnlyCollection<string> packages)
+    {
+        var result = new Dictionary<string, AppIdentity>(StringComparer.Ordinal);
+        if (packages.Count == 0) return Task.FromResult<IReadOnlyDictionary<string, AppIdentity>>(result);
+
+        lock (_db.SyncRoot)
+        {
+            using var cmd = _db.CreateCommand();
+            var names = new List<string>(packages.Count);
+            for (var i = 0; i < packages.Count; i++)
+            {
+                var name = $"@p{i}";
+                names.Add(name);
+                cmd.Parameters.AddWithValue(name, packages.ElementAt(i));
+            }
+
+            cmd.CommandText = $"SELECT package, label, icon_png FROM apps WHERE package IN ({string.Join(", ", names)})";
+
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                var package = reader.GetString(0);
+                var label = reader.IsDBNull(1) ? null : reader.GetString(1);
+                var icon = reader.IsDBNull(2) ? null : (byte[])reader["icon_png"];
+                result[package] = new AppIdentity(package, label, icon);
+            }
+        }
+
+        return Task.FromResult<IReadOnlyDictionary<string, AppIdentity>>(result);
+    }
+
+    public Task<IReadOnlyList<string>> GetPackagesWithoutLabelAsync(int limit)
+    {
+        lock (_db.SyncRoot)
+        {
+            var packages = new List<string>();
+            using var cmd = _db.CreateCommand();
+            cmd.CommandText = @"
+                SELECT package FROM apps
+                WHERE label IS NULL OR label = ''
+                ORDER BY last_seen_at DESC
+                LIMIT @limit";
+            cmd.Parameters.AddWithValue("@limit", limit);
+
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                packages.Add(reader.GetString(0));
+            }
+
+            return Task.FromResult<IReadOnlyList<string>>(packages);
         }
     }
 }

@@ -60,6 +60,13 @@ public static class MauiProgram
         builder.Services.AddSingleton<IPackLoader, PackLoader>();
         builder.Services.AddSingleton<IRuleCompiler, RuleCompiler>();
         builder.Services.AddSingleton<INotificationRepository, NotificationRepository>();
+        builder.Services.AddSingleton<IAppDomainRepository, AppDomainRepository>();
+#if ANDROID
+        builder.Services.AddSingleton<IAppInfoProvider, Platforms.Android.AndroidAppInfoProvider>();
+#else
+        builder.Services.AddSingleton<IAppInfoProvider, FallbackAppInfoProvider>();
+#endif
+        builder.Services.AddSingleton<SourceMetadataBackfillService>();
         builder.Services.AddSingleton<IUserRulesRepository, UserRulesRepository>();
         builder.Services.AddSingleton<UserRulesEngine>();
         builder.Services.AddSingleton<INotificationIngestionService, NotificationIngestionService>();

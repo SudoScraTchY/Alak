@@ -1,6 +1,7 @@
 using Alak.Adaptive;
 using Alak.Core.Capture;
 using Alak.Core.Classification;
+using Alak.Core.Linking;
 using Alak.Core.Model;
 using Alak.Rules;
 using Alak.Storage;
@@ -27,6 +28,9 @@ public sealed class NotificationIngestionService : INotificationIngestionService
     private readonly IAdaptiveEngine _adaptiveEngine;
     private readonly IPackLoader _packLoader;
     private readonly IRuleCompiler _ruleCompiler;
+    private readonly IAppInfoProvider _appInfoProvider;
+    private readonly IAppDomainRepository _appDomainRepository;
+    private readonly HashSet<string> _resolvedPackages = new(StringComparer.Ordinal);
     private PackSet? _activePackSet;
 
     public event Action<Notification>? NotificationIngested;
@@ -38,7 +42,9 @@ public sealed class NotificationIngestionService : INotificationIngestionService
         UserRulesEngine userRulesEngine,
         IAdaptiveEngine adaptiveEngine,
         IPackLoader packLoader,
-        IRuleCompiler ruleCompiler)
+        IRuleCompiler ruleCompiler,
+        IAppInfoProvider appInfoProvider,
+        IAppDomainRepository appDomainRepository)
     {
         _notificationRepository = notificationRepository;
         _userRulesRepository = userRulesRepository;
@@ -47,6 +53,8 @@ public sealed class NotificationIngestionService : INotificationIngestionService
         _adaptiveEngine = adaptiveEngine;
         _packLoader = packLoader;
         _ruleCompiler = ruleCompiler;
+        _appInfoProvider = appInfoProvider;
+        _appDomainRepository = appDomainRepository;
     }
 
     private async ValueTask<PackSet> GetPackSetAsync()
@@ -83,6 +91,12 @@ public sealed class NotificationIngestionService : INotificationIngestionService
                 Debug.WriteLine($"[Ingestion] Muted by AppSettings: {raw.Package}");
                 return;
             }
+
+            // 2b. Cache the app's display identity (CAP-013)
+            await EnsureAppInfoAsync(raw.Package, raw.AppLabel, raw.AppIconPng);
+
+            // 2c. Learn link→app mappings from real apps; attribute SMS ads to the brand
+            var attributedPackage = await LearnOrAttributeSourceAsync(raw);
 
             // 3. User rules check
             var userAction = await _userRulesEngine.EvaluateAsync(raw);
@@ -208,7 +222,8 @@ public sealed class NotificationIngestionService : INotificationIngestionService
                 Timestamp: DateTimeOffset.FromUnixTimeMilliseconds(raw.PostedAtUtcMs),
                 IsRead: userAction?.ArchiveImmediately == true || appSettings?.AutoArchiveOnRead == true,
                 IsPersian: isPersian,
-                ExtractedCode: extractedCode
+                ExtractedCode: extractedCode,
+                AttributedPackage: attributedPackage
             );
 
             await _notificationRepository.AddAsync(notification);
@@ -228,5 +243,66 @@ public sealed class NotificationIngestionService : INotificationIngestionService
         {
             Debug.WriteLine($"[Ingestion] Failed to ingest notification: {ex}");
         }
+    }
+
+    private async Task EnsureAppInfoAsync(string package, string? knownLabel = null, byte[]? knownIconPng = null)
+    {
+        if (string.IsNullOrWhiteSpace(package)) return;
+
+        var hasKnownIdentity = !string.IsNullOrWhiteSpace(knownLabel) || knownIconPng is { Length: > 0 };
+        if (!hasKnownIdentity && !_resolvedPackages.Add(package)) return;
+        if (hasKnownIdentity) _resolvedPackages.Add(package);
+
+        try
+        {
+            var info = hasKnownIdentity ? null : _appInfoProvider.Resolve(package);
+            var label = string.IsNullOrWhiteSpace(knownLabel) ? info?.Label : knownLabel;
+            var icon = knownIconPng is { Length: > 0 } ? knownIconPng : info?.IconPng;
+
+            if (label != null || icon != null)
+            {
+                await _notificationRepository.UpsertAppInfoAsync(package, label, icon);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"[Ingestion] App info resolution failed for {package}: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Real apps teach the domain index (host → package). Notifications posted by an
+    /// SMS app are matched against that index; the result is display-only and never
+    /// replaces the original package. No link is ever fetched (no network permission).
+    /// </summary>
+    private async Task<string?> LearnOrAttributeSourceAsync(RawNotification raw)
+    {
+        try
+        {
+            var domains = SafeLinkParser.ExtractDomains(raw.Title, raw.Text, raw.BigText, raw.TextLines);
+            if (domains.Count == 0) return null;
+
+            if (CommunicationAppDetector.IsSmsApp(raw.Package))
+            {
+                var attributed = await _appDomainRepository.ResolvePackageAsync(domains);
+                if (!string.IsNullOrEmpty(attributed))
+                {
+                    await EnsureAppInfoAsync(attributed);
+                    Debug.WriteLine($"[Ingestion] Attributed SMS notification from {raw.Package} to {attributed}");
+                }
+                return attributed;
+            }
+
+            if (!CommunicationAppDetector.IsCommunicationApp(raw.Package))
+            {
+                await _appDomainRepository.LearnAsync(domains, raw.Package);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"[Ingestion] Source attribution failed: {ex.Message}");
+        }
+
+        return null;
     }
 }

@@ -158,6 +158,20 @@ public partial class LoadingPage : ContentPage
             Application.Current.MainPage = shell;
         }
 
+        // Local-only source metadata pass (app labels/icons + domain index seed).
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                var backfill = AppServices.Current?.GetService<SourceMetadataBackfillService>();
+                if (backfill != null) await backfill.RunAsync();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[LoadingPage] Source metadata backfill failed: {ex.Message}");
+            }
+        });
+
         // Check if biometric app lock is enabled
         if (Preferences.Get("app_lock_enabled", false))
         {

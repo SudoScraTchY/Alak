@@ -65,3 +65,10 @@ Each completed milestone gets a commit and updated rows below.
 
 ## 2026-10-17 — handoff refresh (this session)
 - Rewrote `docs/AGENT-HANDOFF.md` (current state, sandbox environment cheatsheet, debugging history items 11–15, remaining work, fresh delegation prompt for a new agent instance); refreshed milestone state in `docs/HANDOFF-STATUS.md` (M4–M8 status + new next actions).
+
+## 2026-10-30 — app identity display + SMS source attribution (ADR-0003)
+- CAP-013 realised end to end: the capture binder thread resolves label/icon through the posting app's package context (works around Android 11+ visibility, PF-05), ingestion caches it in `apps.label`/`apps.icon_png`, falls back to a humanized package name, and a one-time startup backfill fills older rows. Inbox rows and Detail now show app name + icon instead of the raw package/channel; the package remains visible on Detail.
+- SMS attribution: new pure `SafeLinkParser` (http/https only, IDN/punycode, no IP/userinfo, registrable-domain heuristic, bounded 10 links/2 KB); new `app_domains` index (migration 9) learns domain→package from non-communication apps; SMS notifications are attributed when exactly one package has ≥2 sightings (`notifications.attributed_package`, display-only) and show a localized “via SMS” chip. Original package is never rewritten; messaging apps never teach the index; no network/DNS/WebView/intent calls (R2).
+- Tests: Core 71 (parser/humanizer), Storage 39 (attribution + app metadata round-trip), Rules 1300, Text 148, Adaptive 8, Inference.Abstractions 28 — all green. Build 0 errors.
+- ADR: `docs/adr/0003-app-source-display-and-sms-attribution.md` (ADR-0002 stays reserved for the M8 inference-engine spike).
+

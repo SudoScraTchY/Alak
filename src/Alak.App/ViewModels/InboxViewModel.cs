@@ -4,12 +4,14 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Alak.App.Design;
 using Alak.Core;
+using Alak.Core.Linking;
 using Alak.Core.Model;
 using Alak.Adaptive;
 using Alak.Rules;
 using Alak.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.Controls;
 
 namespace Alak.App.ViewModels;
 
@@ -33,6 +35,7 @@ public partial class InboxViewModel : ObservableObject
     private bool _hasMore = true;
     private bool _isLoadingMore;
     private System.Threading.Timer? _searchDebounceTimer;
+    private readonly Dictionary<string, ImageSource?> _sourceIcons = new(StringComparer.Ordinal);
 
     [ObservableProperty]
     private bool _isLoading;
@@ -122,7 +125,7 @@ public partial class InboxViewModel : ObservableObject
 
     private void OnNotificationIngested(Notification notification)
     {
-        MainThread.BeginInvokeOnMainThread(() =>
+        MainThread.BeginInvokeOnMainThread(async () =>
         {
             // 1. Update in-memory cached notifications list and decrement old counts if existing
             var existingIndex = _cachedNotifications.FindIndex(n => n.Id == notification.Id);
@@ -239,6 +242,8 @@ public partial class InboxViewModel : ObservableObject
                     }
                     GroupedNotifications.Insert(insertGroupIdx, newGroup);
                 }
+
+                await PopulateSourceInfoAsync(new[] { vm });
             }
         });
     }
@@ -325,6 +330,7 @@ public partial class InboxViewModel : ObservableObject
                 }
 
                 RebuildGroupedNotifications(loaded);
+                await PopulateSourceInfoAsync(Notifications.ToList());
                 _isInitialized = true;
             }
         }
@@ -362,6 +368,7 @@ public partial class InboxViewModel : ObservableObject
                 moreItems.Min(n => n.Timestamp.ToUnixTimeMilliseconds()));
 
             AppendNotifications(moreItems);
+            await PopulateSourceInfoAsync(Notifications.ToList());
         }
         catch (Exception ex)
         {
@@ -527,6 +534,46 @@ public partial class InboxViewModel : ObservableObject
             DismissCommand = DismissCommand,
             OpenDetailCommand = OpenDetailCommand
         };
+
+    private async Task PopulateSourceInfoAsync(IReadOnlyList<NotificationViewModel> vms)
+    {
+        if (vms.Count == 0) return;
+
+        var packages = vms
+            .SelectMany(v => new[] { v.Package, v.AttributedPackage })
+            .Where(p => !string.IsNullOrWhiteSpace(p))
+            .Select(p => p!)
+            .Distinct(StringComparer.Ordinal)
+            .ToList();
+        if (packages.Count == 0) return;
+
+        IReadOnlyDictionary<string, AppIdentity> infos;
+        try
+        {
+            infos = await _repository.GetAppInfosAsync(packages);
+        }
+        catch
+        {
+            return;
+        }
+
+        foreach (var vm in vms)
+        {
+            infos.TryGetValue(vm.SourcePackage, out var info);
+            vm.ApplyAppInfo(info?.Label, GetOrCreateIcon(vm.SourcePackage, info?.IconPng));
+        }
+    }
+
+    private ImageSource? GetOrCreateIcon(string package, byte[]? png)
+    {
+        if (png is not { Length: > 0 }) return null;
+        if (_sourceIcons.TryGetValue(package, out var cached)) return cached;
+
+        var bytes = png;
+        var source = ImageSource.FromStream(() => new MemoryStream(bytes));
+        _sourceIcons[package] = source;
+        return source;
+    }
 }
 
 public class NotificationViewModel : INotifyPropertyChanged
@@ -537,14 +584,52 @@ public class NotificationViewModel : INotifyPropertyChanged
     private string _category = string.Empty;
     private string _categoryMarkColor = string.Empty;
     private string _categoryTintColor = string.Empty;
+    private string _sourceLabel = string.Empty;
+    private ImageSource? _sourceIcon;
 
     public string Id { get; }
     public string Package { get; }
+    public string? AttributedPackage { get; }
+    public string SourcePackage => AttributedPackage ?? Package;
+    public bool IsViaSms => !string.IsNullOrEmpty(AttributedPackage);
     public string ChannelName { get; }
     public string Title { get; }
     public string Text { get; }
     public DateTimeOffset Timestamp { get; }
     public bool IsPersian { get; }
+
+    public string SourceLabel
+    {
+        get => _sourceLabel;
+        private set
+        {
+            if (_sourceLabel == value) return;
+            _sourceLabel = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public ImageSource? SourceIcon
+    {
+        get => _sourceIcon;
+        private set
+        {
+            if (ReferenceEquals(_sourceIcon, value)) return;
+            _sourceIcon = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(HasSourceIcon));
+        }
+    }
+
+    public bool HasSourceIcon => _sourceIcon != null;
+
+    public void ApplyAppInfo(string? label, ImageSource? icon)
+    {
+        SourceLabel = string.IsNullOrWhiteSpace(label)
+            ? PackageNameHumanizer.Humanize(SourcePackage)
+            : label!;
+        SourceIcon = icon;
+    }
 
     public string Category
     {
@@ -597,6 +682,7 @@ public class NotificationViewModel : INotifyPropertyChanged
     {
         Id = notification.Id;
         Package = notification.Package;
+        AttributedPackage = notification.AttributedPackage;
         ChannelName = notification.ChannelName;
         Title = notification.Title;
         Text = notification.Text;
@@ -604,6 +690,7 @@ public class NotificationViewModel : INotifyPropertyChanged
         Timestamp = notification.Timestamp;
         IsRead = notification.IsRead;
         IsPersian = notification.IsPersian;
+        _sourceLabel = PackageNameHumanizer.Humanize(SourcePackage);
 
         CategoryMarkColor = GetMarkColor(notification.Category);
         CategoryTintColor = GetTintColor(notification.Category);

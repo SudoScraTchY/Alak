@@ -94,6 +94,61 @@ public sealed class NotificationCaptureService : NotificationListenerService
         }
     }
 
+    /// <summary>
+    /// CAP-013 step 2: resolve label/icon through the notification's own package
+    /// context, which a notification listener can use even when PackageManager
+    /// lookups for other packages are blocked (Android 11+ visibility).
+    /// </summary>
+    private (string? Label, byte[]? IconPng) TryResolveIdentity(StatusBarNotification sbn)
+    {
+        try
+        {
+            using var packageContext = CreatePackageContext(sbn.PackageName, PackageContextFlags.IgnoreSecurity);
+            if (packageContext == null) return (null, null);
+
+            string? label = null;
+            byte[]? iconPng = null;
+
+            try
+            {
+                var appInfo = packageContext.ApplicationInfo;
+                var pm = packageContext.PackageManager;
+                if (appInfo != null && pm != null)
+                {
+                    label = appInfo.LoadLabel(pm)?.ToString();
+                    iconPng = AndroidIconEncoder.Encode(appInfo.LoadIcon(pm));
+                }
+            }
+            catch
+            {
+                // Fall through to the notification icon.
+            }
+
+            if (iconPng == null && sbn.Notification != null)
+            {
+                try
+                {
+                    var notificationIcon = sbn.Notification.GetLargeIcon() ?? sbn.Notification.SmallIcon;
+                    if (notificationIcon != null)
+                    {
+                        using var drawable = notificationIcon.LoadDrawable(packageContext);
+                        iconPng = AndroidIconEncoder.Encode(drawable);
+                    }
+                }
+                catch
+                {
+                    // Icons are cosmetic; label/humanized name still render.
+                }
+            }
+
+            return (label, iconPng);
+        }
+        catch
+        {
+            return (null, null);
+        }
+    }
+
     public override void OnNotificationPosted(StatusBarNotification? sbn, RankingMap? rankingMap)
     {
         base.OnNotificationPosted(sbn, rankingMap);
@@ -154,6 +209,8 @@ public sealed class NotificationCaptureService : NotificationListenerService
             var tzOffsetMin = (int)TimeZoneInfo.Local.GetUtcOffset(DateTimeOffset.UtcNow).TotalMinutes;
             var sbnKey = !string.IsNullOrWhiteSpace(sbn.Key) ? sbn.Key : $"sbn_{sbn.PackageName}_{sbn.Id}_{sbn.PostTime}";
 
+            var identity = TryResolveIdentity(sbn);
+
             var raw = new RawNotification(
                 SbnKey: sbnKey,
                 Package: sbn.PackageName ?? "",
@@ -178,7 +235,9 @@ public sealed class NotificationCaptureService : NotificationListenerService
                 ActionLabels: actionLabels,
                 ConversationTitle: convTitle,
                 LooksRedactedByOs: false,
-                UserHandle: sbn.User != null ? sbn.User.GetHashCode() : 0
+                UserHandle: sbn.User != null ? sbn.User.GetHashCode() : 0,
+                AppLabel: identity.Label,
+                AppIconPng: identity.IconPng
             );
 
             // Privacy check: exclude communication apps if setting is enabled

@@ -99,11 +99,25 @@
                 <!-- Row 3: Channel & App Info -->
                 <Border Grid.Row="3" Style="{StaticResource Card.Surface}" Margin="0">
                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12" VerticalOptions="Center">
-                        <Label Text="📱" FontSize="20" VerticalOptions="Center" />
+                        <Label Text="📱" FontSize="20" VerticalOptions="Center"
+                               IsVisible="{Binding HasSourceIcon, Converter={StaticResource InverseBoolConverter}}" />
+                        <Image Source="{Binding SourceIcon}" WidthRequest="28" HeightRequest="28"
+                               VerticalOptions="Center" IsVisible="{Binding HasSourceIcon}" />
                         <StackLayout Grid.Column="1" Spacing="2">
-                            <Label Text="{Binding Notification.ChannelName}"
-                                   Style="{StaticResource Text.Body}"
-                                   FontAttributes="Bold" />
+                            <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                                <Label Text="{Binding SourceLabel}"
+                                       Style="{StaticResource Text.Body}"
+                                       FontAttributes="Bold" />
+                                <Border Style="{StaticResource Chip.Category}"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource Tint.Work}, Dark={StaticResource Tint.Work.Dark}}"
+                                        IsVisible="{Binding IsViaSms}"
+                                        VerticalOptions="Center">
+                                    <Label Text="{Binding Source={x:Static services:LocalizationManager.Instance}, Path=[Inbox_ViaSms]}"
+                                           FontSize="10"
+                                           LineHeight="1.2"
+                                           TextColor="{AppThemeBinding Light={StaticResource Mark.Work}, Dark={StaticResource Mark.Work.Dark}}" />
+                                </Border>
+                            </HorizontalStackLayout>
                             <Label Text="{Binding Notification.Package}"
                                    Style="{StaticResource Text.Caption}" />
                         </StackLayout>
