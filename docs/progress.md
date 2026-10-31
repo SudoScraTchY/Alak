@@ -72,3 +72,8 @@ Each completed milestone gets a commit and updated rows below.
 - Tests: Core 71 (parser/humanizer), Storage 39 (attribution + app metadata round-trip), Rules 1300, Text 148, Adaptive 8, Inference.Abstractions 28 — all green. Build 0 errors.
 - ADR: `docs/adr/0003-app-source-display-and-sms-attribution.md` (ADR-0002 stays reserved for the M8 inference-engine spike).
 
+
+## 2026-10-31 — M8/M9 closure evidence + M10 kickoff
+- M8 gate measured on-device (Redmi Note 11, R1-class): llama.cpp/LLamaSharp 0.30 with Qwen2.5-0.5B-Instruct Q4_K_M — load 1,046 ms, TTFT 599 ms, 12.3 tok/s, PSS ~240 MB, thermal 0 after 5 runs, 0 crashes; SmolLM2-135M comparison (37.4 tok/s, but 70–80 % JSON validity). ADR-0002 committed with deviations (no custom C shim, no mid-range device, no LiteRT-LM, GBNF crashes natively in LLamaSharp 0.30, APK 88.7 MiB over the 60 MB ceiling).
+- M9 exit gates verified on device: golden suite 10/10 explain + 2/2 digest valid (target ≥85 % without grammar), grounding 2/2 checked claims; cancellation 6.5 ms (<500 ms); oversized model refused (2 GB > 1536 MB cap). Implemented for this: managed GGUF probe (MOD-002), SHA-256 import (MOD-003), structured benchmark persisted to models.benchmark_json (MOD-006), SLM-020/021 resource gate, SLM-023 idle unload, SLM-024 performance profile, per-call executor isolation, JSON prefill + tolerant parser, `Explain_Failed` localization.
+- M10 started: CI `corpus-gates` job (QLT-003 EN/FA/fa-latn, fails the build), accessibility checklist (`docs/accessibility-checklist.md`); privacy-guard job already existed.

@@ -60,11 +60,14 @@ public static class MauiProgram
         builder.Services.AddSingleton<IPackLoader, PackLoader>();
         builder.Services.AddSingleton<IRuleCompiler, RuleCompiler>();
         builder.Services.AddSingleton<INotificationRepository, NotificationRepository>();
+        builder.Services.AddSingleton<IModelRepository, ModelRepository>();
         builder.Services.AddSingleton<IAppDomainRepository, AppDomainRepository>();
 #if ANDROID
         builder.Services.AddSingleton<IAppInfoProvider, Platforms.Android.AndroidAppInfoProvider>();
+        builder.Services.AddSingleton<IDeviceResourceGuard, Platforms.Android.AndroidDeviceResourceGuard>();
 #else
         builder.Services.AddSingleton<IAppInfoProvider, FallbackAppInfoProvider>();
+        builder.Services.AddSingleton<IDeviceResourceGuard, FallbackDeviceResourceGuard>();
 #endif
         builder.Services.AddSingleton<SourceMetadataBackfillService>();
         builder.Services.AddSingleton<IUserRulesRepository, UserRulesRepository>();
@@ -73,6 +76,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IAdaptiveEngine, AdaptiveEngine>();
         builder.Services.AddSingleton<IInferenceEngine, LLamaInferenceEngine>();
         builder.Services.AddSingleton<IModelService, ModelService>();
+        builder.Services.AddSingleton<SlmDiagnosticsService>();
         builder.Services.AddSingleton<IBiometricAuthService, BiometricAuthService>();
         builder.Services.AddSingleton<IPromoCodeRepository, PromoCodeRepository>();
         builder.Services.AddSingleton<IBackupService>(sp =>

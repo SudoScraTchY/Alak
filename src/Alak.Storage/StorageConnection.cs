@@ -373,6 +373,14 @@ public sealed class StorageConnection : IDisposable
                 );
                 CREATE INDEX IF NOT EXISTS ix_app_domains_host ON app_domains(host);
             "),
+
+            // Migration 10: model registry fields + persisted benchmark (MOD-006)
+            (10L, @"
+                ALTER TABLE models ADD COLUMN path TEXT;
+                ALTER TABLE models ADD COLUMN name TEXT;
+                ALTER TABLE models ADD COLUMN benchmark_json TEXT;
+                ALTER TABLE models ADD COLUMN last_used_at INTEGER;
+            "),
         };
 
         public static void Apply(SqliteConnection con)

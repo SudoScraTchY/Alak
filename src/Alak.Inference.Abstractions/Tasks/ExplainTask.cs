@@ -10,7 +10,7 @@ public static class ExplainTask
     public const int MaxTokens = 200;          // SLM-006
     public const float Temperature = 0.2f;     // SLM-006
     public const float TopP = 0.9f;            // SLM-006
-    public const string PromptVersion = "v1";
+    public const string PromptVersion = "v2";
 
     /// <summary>Output schema (JSON schema string) shown to the engine / used for validation.</summary>
     public const string OutputSchema = """
@@ -37,18 +37,49 @@ public static class ExplainTask
         using (doc)
         {
             var root = doc.RootElement;
+            var summary = TryGetString(root, "summary");
+            if (string.IsNullOrWhiteSpace(summary))
+                throw new InvalidOperationException("T3-01: model output has no summary (SLM-002).");
+
+            var importance = TryGetString(root, "importance")?.ToLowerInvariant();
+            if (importance is not ("low" or "normal" or "high")) importance = "normal";
+
+            var category = TryGetString(root, "category_suggestion")?.ToLowerInvariant();
+            if (category is not (null or "offers" or "promo" or "work" or "people" or "money"
+                or "orders" or "security" or "social" or "updates" or "other"))
+            {
+                category = null;
+            }
+
+            var tags = TryGetStrings(root, "tags").Take(4).ToArray();
+
             return new T301ExplainResult(
-                Summary: root.GetProperty("summary").GetString()!,
-                Importance: root.GetProperty("importance").GetString()!,
+                Summary: summary!,
+                Importance: importance,
                 Action: TryGetString(root, "action"),
-                CategorySuggestion: TryGetString(root, "category_suggestion"),
-                Tags: TryGetStrings(root, "tags"),
-                Facts: root.TryGetProperty("facts", out var facts)
-                    ? facts.EnumerateArray().Select(f => new T3Fact(
-                        Label: f.GetProperty("label").GetString() ?? "",
-                        Value: f.GetProperty("value").GetString() ?? "")).ToArray()
-                    : Array.Empty<T3Fact>());
+                CategorySuggestion: category,
+                Tags: tags,
+                Facts: ReadFacts(root));
         }
+    }
+
+    private static T3Fact[] ReadFacts(JsonElement root)
+    {
+        if (!root.TryGetProperty("facts", out var facts) || facts.ValueKind != JsonValueKind.Array)
+            return Array.Empty<T3Fact>();
+
+        var results = new List<T3Fact>();
+        foreach (var f in facts.EnumerateArray())
+        {
+            if (results.Count >= 5) break;
+            if (f.ValueKind != JsonValueKind.Object) continue;
+            var label = TryGetString(f, "label");
+            var value = TryGetString(f, "value");
+            if (string.IsNullOrWhiteSpace(label) || string.IsNullOrWhiteSpace(value)) continue;
+            results.Add(new T3Fact(label!, value!));
+        }
+
+        return results.ToArray();
     }
 
     internal static string? TryGetString(JsonElement root, string name)

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -45,25 +46,16 @@ public sealed class LLamaInferenceEngine : IInferenceEngine
             throw new FileNotFoundException("Model file not found", file.Path);
         }
 
-        using var stream = File.OpenRead(file.Path);
-        using var reader = new BinaryReader(stream);
-        var magic = reader.ReadUInt32();
-        // GGUF magic = 'GGUF' = 0x46554747
-        if (magic != 0x46554747)
-        {
-            throw new InvalidOperationException("Invalid GGUF file: incorrect magic header.");
-        }
-
-        var version = reader.ReadUInt32();
+        var metadata = Alak.Core.Models.GgufMetadataReader.Read(file.Path);
 
         return Task.FromResult(new ModelProbeResult(
             Format: "gguf",
-            Architecture: "llama",
-            ParamCountBillions: 0.135f,
-            Quantization: "Q4_K_M",
-            ContextLength: 2048,
-            HasChatTemplate: true,
-            VocabSize: 49152));
+            Architecture: metadata.Architecture,
+            ParamCountBillions: (float)metadata.ParameterCountBillions,
+            Quantization: metadata.Quantization,
+            ContextLength: metadata.ContextLength > 0 ? metadata.ContextLength : 2048,
+            HasChatTemplate: metadata.HasChatTemplate,
+            VocabSize: (int)Math.Min(metadata.VocabularySize, int.MaxValue)));
     }
 
     public async Task LoadAsync(ModelFileRef file, ModelLoadOptions options, IProgress<double>? progress, CancellationToken ct)
@@ -127,17 +119,27 @@ public sealed class LLamaInferenceEngine : IInferenceEngine
             throw new InvalidOperationException("No model loaded. Call LoadAsync before GenerateAsync.");
         }
 
-        var sb = new StringBuilder();
-        foreach (var msg in request.Messages)
-        {
-            sb.AppendLine($"<|im_start|>{msg.Role}\n{msg.Content}<|im_end|>");
-        }
-        sb.Append("<|im_start|>assistant\n");
-        var prompt = sb.ToString();
+        var wantsJsonPrefill = request.Format is ResponseFormat.Grammar or ResponseFormat.JsonSchema;
 
-        // Note: In LLamaSharp 0.30+, llama_sampler_init_grammar requires a valid llama_vocab pointer.
-        // Instantiating Grammar without vocab causes a native SIGSEGV in libllama.so.
-        // Prompt instruction adherence + JsonValidator.ExtractJsonObject handles output extraction cleanly.
+        // Use the GGUF's own chat template (SLM-005) instead of hand-built ChatML.
+        var systemMessage = request.Messages.FirstOrDefault(m => m.Role == "system")?.Content;
+        var userPrompt = string.Join("\n", request.Messages.Where(m => m.Role != "system").Select(m => m.Content));
+
+        string prompt;
+        try
+        {
+            var template = new LLamaTemplate(_weights) { AddAssistant = true };
+            if (!string.IsNullOrWhiteSpace(systemMessage)) template.Add("system", systemMessage!);
+            template.Add("user", userPrompt);
+            prompt = System.Text.Encoding.UTF8.GetString(template.Apply());
+            if (wantsJsonPrefill) prompt += "{";
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[LLamaInferenceEngine] Chat template failed, using plain prompt: {ex.Message}");
+            prompt = userPrompt + (wantsJsonPrefill ? "\n{" : string.Empty);
+        }
+
         var samplingPipeline = new LLama.Sampling.DefaultSamplingPipeline
         {
             Temperature = request.Temperature >= 0 ? request.Temperature : 0.2f,
@@ -153,12 +155,29 @@ public sealed class LLamaInferenceEngine : IInferenceEngine
         };
 
         int generatedTokens = 0;
-
-        await foreach (var token in _executor.InferAsync(prompt, inferenceParams, ct))
+        if (wantsJsonPrefill)
         {
-            ct.ThrowIfCancellationRequested();
-            generatedTokens++;
-            yield return new GenerationChunk(token, IsFinal: false, GeneratedTokens: generatedTokens);
+            // The "{" is already part of the assistant message in the prompt;
+            // emit it as the first chunk so the accumulator sees valid JSON.
+            generatedTokens = 1;
+            yield return new GenerationChunk("{", IsFinal: false, GeneratedTokens: 1);
+        }
+
+        // StatelessExecutor keeps a native context; reuse across calls leaks KV state for
+        // some inputs (deterministic bare-"{" degenerations). Use a fresh executor per call.
+        var executor = new StatelessExecutor(_weights, _parameters);
+        try
+        {
+            await foreach (var token in executor.InferAsync(prompt, inferenceParams, ct))
+            {
+                ct.ThrowIfCancellationRequested();
+                generatedTokens++;
+                yield return new GenerationChunk(token, IsFinal: false, GeneratedTokens: generatedTokens);
+            }
+        }
+        finally
+        {
+            try { executor.Context?.Dispose(); } catch { /* native cleanup */ }
         }
 
         yield return new GenerationChunk(null, IsFinal: true, PromptTokens: request.Messages.Count, GeneratedTokens: generatedTokens);

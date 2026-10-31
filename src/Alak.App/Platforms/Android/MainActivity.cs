@@ -55,6 +55,26 @@ public class MainActivity : MauiAppCompatActivity
 
     private void HandleIntent(Android.Content.Intent? intent)
     {
+        var diag = intent?.GetStringExtra("alak.diag");
+        if (!string.IsNullOrWhiteSpace(diag))
+        {
+            Android.Util.Log.Info("AlakDiag", $"Intent diag={diag} shellReady={Microsoft.Maui.Controls.Shell.Current != null}");
+#if DEBUG
+            if (Microsoft.Maui.Controls.Shell.Current != null)
+            {
+                Microsoft.Maui.Controls.Application.Current?.Dispatcher.Dispatch(async () =>
+                {
+                    await System.Threading.Tasks.Task.Delay(1500);
+                    await App.RunDiagnosticsAsync(diag);
+                });
+            }
+            else
+            {
+                App.PendingDiagnostics = diag;
+            }
+#endif
+        }
+
         var route = intent?.GetStringExtra("route");
         if (!string.IsNullOrEmpty(route))
         {

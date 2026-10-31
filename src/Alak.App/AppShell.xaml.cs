@@ -34,6 +34,17 @@ public partial class AppShell : Shell
                 await GoToAsync(route);
             });
         }
+
+        if (!string.IsNullOrEmpty(App.PendingDiagnostics))
+        {
+            var diag = App.PendingDiagnostics;
+            App.PendingDiagnostics = null;
+            Dispatcher.Dispatch(async () =>
+            {
+                await Task.Delay(1500);
+                await App.RunDiagnosticsAsync(diag);
+            });
+        }
     }
 
     protected override void OnNavigated(ShellNavigatedEventArgs args)

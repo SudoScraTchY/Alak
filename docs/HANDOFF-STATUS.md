@@ -86,8 +86,11 @@ All five kickoff items completed: fa pack completed (§8.9.2 concepts), FA corpu
 - **M5 (MAUI shell + design system)** ✅ DONE — app shell per §12–§13, 5-tab nav, screens, DI wired.
 - **M6 (Onboarding, Sources, Rules, Settings)** ✅ DONE — §13.1/§13.6/§13.7/§13.9 + UserRulesEngine §11.1–11.3 + GlobalSettings store.
 - **M7 (Codes wallet §13.8 + Tier-2 adaptive §8.11)** ✅ mostly done — Backup/Restore §11.5 NOT started.
-- **M8 (on-device app bring-up + UI)** ⏳ IN PROGRESS — app boots/renders (emulator, 2026-10-10, `d3c6ba4`); UI redesigned on SPEC §12 and verified on the physical device (Redmi Note 11 `5a8c869e`, 2026-10-16, `6b5619e`): Inbox/Codes/Rules/Settings/Onboarding in light+dark, 893/893 tests green. PENDING: Scan-tab fix (`BarcodesDetected`) needs on-device re-verification; NotificationListenerService capture side not started. Full list in `docs/AGENT-HANDOFF.md` §6.
-- **M9–M11** 🔲 not started (Tier-3 SLM, corpus hardening + a11y + privacy audit, release packaging).
+- **App bring-up + UI (working label “M8” before the spec name was reconciled)** ✅ DONE — boots/renders and verified on the physical device (Redmi Note 11 `5a8c869e`): Inbox/Codes/Digest/Settings/Onboarding, light+dark, capture service, detail routes, crash fixes; 1594 tests green at `a7a314f`.
+- **M8 (AI runtime spike + decision)** ✅ **exit measured** (2026-10-31, Redmi Note 11 5a8c869e): ADR-0002 committed with load 1,046 ms, TTFT 599 ms, 12.3 tok/s, PSS ~240 MB, thermal 0/5 runs, 0 crashes on Qwen2.5-0.5B Q4; llama.cpp/LLamaSharp chosen. **Deviations to accept or fix:** no custom C shim (ENG-004/005), no llama.cpp commit pin (ENG-006), native libs lack 16 KB page alignment (PF-07), no mid-range device, LiteRT-LM not tested, APK 88.7 MiB over the 60 MB ceiling.
+- **M9 (Tier 3)** 🟡 **exit gates verified** (2026-10-31): golden 12/12 valid JSON (10 explain + 2 digest; ≥85 % target without grammar), grounding 2/2 checked claims, cancellation 6.5 ms, oversized 2 GB model refused (SLM-020). Implemented GGUF probe, SHA import, structured benchmark (benchmark_json), SLM-021/023/024. **Remaining scope:** T3-04 "Fill in details" entry point, SLM-007 slm_results cache, MOD-007/008 catalog + validator, SLM-022 background pause.
+- **M10 (Quality/hardening)** 🟡 started 2026-10-31: corpus-gates CI job added (QLT-003 EN/FA/fa-latn), privacy-guard job existed, accessibility checklist started (`docs/accessibility-checklist.md`); REUSE/SPDX metadata and the manual a11y fixes remain.
+- **M11** 🔲 not started (release packaging, §14 re-measure, name/package ADR); APK size is a known blocker.
 
 ## 4. Conventions (binding on all agents working this repo)
 

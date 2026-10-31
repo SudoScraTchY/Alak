@@ -71,6 +71,21 @@ public static class JsonValidator
         doc = null!;
         var json = ExtractJsonObject(raw);
         if (json is null) return false;
+
+        if (TryParseExact(json, out doc)) return true;
+
+        // Small models sometimes double the outer braces ({{ ... }}).
+        if (json.Length > 4 && json.StartsWith("{{", StringComparison.Ordinal) && json.EndsWith("}}", StringComparison.Ordinal))
+        {
+            return TryParseExact(json[1..^1], out doc);
+        }
+
+        return false;
+    }
+
+    private static bool TryParseExact(string json, out JsonDocument doc)
+    {
+        doc = null!;
         try
         {
             doc = JsonDocument.Parse(json);

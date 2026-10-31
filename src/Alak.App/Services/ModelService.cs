@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Alak.Core.Model;
 using Alak.Inference.Abstractions;
 using Alak.Inference.Abstractions.Tasks;
+using Alak.Storage;
 using Microsoft.Maui.Storage;
 
 namespace Alak.App.Services;
@@ -20,15 +23,27 @@ public sealed record InstalledModelInfo(
     string Quantization,
     bool IsActive);
 
+public sealed record ModelBenchmarkResult(
+    double LoadMs,
+    double FirstTokenMs,
+    double TokensPerSecond,
+    int GeneratedTokens,
+    long PssKb,
+    string Label,
+    string Detail);
+
 public interface IModelService
 {
     bool IsModelDownloaded { get; }
     bool IsModelLoaded { get; }
     string? ActiveModelPath { get; }
+    string? LastLoadError { get; }
     Task<bool> EnsureModelLoadedAsync(CancellationToken ct = default);
+    Task UnloadAsync(CancellationToken ct = default);
     Task<bool> ImportModelAsync(FileResult file, IProgress<double>? progress = null, CancellationToken ct = default);
     Task<string?> ClassifyAsync(string title, string text, string package, CancellationToken ct = default);
     Task<string> BenchmarkAsync(CancellationToken ct = default);
+    Task<ModelBenchmarkResult?> RunBenchmarkAsync(CancellationToken ct = default);
     Task<T301ExplainResult?> ExplainNotificationAsync(string title, string text, string package, string category, CancellationToken ct = default);
     Task<T303DigestResult?> GenerateDigestAsync(IEnumerable<Notification> notifications, CancellationToken ct = default);
     T303DigestResult GenerateRulesDigest(IEnumerable<Notification> notifications);
@@ -47,11 +62,17 @@ public sealed class ModelService : IModelService
     private const uint GgufMagic = 0x46554747; // 'G' 'G' 'U' 'F' in little endian
 
     private readonly IInferenceEngine _engine;
+    private readonly IModelRepository _modelRepository;
+    private readonly IDeviceResourceGuard _resourceGuard;
+    private readonly IUserRulesRepository _userRulesRepository;
     private readonly string _modelsDir;
+    private readonly object _idleLock = new();
+    private Timer? _idleTimer;
     private bool _isLoaded;
 
     public bool IsModelDownloaded => !string.IsNullOrEmpty(ActiveModelPath) && File.Exists(ActiveModelPath) && new FileInfo(ActiveModelPath).Length > 10_000_000;
     public bool IsModelLoaded => _isLoaded;
+    public string? LastLoadError { get; private set; }
 
     public string? ActiveModelPath
     {
@@ -71,9 +92,16 @@ public sealed class ModelService : IModelService
         }
     }
 
-    public ModelService(IInferenceEngine engine)
+    public ModelService(
+        IInferenceEngine engine,
+        IModelRepository modelRepository,
+        IDeviceResourceGuard resourceGuard,
+        IUserRulesRepository userRulesRepository)
     {
         _engine = engine;
+        _modelRepository = modelRepository;
+        _resourceGuard = resourceGuard;
+        _userRulesRepository = userRulesRepository;
         _modelsDir = Path.Combine(FileSystem.AppDataDirectory, "models");
         Directory.CreateDirectory(_modelsDir);
     }
@@ -97,22 +125,121 @@ public sealed class ModelService : IModelService
 
     public async Task<bool> EnsureModelLoadedAsync(CancellationToken ct = default)
     {
-        if (_isLoaded) return true;
+        if (_isLoaded)
+        {
+            ScheduleIdleUnload();
+            return true;
+        }
         if (!IsModelDownloaded || string.IsNullOrEmpty(ActiveModelPath)) return false;
 
         try
         {
             var modelPath = ActiveModelPath;
-            var fileRef = new ModelFileRef(modelPath, null, new FileInfo(modelPath).Length);
-            await _engine.LoadAsync(fileRef, new ModelLoadOptions(ContextTokens: 1024, Threads: 2), null, ct);
+            var fileSize = new FileInfo(modelPath).Length;
+
+            var gate = _resourceGuard.CheckCanLoad(fileSize);
+            if (!gate.Allowed)
+            {
+                LastLoadError = gate.Reason;
+                Debug.WriteLine($"[ModelService] Load refused (SLM-020/021): {gate.Reason}");
+                return false;
+            }
+            if (!string.IsNullOrEmpty(gate.Warning))
+            {
+                Debug.WriteLine($"[ModelService] Resource warning: {gate.Warning}");
+            }
+
+            var fileRef = new ModelFileRef(modelPath, null, fileSize);
+            var options = await BuildLoadOptionsAsync();
+            await _engine.LoadAsync(fileRef, options, null, ct);
             _isLoaded = true;
+            LastLoadError = null;
+            ScheduleIdleUnload();
             return true;
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"[ModelService] Failed to load model: {ex.Message}");
+            LastLoadError = ex.Message;
+            Debug.WriteLine($"[ModelService] Failed to load model: {ex.Message}");
             _isLoaded = false;
             return false;
+        }
+    }
+
+    /// <summary>SLM-023: unload the model and release native memory.</summary>
+    public async Task UnloadAsync(CancellationToken ct = default)
+    {
+        CancelIdleUnload();
+        await _engine.UnloadAsync();
+        _isLoaded = false;
+    }
+
+    /// <summary>SLM-024: Gentle/Balanced/Fast maps to 2/4/6 threads capped by cores.</summary>
+    private async Task<ModelLoadOptions> BuildLoadOptionsAsync()
+    {
+        var profile = "balanced";
+        try
+        {
+            var settings = await _userRulesRepository.GetGlobalSettingsAsync();
+            if (!string.IsNullOrWhiteSpace(settings?.SlmPerformanceProfile))
+            {
+                profile = settings!.SlmPerformanceProfile.ToLowerInvariant();
+            }
+        }
+        catch
+        {
+            // Default profile is fine.
+        }
+
+        var cores = Math.Max(1, Environment.ProcessorCount);
+        var threads = profile switch
+        {
+            "gentle" => Math.Min(2, cores),
+            "fast" => Math.Min(6, cores),
+            _ => Math.Min(4, cores)
+        };
+
+        var contextTokens = profile == "gentle" ? 1024 : 2048;
+        return new ModelLoadOptions(ContextTokens: contextTokens, Threads: threads);
+    }
+
+    /// <summary>SLM-023: unload after 60 s of inactivity (setting, default on).</summary>
+    private void ScheduleIdleUnload()
+    {
+        if (!Preferences.Get("slm_unload_idle", true)) return;
+
+        lock (_idleLock)
+        {
+            _idleTimer?.Dispose();
+            _idleTimer = new Timer(
+                async _ => await UnloadForIdleAsync(),
+                null,
+                TimeSpan.FromSeconds(60),
+                Timeout.InfiniteTimeSpan);
+        }
+    }
+
+    private void CancelIdleUnload()
+    {
+        lock (_idleLock)
+        {
+            _idleTimer?.Dispose();
+            _idleTimer = null;
+        }
+    }
+
+    private async Task UnloadForIdleAsync()
+    {
+        try
+        {
+            if (!_isLoaded) return;
+            await _engine.UnloadAsync();
+            _isLoaded = false;
+            Debug.WriteLine("[ModelService] Model unloaded after 60 s idle (SLM-023).");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"[ModelService] Idle unload failed: {ex.Message}");
         }
     }
 
@@ -136,6 +263,7 @@ public sealed class ModelService : IModelService
 
         try
         {
+            using var hasher = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
             await using (var sourceStream = await file.OpenReadAsync())
             {
                 // Verify GGUF magic header: 0x46554747 ('GGUF')
@@ -181,6 +309,7 @@ public sealed class ModelService : IModelService
                     if (!sourceStream.CanSeek)
                     {
                         await targetStream.WriteAsync(magic, ct);
+                        hasher.AppendData(magic);
                     }
 
                     var buffer = new byte[81920];
@@ -190,6 +319,7 @@ public sealed class ModelService : IModelService
                     while ((bytesRead = await sourceStream.ReadAsync(buffer.AsMemory(0, buffer.Length), ct)) > 0)
                     {
                         await targetStream.WriteAsync(buffer.AsMemory(0, bytesRead), ct);
+                        hasher.AppendData(buffer, 0, bytesRead);
                         totalRead += bytesRead;
                         if (totalLength > 0 && progress != null)
                         {
@@ -204,6 +334,17 @@ public sealed class ModelService : IModelService
                 File.Delete(targetPath);
             }
             File.Move(tempPath, targetPath);
+
+            var sha256 = Convert.ToHexString(hasher.GetHashAndReset()).ToLowerInvariant();
+            await _modelRepository.UpsertModelAsync(
+                sha256,
+                targetPath,
+                Path.GetFileNameWithoutExtension(fileName),
+                null,
+                new FileInfo(targetPath).Length,
+                null,
+                ct);
+
             Preferences.Set("active_slm_model_path", targetPath);
 
             await _engine.UnloadAsync();
@@ -264,39 +405,86 @@ public sealed class ModelService : IModelService
 
     public async Task<string> BenchmarkAsync(CancellationToken ct = default)
     {
-        if (!await EnsureModelLoadedAsync(ct))
-        {
-            return "Model not downloaded or loaded.";
-        }
+        var result = await RunBenchmarkAsync(ct);
+        return result?.Detail ?? "Model not downloaded or loaded.";
+    }
 
-        var sw = System.Diagnostics.Stopwatch.StartNew();
-        var messages = new[]
-        {
-            new ChatMessage("user", "Hello, give me 5 words about technology.")
-        };
+    /// <summary>
+    /// MOD-006: fixed prompt measures cold load, time-to-first-token, decode speed,
+    /// PSS and labels the model Good/Usable/Slow; the JSON is persisted in models.benchmark_json.
+    /// </summary>
+    public async Task<ModelBenchmarkResult?> RunBenchmarkAsync(CancellationToken ct = default)
+    {
+        CancelIdleUnload();
+        if (!IsModelDownloaded) return null;
+
+        await _engine.UnloadAsync();
+        _isLoaded = false;
+
+        var loadWatch = Stopwatch.StartNew();
+        if (!await EnsureModelLoadedAsync(ct)) return null;
+        loadWatch.Stop();
 
         var request = new GenerationRequest(
-            Messages: messages,
-            MaxTokens: 20,
+            Messages: new[] { new ChatMessage("user", "Explain in one short sentence why offline apps matter.") },
+            MaxTokens: 128,
             Temperature: 0.2f,
             TopP: 0.9f,
             Stop: new[] { "<|im_end|>", "</s>" },
-            Format: new ResponseFormat.Text()
-        );
+            Format: new ResponseFormat.Text());
 
-        int tokens = 0;
+        var decodeWatch = Stopwatch.StartNew();
+        double firstTokenMs = 0;
+        var tokens = 0;
+
         await foreach (var chunk in _engine.GenerateAsync(request, ct))
         {
-            if (!string.IsNullOrEmpty(chunk.TextDelta))
+            if (firstTokenMs <= 0) firstTokenMs = decodeWatch.Elapsed.TotalMilliseconds;
+            var generated = chunk.GeneratedTokens ?? 0;
+            if (generated > tokens) tokens = generated;
+            if (chunk.IsFinal) break;
+        }
+        decodeWatch.Stop();
+
+        var seconds = Math.Max(decodeWatch.Elapsed.TotalSeconds, 0.001);
+        var tokensPerSecond = tokens / seconds;
+        var pssKb = _resourceGuard.Capture().PssKb;
+        var label = tokensPerSecond >= 5 ? "Good" : tokensPerSecond >= 2 ? "Usable" : "Slow";
+
+        var result = new ModelBenchmarkResult(
+            LoadMs: loadWatch.Elapsed.TotalMilliseconds,
+            FirstTokenMs: firstTokenMs,
+            TokensPerSecond: tokensPerSecond,
+            GeneratedTokens: tokens,
+            PssKb: pssKb,
+            Label: label,
+            Detail: $"{tokens} tokens · {tokensPerSecond:F1} tok/s · load {loadWatch.Elapsed.TotalMilliseconds:F0} ms · TTFT {firstTokenMs:F0} ms · PSS {pssKb / 1024} MB · {label}");
+
+        try
+        {
+            var path = ActiveModelPath;
+            if (!string.IsNullOrEmpty(path))
             {
-                tokens++;
+                var sha = await _modelRepository.GetShaForPathAsync(path, ct) ?? await ComputeShaAsync(path, ct);
+                await _modelRepository.UpsertModelAsync(sha, path, Path.GetFileNameWithoutExtension(path), null, new FileInfo(path).Length, null, ct);
+                await _modelRepository.SaveBenchmarkAsync(sha, JsonSerializer.Serialize(result), ct);
             }
         }
-        sw.Stop();
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"[ModelService] Benchmark persistence failed: {ex.Message}");
+        }
 
-        var seconds = sw.Elapsed.TotalSeconds;
-        var tps = seconds > 0 ? tokens / seconds : 0;
-        return $"{tokens} tokens in {sw.ElapsedMilliseconds} ms ({tps:F1} tok/s)";
+        ScheduleIdleUnload();
+        return result;
+    }
+
+    private static async Task<string> ComputeShaAsync(string path, CancellationToken ct)
+    {
+        await using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 81920,
+            FileOptions.Asynchronous | FileOptions.SequentialScan);
+        var hash = await SHA256.HashDataAsync(stream, ct);
+        return Convert.ToHexString(hash).ToLowerInvariant();
     }
 
     public async Task<T301ExplainResult?> ExplainNotificationAsync(string title, string text, string package, string category, CancellationToken ct = default)
@@ -333,6 +521,7 @@ public sealed class ModelService : IModelService
                 : new ResponseFormat.Text();
 
             var systemPrompt = await GetExplainPromptAsync();
+            systemPrompt += "\nAlways answer with one JSON object. The first key must be \"summary\". Never answer with prose or a single character.";
             var userPrompt = $"App: {package}\nCategory: {category}\nTitle: {safeTitle}\nBody: {safeText}";
 
             // Generation attempt 1
@@ -342,9 +531,14 @@ public sealed class ModelService : IModelService
             // SLM-002: On failure, retry ONCE with a shorter, stricter prompt
             if (parsed == null)
             {
-                var strictSystem = "Output ONLY raw JSON with keys: summary, importance, action, category_suggestion, tags, facts.";
-                var retryOutput = await GenerateAsync(strictSystem, userPrompt, format, ExplainTask.MaxTokens, 0.1f, 0.8f, ct);
+                LogDiag($"explain parse failed (attempt 1): {Truncate(rawOutput)}");
+                var strictSystem = "You are a JSON API. Reply with ONLY one JSON object, no prose, no markdown. " +
+                                   "The first key must be \"summary\". Persian input still returns the same JSON keys. " +
+                                   "{\"summary\":\"...\",\"importance\":\"low|normal|high\",\"action\":null," +
+                                   "\"category_suggestion\":null,\"tags\":[],\"facts\":[]}";
+                var retryOutput = await GenerateAsync(strictSystem, userPrompt, format, ExplainTask.MaxTokens, 0.4f, 0.9f, ct);
                 parsed = TryParseExplain(retryOutput);
+                if (parsed == null) LogDiag($"explain parse failed (retry): {Truncate(retryOutput)}");
             }
 
             // SLM-002: Never show raw unparsed model text on failure
@@ -406,6 +600,7 @@ public sealed class ModelService : IModelService
                 : new ResponseFormat.Text();
 
             var systemPrompt = await GetDigestPromptAsync();
+            systemPrompt += "\nAlways answer with one JSON object. The first key must be \"headline\".";
             var userPrompt = promptBuilder.ToString();
 
             // Generation attempt 1
@@ -415,8 +610,9 @@ public sealed class ModelService : IModelService
             // SLM-002: Retry once on failure
             if (parsed == null)
             {
-                var strictSystem = "Output ONLY raw JSON with keys: headline, sections, follow_ups.";
-                var retryOutput = await GenerateAsync(strictSystem, userPrompt, format, DigestTask.MaxTokens, 0.1f, 0.8f, ct);
+                var strictSystem = "You are a JSON API. Reply with ONLY one JSON object, no prose, no markdown. " +
+                                   "The first key must be \"headline\".";
+                var retryOutput = await GenerateAsync(strictSystem, userPrompt, format, DigestTask.MaxTokens, 0.4f, 0.9f, ct);
                 parsed = TryParseDigest(retryOutput);
             }
 
@@ -575,6 +771,7 @@ public sealed class ModelService : IModelService
         );
 
         var sb = new System.Text.StringBuilder();
+        CancelIdleUnload();
         await foreach (var chunk in _engine.GenerateAsync(request, ct))
         {
             if (!string.IsNullOrEmpty(chunk.TextDelta))
@@ -582,6 +779,7 @@ public sealed class ModelService : IModelService
                 sb.Append(chunk.TextDelta);
             }
         }
+        ScheduleIdleUnload();
 
         return sb.ToString().Trim();
     }
@@ -597,6 +795,17 @@ public sealed class ModelService : IModelService
         {
             return null;
         }
+    }
+
+    private static string Truncate(string? value)
+        => string.IsNullOrEmpty(value) ? "<empty>" : value.Length <= 400 ? value : value[..400] + "…";
+
+    private static void LogDiag(string message)
+    {
+        System.Diagnostics.Debug.WriteLine($"[AlakDiag] {message}");
+#if ANDROID
+        global::Android.Util.Log.Info("AlakDiag", message);
+#endif
     }
 
     private static T303DigestResult? TryParseDigest(string raw)

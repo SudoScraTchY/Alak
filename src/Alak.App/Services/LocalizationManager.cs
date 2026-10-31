@@ -117,6 +117,7 @@ public class LocalizationManager : INotifyPropertyChanged
         { "Inbox_Today", "Today" },
         { "Inbox_Yesterday", "Yesterday" },
         { "Inbox_ViaSms", "via SMS" },
+        { "Explain_Failed", "Unable to analyze this notification." },
 
         // Categories
         { "Cat_All", "All" },
@@ -320,6 +321,7 @@ public class LocalizationManager : INotifyPropertyChanged
         { "Inbox_Today", "امروز" },
         { "Inbox_Yesterday", "دیروز" },
         { "Inbox_ViaSms", "از طریق پیامک" },
+        { "Explain_Failed", "تحلیل این اعلان ممکن نشد." },
 
         // Categories
         { "Cat_All", "همه" },

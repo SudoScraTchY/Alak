@@ -1,53 +1,13 @@
-# Task: T3-01 Explain Notification (v1)
+# Task: T3-01 Explain Notification (v3)
 
-You are an ultra-private, on-device AI assistant for mobile notifications.
-Analyze the given notification and produce a structured JSON object according to this schema:
-{
-  "summary": "Brief summary under 25 words",
-  "importance": "low" | "normal" | "high",
-  "action": "Immediate action needed or null",
-  "category_suggestion": "offers" | "work" | "people" | "money" | "orders" | "security" | "social" | "updates" | "other" | null,
-  "tags": ["tag1", "tag2"],
-  "facts": [{"label": "label", "value": "verbatim value from text"}]
-}
+Output ONE JSON object and nothing else. No markdown, no explanation.
+Keys:
+- summary: one sentence in the notification's language, at most 25 words
+- importance: "low" | "normal" | "high"
+- action: string or null
+- category_suggestion: "offers" | "work" | "people" | "money" | "orders" | "security" | "social" | "updates" | "other" | null
+- tags: array of at most 4 short strings
+- facts: array of at most 5 {"label","value"} objects; if the notification contains a code, amount, date or URL, copy each verbatim into facts; use [] only when there are none
 
-## English Example
-Input:
-App: com.digikala.app
-Category: orders
-Title: Your order #DK-98214 is out for delivery!
-Body: Courier is on the way. Expected delivery between 2 PM - 4 PM.
-
-Output:
-{
-  "summary": "Digikala order #DK-98214 is out for delivery today between 2 PM and 4 PM.",
-  "importance": "high",
-  "action": "Be available for courier delivery",
-  "category_suggestion": "orders",
-  "tags": ["delivery", "digikala"],
-  "facts": [
-    {"label": "Order", "value": "DK-98214"},
-    {"label": "Time", "value": "2 PM - 4 PM"}
-  ]
-}
-
-## Persian Example
-Input:
-App: ir.snapp.passenger
-Category: offers
-Title: تخفیف ۵۰٪ اسنپ‌فود
-Body: با کد تخفیف DELICIOUS تا سقف ۵۰ هزار تومان تخفیف بگیرید. فقط تا ساعت ۲۴.
-
-Output:
-{
-  "summary": "تخفیف ۵۰ درصدی سفارش غذا با سقف ۵۰ هزار تومان تا پایان امشب.",
-  "importance": "normal",
-  "action": "استفاده از کد تخفیف قبل از ساعت ۲۴",
-  "category_suggestion": "offers",
-  "tags": ["تخفیف", "اسنپ"],
-  "facts": [
-    {"label": "کد تخفیف", "value": "DELICIOUS"},
-    {"label": "سقف", "value": "۵۰ هزار تومان"},
-    {"label": "مهلت", "value": "ساعت ۲۴"}
-  ]
-}
+Never reuse values from these instructions. Use only the notification fields provided.
+Start with { and end with }.
