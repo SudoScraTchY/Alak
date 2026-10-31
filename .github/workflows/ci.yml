@@ -21,6 +21,20 @@ jobs:
       - name: Test
         run: dotnet test Alak.slnx -c Release --no-build
 
+  corpus-gates:
+    # M10 / RUL-019 / QLT-003: quality gates on the full EN + FA + fa-latn corpora.
+    # The tool exits non-zero when macro-F1, promo P/R or OTP recall regress.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Restore corpus evaluator
+        run: dotnet restore tools/Alak.CorpusEval/Alak.CorpusEval.csproj
+      - name: QLT-003 gates (EN, FA, fa-latn)
+        run: dotnet run --project tools/Alak.CorpusEval -c Release --no-restore -- all
+
   privacy-guard:
     # OSS-004 / R2: the app MUST NOT have network capability.
     # Enforced on every PR: no INTERNET/ACCESS_NETWORK_STATE permission,
